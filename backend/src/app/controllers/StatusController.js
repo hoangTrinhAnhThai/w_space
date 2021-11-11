@@ -1,6 +1,5 @@
 const Status = require('../models/Status');
 const { body, validationResult } = require('express-validator');
-const { sanitizeBody } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
 require('dotenv').config();
 

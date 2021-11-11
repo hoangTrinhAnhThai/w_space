@@ -7,7 +7,7 @@ const statusController = require('../../app/controllers/StatusController');
 router.get('/status/', statusController.showStatus);
 router.post('/status/', statusController.createStatus);
 router.post('/:id/task/', taskController.createTask);
-
+router.get('/:id/task', taskController.showTaskById)
 router.get('/:id', projectController.showProject);
 router.get('/', projectController.showAllProjects);
 router.post('/', projectController.createProject);
