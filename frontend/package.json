@@ -1,15 +1,26 @@
 {
-  "name": "frontend",
+  "name": "doan",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start": "node server.js",
+    "beautiful": "prettier --single-quote --trailing-comma all --write src/**/*.{js,json,scss,vue}"
   },
   "dependencies": {
+    "axios": "^0.23.0",
+    "bootstrap": "^5.1.3",
+    "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "express": "^4.17.1",
+    "serve-static": "^1.14.1",
+    "tailwindcss": "^2.2.17",
+    "vue": "^2.6.14",
+    "vue-router": "^3.5.2",
+    "vue-smooth-dnd": "^0.8.1",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -18,6 +29,11 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "husky": "^7.0.4",
+    "lint-staged": "^11.2.6",
+    "node-sass": "^6.0.1",
+    "prettier": "^2.4.1",
+    "sass-loader": "^10.2.0",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
