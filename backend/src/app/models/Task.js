@@ -13,6 +13,10 @@ const Task = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Status',
     },
+    moved: {
+      before: { type: String},
+      after: { type: String}
+    }
   },
   {
     timestamps: true,

@@ -3,6 +3,6 @@ const projectRouter = require('./modules/project');
 
 function route(app) {
   app.use('/auth', authRouter);
-  app.use('/project', projectRouter)
+  app.use('/project', projectRouter);
 }
 module.exports = route;
