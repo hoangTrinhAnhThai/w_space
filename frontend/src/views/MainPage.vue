@@ -11,27 +11,36 @@
 <script>
 import Sidebar from '../components/Sidebar.vue';
 import Nav from '../components/Navigation.vue';
+import { mapActions } from 'vuex';
 export default {
   name: 'MainPage',
   components: {
     Sidebar,
     Nav,
   },
+  methods: {
+    ...mapActions({
+      getProject: "TASKS/getProject",
+      getStatus: "TASKS/getStatus"
+    })
+  },
+  created() {
+    this.getProject()
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .main-page {
+  display: flex;
   .sidebar {
-    width: 16vw;
-    float: left;
+    width: 15vw;
   }
   .main-container {
-    max-width: 83vw;
-    // overflow: scroll;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
+    width: 85vw;
+    // overflow-x: auto;
+    // overflow-y: hidden;
+    // white-space: nowrap;
   }
 }
 </style>

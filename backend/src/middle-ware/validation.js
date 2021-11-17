@@ -45,10 +45,10 @@ exports.projectValidation = () => {
       .isLength({ min: 1 })
       .trim()
       .withMessage('Project name is required'),
-    check('description')
-      .isLength({ min: 1 })
-      .trim()
-      .withMessage('Project description must be specified'),
+    // check('description')
+    //   .isLength({ min: 1 })
+    //   .trim()
+    //   .withMessage('Project description must be specified'),
   ];
 };
 exports.statusValidation = () => {

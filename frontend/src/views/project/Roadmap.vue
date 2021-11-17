@@ -1,19 +1,21 @@
 <template>
   <div class="road-map">
     <h1>Roadmap</h1>
-    <div class="container" v-if="dataTask">
+    <div class="container" >
       <div class="open status" v-for="(data, index) in dataTask" :key="index">
         <div class="label">
           {{ data.status.name }}
           <span class="number">{{ data.tasks.length }}</span>
         </div>
-        <p @click="isShowAddTask = false" v-show="isShowAddTask">
+        <div class="addTask" v-if="index == 0">
+          <p @click="isShowAddTask = false" v-show="isShowAddTask">
           + Add issue ....
         </p>
         <div class="addform" v-show="!isShowAddTask">
           <add-task-form
-            v-on:cancelAddTaskIssue="cancelAddTaskIssue"
+            v-on:closeAddtaskForm="closeAddtaskForm"
           ></add-task-form>
+        </div>
         </div>
         <Container
           group-name="trello"
@@ -51,15 +53,15 @@ export default {
   computed: {
     ...mapGetters({
       dataTask: 'TASKS/taskOfProject',
+            idProject: 'TASKS/idProject'
+
     }),
   },
   created() {
-    this.getTaskOfProjectAction();
   },
   methods: {
     ...mapActions({
-      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
-      updateStatusOfTaskAction: 'TASKS/updateStatusOfTask',
+      removeCard: 'TASKS/removeCard'
     }),
     handleDragStart(lane, dragResult) {
       const { payload, isSource } = dragResult;
@@ -101,7 +103,8 @@ export default {
 
         setTimeout(() => {
           card.id = localStorage.getItem('idTask');
-          this.updateStatusOfTaskAction(card);
+          card.idProject = this.idProject
+          this.removeCard(card);
         }, 200);
         this.dataTask[lane].tasks.splice(
           addedIndex,
@@ -115,7 +118,9 @@ export default {
         index,
       };
     },
-    cancelAddTaskIssue() {},
+    closeAddtaskForm() {
+      this.isShowAddTask = true
+    }
   },
   components: {
     Card,

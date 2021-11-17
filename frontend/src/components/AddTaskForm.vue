@@ -1,10 +1,9 @@
 <template>
   <div class="add-task-form">
-    <form method="post">
       <textarea
         type="text"
         placeholder="Enter a title ..."
-        v-model.trim="newTask.title"
+        v-model.trim="newTask.name"
         wrap="soft"
         style="overflow: hidden; resize: none"
       >
@@ -13,14 +12,14 @@
         {{ errorMessage }}
       </div>
       <div class="add">
-        <button type="reset">Cancel</button>
-        <button type="submit">Add</button>
+        <button type="reset" @click="closeAddtaskForm">Cancel</button>
+        <button type="submit" @click="addtaskForm">Add</button>
       </div>
-    </form>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'AddTaskForm',
   props: {
@@ -29,35 +28,35 @@ export default {
   data() {
     return {
       newTask: {
-        title: '',
-        description: '',
-        statusId: null,
+        name: '',
       },
       errorMessage: '',
     };
   },
-  mounted() {
-    this.newTask.statusId = this.statusId;
-    this.$nextTick(() => {
-      this.$el.setAttribute(
-        'style',
-        'height:' + this.$el.scrollHeight + 'px;overflow-y:hidden;',
-      );
-      this.$el.addEventListener('input', this.resizeTextarea);
-    });
+  computed: {
+    ...mapGetters({
+      idProject: 'TASKS/idProject'
+    })
   },
   methods: {
-    resizeTextarea(event) {
-      event.target.style.height = 'auto';
-      event.target.style.height = event.target.scrollHeight + 'px';
+    ...mapActions({
+      addNewTaskAction: 'TASKS/addNewTask'
+    }),
+    addtaskForm() {
+      this.addNewTaskAction({task: this.newTask, idProject: this.idProject})
+      this.$emit('closeAddtaskForm')
+      this.newTask.name = ''
     },
-  },
+    closeAddtaskForm() {
+      this.$emit('closeAddtaskForm')
+    },
+  }
+
 };
 </script>
 
 <style lang="scss" scoped>
 .add-task-form {
-  background-color: rgb(59, 177, 85);
   margin: 15px;
   padding: 8px;
   border: 1px solid rgb(214, 212, 212);
@@ -66,6 +65,7 @@ export default {
   cursor: pointer;
   min-height: 100px;
   textarea {
+    width: 100%;
     border: none;
     outline: none;
   }

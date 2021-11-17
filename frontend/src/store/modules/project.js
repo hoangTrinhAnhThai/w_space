@@ -62,15 +62,18 @@ const mutations = {
   }
 };
 const actions = {
-
+  addIdProject({commit}, idProject) {
+    commit('setIdProject', idProject)
+  },
   getStatus({ commit }) {
     http.get('project/status').then((result) => {
       commit('setStatus', result.data.data)
+
     }).catch((error) => {
       console.log(error);
     })
   },
-  
+
   getTaskOfProject({ commit, dispatch }, idProject) {
     commit('setIdProject', idProject)
     http.get(`project/${idProject}`).then((result) => {
@@ -81,7 +84,6 @@ const actions = {
     })
   },
   getProject({ commit }) {
-    console.log('a');
     http.get('project').then((result) => {
       commit('setProject', result.data.data)
       console.log('project', result.data.data);
@@ -89,21 +91,23 @@ const actions = {
       console.log(error);
     })
   },
-  createProject({ commit }, params) {
+  addProject({ dispatch }, params) {
     http.post('/project', params).then((result) => {
-      commit('')
+      dispatch('getProject')
       console.log(result);
     }).catch((error) => {
       console.log(error);
     })
   },
   addNewTask({ dispatch }, params) {
+    console.log(params.task);
     http.post(`project/${params.idProject}/task`, params.task).then((result) => {
       console.log(result);
       dispatch('getTaskOfProject', params.idProject)
     })
   },
   removeCard({ commit }, data) {
+    console.log(data);
     http.post('project/task', data).then((result) => {
       console.log(result);
       commit('logMess')

@@ -7,6 +7,7 @@
           class="textProject"
           type="text"
           placeholder="Name project ...."
+          v-model="project.name"
         />
       </div>
       <button class="addProjectButton">Continue</button>
@@ -17,18 +18,26 @@
         alt=""
       />
     </div>
-    <div class="addMember">
+    <!-- <div class="addMember">
       <div class="content">
         <i class="bx bx-user-plus"></i>
         <input type="text" placeholder="Enter email address..." />
       </div>
       <button class="invite">Invite</button>
-    </div>
+    </div> -->
   </b-modal>
 </template>
 
 <script>
 export default {
+  name: 'AddNewProjectModal',
+  data() {
+    return {
+      project: {
+        name: ''
+      }
+    }
+  },
   methods: {
     show() {
       this.$refs.newProjectModal.show();

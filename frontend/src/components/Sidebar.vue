@@ -18,8 +18,8 @@
             <router-link tag="li" to="/roadmap">Project</router-link>
             <i class="bx bx-plus" @click="showAddProjectModal"></i>
             <ul v-show="isShowProject" class="list-child">
-              <li v-for="i in projects" :key="i.id">
-                <i class="bx bx-chevron-right"></i> {{ i.name }}
+              <li v-for="project in projects" :key="project._id" @click="getTaskOfProject(project._id)">
+                <i class="bx bx-chevron-right"></i> {{ project.name }}
               </li>
             </ul>
           </li>
@@ -39,22 +39,34 @@
 </template>
 
 <script>
-import projects from '../initialCards';
+import { mapActions, mapGetters } from 'vuex';
 import AddNewProjectModal from '../components/modal/AddNewProject.vue';
 export default {
   name: 'Sidebar',
   data: () => ({
-    projects: projects.projects,
     isShowProject: false,
   }),
   components: {
     AddNewProjectModal,
   },
+  computed: {
+    ...mapGetters({
+      projects: "TASKS/projectArray"
+    })
+  },
   methods: {
     showAddProjectModal() {
-      console.log('hiii');
       this.$refs.newProjectModal.show();
     },
+    ...mapActions({
+      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
+      addIdProjectAction: 'TASKS/addIdProject'
+    }),
+    getTaskOfProject(idProject) {
+      this.addIdProjectAction(idProject)
+      this.getTaskOfProjectAction(idProject)
+      
+    }
   },
 };
 </script>
