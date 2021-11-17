@@ -18,8 +18,16 @@
             <router-link tag="li" to="/roadmap">Project</router-link>
             <i class="bx bx-plus" @click="showAddProjectModal"></i>
             <ul v-show="isShowProject" class="list-child">
-              <li v-for="project in projects" :key="project._id" @click="getTaskOfProject(project._id)">
+              <li
+                v-for="project in projects"
+                :key="project._id"
+                @click="getTaskOfProject(project._id)"
+              >
                 <i class="bx bx-chevron-right"></i> {{ project.name }}
+                <div class="function">
+                  <i class='bx bx-edit-alt' ></i>
+                  <i class='bx bx-trash' ></i>
+                </div>
               </li>
             </ul>
           </li>
@@ -51,8 +59,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projects: "TASKS/projectArray"
-    })
+      projects: 'TASKS/projectArray',
+    }),
   },
   methods: {
     showAddProjectModal() {
@@ -60,13 +68,12 @@ export default {
     },
     ...mapActions({
       getTaskOfProjectAction: 'TASKS/getTaskOfProject',
-      addIdProjectAction: 'TASKS/addIdProject'
+      addIdProjectAction: 'TASKS/addIdProject',
     }),
     getTaskOfProject(idProject) {
-      this.addIdProjectAction(idProject)
-      this.getTaskOfProjectAction(idProject)
-      
-    }
+      this.addIdProjectAction(idProject);
+      this.getTaskOfProjectAction(idProject);
+    },
   },
 };
 </script>
@@ -106,6 +113,11 @@ export default {
             border: 1px solid rgb(194, 190, 190);
             border-radius: 3px;
             display: none;
+          }
+          .function {
+            position: absolute;
+            right: 0;
+            top: 0;
           }
         }
         li:hover .bx-plus {

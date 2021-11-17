@@ -1,20 +1,20 @@
 <template>
   <div class="add-task-form">
-      <textarea
-        type="text"
-        placeholder="Enter a title ..."
-        v-model.trim="newTask.name"
-        wrap="soft"
-        style="overflow: hidden; resize: none"
-      >
-      </textarea>
-      <div class="errorMessage">
-        {{ errorMessage }}
-      </div>
-      <div class="add">
-        <button type="reset" @click="closeAddtaskForm">Cancel</button>
-        <button type="submit" @click="addtaskForm">Add</button>
-      </div>
+    <textarea
+      type="text"
+      placeholder="Enter a title ..."
+      v-model.trim="newTask.name"
+      wrap="soft"
+      style="overflow: hidden; resize: none"
+    >
+    </textarea>
+    <div class="errorMessage">
+      {{ errorMessage }}
+    </div>
+    <div class="add">
+      <button type="reset" @click="closeAddtaskForm">Cancel</button>
+      <button type="submit" @click="addtaskForm">Add</button>
+    </div>
   </div>
 </template>
 
@@ -35,23 +35,22 @@ export default {
   },
   computed: {
     ...mapGetters({
-      idProject: 'TASKS/idProject'
-    })
+      idProject: 'TASKS/idProject',
+    }),
   },
   methods: {
     ...mapActions({
-      addNewTaskAction: 'TASKS/addNewTask'
+      addNewTaskAction: 'TASKS/addNewTask',
     }),
     addtaskForm() {
-      this.addNewTaskAction({task: this.newTask, idProject: this.idProject})
-      this.$emit('closeAddtaskForm')
-      this.newTask.name = ''
+      this.addNewTaskAction({ task: this.newTask, idProject: this.idProject });
+      this.$emit('closeAddtaskForm');
+      this.newTask.name = '';
     },
     closeAddtaskForm() {
-      this.$emit('closeAddtaskForm')
+      this.$emit('closeAddtaskForm');
     },
-  }
-
+  },
 };
 </script>
 

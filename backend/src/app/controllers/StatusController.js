@@ -33,10 +33,10 @@ class StatusController {
   deleteStatus = [
     (req, res) => {
       Status.findByIdAndDelete(req.params.id).then(() => {
-        return apiResponse.successResponse(res, 'Delete task successfully')
-      })
-    }
-  ]
+        return apiResponse.successResponse(res, 'Delete task successfully');
+      });
+    },
+  ];
 }
 
 module.exports = new StatusController();

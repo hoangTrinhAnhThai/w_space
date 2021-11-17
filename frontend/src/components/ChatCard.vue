@@ -1,6 +1,6 @@
 <template>
   <div class="chat-card">
-    <div class="container">
+    <div class="container-card">
       <input class="content" type="text" placeholder="..." />
       <i class="bx bx-paper-plane"></i>
     </div>
@@ -12,14 +12,14 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/style.scss";
+@import '../assets/style.scss';
 .chat-card {
-  .container {
+  .container-card {
     width: 100%;
-    background-color: rgb(200, 200, 200);
+    background-color: rgb(241, 237, 237);
     padding: 10px;
     .content {
-      width: 95%;
+      width: 97%;
       white-space: nowrap;
       background-color: #fff;
       overflow: hidden;
@@ -34,6 +34,9 @@ export default {};
       margin-left: 10px;
       position: relative;
       top: 5px;
+    }
+    i:hover {
+      color: rgb(138, 138, 138);
     }
   }
 }

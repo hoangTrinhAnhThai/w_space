@@ -1,4 +1,4 @@
-import http from "../../service/api.js"
+import http from '../../service/api.js';
 import { sort } from '../../utils/helper';
 
 const state = {
@@ -6,12 +6,12 @@ const state = {
   taskOfProject: [],
   statusArray: [],
   projectArray: [],
-  idProject: ''
+  idProject: '',
 };
 
 const getters = {
   projectArray(state) {
-    return state.projectArray
+    return state.projectArray;
   },
   tasksArray(state) {
     return state.tasksArray;
@@ -29,14 +29,14 @@ const getters = {
 
 const mutations = {
   setProject(state, data) {
-    state.projectArray = data
+    state.projectArray = data;
   },
 
   setTasksArray(state, data) {
     state.tasksArray = data;
   },
   setIdProject(state, data) {
-    state.idProject = data
+    state.idProject = data;
   },
   setTaskAsStatus(state) {
     state.taskOfProject = [];
@@ -59,59 +59,69 @@ const mutations = {
   },
   logMess() {
     console.log('success');
-  }
+  },
 };
 const actions = {
-  addIdProject({commit}, idProject) {
-    commit('setIdProject', idProject)
+  addIdProject({ commit }, idProject) {
+    commit('setIdProject', idProject);
   },
   getStatus({ commit }) {
-    http.get('project/status').then((result) => {
-      commit('setStatus', result.data.data)
-
-    }).catch((error) => {
-      console.log(error);
-    })
+    http
+      .get('project/status')
+      .then((result) => {
+        commit('setStatus', result.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 
   getTaskOfProject({ commit, dispatch }, idProject) {
-    commit('setIdProject', idProject)
+    commit('setIdProject', idProject);
     http.get(`project/${idProject}`).then((result) => {
-      commit('setTasksArray', result.data.data.tasks)
+      commit('setTasksArray', result.data.data.tasks);
       dispatch('getStatus').then(() => {
         commit('setTaskAsStatus');
-      })
-    })
+      });
+    });
   },
   getProject({ commit }) {
-    http.get('project').then((result) => {
-      commit('setProject', result.data.data)
-      console.log('project', result.data.data);
-    }).catch((error) => {
-      console.log(error);
-    })
+    http
+      .get('project')
+      .then((result) => {
+        commit('setProject', result.data.data);
+        console.log('project', result.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
   addProject({ dispatch }, params) {
-    http.post('/project', params).then((result) => {
-      dispatch('getProject')
-      console.log(result);
-    }).catch((error) => {
-      console.log(error);
-    })
+    http
+      .post('project', params)
+      .then((result) => {
+        dispatch('getProject');
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
   addNewTask({ dispatch }, params) {
     console.log(params.task);
-    http.post(`project/${params.idProject}/task`, params.task).then((result) => {
-      console.log(result);
-      dispatch('getTaskOfProject', params.idProject)
-    })
+    http
+      .post(`project/${params.idProject}/task`, params.task)
+      .then((result) => {
+        console.log(result);
+        dispatch('getTaskOfProject', params.idProject);
+      });
   },
   removeCard({ commit }, data) {
     console.log(data);
     http.post('project/task', data).then((result) => {
       console.log(result);
-      commit('logMess')
-    })
+      commit('logMess');
+    });
   },
 };
 

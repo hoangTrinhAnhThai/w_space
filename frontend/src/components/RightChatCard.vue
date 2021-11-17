@@ -1,8 +1,7 @@
 <template>
   <div class="right-chat-card">
     <div class="content-chat">
-      <p>re, ratione quasi harum! Lorem i
-      </p>
+      <p>re, ratione quasi harum! Lorem i</p>
       <div class="img">
         <img
           src="https://i2.wp.com/scr.vn/wp-content/uploads/2020/07/avt-cute.jpg?resize=575%2C575&ssl=1"
@@ -18,7 +17,7 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/style.scss";
+@import '../assets/style.scss';
 .right-chat-card {
   max-width: 70%;
   float: right;

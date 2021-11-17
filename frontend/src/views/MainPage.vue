@@ -2,7 +2,7 @@
   <div class="main-page">
     <sidebar />
     <div class="content">
-      <Nav />
+      <Nav class="nav" />
       <router-view class="main-container" />
     </div>
   </div>
@@ -20,13 +20,13 @@ export default {
   },
   methods: {
     ...mapActions({
-      getProject: "TASKS/getProject",
-      getStatus: "TASKS/getStatus"
-    })
+      getProject: 'TASKS/getProject',
+      getStatus: 'TASKS/getStatus',
+    }),
   },
   created() {
-    this.getProject()
-  }
+    this.getProject();
+  },
 };
 </script>
 
@@ -35,9 +35,15 @@ export default {
   display: flex;
   .sidebar {
     width: 15vw;
+    min-width: 220px;
+  }
+  .nav {
+    height: 7vh;
+    min-height: 60px;
   }
   .main-container {
     width: 85vw;
+    
     // overflow-x: auto;
     // overflow-y: hidden;
     // white-space: nowrap;

@@ -14,9 +14,9 @@ const Task = new Schema(
       ref: 'Status',
     },
     moved: {
-      before: { type: String},
-      after: { type: String}
-    }
+      before: { type: String },
+      after: { type: String },
+    },
   },
   {
     timestamps: true,

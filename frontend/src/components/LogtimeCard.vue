@@ -1,6 +1,6 @@
 <template>
   <div class="logtime-card">
-    <div class="container">
+    <div class="container-card">
       <div class="project">
         <b-form-select
           :options="dataTask.opening"
@@ -37,18 +37,18 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: "LogtimeCard",
+  name: 'LogtimeCard',
 
   data: () => ({
-    seletedTask: "",
+    seletedTask: '',
     isOpen: false,
   }),
   computed: {
     ...mapGetters({
-      dataTask: "TASKS/tasksArray",
+      dataTask: 'TASKS/tasksArray',
     }),
   },
   components: {},
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getTasks: "TASKS/getTasksArray",
+      getTasks: 'TASKS/getTasksArray',
     }),
   },
   watch: {
@@ -72,12 +72,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/style.scss";
+@import '../assets/style.scss';
 
 .logtime-card {
   margin-top: 50px;
   width: 100%;
-  .container {
+  .container-card {
     width: 100%;
     display: flex;
     border: 1px solid $border-color;
@@ -86,8 +86,7 @@ export default {
     padding: 20px 15px;
     div {
       display: flex;
-      align-self: center; 
-      
+      align-self: center;
     }
     .project {
       width: 30%;
@@ -159,7 +158,7 @@ export default {
       }
     }
   }
-  .container:hover {
+  .container-card:hover {
     .play-time {
       i {
         background-color: #fff;
@@ -182,12 +181,11 @@ export default {
         background-color: rgb(219, 219, 223);
       }
     }
-    
   }
   .description:hover {
-      button {
-        border: 1px solid $border-color;
-      }
+    button {
+      border: 1px solid $border-color;
     }
+  }
 }
 </style>

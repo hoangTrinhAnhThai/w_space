@@ -1,6 +1,6 @@
 <template>
   <div class="logtime">
-    <div class="container">
+    <div class="container-logtime">
       <div class="header">
         <div class="content1 content">
           <div class="left">
@@ -32,6 +32,7 @@
       </div>
       <div class="add-time-entry">
         <div class="search">
+          <i class="bx bx-search-alt-2"></i>
           <input type="text" />
         </div>
         <div class="filter"><i class="bx bx-filter-alt"></i> Filter</div>
@@ -40,14 +41,14 @@
         </div>
       </div>
       <div class="logtime-card">
-        <logtime-card/>
+        <logtime-card />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import LogtimeCard from '../../components/LogtimeCard.vue';
+import LogtimeCard from "../../components/LogtimeCard.vue";
 export default {
   name: "Logtime",
   components: {
@@ -59,11 +60,11 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/style.scss";
 .logtime {
-  width: 80vw;
-  float: left;
-  .container {
-    margin-top: 20px;
-    width: i {
+  margin: 0 auto;
+  .container-logtime {
+    margin: 20px auto;
+    width: 90%;
+    i {
       font-size: 21px;
     }
     .header {
@@ -116,13 +117,11 @@ export default {
       div {
         display: flex;
         align-self: center;
-          margin-right: 20px;
+        margin-right: 20px;
         input,
         button {
-          border: 1px solid $border-color;
-          border-radius: 7px;
-          padding: 5px 15px;
           outline: none;
+          border: none;
         }
         i {
           font-size: 17px;
@@ -132,15 +131,19 @@ export default {
           background-color: $color;
           color: rgb(255, 255, 255);
           font-weight: 500;
+          padding: 7px 15px;
+          border-radius: 7px;
         }
       }
-      .filter {
+      .filter,
+      .search {
+        border-radius: 7px;
         border: 1px solid $border-color;
-          border-radius: 7px;
-          padding: 5px 15px;
+        border-radius: 7px;
+        padding: 5px 15px;
       }
       .filter:hover {
-        background-color:rgb(226, 224, 224);
+        background-color: rgb(226, 224, 224);
       }
       button:hover {
         background-color: rgb(132, 199, 132);

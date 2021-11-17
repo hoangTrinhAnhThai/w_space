@@ -7,9 +7,7 @@
           alt=""
         />
       </div>
-      <p>
-        re, quos, at vobus.
-      </p>
+      <p>re, quos, at vobus.</p>
     </div>
   </div>
 </template>
@@ -19,7 +17,7 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/style.scss";
+@import '../assets/style.scss';
 .left-chat-card {
   width: 100%;
   float: left;
@@ -27,7 +25,7 @@ export default {};
   position: relative;
 
   .content-chat {
-      max-width: 70%;
+    max-width: 70%;
     .img {
       width: 45px;
       height: 45px;

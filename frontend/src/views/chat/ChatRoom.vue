@@ -1,19 +1,16 @@
 <template>
   <div class="chat-room">
-    <div class="container">
-      <div class="header">
-        Ten chat room
-      </div>
-      <hr>
+    <div class="container-chat">
+      <div class="header">Ten chat room</div>
+      <hr />
       <div class="content">
-        <left-chat-card/>
-        <right-chat-card/>
-        <left-chat-card/>
-        <left-chat-card/>
-
+        <left-chat-card />
+        <right-chat-card />
+        <left-chat-card />
+        <left-chat-card />
       </div>
       <div class="write-content">
-        <chat-card/>
+        <chat-card />
       </div>
     </div>
   </div>
@@ -29,20 +26,20 @@ export default {
   components: {
     LeftChatCard,
     RightChatCard,
-    ChatCard
-  }
+    ChatCard,
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .chat-room {
+  width: 100vw;
   position: relative;
-  min-height: 85vh;
+  min-height: 92vh;
   .content {
-    height: 65vh;
+    height: 81.5vh;
   }
   .write-content {
-    // height: 6vh;
   }
 }
 </style>

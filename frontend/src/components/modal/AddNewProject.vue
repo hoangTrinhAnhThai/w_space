@@ -35,23 +35,25 @@ export default {
   data() {
     return {
       project: {
-        name: ''
-      }
-    }
+        name: '',
+      },
+    };
   },
   methods: {
     show() {
       this.$refs.newProjectModal.show();
     },
-    hideModal() {
-      this.$refs.addNewProjectModal.hide();
+    hide() {
+      this.$refs.newProjectModal.hide();
     },
     ...mapActions({
-      addProjectAction: 'TASKS/addProject'
+      addProjectAction: 'TASKS/addProject',
     }),
     addProject() {
-      this.addProjectAction(this.project)
-    }
+      this.addProjectAction(this.project);
+      this.hide()
+      this.project.name= ''
+    },
   },
 };
 </script>
