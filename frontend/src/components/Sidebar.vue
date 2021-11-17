@@ -25,8 +25,8 @@
               >
                 <i class="bx bx-chevron-right"></i> {{ project.name }}
                 <div class="function">
-                  <i class='bx bx-edit-alt' ></i>
-                  <i class='bx bx-trash' ></i>
+                  <i @click="editProject(project._id)" class='bx bx-edit-alt' ></i>
+                  <i @click="deleteProject(project._id)" class='bx bx-trash' ></i>
                 </div>
               </li>
             </ul>
@@ -69,11 +69,20 @@ export default {
     ...mapActions({
       getTaskOfProjectAction: 'TASKS/getTaskOfProject',
       addIdProjectAction: 'TASKS/addIdProject',
+      editProjectAction: 'TASKS/editProject',
+      deleteProjectAction: 'TASKS/deleteProject'
     }),
     getTaskOfProject(idProject) {
       this.addIdProjectAction(idProject);
       this.getTaskOfProjectAction(idProject);
     },
+    editProject(idProject) {
+      this.editProjectAction({idProject: idProject, project: this.project})
+    },
+    deleteProject(idProject) {
+      this.deleteProjectAction(idProject)
+
+    }
   },
 };
 </script>
@@ -105,6 +114,11 @@ export default {
             list-style: square;
             position: relative;
             left: 5px;
+            li:hover {
+              .function {
+                display:block
+              }
+            }
           }
           .bx-plus {
             position: absolute;
@@ -116,8 +130,9 @@ export default {
           }
           .function {
             position: absolute;
-            right: 0;
+            right: -20px;
             top: 0;
+            display: none;
           }
         }
         li:hover .bx-plus {

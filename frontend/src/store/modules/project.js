@@ -123,6 +123,18 @@ const actions = {
       commit('logMess');
     });
   },
+  deleteProject({dispatch}, idProject) {
+    http.delete(`project/${idProject}`).then((result) => {
+      console.log('deletePr', result);
+      dispatch('getProject')
+    })
+  },
+  editProject({dispatch}, params) {
+    http.put(`project/${params.idProject}`,params.project).then((result) => {
+      dispatch('getProject')
+console.log(result);
+    }) 
+  }
 };
 
 export default {
