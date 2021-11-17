@@ -10,7 +10,7 @@
           v-model="project.name"
         />
       </div>
-      <button class="addProjectButton">Continue</button>
+      <button @click="addProject" class="addProjectButton">Continue</button>
     </div>
     <div class="img">
       <img
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: 'AddNewProjectModal',
   data() {
@@ -45,6 +46,12 @@ export default {
     hideModal() {
       this.$refs.addNewProjectModal.hide();
     },
+    ...mapActions({
+      addProjectAction: 'TASKS/addProject'
+    }),
+    addProject() {
+      this.addProjectAction(this.project)
+    }
   },
 };
 </script>

@@ -139,7 +139,7 @@ class TaskController {
                 if (taskBefore) {
                   if (taskAfter) {
                     Task.findByIdAndUpdate(JSON.stringify(taskBefore._id), { 'moved.after': taskAfter._id }).then((result) => {
-                    console.log('doi sang ', rresult);
+                    console.log('doi sang ', result);
 
                     })
                   } else {
