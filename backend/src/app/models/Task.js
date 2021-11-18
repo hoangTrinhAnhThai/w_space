@@ -13,6 +13,14 @@ const Task = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Status',
     },
+    moved: {
+      before: { type: String },
+      after: { type: String },
+    },
+    logtimes: {
+      type: Schema.Types.ObjectId,
+      ref: 'Logtime',
+    }
   },
   {
     timestamps: true,

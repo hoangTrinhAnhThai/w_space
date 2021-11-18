@@ -2,26 +2,31 @@
   <div class="logtime-card">
     <div class="container">
       <div class="project">
-        <b-form-select
-          :options="dataTask.opening"
-          v-model="seletedTask"
-          value-field="id"
-          text-field="text"
-        >
-        </b-form-select>
+        <select name="" id="" v-model="logtime.task">
+          <optgroup
+            v-for="(project, index) in projectArray"
+            :key="index"
+            :label="project.name"
+          >
+            <option
+              v-for="(task, index) in project.tasks"
+              :key="index"
+              :value="task._id"
+            >
+              {{ task.name }}
+            </option>
+          </optgroup>
+        </select>
       </div>
       <div class="function">
         <ul>
-          <li><i class="bx bx-trash"></i></li>
+          <li><i class="bx bx-trash" @click="deteleLogtime"></i></li>
           <li><i class="bx bx-calendar"></i></li>
         </ul>
       </div>
       <div class="description">
         <b-button id="description-tooltip"
-          >Nop de xuat Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Qui numquam molestias itaque, ipsa iure doloremque sint blanditiis
-          recusandae cupiditate exercitationem voluptatum suscipit reprehenderit
-          pariatur rerum quo cumque dignissimos dolorum impedit.</b-button
+          >Note</b-button
         >
         <b-tooltip target="description-tooltip" triggers="hover"
           >description-tooltip</b-tooltip
@@ -32,49 +37,100 @@
         <div class="sign">-</div>
         <div class="end-time">09:00</div>
       </div>
-      <div class="report">1h00</div>
-      <div class="play-time"><i class="bx bx-play"></i></div>
+      <div class="report">{{timeReport.hours}}h{{timeReport.minutes}}m{{timeReport.seconds}}</div>
+      <div class="play-time">
+        <i id="play" class="bx bx-play" @click="startTime" v-show="!isPlay"></i>
+        <i id="stop" @click="stopTime" v-show="isPlay" class="bx bx-stop"></i>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 
 export default {
-  name: 'LogtimeCard',
+  name: "LogtimeCard",
+  props: {
+    logtime: {
+      type: Object
+    }
+  },
 
   data: () => ({
-    seletedTask: '',
     isOpen: false,
+    isPlay: false,
+    nowTime: new Date(),
+    myInterval: function () {},
+    timeReport: {
+      hours: "",
+      minutes: "",
+      seconds: "",
+    },
   }),
   computed: {
     ...mapGetters({
-      dataTask: 'TASKS/tasksArray',
+      projectArray: "TASKS/projectArray",
+      timeStart: "LOGTIME/timeStart",
     }),
   },
   components: {},
-  created() {
-    this.getTasks();
-  },
   methods: {
+    // ...mapActions({
+    //   getTasks: 'TASKS/getTasksArray',
+    // }),
     ...mapActions({
-      getTasks: 'TASKS/getTasksArray',
+      addStartTimeAction: "LOGTIME/addStartTime",
+      addRealTimeAction: "LOGTIME/addRealTime",
+      addStopTimeAction: "LOGTIME/addStopTime",
+      deteleLogtimeAction: "LOGTIME/deteleLogtime"
     }),
+    startTime() {
+      this.myInterval = setInterval(this.showTime, 5000);
+      this.addStartTimeAction({startTime: this.nowTime, idTask: this.logtime.task});
+      localStorage.startTime = this.nowTime
+      this.isPlay = true;
+    },
+    stopTime() {
+      clearInterval(this.myInterval);
+      this.isPlay = false;
+      // this.addStopTime(this.nowTime);
+      localStorage.stopTime = this.nowTime
+
+    },
+    showTime() {
+      let timeNow = new Date();
+      this.addRealTimeAction(timeNow - this.nowTime);
+      var start = Date.parse(localStorage.startTime)
+      var timeInMiliseconds = timeNow - start 
+      this.timeReport.hours = Math.floor(timeInMiliseconds/1000/60/60);
+      this.timeReport.minutes = Math.floor((timeInMiliseconds/1000/60/60 - this.timeReport.hours)*60)
+      this.timeReport.seconds = Math.floor(((timeInMiliseconds/1000/60/60 - this.timeReport.hours)*60 - this.timeReport.minutes)*60)
+        
+    },
+    deteleLogtime() {
+      this.deteleLogtimeAction(this.logtime._id)
+    }
   },
   watch: {
-    dataTask: {
-      handler(value) {
-        this.seletedTask = value.opening[0].id;
-      },
-      deep: true,
-    },
+    // dataTask: {
+    //   handler(value) {
+    //     this.seletedTask = value.opening[0].id;
+    //   },
+    //   deep: true,
+    // },
+
+    'seletedTask'() {
+      if(this.isPlay == true) {
+        console.log(this.seletedTask, localStorage.startTime);
+      }
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/style.scss';
+@import "../assets/style.scss";
 
 .logtime-card {
   width: 100%;
@@ -148,23 +204,39 @@ export default {
       }
     }
     .play-time {
+<<<<<<< Updated upstream
       flex-basis: 5%;
       i {
+=======
+      #play {
+>>>>>>> Stashed changes
         right: 0;
         border-radius: 10px;
         padding: 10px;
         font-size: 20px;
       }
+      #stop {
+        right: 0;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 20px;
+        color: white;
+        background-color: rgb(248, 51, 51);
+      }
     }
   }
   .container:hover {
     .play-time {
-      i {
+      #play {
         background-color: #fff;
         color: grey;
       }
+      #stop {
+        background-color: rgb(197, 49, 49);
+        color: rgb(209, 207, 207);
+      }
     }
-    .play-time:hover i {
+    .play-time:hover #play {
       background-color: $color;
       color: white;
     }
