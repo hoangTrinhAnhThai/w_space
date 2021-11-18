@@ -1,11 +1,28 @@
 const Task = require('../models/Task');
 const Project = require('../models/Project');
 const Status = require('../models/Status');
-const { body, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
 require('dotenv').config();
+const {addANode, dropANode} = require('../../utils/movedCard')
 
 class TaskController {
+  showTask = [
+    (req, res) => {
+      Task.findById(req.params.id)
+        .populate('logtimes')
+        .then((task) => {
+          return apiResponse.successResponseWithData(
+            res,
+            'show task success',
+            task,
+          );
+        })
+        .catch((error) => {
+          return apiResponse.ErrorResponse(res, error);
+        });
+    },
+  ]
   createTask = [
     (req, res) => {
       try {
@@ -130,9 +147,17 @@ class TaskController {
   ];
   deleteTask = [
     (req, res) => {
-      Task.findByIdAndDelete(req.params.id).then(() => {
-        return apiResponse.successResponse(res, 'Delete task successfully');
-      });
+      Project.findById(req.params.idProject).populate('tasks').then((project) => {
+        if(project) {
+          if (project.tasks.length > 1) {
+            dropANode(project.tasks, req.params.idTask)
+            Task.findByIdAndDelete(req.params.idTask).then(() => {
+              return apiResponse.successResponse(res, 'Delete task successfully');
+            });
+          }
+        }
+      })
+      
     },
   ];
   moveCard = [
@@ -147,58 +172,10 @@ class TaskController {
             .populate('tasks')
             .then((project) => {
               if (project) {
-                let taskBeforeNew = null;
-                let taskAfterNew = null;
                 if (project.tasks.length > 1) {
-                  for (let task of project.tasks) {
-                    if (task.moved.before == req.body.id) {
-                      taskAfterNew = task;
-                    }
-                    if (task.moved.after == req.body.id) {
-                      taskBeforeNew = task;
-                    }
+                  dropANode(project.tasks, req.body.id)
+                  addANode(project.tasks, req.body.id, req.body.moved.before, req.body.moved.after)
 
-                    if (req.body.moved.before && JSON.stringify(task._id) == JSON.stringify(req.body.moved.before)) {
-                      Task.findByIdAndUpdate(task._id, { 'moved.after': req.body.id }).then((result) => {
-                        return result
-                      })
-                    }
-                    if (req.body.moved.after && JSON.stringify(task._id) == JSON.stringify(req.body.moved.after)) {
-                      Task.findByIdAndUpdate(task._id, { 'moved.before': req.body.id }).then((result) => {
-                        return result
-                      })
-                    }
-                  }
-                  if (taskBeforeNew) {
-                    if (taskAfterNew) {
-                       Task.findByIdAndUpdate(taskBeforeNew._id, {
-                        'moved.after': taskAfterNew._id,
-                      }).then((result) => {
-                        return result
-                      })
-                    } else {
-                       Task.findByIdAndUpdate(taskBeforeNew._id, {
-                        'moved.after': null,
-                      }).then((result) => {
-                        return result
-                      })
-                    }
-                  }
-                  if (taskAfterNew) {
-                    if (taskBeforeNew) {
-                      Task.findByIdAndUpdate(taskAfterNew._id, {
-                        'moved.before': taskBeforeNew._id,
-                      }).then((result) => {
-                        return result
-                      })
-                    } else {
-                      Task.findByIdAndUpdate(taskAfterNew._id, {
-                        'moved.before': null,
-                      }).then((result) => {
-                        return result
-                      })
-                    }
-                  }
                 }
               }
             });

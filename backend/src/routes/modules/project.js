@@ -14,9 +14,10 @@ router.get('/status', statusController.showStatus);
 router.post('/status', statusValidation(), statusController.createStatus);
 
 // task
+router.get('/task/:id', taskValidation(), taskController.showTask);
 router.post('/:id/task', taskValidation(), taskController.createTask);
 router.put('/task/:id', taskValidation(), taskController.editTask);
-router.delete('/task/:id', taskController.deleteTask);
+router.delete('/:idProject/:idTask', taskController.deleteTask);
 router.post('/task', taskController.moveCard);
 
 // project

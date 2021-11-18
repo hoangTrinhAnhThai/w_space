@@ -37,23 +37,41 @@
         </div>
         <div class="filter"><i class="bx bx-filter-alt"></i> Filter</div>
         <div class="add-project">
-          <button>Add project</button>
+          <button @click="addLogtime">Add new time entry</button>
         </div>
       </div>
       <div class="logtime-card">
-        <logtime-card />
+          <logtime-card v-for="(logtime, index) in logtimeArray" :key="index"  v-bind:logtime="logtime" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import LogtimeCard from "../../components/LogtimeCard.vue";
 export default {
   name: "Logtime",
+  computed: {
+    ...mapGetters({
+      logtimeArray: 'LOGTIME/logtimeArray'
+    })
+  },
+  methods: {
+    ...mapActions({
+      getAllLogtimeAction: "LOGTIME/getAllLogtime",
+      addStartTimeAction: "LOGTIME/addStartTime",
+    }),
+    addLogtime() {
+      this.addStartTimeAction();
+    },
+  },
   components: {
     LogtimeCard,
   },
+  created() {
+    this.getAllLogtimeAction()
+  }
 };
 </script>
 

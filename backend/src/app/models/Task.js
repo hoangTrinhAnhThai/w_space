@@ -17,6 +17,10 @@ const Task = new Schema(
       before: { type: String },
       after: { type: String },
     },
+    logtimes: {
+      type: Schema.Types.ObjectId,
+      ref: 'Logtime',
+    }
   },
   {
     timestamps: true,

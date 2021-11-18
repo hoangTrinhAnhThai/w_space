@@ -7,6 +7,9 @@ const state = {
   statusArray: [],
   projectArray: [],
   idProject: '',
+  timeStart: '',
+  realtime: '',
+  timeStop: ''
 };
 
 const getters = {
@@ -25,13 +28,23 @@ const getters = {
   idProject(state) {
     return state.idProject;
   },
+  // logtime
+
+  timeStart(state) {
+    return state.timeStart
+  },
+  realtime(state) {
+    return state.realtime
+  },
+  timeStop(state) {
+    return state.timeStop
+  }
 };
 
 const mutations = {
   setProject(state, data) {
     state.projectArray = data;
   },
-
   setTasksArray(state, data) {
     state.tasksArray = data;
   },
@@ -60,6 +73,17 @@ const mutations = {
   logMess() {
     console.log('success');
   },
+
+  // logtime 
+  setStartTime(state, data) {
+    state.timeStart = data
+  },
+  setRealTime(state, data) {
+    state.realtime = data
+  },
+  setStopTime(state, data) {
+    state.timeStop = data
+  }
 };
 const actions = {
   addIdProject({ commit }, idProject) {
@@ -123,17 +147,42 @@ const actions = {
       commit('logMess');
     });
   },
-  deleteProject({dispatch}, idProject) {
+  deleteProject({ dispatch }, idProject) {
     http.delete(`project/${idProject}`).then((result) => {
       console.log('deletePr', result);
       dispatch('getProject')
     })
   },
-  editProject({dispatch}, params) {
-    http.put(`project/${params.idProject}`,params.project).then((result) => {
+  editProject({ dispatch }, params) {
+    http.put(`project/${params.idProject}`, params.project).then((result) => {
       dispatch('getProject')
-console.log(result);
+      console.log(result);
+    })
+  },
+  deleteTask({dispatch}, params) {
+    http.delete(`project/${params.idProject}/${params.idTask}`).then((result) => {
+      console.log(result)
+      dispatch('getTaskOfProject', params.idProject);
+    })
+  },
+
+  // logtime
+
+  addStartTime({commit}, params) {
+    http.post('logtime', params).then((result) => {
+      console.log('start', result);
+    commit('logMess')
+
     }) 
+    // console.log('start', params);
+  },
+  addRealTime({commit}, params) {
+    commit('setRealTime', params)
+    // console.log('real', params);
+  },
+  addStopTime({commit}, params) {
+    commit('setStopTime', params)
+    console.log('stop', params);
   }
 };
 

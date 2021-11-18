@@ -90,7 +90,7 @@ const services = {
   delete(endPoint, params, message) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${API_URL}${endPoint}`, params, {
+        .delete(`${API_URL}${endPoint}`, params, {
           headers: localStorage.getItem('token')
             ? { Authorization: `Bearer ${localStorage.getItem('token')}` }
             : null,

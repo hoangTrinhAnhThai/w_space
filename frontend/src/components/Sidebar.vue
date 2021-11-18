@@ -18,15 +18,21 @@
             <router-link tag="li" to="/roadmap">Project</router-link>
             <i class="bx bx-plus" @click="showAddProjectModal"></i>
             <ul v-show="isShowProject" class="list-child">
-              <li
-                v-for="project in projects"
-                :key="project._id"
-                @click="getTaskOfProject(project._id)"
-              >
-                <i class="bx bx-chevron-right"></i> {{ project.name }}
+              <li v-for="project in projects" :key="project._id">
+                <span class="nameProject" @click="getTaskOfProject(project._id)"
+                  ><i class="bx bx-chevron-right"></i>
+                  <span id="name">{{ project.name }}</span></span
+                >
+
                 <div class="function">
-                  <i @click="editProject(project._id)" class='bx bx-edit-alt' ></i>
-                  <i @click="deleteProject(project._id)" class='bx bx-trash' ></i>
+                  <i
+                    @click="showAddProjectModal(project.name)"
+                    class="bx bx-edit-alt"
+                  ></i>
+                  <i
+                    @click="deleteProject(project._id)"
+                    class="bx bx-trash"
+                  ></i>
                 </div>
               </li>
             </ul>
@@ -47,10 +53,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import AddNewProjectModal from '../components/modal/AddNewProject.vue';
+import { mapActions, mapGetters } from "vuex";
+import AddNewProjectModal from "../components/modal/AddNewProject.vue";
 export default {
-  name: 'Sidebar',
+  name: "Sidebar",
   data: () => ({
     isShowProject: false,
   }),
@@ -59,7 +65,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projects: 'TASKS/projectArray',
+      projects: "TASKS/projectArray",
     }),
   },
   methods: {
@@ -67,22 +73,22 @@ export default {
       this.$refs.newProjectModal.show();
     },
     ...mapActions({
-      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
-      addIdProjectAction: 'TASKS/addIdProject',
-      editProjectAction: 'TASKS/editProject',
-      deleteProjectAction: 'TASKS/deleteProject'
+      getTaskOfProjectAction: "TASKS/getTaskOfProject",
+      addIdProjectAction: "TASKS/addIdProject",
+      editProjectAction: "TASKS/editProject",
+      deleteProjectAction: "TASKS/deleteProject",
     }),
     getTaskOfProject(idProject) {
       this.addIdProjectAction(idProject);
       this.getTaskOfProjectAction(idProject);
     },
     editProject(idProject) {
-      this.editProjectAction({idProject: idProject, project: this.project})
+      this.editProjectAction({ idProject: idProject, project: this.project });
     },
     deleteProject(idProject) {
-      this.deleteProjectAction(idProject)
-
-    }
+      this.deleteProjectAction(idProject);
+    },
+   
   },
 };
 </script>
@@ -116,7 +122,19 @@ export default {
             left: 5px;
             li:hover {
               .function {
-                display:block
+                display: block;
+              }
+            }
+            li {
+              .nameProject {
+                width: 120px;
+                text-overflow: ellipsis;
+              }
+              .function {
+                position: absolute;
+                right: -20px;
+                top: 0;
+                display: none;
               }
             }
           }
@@ -126,12 +144,6 @@ export default {
             right: 0;
             border: 1px solid rgb(194, 190, 190);
             border-radius: 3px;
-            display: none;
-          }
-          .function {
-            position: absolute;
-            right: -20px;
-            top: 0;
             display: none;
           }
         }

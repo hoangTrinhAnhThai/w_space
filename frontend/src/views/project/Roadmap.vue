@@ -26,7 +26,7 @@
           :drop-placeholder="{ className: 'placeholder' }"
         >
           <Draggable v-for="(card, index) in data.tasks" :key="index">
-            <Card class="card">{{ card.name }}</Card>
+            <Card v-bind:card="card" v-bind:idProject="idProject" class="card">{{ card.name }}</Card>
           </Draggable>
         </Container>
       </div>
@@ -232,5 +232,8 @@ export default {
   border-radius: 5px;
   transform: scaleY((0.85));
   transform-origin: 0% 0%;
+}
+.smooth-dnd-draggable-wrapper {
+  overflow: inherit !important;
 }
 </style>
