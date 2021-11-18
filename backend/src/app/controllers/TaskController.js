@@ -3,8 +3,6 @@ const Project = require('../models/Project');
 const Status = require('../models/Status');
 const { validationResult } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const {addANode, dropANode} = require('../../utils/movedCard')
 
@@ -26,14 +24,6 @@ class TaskController {
     },
   ]
   createTask = [
-    body('name')
-      .isLength({ min: 1 })
-      .trim()
-      .withMessage('Task name must be specified'),
-    body('description')
-      .isLength({ min: 1 })
-      .trim()
-      .withMessage('Task description must be specified'),
     (req, res) => {
       try {
         const errors = validationResult(req);
@@ -44,32 +34,93 @@ class TaskController {
             errors.array(),
           );
         } else {
-          Project.findOne({ _id: req.params.id }).then((pr) => {
-            if (pr) {
-              let task = new Task();
-              task.name = req.body.name;
-              task.description = req.body.description;
-
-              task.save(function (err) {
-                if (err) {
-                  return apiResponse.ErrorResponse(res, err);
-                }
-                pr.tasks.push(task);
-                pr.save(function (err) {
-                  if (err) {
-                    return apiResponse.ErrorResponse(res, err);
+          Status.findById('6188e159b6fc472025217718').then((status) => {
+            let task = new Task();
+            task.name = req.body.name;
+            task.description = req.body.description;
+            task.status = status
+            task.moved.before = null
+            Task.create(task).then((docTask) => {
+              Project.findById(req.params.id).populate('tasks').then((project) => {
+                if (project) {
+                  let firstTask;
+                  if (project.tasks.length > 0) {
+                    for (let task of project.tasks) {
+                      if (task.status == '6188e159b6fc472025217718' && task.moved.before == null) {
+                        firstTask = task;
+                        break;
+                      }
+                    }
+                    Task.findByIdAndUpdate(firstTask._id, { 'moved.before': docTask._id }).then(() => {
+                      Task.findByIdAndUpdate(docTask._id, { 'moved.after': firstTask._id }).then(() => {
+                        Project.findByIdAndUpdate(
+                          req.params.id,
+                          { $push: { tasks: docTask._id } },
+                          { new: true, useFindAndModify: false },
+                        ).then((result) => {
+                          return apiResponse.successResponseWithData(
+                            res,
+                            'Add task success',
+                            result,
+                          );
+                        });
+                      })
+                    })
+                  } else {
+                    Task.findByIdAndUpdate(docTask._id, { 'moved.after': null }).then((result) => {
+                      Project.findByIdAndUpdate(
+                        req.params.id,
+                        { $push: { tasks: docTask._id } },
+                        { new: true, useFindAndModify: false },
+                      ).then((result) => {
+                        return apiResponse.successResponseWithData(
+                          res,
+                          'Add task success',
+                          result,
+                        );
+                      });
+                    })
                   }
-                  return apiResponse.successResponseWithData(
-                    res,
-                    'Add task success',
-                    pr,
-                  );
-                });
-              });
-            } else {
-              return 'khong co';
-            }
-          });
+
+                } else {
+                  return apiResponse.ErrorResponse(res, 'Not found project');
+                }
+              })
+
+            });
+          }).catch((error) => {
+            return apiResponse.ErrorResponse(res, error);
+          })
+        }
+      } catch (error) {
+        return apiResponse.ErrorResponse(res, error);
+      }
+    },
+  ];
+  editTask = [
+    (req, res) => {
+      try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return apiResponse.validationErrorWithData(
+            res,
+            'Validation Error',
+            errors.array(),
+          );
+        } else {
+          Task.findByIdAndUpdate(req.params.id,
+            {
+              name: req.body.name,
+              description: req.body.description
+            }, { new: true }).then((result) => {
+              return apiResponse.successResponseWithData(
+                res,
+                'Edit task successfully',
+                result,
+              );
+            }).catch((error) => {
+              return apiResponse.ErrorResponse(res, error);
+            })
         }
       } catch (error) {
         return apiResponse.ErrorResponse(res, error);

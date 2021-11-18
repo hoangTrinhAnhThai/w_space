@@ -1,14 +1,10 @@
 const Status = require('../models/Status');
 const { body, validationResult } = require('express-validator');
-const { sanitizeBody } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
 require('dotenv').config();
 
 class StatusController {
   createStatus = [
-    body('name')
-      .isLength({ min: 1 })
-      .withMessage('Status name must be specified'),
     (req, res) => {
       let status = new Status();
       status.name = req.body.name;
@@ -34,6 +30,13 @@ class StatusController {
       });
     },
   ];
+  deleteStatus = [
+    (req, res) => {
+      Status.findByIdAndDelete(req.params.id).then(() => {
+        return apiResponse.successResponse(res, 'Delete task successfully')
+      })
+    }
+  ]
 }
 
 module.exports = new StatusController();

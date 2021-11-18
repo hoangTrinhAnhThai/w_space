@@ -69,12 +69,3 @@ exports.taskValidation = () => {
     //   .withMessage('Task description must be specified'),
   ];
 };
-
-// exports.logtimeValidation = () => {
-//   return [
-//       check('startTime')
-//         .isLength({ min: 1 })
-//         .trim()
-//         .withMessage('Start time must be specified'),
-//   ]
-// }
