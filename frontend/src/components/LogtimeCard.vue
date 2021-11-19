@@ -207,6 +207,8 @@ export default {
       }
     }
     .play-time {
+      flex-basis: 5%;
+      i {
       #play {
         right: 0;
         border-radius: 10px;

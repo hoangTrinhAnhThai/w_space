@@ -145,6 +145,41 @@ class TaskController {
       }
     },
   ];
+  editTask = [
+    (req, res) => {
+      try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return apiResponse.validationErrorWithData(
+            res,
+            'Validation Error',
+            errors.array(),
+          );
+        } else {
+          Task.findByIdAndUpdate(
+            req.params.id,
+            {
+              name: req.body.name,
+              description: req.body.description,
+            },
+            { new: true },
+          )
+            .then((result) => {
+              return apiResponse.successResponseWithData(
+                res,
+                'Edit task successfully',
+                result,
+              );
+            })
+            .catch((error) => {
+              return apiResponse.ErrorResponse(res, error);
+            });
+        }
+      } catch (error) {
+        return apiResponse.ErrorResponse(res, error);
+      }
+    },
+  ];
   deleteTask = [
     (req, res) => {
       Project.findById(req.params.idProject).populate('tasks').then((project) => {
