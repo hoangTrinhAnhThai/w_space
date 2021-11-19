@@ -37,7 +37,7 @@
         </div>
         <div class="filter"><i class="bx bx-filter-alt"></i> Filter</div>
         <div class="add-project">
-          <button @click="addLogtime">Add new time entry</button>
+          <button @click="createLogtime">Add new time entry</button>
         </div>
       </div>
       <div class="logtime-card">
@@ -56,6 +56,13 @@ import { mapActions, mapGetters } from 'vuex';
 import LogtimeCard from '../../components/LogtimeCard.vue';
 export default {
   name: 'Logtime',
+  data() {
+    return {
+      logtime: {
+        
+      }
+    }
+  },
   computed: {
     ...mapGetters({
       logtimeArray: 'LOGTIME/logtimeArray',
@@ -64,10 +71,10 @@ export default {
   methods: {
     ...mapActions({
       getAllLogtimeAction: 'LOGTIME/getAllLogtime',
-      addStartTimeAction: 'LOGTIME/addStartTime',
+      createLogtimeAction: 'LOGTIME/createLogtime',
     }),
-    addLogtime() {
-      this.addStartTimeAction();
+    createLogtime() {
+      this.createLogtimeAction();
     },
   },
   components: {

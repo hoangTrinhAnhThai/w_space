@@ -71,10 +71,10 @@ const services = {
         });
     });
   },
-  put(endPoint, message) {
+  put(endPoint, params, message) {
     return new Promise((resolve, reject) => {
       axios
-        .put(`${API_URL}${endPoint}`, {
+        .put(`${API_URL}${endPoint}`, params, {
           headers: localStorage.getItem('token')
             ? { Authorization: `Bearer ${localStorage.getItem('token')}` }
             : null,
