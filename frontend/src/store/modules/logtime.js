@@ -47,18 +47,6 @@ const mutations = {
 };
 
 const actions = {
-    // addStartTime({ dispatch }, params) {
-    //     http.post('logtime', params).then(() => {
-    //         dispatch('getAllLogtime')
-    //     })
-    // },
-    // addRealTime({ commit }, params) {
-    //     commit('setRealTime', params)
-    // },
-    // addStopTime({ commit }, params) {
-    //     commit('setStopTime', params)
-    //     console.log('stop', params);
-    // },
     getAllLogtime({ commit }) {
         http.get('logtime').then((result) => {
             console.log('logtime', result.data.data);
