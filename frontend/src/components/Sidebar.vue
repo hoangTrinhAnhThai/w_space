@@ -58,7 +58,6 @@ import AddNewProjectModal from "../components/modal/AddNewProject.vue";
 export default {
   name: "Sidebar",
   data: () => ({
-    projects: projects.projects,
     isShowProject: false,
   }),
   components: {
@@ -71,7 +70,6 @@ export default {
   },
   methods: {
     showAddProjectModal() {
-      console.log('hiii');
       this.$refs.newProjectModal.show();
     },
     ...mapActions({

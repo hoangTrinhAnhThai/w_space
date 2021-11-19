@@ -1,21 +1,24 @@
 <template>
   <div class="road-map">
     <h1>Roadmap</h1>
-    <div class="container" v-if="dataTask">
+    <div class="container-roadmap">
       <div class="open status" v-for="(data, index) in dataTask" :key="index">
         <div class="label">
           {{ data.status.name }}
           <span class="number">{{ data.tasks.length }}</span>
         </div>
-        <p @click="isShowAddTask = false" v-show="isShowAddTask">
-          + Add issue ....
-        </p>
-        <div class="addform" v-show="!isShowAddTask">
-          <add-task-form
-            v-on:cancelAddTaskIssue="cancelAddTaskIssue"
-          ></add-task-form>
+        <div class="addTask" v-if="index == 0">
+          <p @click="isShowAddTask = false" v-show="isShowAddTask">
+            + Add issue ....
+          </p>
+          <div class="addform" v-show="!isShowAddTask">
+            <add-task-form
+              v-on:closeAddtaskForm="closeAddtaskForm"
+            ></add-task-form>
+          </div>
         </div>
         <Container
+        class="container-card"
           group-name="trello"
           @drag-start="handleDragStart(index, $event)"
           @drop="handleDrop(index, $event)"
@@ -32,16 +35,16 @@
 </template>
 
 <script>
-import Card from '../../components/ProjectCard.vue';
-import AddTaskForm from '../../components/AddTaskForm.vue';
-import { Container, Draggable } from 'vue-smooth-dnd';
-import { mapActions, mapGetters } from 'vuex';
+import Card from "../../components/ProjectCard.vue";
+import AddTaskForm from "../../components/AddTaskForm.vue";
+import { Container, Draggable } from "vue-smooth-dnd";
+import { mapActions, mapGetters } from "vuex";
 export default {
-  name: 'Roadmap',
+  name: "Roadmap",
   data() {
     return {
       draggingCard: {
-        lane: '',
+        lane: "",
         index: -1,
         cardData: {},
       },
@@ -50,16 +53,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      dataTask: 'TASKS/taskOfProject',
+      dataTask: "TASKS/taskOfProject",
+      idProject: "TASKS/idProject",
     }),
   },
-  created() {
-    this.getTaskOfProjectAction();
-  },
+  created() {},
   methods: {
     ...mapActions({
-      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
-      updateStatusOfTaskAction: 'TASKS/updateStatusOfTask',
+      removeCard: "TASKS/removeCard",
     }),
     handleDragStart(lane, dragResult) {
       const { payload, isSource } = dragResult;
@@ -80,13 +81,13 @@ export default {
       }
       if (removedIndex !== null) {
         localStorage.setItem(
-          'idTask',
-          this.dataTask[lane].tasks[removedIndex]._id,
+          "idTask",
+          this.dataTask[lane].tasks[removedIndex]._id
         );
         this.dataTask[lane].tasks.splice(removedIndex, 1);
       }
       if (addedIndex !== null) {
-        let card = { id: '', statusId: '', moved: { before: '', after: '' } };
+        let card = { id: "", statusId: "", moved: { before: "", after: "" } };
         card.statusId = this.dataTask[lane].status._id;
         if (this.dataTask[lane].tasks[addedIndex - 1]) {
           card.moved.before = this.dataTask[lane].tasks[addedIndex - 1]._id;
@@ -100,13 +101,14 @@ export default {
         }
 
         setTimeout(() => {
-          card.id = localStorage.getItem('idTask');
-          this.updateStatusOfTaskAction(card);
+          card.id = localStorage.getItem("idTask");
+          card.idProject = this.idProject;
+          this.removeCard(card);
         }, 200);
         this.dataTask[lane].tasks.splice(
           addedIndex,
           0,
-          this.draggingCard.cardData,
+          this.draggingCard.cardData
         );
       }
     },
@@ -115,7 +117,9 @@ export default {
         index,
       };
     },
-    cancelAddTaskIssue() {},
+    closeAddtaskForm() {
+      this.isShowAddTask = true;
+    },
   },
   components: {
     Card,
@@ -128,12 +132,12 @@ export default {
 
 <style lang="scss" scoped>
 .road-map {
-  width: 80vw;
   float: left;
-  .container {
+  .container-roadmap {
+
+    width: 90%;
     display: flex;
     justify-content: space-between;
-    margin: 30px 0 15px;
     margin: 30px auto;
     .status {
       min-width: 18em;
@@ -220,17 +224,9 @@ export default {
         line-height: 25px;
       }
     }
-    .inProgress {
-      background-color: rgb(233, 247, 224);
-    }
-    .resolved {
-      background-color: rgb(241, 245, 253);
-    }
-    .closed {
-      background-color: rgb(241, 227, 224);
-    }
   }
 }
+
 .placeholder {
   background-color: rgb(223, 191, 191);
   border-radius: 5px;

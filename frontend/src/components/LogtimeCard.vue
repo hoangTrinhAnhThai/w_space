@@ -1,6 +1,6 @@
 <template>
   <div class="logtime-card">
-    <div class="container">
+    <div class="container-card">
       <div class="project">
         <select name="" id="" v-model="logtime.task">
           <optgroup
@@ -133,20 +133,21 @@ export default {
 @import "../assets/style.scss";
 
 .logtime-card {
+  margin-top: 50px;
   width: 100%;
-  .container {
+  .container-card {
     width: 100%;
     display: flex;
-    border: 1px solid grey;
+    border: 1px solid $border-color;
     border-radius: 10px;
     justify-content: space-between;
-    padding: 10px 15px;
+    padding: 20px 15px;
     div {
       display: flex;
       align-self: center;
     }
     .project {
-      flex-basis: 40%;
+      width: 30%;
       position: relative;
 
       select {
@@ -159,31 +160,32 @@ export default {
     }
 
     .function {
-      flex-basis: 10%;
+      width: 10%;
+      text-align: center;
       ul {
+        margin: 0 auto;
         list-style: none;
         color: grey;
         display: flex;
         padding: 0;
-        margin: 0;
         li {
-          display: none;
           margin-right: 5px;
-          border: 1px solid rgb(201, 198, 198);
+          border: 1px solid white;
           padding: 0 5px;
           border-radius: 5px;
           font-size: 20px;
+          color: white;
         }
       }
     }
     .description {
-      flex-basis: 30%;
+      width: 20%;
       button {
         margin: 0;
         background-color: #fff;
         color: grey;
         border: 1px solid white;
-        padding: 3.5px 15px;
+        padding: 5px 15px;
         width: 300px;
         text-align: left;
         white-space: nowrap;
@@ -192,28 +194,27 @@ export default {
       }
     }
     .timer {
-      flex-basis: 10%;
+      width: 10%;
       .sign {
         margin: 0 10px;
       }
     }
     .report {
-      p {
+      width: 15% p {
+        margin: 0 auto;
         background-color: rgb(218, 214, 214);
         border-radius: 5px;
       }
     }
     .play-time {
-<<<<<<< Updated upstream
       flex-basis: 5%;
       i {
-=======
       #play {
->>>>>>> Stashed changes
         right: 0;
         border-radius: 10px;
         padding: 10px;
         font-size: 20px;
+        color: white;
       }
       #stop {
         right: 0;
@@ -225,7 +226,7 @@ export default {
       }
     }
   }
-  .container:hover {
+  .container-card:hover {
     .play-time {
       #play {
         background-color: #fff;
@@ -245,15 +246,17 @@ export default {
       align-self: center;
       li {
         display: inline;
+        color: grey;
+        border: 1px solid rgb(201, 198, 198);
       }
       li:hover {
         background-color: rgb(219, 219, 223);
       }
     }
-    .description {
-      button {
-        border: 1px solid $border-color;
-      }
+  }
+  .description:hover {
+    button {
+      border: 1px solid $border-color;
     }
   }
 }

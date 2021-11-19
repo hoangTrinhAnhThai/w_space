@@ -18,7 +18,7 @@ const handleErrorResponse = (response, reject, message) => {
 };
 
 // let API_URL = 'http://localhost:3000/'
-let API_URL = process.env.API_URL;
+let API_URL = process.env.VUE_APP_API_URL;
 const headers = {
   Authorization: `Bearer ${localStorage.getItem('token')}`,
   'Content-Type': 'multipart/form-data',

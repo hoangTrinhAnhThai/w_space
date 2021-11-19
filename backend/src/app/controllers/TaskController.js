@@ -34,63 +34,76 @@ class TaskController {
             errors.array(),
           );
         } else {
-          Status.findById('6188e159b6fc472025217718').then((status) => {
-            let task = new Task();
-            task.name = req.body.name;
-            task.description = req.body.description;
-            task.status = status
-            task.moved.before = null
-            Task.create(task).then((docTask) => {
-              Project.findById(req.params.id).populate('tasks').then((project) => {
-                if (project) {
-                  let firstTask;
-                  if (project.tasks.length > 0) {
-                    for (let task of project.tasks) {
-                      if (task.status == '6188e159b6fc472025217718' && task.moved.before == null) {
-                        firstTask = task;
-                        break;
-                      }
-                    }
-                    Task.findByIdAndUpdate(firstTask._id, { 'moved.before': docTask._id }).then(() => {
-                      Task.findByIdAndUpdate(docTask._id, { 'moved.after': firstTask._id }).then(() => {
-                        Project.findByIdAndUpdate(
-                          req.params.id,
-                          { $push: { tasks: docTask._id } },
-                          { new: true, useFindAndModify: false },
-                        ).then((result) => {
-                          return apiResponse.successResponseWithData(
-                            res,
-                            'Add task success',
-                            result,
-                          );
+          Status.findOne({ name: 'Open' })
+            .then((status) => {
+              let task = new Task();
+              task.name = req.body.name;
+              task.description = req.body.description;
+              task.status = status;
+              task.moved.before = null;
+              Task.create(task).then((docTask) => {
+                Project.findById(req.params.id)
+                  .populate('tasks')
+                  .then((project) => {
+                    if (project) {
+                      if (project.tasks.length > 0) {
+                        for (let task of project.tasks) {
+                          if (
+                            JSON.stringify(task.status) ==
+                            JSON.stringify(status._id) &&
+                            task.moved.before == null
+                          ) {
+                            Task.findByIdAndUpdate(task._id, {
+                              'moved.before': docTask._id,
+                            }).then(() => {
+                              Task.findByIdAndUpdate(docTask._id, {
+                                'moved.after': task._id,
+                              }).then(() => {
+                                Project.findByIdAndUpdate(
+                                  req.params.id,
+                                  { $push: { tasks: docTask._id } },
+                                  { new: true, useFindAndModify: false },
+                                ).then((result) => {
+                                  return apiResponse.successResponseWithData(
+                                    res,
+                                    'Add task success',
+                                    result,
+                                  );
+                                });
+                              });
+                            });
+                            break;
+                          }
+                        }
+                      } else {
+                        Task.findByIdAndUpdate(docTask._id, {
+                          'moved.after': null,
+                        }).then((result) => {
+                          Project.findByIdAndUpdate(
+                            req.params.id,
+                            { $push: { tasks: docTask._id } },
+                            { new: true, useFindAndModify: false },
+                          ).then((result) => {
+                            return apiResponse.successResponseWithData(
+                              res,
+                              'Add task success',
+                              result,
+                            );
+                          });
                         });
-                      })
-                    })
-                  } else {
-                    Task.findByIdAndUpdate(docTask._id, { 'moved.after': null }).then((result) => {
-                      Project.findByIdAndUpdate(
-                        req.params.id,
-                        { $push: { tasks: docTask._id } },
-                        { new: true, useFindAndModify: false },
-                      ).then((result) => {
-                        return apiResponse.successResponseWithData(
-                          res,
-                          'Add task success',
-                          result,
-                        );
-                      });
-                    })
-                  }
-
-                } else {
-                  return apiResponse.ErrorResponse(res, 'Not found project');
-                }
-              })
-
+                      }
+                    } else {
+                      return apiResponse.ErrorResponse(
+                        res,
+                        'Not found project',
+                      );
+                    }
+                  });
+              });
+            })
+            .catch((error) => {
+              return apiResponse.ErrorResponse(res, error);
             });
-          }).catch((error) => {
-            return apiResponse.ErrorResponse(res, error);
-          })
         }
       } catch (error) {
         return apiResponse.ErrorResponse(res, error);
@@ -108,19 +121,24 @@ class TaskController {
             errors.array(),
           );
         } else {
-          Task.findByIdAndUpdate(req.params.id,
+          Task.findByIdAndUpdate(
+            req.params.id,
             {
               name: req.body.name,
-              description: req.body.description
-            }, { new: true }).then((result) => {
+              description: req.body.description,
+            },
+            { new: true },
+          )
+            .then((result) => {
               return apiResponse.successResponseWithData(
                 res,
                 'Edit task successfully',
                 result,
               );
-            }).catch((error) => {
-              return apiResponse.ErrorResponse(res, error);
             })
+            .catch((error) => {
+              return apiResponse.ErrorResponse(res, error);
+            });
         }
       } catch (error) {
         return apiResponse.ErrorResponse(res, error);

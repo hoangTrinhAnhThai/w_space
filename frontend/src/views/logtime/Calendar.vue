@@ -76,10 +76,97 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/style.scss";
 .logtime {
-  float: left;
-  .container {
-    margin-top: 50px;
+  margin: 0 auto;
+  .container-logtime {
+    margin: 20px auto;
+    width: 90%;
+    i {
+      font-size: 21px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      .content {
+        display: flex;
+        div {
+          padding: 5px 10px;
+        }
+      }
+      .content {
+        .left,
+        .day {
+          border: 1px solid $border-color;
+          border-top-left-radius: 7px;
+          border-bottom-left-radius: 7px;
+        }
+        .calendar {
+          border-top: 1px solid $border-color;
+          border-bottom: 1px solid $border-color;
+          border-right: 1px solid $border-color;
+        }
+        .right,
+        .week {
+          border: 1px solid $border-color;
+          border-top-right-radius: 7px;
+          border-bottom-right-radius: 7px;
+          border-left: none;
+        }
+        .sync,
+        .user,
+        .edit {
+          border: 1px solid $border-color;
+          border-radius: 7px;
+          margin-left: 7px;
+        }
+        div:hover {
+          background-color: rgb(226, 224, 224);
+        }
+        .nowDate:hover {
+          background-color: #fff;
+        }
+      }
+    }
+    .add-time-entry {
+      margin-top: 20px;
+      display: flex;
+
+      div {
+        display: flex;
+        align-self: center;
+        margin-right: 20px;
+        input,
+        button {
+          outline: none;
+          border: none;
+        }
+        i {
+          font-size: 17px;
+          margin-top: 5px;
+        }
+        button {
+          background-color: $color;
+          color: rgb(255, 255, 255);
+          font-weight: 500;
+          padding: 7px 15px;
+          border-radius: 7px;
+        }
+      }
+      .filter,
+      .search {
+        border-radius: 7px;
+        border: 1px solid $border-color;
+        border-radius: 7px;
+        padding: 5px 15px;
+      }
+      .filter:hover {
+        background-color: rgb(226, 224, 224);
+      }
+      button:hover {
+        background-color: rgb(132, 199, 132);
+      }
+    }
   }
 }
 </style>

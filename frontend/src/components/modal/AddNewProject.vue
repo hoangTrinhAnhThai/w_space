@@ -7,9 +7,10 @@
           class="textProject"
           type="text"
           placeholder="Name project ...."
+          v-model="project.name"
         />
       </div>
-      <button class="addProjectButton">Continue</button>
+      <button @click="addProject" class="addProjectButton">Continue</button>
     </div>
     <div class="img">
       <img
@@ -17,24 +18,41 @@
         alt=""
       />
     </div>
-    <div class="addMember">
+    <!-- <div class="addMember">
       <div class="content">
         <i class="bx bx-user-plus"></i>
         <input type="text" placeholder="Enter email address..." />
       </div>
       <button class="invite">Invite</button>
-    </div>
+    </div> -->
   </b-modal>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
+  name: 'AddNewProjectModal',
+  data() {
+    return {
+      project: {
+        name: '',
+      },
+    };
+  },
   methods: {
     show() {
       this.$refs.newProjectModal.show();
     },
-    hideModal() {
-      this.$refs.addNewProjectModal.hide();
+    hide() {
+      this.$refs.newProjectModal.hide();
+    },
+    ...mapActions({
+      addProjectAction: 'TASKS/addProject',
+    }),
+    addProject() {
+      this.addProjectAction(this.project);
+      this.hide()
+      this.project.name= ''
     },
   },
 };

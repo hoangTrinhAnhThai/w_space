@@ -46,42 +46,49 @@ class ProjectController {
             errors.array(),
           );
         } else {
-          Project.findByIdAndUpdate(req.params.id,
+          Project.findByIdAndUpdate(
+            req.params.id,
             {
               name: req.body.name,
-              description: req.body.description
-            }, { new: true }).then((result) => {
+              description: req.body.description,
+            },
+            { new: true },
+          )
+            .then((result) => {
               return apiResponse.successResponseWithData(
                 res,
                 'Edit project successfully',
                 result,
               );
-            }).catch((error) => {
-              return apiResponse.ErrorResponse(res, error);
             })
+            .catch((error) => {
+              return apiResponse.ErrorResponse(res, error);
+            });
         }
       } catch (error) {
         return apiResponse.ErrorResponse(res, error);
       }
     },
-  ]
+  ];
   deleteProject = [
     (req, res) => {
       Project.findByIdAndDelete(req.params.id).then(() => {
-        return apiResponse.successResponse(res, 'Delete project successfully')
-      })
-    }
-  ]
+        return apiResponse.successResponse(res, 'Delete project successfully');
+      });
+    },
+  ];
 
   showAllProjects = [
     (req, res) => {
-      Project.find().populate('tasks').then((project) => {
-        if (project) {
-          return apiResponse.successResponseWithData(res, 'data', project);
-        } else {
-          return apiResponse.ErrorResponse(res, 'Not found project');
-        }
-      });
+      Project.find()
+        .populate('tasks')
+        .then((project) => {
+          if (project) {
+            return apiResponse.successResponseWithData(res, 'data', project);
+          } else {
+            return apiResponse.ErrorResponse(res, 'Not found project');
+          }
+        });
     },
   ];
   showProject = [
@@ -94,9 +101,10 @@ class ProjectController {
             'Get tasks success',
             project,
           );
-        }).catch((error) => {
-          return apiResponse.ErrorResponse(res, error)
         })
+        .catch((error) => {
+          return apiResponse.ErrorResponse(res, error);
+        });
     },
   ];
 }
