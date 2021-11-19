@@ -9,7 +9,7 @@ const state = {
   idProject: '',
   timeStart: '',
   realtime: '',
-  timeStop: ''
+  timeStop: '',
 };
 
 const getters = {
@@ -31,14 +31,14 @@ const getters = {
   // logtime
 
   timeStart(state) {
-    return state.timeStart
+    return state.timeStart;
   },
   realtime(state) {
-    return state.realtime
+    return state.realtime;
   },
   timeStop(state) {
-    return state.timeStop
-  }
+    return state.timeStop;
+  },
 };
 
 const mutations = {
@@ -74,16 +74,16 @@ const mutations = {
     console.log('success');
   },
 
-  // logtime 
+  // logtime
   setStartTime(state, data) {
-    state.timeStart = data
+    state.timeStart = data;
   },
   setRealTime(state, data) {
-    state.realtime = data
+    state.realtime = data;
   },
   setStopTime(state, data) {
-    state.timeStop = data
-  }
+    state.timeStop = data;
+  },
 };
 const actions = {
   addIdProject({ commit }, idProject) {
@@ -150,40 +150,41 @@ const actions = {
   deleteProject({ dispatch }, idProject) {
     http.delete(`project/${idProject}`).then((result) => {
       console.log('deletePr', result);
-      dispatch('getProject')
-    })
+      dispatch('getProject');
+    });
   },
   editProject({ dispatch }, params) {
     http.put(`project/${params.idProject}`, params.project).then((result) => {
-      dispatch('getProject')
+      dispatch('getProject');
       console.log(result);
-    })
+    });
   },
-  deleteTask({dispatch}, params) {
-    http.delete(`project/${params.idProject}/${params.idTask}`).then((result) => {
-      console.log(result)
-      dispatch('getTaskOfProject', params.idProject);
-    })
+  deleteTask({ dispatch }, params) {
+    http
+      .delete(`project/${params.idProject}/${params.idTask}`)
+      .then((result) => {
+        console.log(result);
+        dispatch('getTaskOfProject', params.idProject);
+      });
   },
 
   // logtime
 
-  addStartTime({commit}, params) {
+  addStartTime({ commit }, params) {
     http.post('logtime', params).then((result) => {
       console.log('start', result);
-    commit('logMess')
-
-    }) 
+      commit('logMess');
+    });
     // console.log('start', params);
   },
-  addRealTime({commit}, params) {
-    commit('setRealTime', params)
+  addRealTime({ commit }, params) {
+    commit('setRealTime', params);
     // console.log('real', params);
   },
-  addStopTime({commit}, params) {
-    commit('setStopTime', params)
+  addStopTime({ commit }, params) {
+    commit('setStopTime', params);
     console.log('stop', params);
-  }
+  },
 };
 
 export default {

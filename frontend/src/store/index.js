@@ -14,6 +14,6 @@ export default new Vuex.Store({
     VALIDATION: Validation,
     ERROR: ErrorMessage,
     TASKS: Task,
-    LOGTIME: Logtime
+    LOGTIME: Logtime,
   },
 });

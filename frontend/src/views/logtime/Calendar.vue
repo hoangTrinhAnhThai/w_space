@@ -41,7 +41,11 @@
         </div>
       </div>
       <div class="logtime-card">
-          <logtime-card v-for="(logtime, index) in logtimeArray" :key="index"  v-bind:logtime="logtime" />
+        <logtime-card
+          v-for="(logtime, index) in logtimeArray"
+          :key="index"
+          v-bind:logtime="logtime"
+        />
       </div>
     </div>
   </div>
@@ -49,18 +53,18 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import LogtimeCard from "../../components/LogtimeCard.vue";
+import LogtimeCard from '../../components/LogtimeCard.vue';
 export default {
-  name: "Logtime",
+  name: 'Logtime',
   computed: {
     ...mapGetters({
-      logtimeArray: 'LOGTIME/logtimeArray'
-    })
+      logtimeArray: 'LOGTIME/logtimeArray',
+    }),
   },
   methods: {
     ...mapActions({
-      getAllLogtimeAction: "LOGTIME/getAllLogtime",
-      addStartTimeAction: "LOGTIME/addStartTime",
+      getAllLogtimeAction: 'LOGTIME/getAllLogtime',
+      addStartTimeAction: 'LOGTIME/addStartTime',
     }),
     addLogtime() {
       this.addStartTimeAction();
@@ -70,13 +74,13 @@ export default {
     LogtimeCard,
   },
   created() {
-    this.getAllLogtimeAction()
-  }
+    this.getAllLogtimeAction();
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
+@import '../../assets/style.scss';
 .logtime {
   margin: 0 auto;
   .container-logtime {

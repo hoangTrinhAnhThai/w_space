@@ -18,7 +18,7 @@
           </div>
         </div>
         <Container
-        class="container-card"
+          class="container-card"
           group-name="trello"
           @drag-start="handleDragStart(index, $event)"
           @drop="handleDrop(index, $event)"
@@ -26,7 +26,12 @@
           :drop-placeholder="{ className: 'placeholder' }"
         >
           <Draggable v-for="(card, index) in data.tasks" :key="index">
-            <Card v-bind:card="card" v-bind:idProject="idProject" class="card">{{ card.name }}</Card>
+            <Card
+              v-bind:card="card"
+              v-bind:idProject="idProject"
+              class="card"
+              >{{ card.name }}</Card
+            >
           </Draggable>
         </Container>
       </div>
@@ -35,16 +40,16 @@
 </template>
 
 <script>
-import Card from "../../components/ProjectCard.vue";
-import AddTaskForm from "../../components/AddTaskForm.vue";
-import { Container, Draggable } from "vue-smooth-dnd";
-import { mapActions, mapGetters } from "vuex";
+import Card from '../../components/ProjectCard.vue';
+import AddTaskForm from '../../components/AddTaskForm.vue';
+import { Container, Draggable } from 'vue-smooth-dnd';
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "Roadmap",
+  name: 'Roadmap',
   data() {
     return {
       draggingCard: {
-        lane: "",
+        lane: '',
         index: -1,
         cardData: {},
       },
@@ -53,14 +58,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      dataTask: "TASKS/taskOfProject",
-      idProject: "TASKS/idProject",
+      dataTask: 'TASKS/taskOfProject',
+      idProject: 'TASKS/idProject',
     }),
   },
   created() {},
   methods: {
     ...mapActions({
-      removeCard: "TASKS/removeCard",
+      removeCard: 'TASKS/removeCard',
     }),
     handleDragStart(lane, dragResult) {
       const { payload, isSource } = dragResult;
@@ -81,13 +86,13 @@ export default {
       }
       if (removedIndex !== null) {
         localStorage.setItem(
-          "idTask",
-          this.dataTask[lane].tasks[removedIndex]._id
+          'idTask',
+          this.dataTask[lane].tasks[removedIndex]._id,
         );
         this.dataTask[lane].tasks.splice(removedIndex, 1);
       }
       if (addedIndex !== null) {
-        let card = { id: "", statusId: "", moved: { before: "", after: "" } };
+        let card = { id: '', statusId: '', moved: { before: '', after: '' } };
         card.statusId = this.dataTask[lane].status._id;
         if (this.dataTask[lane].tasks[addedIndex - 1]) {
           card.moved.before = this.dataTask[lane].tasks[addedIndex - 1]._id;
@@ -101,14 +106,14 @@ export default {
         }
 
         setTimeout(() => {
-          card.id = localStorage.getItem("idTask");
+          card.id = localStorage.getItem('idTask');
           card.idProject = this.idProject;
           this.removeCard(card);
         }, 200);
         this.dataTask[lane].tasks.splice(
           addedIndex,
           0,
-          this.draggingCard.cardData
+          this.draggingCard.cardData,
         );
       }
     },
@@ -134,7 +139,6 @@ export default {
 .road-map {
   float: left;
   .container-roadmap {
-
     width: 90%;
     display: flex;
     justify-content: space-between;

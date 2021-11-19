@@ -4,8 +4,12 @@
       <i class="bx bx-dots-vertical-rounded"></i>
       <div class="function">
         <ul>
-          <li><span><i class="bx bx-edit-alt"></i> Edit</span></li>
-          <li @click="deleteTask"><span><i class="bx bx-trash"></i> Delete</span></li>
+          <li>
+            <span><i class="bx bx-edit-alt"></i> Edit</span>
+          </li>
+          <li @click="deleteTask">
+            <span><i class="bx bx-trash"></i> Delete</span>
+          </li>
         </ul>
       </div>
     </div>
@@ -17,24 +21,27 @@
 <script>
 import { mapActions } from 'vuex';
 export default {
-  name: "Cards",
+  name: 'Cards',
   props: {
     card: {
-      type: Object
+      type: Object,
     },
     idProject: {
-      type: String
-    }
+      type: String,
+    },
   },
-  
+
   methods: {
     ...mapActions({
-      deleteTaskAction: 'TASKS/deleteTask'
+      deleteTaskAction: 'TASKS/deleteTask',
     }),
     deleteTask() {
-      this.deleteTaskAction({idTask: this.card._id, idProject: this.idProject})
-    }
-  }
+      this.deleteTaskAction({
+        idTask: this.card._id,
+        idProject: this.idProject,
+      });
+    },
+  },
 };
 </script>
 

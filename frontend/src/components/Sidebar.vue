@@ -53,10 +53,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import AddNewProjectModal from "../components/modal/AddNewProject.vue";
+import { mapActions, mapGetters } from 'vuex';
+import AddNewProjectModal from '../components/modal/AddNewProject.vue';
 export default {
-  name: "Sidebar",
+  name: 'Sidebar',
   data: () => ({
     isShowProject: false,
   }),
@@ -65,7 +65,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projects: "TASKS/projectArray",
+      projects: 'TASKS/projectArray',
     }),
   },
   methods: {
@@ -73,10 +73,10 @@ export default {
       this.$refs.newProjectModal.show();
     },
     ...mapActions({
-      getTaskOfProjectAction: "TASKS/getTaskOfProject",
-      addIdProjectAction: "TASKS/addIdProject",
-      editProjectAction: "TASKS/editProject",
-      deleteProjectAction: "TASKS/deleteProject",
+      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
+      addIdProjectAction: 'TASKS/addIdProject',
+      editProjectAction: 'TASKS/editProject',
+      deleteProjectAction: 'TASKS/deleteProject',
     }),
     getTaskOfProject(idProject) {
       this.addIdProjectAction(idProject);
@@ -88,7 +88,6 @@ export default {
     deleteProject(idProject) {
       this.deleteProjectAction(idProject);
     },
-   
   },
 };
 </script>

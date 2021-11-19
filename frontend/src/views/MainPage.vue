@@ -43,7 +43,7 @@ export default {
   }
   .main-container {
     width: 85vw;
-    
+
     // overflow-x: auto;
     // overflow-y: hidden;
     // white-space: nowrap;

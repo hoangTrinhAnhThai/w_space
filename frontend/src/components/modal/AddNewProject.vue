@@ -51,8 +51,8 @@ export default {
     }),
     addProject() {
       this.addProjectAction(this.project);
-      this.hide()
-      this.project.name= ''
+      this.hide();
+      this.project.name = '';
     },
   },
 };

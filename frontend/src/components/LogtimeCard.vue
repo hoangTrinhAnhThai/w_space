@@ -25,9 +25,7 @@
         </ul>
       </div>
       <div class="description">
-        <b-button id="description-tooltip"
-          >Note</b-button
-        >
+        <b-button id="description-tooltip">Note</b-button>
         <b-tooltip target="description-tooltip" triggers="hover"
           >description-tooltip</b-tooltip
         >
@@ -37,7 +35,9 @@
         <div class="sign">-</div>
         <div class="end-time">09:00</div>
       </div>
-      <div class="report">{{timeReport.hours}}h{{timeReport.minutes}}m{{timeReport.seconds}}</div>
+      <div class="report">
+        {{ timeReport.hours }}h{{ timeReport.minutes }}m{{ timeReport.seconds }}
+      </div>
       <div class="play-time">
         <i id="play" class="bx bx-play" @click="startTime" v-show="!isPlay"></i>
         <i id="stop" @click="stopTime" v-show="isPlay" class="bx bx-stop"></i>
@@ -47,14 +47,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: "LogtimeCard",
+  name: 'LogtimeCard',
   props: {
     logtime: {
-      type: Object
-    }
+      type: Object,
+    },
   },
 
   data: () => ({
@@ -63,15 +63,15 @@ export default {
     nowTime: new Date(),
     myInterval: function () {},
     timeReport: {
-      hours: "",
-      minutes: "",
-      seconds: "",
+      hours: '',
+      minutes: '',
+      seconds: '',
     },
   }),
   computed: {
     ...mapGetters({
-      projectArray: "TASKS/projectArray",
-      timeStart: "LOGTIME/timeStart",
+      projectArray: 'TASKS/projectArray',
+      timeStart: 'LOGTIME/timeStart',
     }),
   },
   components: {},
@@ -80,37 +80,44 @@ export default {
     //   getTasks: 'TASKS/getTasksArray',
     // }),
     ...mapActions({
-      addStartTimeAction: "LOGTIME/addStartTime",
-      addRealTimeAction: "LOGTIME/addRealTime",
-      addStopTimeAction: "LOGTIME/addStopTime",
-      deteleLogtimeAction: "LOGTIME/deteleLogtime"
+      addStartTimeAction: 'LOGTIME/addStartTime',
+      addRealTimeAction: 'LOGTIME/addRealTime',
+      addStopTimeAction: 'LOGTIME/addStopTime',
+      deteleLogtimeAction: 'LOGTIME/deteleLogtime',
     }),
     startTime() {
       this.myInterval = setInterval(this.showTime, 5000);
-      this.addStartTimeAction({startTime: this.nowTime, idTask: this.logtime.task});
-      localStorage.startTime = this.nowTime
+      this.addStartTimeAction({
+        startTime: this.nowTime,
+        idTask: this.logtime.task,
+      });
+      localStorage.startTime = this.nowTime;
       this.isPlay = true;
     },
     stopTime() {
       clearInterval(this.myInterval);
       this.isPlay = false;
       // this.addStopTime(this.nowTime);
-      localStorage.stopTime = this.nowTime
-
+      localStorage.stopTime = this.nowTime;
     },
     showTime() {
       let timeNow = new Date();
       this.addRealTimeAction(timeNow - this.nowTime);
-      var start = Date.parse(localStorage.startTime)
-      var timeInMiliseconds = timeNow - start 
-      this.timeReport.hours = Math.floor(timeInMiliseconds/1000/60/60);
-      this.timeReport.minutes = Math.floor((timeInMiliseconds/1000/60/60 - this.timeReport.hours)*60)
-      this.timeReport.seconds = Math.floor(((timeInMiliseconds/1000/60/60 - this.timeReport.hours)*60 - this.timeReport.minutes)*60)
-        
+      var start = Date.parse(localStorage.startTime);
+      var timeInMiliseconds = timeNow - start;
+      this.timeReport.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60);
+      this.timeReport.minutes = Math.floor(
+        (timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60,
+      );
+      this.timeReport.seconds = Math.floor(
+        ((timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60 -
+          this.timeReport.minutes) *
+          60,
+      );
     },
     deteleLogtime() {
-      this.deteleLogtimeAction(this.logtime._id)
-    }
+      this.deteleLogtimeAction(this.logtime._id);
+    },
   },
   watch: {
     // dataTask: {
@@ -120,17 +127,17 @@ export default {
     //   deep: true,
     // },
 
-    'seletedTask'() {
-      if(this.isPlay == true) {
+    seletedTask() {
+      if (this.isPlay == true) {
         console.log(this.seletedTask, localStorage.startTime);
       }
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/style.scss";
+@import '../assets/style.scss';
 
 .logtime-card {
   margin-top: 50px;
