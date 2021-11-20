@@ -50,27 +50,55 @@
       </div>
       <div class="report">
         <span v-if="!logtime.isPlaying">
-          {{ Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60) }}h
-          {{
-            Math.floor(
-              (logtime.timeInMiliseconds / 1000 / 60 / 60 -
-                Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                60
-            )
-          }}m
-          {{
-            Math.floor(
-              ((logtime.timeInMiliseconds / 1000 / 60 / 60 -
-                Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                60 -
-                Math.floor(
-                  (logtime.timeInMiliseconds / 1000 / 60 / 60 -
-                    Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                    60
-                )) *
-                60
-            )
-          }}
+          <span v-if="Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)">{{
+            Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)
+          }}</span>
+          <span v-else>00</span>h
+          <span
+            v-if="
+              Math.floor(
+                (logtime.timeInMiliseconds / 1000 / 60 / 60 -
+                  Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
+                  60
+              )
+            "
+          >
+            {{
+              Math.floor(
+                (logtime.timeInMiliseconds / 1000 / 60 / 60 -
+                  Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
+                  60
+              )
+            }}</span
+          ><span v-else>00</span>m
+          <span
+            v-if="
+              Math.floor(
+                ((logtime.timeInMiliseconds / 1000 / 60 / 60 -
+                  Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
+                  60 -
+                  Math.floor(
+                    (logtime.timeInMiliseconds / 1000 / 60 / 60 -
+                      Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
+                      60
+                  )) *
+                  60
+              )
+            "
+            >{{
+              Math.floor(
+                ((logtime.timeInMiliseconds / 1000 / 60 / 60 -
+                  Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
+                  60 -
+                  Math.floor(
+                    (logtime.timeInMiliseconds / 1000 / 60 / 60 -
+                      Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
+                      60
+                  )) *
+                  60
+              )
+            }}</span
+          >
         </span>
         <span v-else>
           <span v-if="timeReport.hours">{{ timeReport.hours }}</span>
@@ -114,9 +142,9 @@ export default {
     nowTime: new Date(),
     myInterval: function () {},
     timeReport: {
-      hours: "",
-      minutes: "",
-      seconds: "",
+      hours: "00",
+      minutes: "00",
+      seconds: "00",
     },
   }),
   computed: {
@@ -214,6 +242,7 @@ export default {
 .logtime-card {
   margin-top: 50px;
   width: 100%;
+  // min-width: 850px;
   .container-card {
     width: 100%;
     display: flex;

@@ -35,18 +35,18 @@ export default {
   display: flex;
   .sidebar {
     width: 15vw;
-    min-width: 220px;
+    min-width: 200px;
+    // position: fixed;
   }
   .nav {
     height: 7vh;
     min-height: 60px;
   }
   .main-container {
-    width: 85vw;
-
-    // overflow-x: auto;
-    // overflow-y: hidden;
-    // white-space: nowrap;
+    width: 83vw;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
   }
 }
 </style>

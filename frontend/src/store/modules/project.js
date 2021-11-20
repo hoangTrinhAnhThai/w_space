@@ -93,6 +93,7 @@ const actions = {
     http
       .get('project/status')
       .then((result) => {
+        console.log(result.data.data);
         commit('setStatus', result.data.data);
       })
       .catch((error) => {

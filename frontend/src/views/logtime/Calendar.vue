@@ -93,6 +93,8 @@ export default {
   .container-logtime {
     margin: 20px auto;
     width: 90%;
+  min-width: 850px;
+
     i {
       font-size: 21px;
     }
