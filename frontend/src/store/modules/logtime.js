@@ -48,8 +48,22 @@ const mutations = {
 
 const actions = {
     getAllLogtime({ commit }) {
+        commit('setLogtimeArray', [])
         http.get('logtime').then((result) => {
             console.log('logtime', result.data.data);
+            commit('setLogtimeArray', result.data.data)
+            for (let logtime of result.data.data) {
+                if (logtime.isPlaying == true) {
+                    commit('setLogtimeIsPlaying', logtime)
+                }
+            }
+        })
+    },
+    getAllLogtimeByDate({ commit }, params) {
+        console.log(params);
+        commit('setLogtimeArray', [])
+        http.post(`logtime/${params}`).then((result) => {
+            console.log('logtime', result);
             commit('setLogtimeArray', result.data.data)
             for (let logtime of result.data.data) {
                 if (logtime.isPlaying == true) {

@@ -18,17 +18,40 @@
           </optgroup>
         </select>
       </div>
-      <div class="function">
-        <ul>
+      <div class="function" >
+        <ul v-show="!logtime.isPlaying">
           <li><i class="bx bx-trash" @click="deteleLogtime"></i></li>
           <li><i class="bx bx-calendar"></i></li>
         </ul>
       </div>
-      <div class="description">
-        <b-button id="description-tooltip">Note</b-button>
-        <b-tooltip target="description-tooltip" triggers="hover"
-          >description-tooltip</b-tooltip
-        >
+      <div class="description" tabindex="0">
+        <div class="note">
+          <span
+            v-if="logtime.note"
+            v-b-tooltip.hover
+            placement="bottom"
+            :title="logtime.note"
+            placeholder="note"
+            >{{ logtime.note }}</span
+          >
+          <span
+            v-else
+            v-b-tooltip.hover
+            placement="bottom"
+            :title="logtime.note"
+            placeholder="note"
+            >note</span
+          >
+        </div>
+        <div class="text">
+          <textarea
+            v-on:blur="handleBlur"
+            placeholder="note"
+            v-model="logtime.note"
+            rows="5"
+            cols="25"
+          ></textarea>
+        </div>
       </div>
       <div class="timer">
         <div class="start-time">
@@ -139,7 +162,6 @@ export default {
 
   data: () => ({
     isOpen: false,
-    nowTime: new Date(),
     myInterval: function () {},
     timeReport: {
       hours: "00",
@@ -184,7 +206,7 @@ export default {
           _id: this.logtime._id,
         });
       }
-      this.myInterval = setInterval(this.showTime, 5000);
+      this.myInterval = setInterval(this.showTime, 1000);
     },
     stopTime() {
       clearInterval(this.myInterval);
@@ -214,6 +236,13 @@ export default {
     deteleLogtime() {
       this.deteleLogtimeAction(this.logtime._id);
     },
+    handleBlur() {
+      console.log(this.logtime.note);
+      this.updateLogtimeAction({
+        logtime: {note: this.logtime.note},
+        _id: this.logtime._id,
+      });
+    },
   },
   watch: {
     // dataTask: {
@@ -231,7 +260,7 @@ export default {
     },
   },
   created() {
-        this.myInterval = setInterval(this.showTime, 5000);
+    this.myInterval = setInterval(this.showTime, 1000);
   },
 };
 </script>
@@ -240,14 +269,12 @@ export default {
 @import "../assets/style.scss";
 
 .logtime-card {
-  margin-top: 50px;
+  // margin-top: 10px;
   width: 100%;
   // min-width: 850px;
   .container-card {
     width: 100%;
     display: flex;
-    border: 1px solid $border-color;
-    border-radius: 10px;
     justify-content: space-between;
     padding: 20px 15px;
     div {
@@ -288,17 +315,45 @@ export default {
     }
     .description {
       width: 20%;
-      button {
+      .note {
+        width: 180px;
+        span {
+          width: 180px;
+
+          padding-right: 15px;
+          border: 1px solid $border-color;
+          text-align: left;
+          padding: 5px 15px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          outline: none;
+          border-radius: 7px;
+          color: grey;
+        }
+      }
+      .text {
+        display: none;
+      }
+    }
+    .description:focus-within {
+      position: relative;
+      .text {
+        position: absolute;
+        top: 0;
+        display: inline-block;
         margin: 0;
         background-color: #fff;
         color: grey;
-        border: 1px solid white;
-        padding: 5px 15px;
-        width: 300px;
         text-align: left;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        outline: none;
+        border-radius: 7px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        textarea {
+          padding: 15px;
+          border: none;
+          outline: none;
+        }
       }
     }
     .timer {
@@ -361,8 +416,11 @@ export default {
     }
   }
   .description:hover {
-    button {
+    textarea {
       border: 1px solid $border-color;
+      outline: none;
+      border-radius: 10px;
+      // height: 50px;
     }
   }
 }

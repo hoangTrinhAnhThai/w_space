@@ -3,6 +3,8 @@ const LogTime = require('../models/Logtime')
 const { validationResult } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
 const Logtime = require('../models/Logtime');
+const endOfDay = require('date-fns/endOfDay')
+const startOfDay = require('date-fns/startOfDay')
 require('dotenv').config();
 
 class LogtimeController {
@@ -36,12 +38,33 @@ class LogtimeController {
         });
     },
   ]
+  showAllLogtimeByDate = [
+    (req, res) => {
+      LogTime.find({
+        createdAt: {
+          $gte: startOfDay(new Date(req.params.date)),
+          $lte: endOfDay(new Date(req.params.date))
+        }
+      }).sort({ 'createdAt': -1 })
+        .then((logtimes) => {
+          return apiResponse.successResponseWithData(
+            res,
+            'show tasks success',
+             logtimes
+          );
+        })
+        .catch((error) => {
+          return apiResponse.ErrorResponse(res, error);
+        });
+      // return apiResponse.successResponseWithData(res, 'date', new Date(req.params.date))
+    },
+  ]
   createLogtime = [
     (req, res) => {
       console.log(req.body);
       const logtime = new Logtime()
       logtime.startTime = req.body.startTime
-      logtime.task = req.body.idTask
+      logtime.task = req.body.task
       logtime.note = req.body.note
       logtime.isPlaying = req.body.isPlaying
       LogTime.create(logtime).then((logtime) => {
@@ -69,7 +92,7 @@ class LogtimeController {
           task: req.body.task,
           note: req.body.note,
           stopTime: req.body.stopTime,
-          startTime:  req.body.startTime,
+          startTime: req.body.startTime,
           isPlaying: req.body.isPlaying,
           timeInMiliseconds: req.body.timeInMiliseconds
 

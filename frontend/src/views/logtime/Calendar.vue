@@ -8,13 +8,12 @@
           </div>
           <div class="calendar">
             <i class="bx bxs-calendar"></i>
-            <i class="bx bxs-chevron-up"></i>
-            <i class="bx bxs-chevron-down"></i>
+            <DatePicker v-model="date" :clearable="false" class="datepicker" />
           </div>
           <div class="right">
             <i class="bx bxs-chevron-right"></i>
           </div>
-          <div class="nowDate">Tuesday, 14 November</div>
+          <div class="nowDate">{{ dateWeek }}, {{ dateMonth }} {{ month }}</div>
         </div>
         <div class="content2 content">
           <div class="day">Day</div>
@@ -45,6 +44,7 @@
           v-for="(logtime, index) in logtimeArray"
           :key="index"
           v-bind:logtime="logtime"
+          class="logtime-content"
         />
       </div>
     </div>
@@ -52,26 +52,37 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import LogtimeCard from '../../components/LogtimeCard.vue';
+import { mapActions, mapGetters } from "vuex";
+import LogtimeCard from "../../components/LogtimeCard.vue";
+import data from "../../utils/data";
+import DatePicker from "vue2-datepicker";
 export default {
-  name: 'Logtime',
+  name: "Logtime",
   data() {
     return {
-      logtime: {
-        
-      }
-    }
+      logtime: {},
+      date: sessionStorage.getItem('date') || `${new Date().getFullYear()}-${new Date().getMonth() +1}-${new Date().getDate()}`
+    };
   },
   computed: {
     ...mapGetters({
-      logtimeArray: 'LOGTIME/logtimeArray',
+      logtimeArray: "LOGTIME/logtimeArray",
     }),
+    dateWeek() {
+      return data.weekday[new Date(this.date).getDay()];
+    },
+    dateMonth() {
+      return new Date(this.date).getDate();
+    },
+    month() {
+      return data.month[new Date(this.date).getMonth()];
+    },
   },
   methods: {
     ...mapActions({
-      getAllLogtimeAction: 'LOGTIME/getAllLogtime',
-      createLogtimeAction: 'LOGTIME/createLogtime',
+      getAllLogtimeAction: "LOGTIME/getAllLogtime",
+      createLogtimeAction: "LOGTIME/createLogtime",
+      getAllLogtimeByDate: "LOGTIME/getAllLogtimeByDate"
     }),
     createLogtime() {
       this.createLogtimeAction();
@@ -79,22 +90,28 @@ export default {
   },
   components: {
     LogtimeCard,
+    DatePicker,
   },
   created() {
-    this.getAllLogtimeAction();
+    this.getAllLogtimeByDate(this.date)
+  },
+  watch: {
+    'date'() {
+      sessionStorage.setItem('date', this.date )
+    this.getAllLogtimeByDate(this.date)
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/style.scss';
+@import "../../assets/style.scss";
 .logtime {
   margin: 0 auto;
   .container-logtime {
     margin: 20px auto;
     width: 90%;
-  min-width: 850px;
-
+    min-width: 850px;
     i {
       font-size: 21px;
     }
@@ -118,6 +135,19 @@ export default {
           border-top: 1px solid $border-color;
           border-bottom: 1px solid $border-color;
           border-right: 1px solid $border-color;
+          position: relative;
+
+          .datepicker {
+            opacity: 0;
+            width: 40px;
+            margin: 0;
+            height: 20px;
+            padding: 0;
+            position: absolute;
+            right: 0;
+          }
+          .bxs-calendar {
+          }
         }
         .right,
         .week {
@@ -142,7 +172,7 @@ export default {
       }
     }
     .add-time-entry {
-      margin-top: 20px;
+      margin: 20px 0 50px;
       display: flex;
 
       div {
@@ -178,6 +208,22 @@ export default {
       }
       button:hover {
         background-color: rgb(132, 199, 132);
+      }
+    }
+    .logtime-card {
+      .logtime-content {
+        border-top: 1px solid $border-color;
+        border-right: 1px solid $border-color;
+        border-left: 1px solid $border-color;
+      }
+      .logtime-content:last-child {
+        border-bottom: 1px solid $border-color;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+      }
+      .logtime-content:first-child {
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
       }
     }
   }
