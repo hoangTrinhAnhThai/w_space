@@ -13,13 +13,13 @@
         </ul>
       </div>
     </div>
-
-    <slot />
+    <slot/>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
+
 export default {
   name: 'Cards',
   props: {
@@ -42,6 +42,8 @@ export default {
       });
     },
   },
+  components: {
+  }
 };
 </script>
 
