@@ -34,7 +34,7 @@ class LogtimeController {
           );
         })
         .catch((error) => {
-          return apiResponse.ErrorResponse(res, error);
+          return apiResponse.ErrorResponse(res, 'error');
         });
     },
   ]
@@ -50,13 +50,30 @@ class LogtimeController {
           return apiResponse.successResponseWithData(
             res,
             'show tasks success',
-             logtimes
+            logtimes
           );
         })
         .catch((error) => {
           return apiResponse.ErrorResponse(res, error);
         });
-      // return apiResponse.successResponseWithData(res, 'date', new Date(req.params.date))
+    },
+  ]
+  showAllLogtimeByTask = [
+    (req, res) => {
+      LogTime.find({
+        task: req.params.task
+      })
+        .then((logtimes) => {
+          console.log(req.params.task);
+          return apiResponse.successResponseWithData(
+            res,
+            req.params.task,
+            logtimes
+          );
+        })
+        .catch((error) => {
+          return apiResponse.ErrorResponse(res, error);
+        });
     },
   ]
   createLogtime = [
@@ -68,53 +85,46 @@ class LogtimeController {
       logtime.note = req.body.note
       logtime.isPlaying = req.body.isPlaying
       LogTime.create(logtime).then((logtime) => {
-        Task.findByIdAndUpdate(
-          req.body.idTask,
-          { $push: { logtimes: logtime } },
-          { new: true, useFindAndModify: false },
-        ).then((result) => {
-          console.log('result', result);
-          return apiResponse.successResponseWithData(
-            res,
-            'Add logtime success',
-            result,
-          );
-        })
-      })
-    }
-  ]
-  updateLogtime = [
-    (req, res) => {
-      console.log(req.body);
-      LogTime.findByIdAndUpdate(
-        req.params.id,
-        {
-          task: req.body.task,
-          note: req.body.note,
-          stopTime: req.body.stopTime,
-          startTime: req.body.startTime,
-          isPlaying: req.body.isPlaying,
-          timeInMiliseconds: req.body.timeInMiliseconds
-
-        },
-        { new: true, useFindAndModify: false },
-      ).then((result) => {
-        console.log('result', result);
         return apiResponse.successResponseWithData(
           res,
-          'Update logtime success',
-          result,
+          'Add logtime success',
+          logtime,
         );
       })
     }
   ]
-  deleteLogtime = [
-    (req, res) => {
-      Logtime.findByIdAndDelete(req.params.id).then(() => {
-        return apiResponse.successResponse(res, 'Delete project successfully');
-      });
-    },
-  ]
+updateLogtime = [
+  (req, res) => {
+    console.log(req.body);
+    LogTime.findByIdAndUpdate(
+      req.params.id,
+      {
+        task: req.body.task,
+        note: req.body.note,
+        stopTime: req.body.stopTime,
+        startTime: req.body.startTime,
+        isPlaying: req.body.isPlaying,
+        timeInMiliseconds: req.body.timeInMiliseconds
+
+      },
+      { new: true, useFindAndModify: false },
+    ).then((result) => {
+      console.log('result', result);
+      return apiResponse.successResponseWithData(
+        res,
+        'Update logtime success',
+        result,
+      );
+    })
+  }
+]
+deleteLogtime = [
+  (req, res) => {
+    Logtime.findByIdAndDelete(req.params.id).then(() => {
+      return apiResponse.successResponse(res, 'Delete project successfully');
+    });
+  },
+]
 }
 
 module.exports = new LogtimeController();

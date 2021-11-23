@@ -1,11 +1,11 @@
 <template>
-  <div class="card">
+  <div class="card" >
     <div class="sign" tabindex="0">
       <i class="bx bx-dots-vertical-rounded"></i>
       <div class="function">
         <ul>
-          <li>
-            <span><i class="bx bx-edit-alt"></i> Edit</span>
+          <li @click="showTaskDetailModal">
+            <span><i class="bx bx-edit-alt"  ></i> Edit</span>
           </li>
           <li @click="deleteTask">
             <span><i class="bx bx-trash"></i> Delete</span>
@@ -13,12 +13,18 @@
         </ul>
       </div>
     </div>
-    <slot/>
+    <div class="content" @click="showTaskDetailModal">
+    <slot />
+
+    </div>
+    <task-detail :task="card" ref="taskDetailModal"></task-detail>
+
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
+import TaskDetail from "../components/modal/TaskDetail.vue";
 
 export default {
   name: 'Cards',
@@ -34,6 +40,8 @@ export default {
   methods: {
     ...mapActions({
       deleteTaskAction: 'TASKS/deleteTask',
+      getLogtimes: 'TASKS/getLogtimes'
+
     }),
     deleteTask() {
       this.deleteTaskAction({
@@ -41,8 +49,14 @@ export default {
         idProject: this.idProject,
       });
     },
+    showTaskDetailModal() {
+      this.getLogtimes(this.card._id)
+      this.$refs.taskDetailModal.show();
+    },
   },
   components: {
+    TaskDetail,
+
   }
 };
 </script>

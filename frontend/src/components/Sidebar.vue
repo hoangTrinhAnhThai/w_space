@@ -93,7 +93,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .sidebar {
-  background-color: rgb(247, 246, 243);
+  background-color: rgb(250,250,250);
   height: 100vh;
   color: rgb(121, 121, 119);
   .workspace {

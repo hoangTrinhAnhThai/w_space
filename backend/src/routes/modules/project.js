@@ -14,6 +14,7 @@ router.get('/status', statusController.showStatus);
 router.post('/status', statusValidation(), statusController.createStatus);
 
 // task
+router.get('/tasks/', taskValidation(), taskController.showAllTask);
 router.get('/task/:id', taskValidation(), taskController.showTask);
 router.post('/:id/task', taskValidation(), taskController.createTask);
 router.put('/task/:id', taskValidation(), taskController.editTask);
@@ -24,7 +25,7 @@ router.post('/task', taskController.moveCard);
 router.get('/:id', projectController.showProject);
 router.get('/', projectController.showAllProjects);
 router.post('/', projectValidation(), projectController.createProject);
-router.put('/:id', projectValidation(), projectController.editProject);
+router.put('/:id', projectController.editProject);
 router.delete('/:id', projectController.deleteProject);
 
 module.exports = router;

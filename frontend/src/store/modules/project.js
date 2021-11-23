@@ -10,6 +10,7 @@ const state = {
   timeStart: '',
   realtime: '',
   timeStop: '',
+  logtimes: ''
 };
 
 const getters = {
@@ -28,17 +29,9 @@ const getters = {
   idProject(state) {
     return state.idProject;
   },
-  // logtime
-
-  timeStart(state) {
-    return state.timeStart;
-  },
-  realtime(state) {
-    return state.realtime;
-  },
-  timeStop(state) {
-    return state.timeStop;
-  },
+  logtimes(state) {
+    return state.logtimes
+  }
 };
 
 const mutations = {
@@ -75,19 +68,18 @@ const mutations = {
   },
 
   // logtime
-  setStartTime(state, data) {
-    state.timeStart = data;
+  setLogtimes(state, data) {
+    state.logtimes = data;
   },
-  setRealTime(state, data) {
-    state.realtime = data;
-  },
-  setStopTime(state, data) {
-    state.timeStop = data;
-  },
-};
+}
 const actions = {
   addIdProject({ commit }, idProject) {
     commit('setIdProject', idProject);
+  },
+  getLogtimes({commit}, idTask) {
+    http.get(`logtime/task/${idTask}`).then((result) => {
+      commit('setLogtimes', result.data.data)
+    })
   },
   getStatus({ commit }) {
     http
@@ -125,7 +117,7 @@ const actions = {
     http
       .post('project', params)
       .then((result) => {
-        dispatch('getProject');
+        dispatch('addIdProject', result.data.data._id);
         console.log(result);
       })
       .catch((error) => {

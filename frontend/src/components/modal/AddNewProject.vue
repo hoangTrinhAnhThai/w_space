@@ -2,6 +2,9 @@
   <b-modal ref="newProjectModal" hide-footer title="Add a new project">
     <div class="addProject">
       <div class="label">Name</div>
+      <div class="errors">
+        <p v-show="showErrors.emptyName" class="error">Name is required</p>
+      </div>
       <div class="d-block text-center content">
         <input
           class="textProject"
@@ -18,26 +21,28 @@
         alt=""
       />
     </div>
-    <!-- <div class="addMember">
-      <div class="content">
-        <i class="bx bx-user-plus"></i>
-        <input type="text" placeholder="Enter email address..." />
-      </div>
-      <button class="invite">Invite</button>
-    </div> -->
+    <add-member ref="addMemberModal" />
   </b-modal>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import AddMember from "./AddMember.vue";
+import { mapActions, mapGetters } from "vuex";
+import Vue from "vue";
 export default {
-  name: 'AddNewProjectModal',
+  name: "AddNewProjectModal",
   data() {
     return {
       project: {
-        name: '',
+        name: "",
       },
+      showErrors: {},
     };
+  },
+  computed: {
+    ...mapGetters({
+      validateProject: "VALIDATION/validateProject",
+    }),
   },
   methods: {
     show() {
@@ -47,19 +52,46 @@ export default {
       this.$refs.newProjectModal.hide();
     },
     ...mapActions({
-      addProjectAction: 'TASKS/addProject',
+      addProjectAction: "TASKS/addProject",
     }),
     addProject() {
-      this.addProjectAction(this.project);
-      this.hide();
-      this.project.name = '';
+      if (!this.validateBeforeSubmit()) {
+        console.log(this.showErrors);
+        return;
+      } else {
+        this.addProjectAction(this.project);
+        this.$refs.addMemberModal.show();
+        this.project.name = "";
+      }
+    },
+    validateBeforeSubmit() {
+      let passedValidate = true;
+      const errors = this.validateProject(this.project.name);
+      if (errors) {
+        Vue.set(
+          this.showErrors,
+          "emptyName",
+          this.showErrors && !!errors && errors.emptyName
+        );
+
+        passedValidate = false;
+      }
+      return passedValidate;
     },
   },
+  components: {
+    AddMember,
+  },
+  watch: {
+    'project.name'() {
+      Vue.set(this.showErrors, 'emptyName', null);
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/style.scss';
+@import "../../assets/style.scss";
 .content {
   border: 1px solid rgb(190, 187, 187);
   padding: none;
@@ -96,5 +128,11 @@ input {
 }
 img {
   width: 350px;
+}
+.errors { 
+  margin: 0;
+  .error {
+  margin: 2px;
+  }
 }
 </style>

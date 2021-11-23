@@ -86,7 +86,7 @@ const getters = {
       return null;
     };
   },
-  validateForgotPassword() {
+  validateEmail() {
     return (email) => {
       const errors = {};
       if (!email) {
@@ -99,6 +99,16 @@ const getters = {
       return null;
     };
   },
+  validateProject() {
+    return (nameProject) => {
+      const errors = {};
+      if (!nameProject) {
+        errors.emptyName = true;
+      }
+      if (Object.keys(errors).length) return errors;
+      return null;
+    };
+  }
 };
 
 export default {

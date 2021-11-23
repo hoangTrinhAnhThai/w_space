@@ -78,3 +78,15 @@ exports.taskValidation = () => {
 //         .withMessage('Start time must be specified'),
 //   ]
 // }
+
+
+exports.emailValidation = () => {
+  return [
+    check('email')
+      .trim()
+      .notEmpty()
+      .withMessage('Email is required')
+      .isEmail()
+      .withMessage('Email must be a valid email adrress'),
+  ];
+};

@@ -1,6 +1,7 @@
 const Project = require('../models/Project');
 const { validationResult } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
+const User = require('../models/User');
 require('dotenv').config();
 
 class ProjectController {
@@ -37,38 +38,45 @@ class ProjectController {
   ];
   editProject = [
     (req, res) => {
-      try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-          return apiResponse.validationErrorWithData(
-            res,
-            'Validation Error',
-            errors.array(),
-          );
-        } else {
-          Project.findByIdAndUpdate(
-            req.params.id,
-            {
-              name: req.body.name,
-              description: req.body.description,
-            },
-            { new: true },
-          )
-            .then((result) => {
-              return apiResponse.successResponseWithData(
-                res,
-                'Edit project successfully',
-                result,
-              );
-            })
-            .catch((error) => {
-              return apiResponse.ErrorResponse(res, error);
-            });
+      // try {
+      //   const errors = validationResult(req);
+      //   if (!errors.isEmpty()) {
+      //     return apiResponse.validationErrorWithData(
+      //       res,
+      //       'Validation Error',
+      //       errors.array(),
+      //     );
+      //   } else {
+          // for(let user of req.body.user)
+          User.findById(req.body.user).then((user) => {
+            if (user) {
+              Project.findByIdAndUpdate(
+                req.params.id,
+                {
+                  name: req.body.name,
+                  description: req.body.description,
+                  $push: {members: user._id}
+                },
+                { new: true },
+              )
+                .then((result) => {
+                  return apiResponse.successResponseWithData(
+                    res,
+                    'Edit project successfully',
+                    result,
+                  );
+                })
+                .catch((error) => {
+                  return apiResponse.ErrorResponse(res, error);
+                });
+            }
+          })
+
         }
-      } catch (error) {
-        return apiResponse.ErrorResponse(res, error);
-      }
-    },
+      // } catch (error) {
+      //   return apiResponse.ErrorResponse(res, error);
+      // }
+    // },
   ];
   deleteProject = [
     (req, res) => {
@@ -81,7 +89,7 @@ class ProjectController {
   showAllProjects = [
     (req, res) => {
       Project.find()
-        .populate('tasks')
+        .populate('tasks').populate('members')
         .then((project) => {
           if (project) {
             return apiResponse.successResponseWithData(res, 'data', project);

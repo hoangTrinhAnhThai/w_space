@@ -78,7 +78,7 @@ const actions = {
         })
     },
     createLogtime({ dispatch }, params) {
-        console.log('logtime', params);
+        console.log('logtime add', params);
         http.post('logtime', params).then(() => {
             dispatch('getAllLogtime')
         })

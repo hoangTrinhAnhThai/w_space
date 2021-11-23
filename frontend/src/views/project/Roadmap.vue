@@ -30,16 +30,13 @@
               v-bind:card="card"
               v-bind:idProject="idProject"
               class="card"
+              
               >{{ card.name }}</Card
             >
           </Draggable>
         </Container>
-        
       </div>
     </div>
-    <button @click="showTaskDetailModal">show</button>
-
-        <task-detail ref="taskDetailModal" ></task-detail>
   </div>
 </template>
 
@@ -48,7 +45,6 @@ import Card from "../../components/ProjectCard.vue";
 import AddTaskForm from "../../components/AddTaskForm.vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { mapActions, mapGetters } from "vuex";
-import TaskDetail from "../../components/modal/TaskDetail.vue";
 export default {
   name: "Roadmap",
   data() {
@@ -130,16 +126,14 @@ export default {
     closeAddtaskForm() {
       this.isShowAddTask = true;
     },
-    showTaskDetailModal() {
-      this.$refs.taskDetailModal.show();
-    },
+    
+    
   },
   components: {
     Card,
     Container,
     Draggable,
     AddTaskForm,
-    TaskDetail,
   },
 };
 </script>
@@ -176,6 +170,7 @@ export default {
       }
       .content {
         background-color: rgb(255, 255, 255);
+
         margin: 15px;
         padding: 15px;
         border: 1px solid rgb(214, 212, 212);
@@ -230,7 +225,9 @@ export default {
       }
     }
     .open {
-      background-color: rgb(247, 247, 235);
+      background-color: rgb(244, 242, 247);
+      // background-color: rgb(245, 231, 230);
+
       .addform {
         padding: 0px;
         border-radius: 5px;
@@ -249,4 +246,5 @@ export default {
 .smooth-dnd-draggable-wrapper {
   overflow: inherit !important;
 }
+
 </style>

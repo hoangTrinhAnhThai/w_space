@@ -1,16 +1,32 @@
 const Task = require('../models/Task');
 const Project = require('../models/Project');
 const Status = require('../models/Status');
+const Logtime = require('../models/Logtime')
 const { validationResult } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
 require('dotenv').config();
-const {addANode, dropANode} = require('../../utils/movedCard')
+const { addANode, dropANode } = require('../../utils/movedCard')
 
 class TaskController {
+  showAllTask = [
+    (req, res) => {
+      Task.find()
+        .then((task) => {
+          console.log(task);
+          return apiResponse.successResponseWithData(
+            res,
+            'show task success',
+            task,
+          );
+        })
+        .catch((error) => {
+          return apiResponse.ErrorResponse(res, error);
+        });
+    },
+  ]
   showTask = [
     (req, res) => {
       Task.findById(req.params.id)
-        .populate('logtimes')
         .then((task) => {
           return apiResponse.successResponseWithData(
             res,
@@ -183,16 +199,23 @@ class TaskController {
   deleteTask = [
     (req, res) => {
       Project.findById(req.params.idProject).populate('tasks').then((project) => {
-        if(project) {
+        if (project) {
           if (project.tasks.length > 1) {
             dropANode(project.tasks, req.params.idTask)
-            Task.findByIdAndDelete(req.params.idTask).then(() => {
-              return apiResponse.successResponse(res, 'Delete task successfully');
-            });
-          }
+            Logtime.find({ task: req.params.idTask }).then((logtimes) => {
+              for (let logtime of logtimes) {
+                Logtime.findByIdAndDelete(logtime._id).then(() => {
+                  return
+                })
+              }
+              Task.findByIdAndDelete(req.params.idTask).then(() => {
+                return apiResponse.successResponse(res, 'Delete Success');
+                })
+              });
+            }
         }
-      })
-      
+        })
+
     },
   ];
   moveCard = [
