@@ -79,7 +79,6 @@ exports.taskValidation = () => {
 //   ]
 // }
 
-
 exports.emailValidation = () => {
   return [
     check('email')
