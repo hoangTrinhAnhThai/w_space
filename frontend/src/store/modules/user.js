@@ -26,6 +26,9 @@ const actions = {
       });
     });
   },
+  removeMemberInfor({commit}, params) {
+    commit('setUserInfo', params)
+  }
 };
 
 export default {

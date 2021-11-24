@@ -25,3 +25,4 @@ export function showTime(startTime) {
       );
       console.log(timeInMiliseconds);
 }
+

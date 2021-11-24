@@ -35,7 +35,7 @@ export default {
   display: flex;
   .sidebar {
     width: 15vw;
-    min-width: 200px;
+    min-width: 220px;
     // position: fixed;
   }
   .nav {

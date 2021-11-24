@@ -2,9 +2,11 @@
   <div class="road-map">
     <h1>Roadmap</h1>
     <div class="container-roadmap">
-      <div class="open status" v-for="(data, index) in dataTask" :key="index">
-        <div class="label">
-          {{ data.status.name }}
+          
+      <div class="open status" v-for="(data, index) in dataTask" :key="index" >
+        <div class="label" >
+          <span :style="{'background-color': colors[index]}">{{ data.status.name }}</span>
+          
           <span class="number">{{ data.tasks.length }}</span>
         </div>
         <div class="addTask" v-if="index == 0">
@@ -28,10 +30,9 @@
           <Draggable v-for="(card, index) in data.tasks" :key="index">
             <Card
               v-bind:card="card"
-              v-bind:idProject="idProject"
+              v-bind:project="currentProject"
               class="card"
-              
-              >{{ card.name }}</Card
+              ><span>{{ card.name }}</span></Card
             >
           </Draggable>
         </Container>
@@ -45,6 +46,7 @@ import Card from "../../components/ProjectCard.vue";
 import AddTaskForm from "../../components/AddTaskForm.vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { mapActions, mapGetters } from "vuex";
+import colors from '../../initialCards'
 export default {
   name: "Roadmap",
   data() {
@@ -55,12 +57,13 @@ export default {
         cardData: {},
       },
       isShowAddTask: true,
+      colors: colors.colors
     };
   },
   computed: {
     ...mapGetters({
       dataTask: "TASKS/taskOfProject",
-      idProject: "TASKS/idProject",
+      currentProject: "TASKS/currentProject",
     }),
   },
   created() {},
@@ -108,7 +111,7 @@ export default {
 
         setTimeout(() => {
           card.id = localStorage.getItem("idTask");
-          card.idProject = this.idProject;
+          card.idProject = this.currentProject._id;
           this.removeCard(card);
         }, 200);
         this.dataTask[lane].tasks.splice(
@@ -156,7 +159,12 @@ export default {
       .label {
         padding: 15px 15px 0;
         font-weight: bolder;
-        margin-bottom: 20px;
+        margin-bottom: 20px; 
+        span {
+          padding: 3px 7px;
+          border-radius: 3px;
+          margin-right: 10px;
+        }
         .number {
           border: 1px solid rgb(240, 240, 218);
           padding: 3px 8px;
@@ -223,17 +231,20 @@ export default {
           }
         }
       }
+      .container-card {
+        // border: 1px solid grey;
+        .card {
+          span {
+            font-weight: bolder;
+          }
+        }
+      }
     }
-    .open {
-      background-color: rgb(244, 242, 247);
-      // background-color: rgb(245, 231, 230);
-
       .addform {
         padding: 0px;
         border-radius: 5px;
         line-height: 25px;
       }
-    }
   }
 }
 

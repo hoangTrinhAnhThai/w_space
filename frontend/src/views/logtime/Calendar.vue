@@ -94,6 +94,7 @@ export default {
   },
   created() {
     this.getAllLogtimeByDate(this.date)
+    // console.log(this.);
   },
   watch: {
     'date'() {
