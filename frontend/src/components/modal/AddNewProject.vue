@@ -31,21 +31,30 @@ import { mapActions, mapGetters } from "vuex";
 import Vue from "vue";
 export default {
   name: "AddNewProjectModal",
+  props: {
+    // typeOfModal: {
+    //   type: String,
+    // },
+  },
   data() {
     return {
       project: {
         name: "",
       },
       showErrors: {},
+      typeOfModal: ''
     };
   },
   computed: {
     ...mapGetters({
       validateProject: "VALIDATION/validateProject",
+      projectEdit: "TASKS/projectEdit"
     }),
   },
   methods: {
-    show() {
+    show(project, typeOfModal) {
+      this.project = project
+      this.typeOfModal = typeOfModal
       this.$refs.newProjectModal.show();
     },
     hide() {
@@ -53,15 +62,29 @@ export default {
     },
     ...mapActions({
       addProjectAction: "TASKS/addProject",
+      editProjectAction: "TASKS/editProject"
     }),
+    editProject() {
+      this.editProjectAction({ idProject: this.project._id, project: this.project });
+    },
     addProject() {
       if (!this.validateBeforeSubmit()) {
         console.log(this.showErrors);
         return;
       } else {
-        this.addProjectAction(this.project);
-        this.$refs.addMemberModal.show();
-        this.project.name = "";
+        console.log('type', this.typeOfModal);
+        if (this.typeOfModal === 'editProject') {
+          this.editProject()
+          this.hide()
+        } else {
+          this.addProjectAction(this.project)
+          setTimeout(() => {
+            console.log('edit proj',this.projectEdit);
+          this.$refs.addMemberModal.show(this.projectEdit);
+          this.project.name = "";
+          }, 1000);
+          
+        }
       }
     },
     validateBeforeSubmit() {
@@ -83,10 +106,10 @@ export default {
     AddMember,
   },
   watch: {
-    'project.name'() {
-      Vue.set(this.showErrors, 'emptyName', null);
-    }
-  }
+    "project.name"() {
+      Vue.set(this.showErrors, "emptyName", null);
+    },
+  },
 };
 </script>
 
@@ -129,10 +152,10 @@ input {
 img {
   width: 350px;
 }
-.errors { 
+.errors {
   margin: 0;
   .error {
-  margin: 2px;
+    margin: 2px;
   }
 }
 </style>

@@ -5,30 +5,29 @@
         <p class="label">W-space</p>
         <ul>
           <li>
-            <i
-              @click="isShowProject = !isShowProject"
-              v-show="!isShowProject"
-              class="bx bxs-right-arrow"
-            ></i>
-            <i
-              @click="isShowProject = !isShowProject"
-              class="bx bxs-down-arrow"
-              v-show="isShowProject"
-            ></i>
-            <router-link tag="li" to="/roadmap">Project</router-link>
-            <i class="bx bx-plus" @click="showAddProjectModal"></i>
+            <span @click="isShowProject = !isShowProject">
+              <i v-show="!isShowProject" class="bx bxs-right-arrow"></i>
+              <i
+                @click="isShowProject = !isShowProject"
+                class="bx bxs-down-arrow"
+                v-show="isShowProject"
+              ></i>
+              <router-link tag="li" to="/roadmap">Project</router-link>
+            </span>
+            <i class="bx bx-plus" @click="showAddProjectModal({}, 'addProject')"></i>
             <ul v-show="isShowProject" class="list-child">
               <li v-for="project in projects" :key="project._id">
-                <span class="nameProject" @click="getTaskOfProject(project._id)"
+                <span class="nameProject" @click="getTaskOfProject(project)"
                   ><i class="bx bx-chevron-right"></i>
                   <span id="name">{{ project.name }}</span></span
                 >
 
                 <div class="function">
                   <i
-                    @click="showAddProjectModal(project.name)"
+                    @click="showAddProjectModal(project, 'editProject')"
                     class="bx bx-edit-alt"
                   ></i>
+                  <i  @click="showAddMemberModal(project)" class='bx bx-user-plus'></i>
                   <i
                     @click="deleteProject(project._id)"
                     class="bx bx-trash"
@@ -48,13 +47,19 @@
         </ul>
       </div>
     </div>
-    <add-new-project-modal ref="newProjectModal"></add-new-project-modal>
+    <add-new-project-modal
+      ref="newProjectModal"
+    ></add-new-project-modal>
+    <add-member-modal ref="addMemberModal" />
+
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import AddNewProjectModal from "../components/modal/AddNewProject.vue";
+import AddMemberModal from "../components/modal/AddMember.vue";
+
 export default {
   name: "Sidebar",
   data: () => ({
@@ -62,6 +67,7 @@ export default {
   }),
   components: {
     AddNewProjectModal,
+    AddMemberModal
   },
   computed: {
     ...mapGetters({
@@ -69,21 +75,26 @@ export default {
     }),
   },
   methods: {
-    showAddProjectModal() {
-      this.$refs.newProjectModal.show();
+    showAddProjectModal(project, typeOfModal) {
+      this.addProjectEditAction(project)
+
+      this.$refs.newProjectModal.show(project, typeOfModal);
+    },
+    showAddMemberModal(project) {
+      this.addProjectEditAction(project)
+
+      this.$refs.addMemberModal.show(project);
+      
     },
     ...mapActions({
       getTaskOfProjectAction: "TASKS/getTaskOfProject",
-      addIdProjectAction: "TASKS/addIdProject",
-      editProjectAction: "TASKS/editProject",
+      addCurrentProjectAction: "TASKS/addCurrentProject",
       deleteProjectAction: "TASKS/deleteProject",
+      addProjectEditAction: "TASKS/addProjectEdit"
     }),
-    getTaskOfProject(idProject) {
-      this.addIdProjectAction(idProject);
-      this.getTaskOfProjectAction(idProject);
-    },
-    editProject(idProject) {
-      this.editProjectAction({ idProject: idProject, project: this.project });
+    getTaskOfProject(project) {
+      this.addCurrentProjectAction(project);
+      this.getTaskOfProjectAction(project._id);
     },
     deleteProject(idProject) {
       this.deleteProjectAction(idProject);
@@ -93,7 +104,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .sidebar {
-  background-color: rgb(250,250,250);
+  background-color: rgb(250, 250, 250);
   height: 100vh;
   color: rgb(121, 121, 119);
   .workspace {
@@ -126,11 +137,11 @@ export default {
             }
             li {
               .nameProject {
-                  display: inline-block;
-                  width: 100px;
-                  white-space: nowrap;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
+                display: inline-block;
+                width: 100px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
               }
               .function {
                 position: absolute;

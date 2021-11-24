@@ -2,7 +2,7 @@
   <b-modal
     ref="taskDetailModal"
     hide-footer
-    title="Add a new project"
+    :title="task.name"
     class="task-detail"
     size="lg"
   >
@@ -10,7 +10,7 @@
       <div class="left-container">
         <div class="description">
           <label for="">Description</label>
-          <textarea
+          <textarea v-model="task.description"
             placeholder="Add a more detailed description ..."
           ></textarea>
         </div>
@@ -52,10 +52,13 @@
         <div class="assign">
           <label for="">Assigned</label>
           <input type="text" name="" id="" />
+          <select>
+            <option v-for="(user, index) in currentProject.members" :key="index">{{user.email}}</option>
+          </select>
         </div>
         <div class="priority">
           <label for="">Priority</label>
-          <select>
+          <select v-model="task.priority">
             <option value="high">High</option>
             <option value="normal">Normal</option>
             <option value="low">Low</option>
@@ -63,17 +66,14 @@
         </div>
         <div class="due-date">
           <label for="">Due date</label>
-          <DatePicker
-            v-model="task.dueDate"
-            :clearable="false"
-            class="datepicker"
-          />
+              <DatePicker v-model="date" :clearable="false" class="datepicker" />
         </div>
         <div class="report-time">
           <label for="">Logtime</label>
-            <ul class="logtime">
-              <li v-for="(logtime, index) in logtimes" :key="index">
-                <i class='bx bx-time' ></i>
+          <ul class="logtime">
+            <li v-for="(logtime, index) in logtimes" :key="index">
+              <span v-if="logtime.stopTime">
+                <i class="bx bx-time"></i>
                 {{ new Date(logtime.startTime).getHours() }}h{{
                   new Date(logtime.startTime).getMinutes()
                 }}m{{ new Date(logtime.startTime).getSeconds() }} -{{
@@ -81,13 +81,14 @@
                 }}h{{ new Date(logtime.stopTime).getMinutes() }}m{{
                   new Date(logtime.stopTime).getSeconds()
                 }}
-              </li>
-            </ul>
+              </span>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
     <div class="button">
-      <button class="save">Save</button>
+      <button class="save" @click="changeTaskDetail">Save</button>
       <button class="cancel">Cancel</button>
     </div>
   </b-modal>
@@ -102,27 +103,43 @@ export default {
     task: {
       type: Object,
     },
+
   },
   data() {
-    return {};
+    return {
+      date: `${new Date().getFullYear()}-${new Date().getMonth() +1}-${new Date().getDate()}`
+    };
   },
   computed: {
     ...mapGetters({
       logtimes: "TASKS/logtimes",
+      currentProject: "TASKS/currentProject",
     }),
   },
   methods: {
-    ...mapActions({}),
+    ...mapActions({
+      editTaskAction: 'TASKS/editTask'
+    }),
     show() {
       this.$refs.taskDetailModal.show();
     },
     hide() {
       this.$refs.taskDetailModal.hide();
     },
+    changeTaskDetail() {
+      this.editTaskAction({idTask: this.task._id, idProject: this.currentProject._id, task: this.task})
+      this.hide()
+    }
   },
   components: {
     DatePicker,
   },
+  created() {
+    // this.task.dueDate = `${new Date(this.task.dueDate).getFullYear()}-${new Date(this.task.dueDate).getMonth()}-${new Date(this.task.dueDate).getDate()}`
+    // this.task.dueDate =(this.task.dueDate).split('T')[0];
+    // console.log((this.task.dueDate).split('T')[0]);
+    console.log(this.date);
+  }
 };
 </script>
 
@@ -175,6 +192,7 @@ export default {
                   background-color: rgb(243, 241, 241);
                   padding: 10px;
                   border-radius: 5px;
+                  border: 1px solid $border-color;
                 }
               }
             }
@@ -207,9 +225,10 @@ export default {
     }
     ul.logtime {
       padding: 0;
-      list-style: square;
+      background-color: rgb(230, 224, 224);
+      padding: 15px;
+      border-radius: 3px;
       li {
-
       }
     }
   }

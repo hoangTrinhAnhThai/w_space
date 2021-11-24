@@ -12,11 +12,27 @@
       <button @click="searchMember" class="invite">
         <i class="bx bx-search-alt"></i>
       </button>
-      <div class="user" v-if="userInfo" @click="addMember(userInfo._id)">
-        <span>{{ userInfo.email }}</span>
-      </div>
-      <div class="errors" v-if="errorMessage">
-        {{ errorMessage }}
+      <div class="member-search">
+        <div
+          class="user-found"
+          v-if="userInfo && !errorMessage"
+          @click="addMember(userInfo._id)"
+        >
+          <span>{{ userInfo.email }}</span>
+        </div>
+        <div class="errors" v-if="errorMessage">
+          {{ errorMessage }} <br />
+          {{ this.error }}
+        </div>
+        <div class="list-user">
+          <ul v-if="project">
+            <li v-for="(member, index) in projectEdit.members" :key="index">
+              <span class="user-joined"
+                >{{ member.email }} <i @click="removeMember(member._id)" class="bx bx-x"></i
+              ></span>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </b-modal>
@@ -31,6 +47,8 @@ export default {
     return {
       email: "",
       showErrors: {},
+      project: {},
+      error: "",
     };
   },
   computed: {
@@ -38,7 +56,7 @@ export default {
       validateEmail: "VALIDATION/validateEmail",
       userInfo: "USER/userInfo",
       errorMessage: "ERROR/errorMessage",
-      idProject: "TASKS/idProject",
+      projectEdit: "TASKS/projectEdit",
     }),
   },
   methods: {
@@ -46,8 +64,12 @@ export default {
       searchMemberAction: "USER/searchMember",
       clearErrorMessage: "ERROR/clearErrorMessage",
       addMemberAction: "TASKS/editProject",
+      removeMemberAction: "TASKS/removeMember",
+      removeMemberInforAction: "USER/removeMemberInfor"
+
     }),
-    show() {
+    show(project) {
+      this.project = project;
       this.$refs.addMemberModal.show();
     },
     hide() {
@@ -59,17 +81,26 @@ export default {
         return;
       } else {
         this.searchMemberAction({ email: this.email });
-        this.$refs.addMemberModal.show();
       }
     },
     addMember(userId) {
       let project = new Object();
       project.user = userId;
-      this.addMemberAction({ project: project, idProject: this.idProject });
-      this.email=''
-      this.userInfo=''
-      this.hide()
-      
+      this.addMemberAction({
+        project: project,
+        idProject: this.project._id,
+      });
+      this.email = "";
+      console.log(project.user);
+      // this.hide();
+    },
+    removeMember(userId) {
+      let project = new Object();
+      project.user = userId;
+      this.removeMemberAction({
+        project: project,
+        idProject: this.project._id,
+      });
     },
     validateBeforeSubmit() {
       let passedValidate = true;
@@ -95,60 +126,82 @@ export default {
       Vue.set(this.showErrors, "emptyEmail", null);
       Vue.set(this.showErrors, "invalidEmail", null);
       this.clearErrorMessage();
+      this.error = "";
+      this.removeMemberInforAction(null)
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.addMember {
-  // position: relative;
-  // top: 10px;
-}
 .container {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-}
-.content {
-  border: 1px solid grey;
-  padding: none;
-  width: 85%;
-  // border-radius: 5px;
-  padding: 5px;
-}
-input {
-  background-color: #fff;
-  border: none;
-  outline: none;
-  width: 85%;
-  font-size: 13px;
-  margin-left: 15px;
-  position: relative;
-  top: -2px;
-}
-i {
-  margin-top: 2px;
-  font-size: 16px;
-}
-.invite {
-  border: 1px solid grey;
-  border-radius: 5px;
-  padding: 5px 10px;
-  background-color: rgb(177, 221, 247);
-}
-.errors {
-  color: red;
-  padding: 5px;
-  font-style: italic;
-}
-.user {
-  padding: 5px;
-  width: 85%;
-  border: 1px solid grey;
-}
+  .content {
+    border: 1px solid grey;
+    padding: none;
+    width: 85%;
+    padding: 5px;
+    input {
+      background-color: #fff;
+      border: none;
+      outline: none;
+      width: 85%;
+      font-size: 13px;
+      margin-left: 15px;
+      position: relative;
+      top: -2px;
+    }
+  }
+  .invite {
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: rgb(177, 221, 247);
+    margin-left: 10px;
+  }
+  .member-search {
+    width: 85%;
 
-.user:hover {
-  background-color: rgb(247, 244, 244);
+    .user-found {
+      width: 100%;
+      border: 1px solid rgb(128, 128, 128);
+      border-top: none;
+      padding: 3px 5px;
+    }
+    .user-found:hover {
+      background-color: rgb(177, 221, 247);
+    }
+    .errors {
+      color: rgb(209, 104, 104);
+      font-style: italic;
+    }
+    .list-user {
+      margin-top: 15px;
+      ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        li {
+          margin-right: 10px;
+          margin-top: 10px;
+          .user-joined {
+            background-color: rgb(240, 238, 238);
+            border-radius: 50px;
+            padding: 3px 5px;
+          }
+          i {
+            position: relative;
+            top: 3px;
+            font-size: 18px;
+          }
+          i:hover {
+            color: grey;
+          }
+        }
+      }
+    }
+  }
 }
 </style>
