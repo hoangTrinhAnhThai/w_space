@@ -10,7 +10,8 @@
       <div class="left-container">
         <div class="description">
           <label for="">Description</label>
-          <textarea v-model="task.description"
+          <textarea
+            v-model="task.description"
             placeholder="Add a more detailed description ..."
           ></textarea>
         </div>
@@ -53,7 +54,12 @@
           <label for="">Assigned</label>
           <input type="text" name="" id="" />
           <select>
-            <option v-for="(user, index) in currentProject.members" :key="index">{{user.email}}</option>
+            <option
+              v-for="(user, index) in currentProject.members"
+              :key="index"
+            >
+              {{ user.email }}
+            </option>
           </select>
         </div>
         <div class="priority">
@@ -66,7 +72,7 @@
         </div>
         <div class="due-date">
           <label for="">Due date</label>
-              <DatePicker v-model="date" :clearable="false" class="datepicker" />
+          <DatePicker v-model="date" :clearable="false" class="datepicker" />
         </div>
         <div class="report-time">
           <label for="">Logtime</label>
@@ -95,30 +101,31 @@
 </template>
 
 <script>
-import DatePicker from "vue2-datepicker";
-import { mapActions, mapGetters } from "vuex";
+import DatePicker from 'vue2-datepicker';
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "task-detail",
+  name: 'task-detail',
   props: {
     task: {
       type: Object,
     },
-
   },
   data() {
     return {
-      date: `${new Date().getFullYear()}-${new Date().getMonth() +1}-${new Date().getDate()}`
+      date: `${new Date().getFullYear()}-${
+        new Date().getMonth() + 1
+      }-${new Date().getDate()}`,
     };
   },
   computed: {
     ...mapGetters({
-      logtimes: "TASKS/logtimes",
-      currentProject: "TASKS/currentProject",
+      logtimes: 'TASKS/logtimes',
+      currentProject: 'TASKS/currentProject',
     }),
   },
   methods: {
     ...mapActions({
-      editTaskAction: 'TASKS/editTask'
+      editTaskAction: 'TASKS/editTask',
     }),
     show() {
       this.$refs.taskDetailModal.show();
@@ -127,9 +134,13 @@ export default {
       this.$refs.taskDetailModal.hide();
     },
     changeTaskDetail() {
-      this.editTaskAction({idTask: this.task._id, idProject: this.currentProject._id, task: this.task})
-      this.hide()
-    }
+      this.editTaskAction({
+        idTask: this.task._id,
+        idProject: this.currentProject._id,
+        task: this.task,
+      });
+      this.hide();
+    },
   },
   components: {
     DatePicker,
@@ -139,12 +150,12 @@ export default {
     // this.task.dueDate =(this.task.dueDate).split('T')[0];
     // console.log((this.task.dueDate).split('T')[0]);
     console.log(this.date);
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
+@import '../../assets/style.scss';
 .container {
   display: flex;
   textarea {

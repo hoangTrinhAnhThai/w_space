@@ -12,17 +12,16 @@ export function sort(list) {
 }
 
 export function showTime(startTime) {
-      var start = new Date(startTime)
-      var timeInMiliseconds = new Date() - start;
-      this.timeReport.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60);
-      this.timeReport.minutes = Math.floor(
-        (timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60
-      );
-      this.timeReport.seconds = Math.floor(
-        ((timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60 -
-          this.timeReport.minutes) *
-          60
-      );
-      console.log(timeInMiliseconds);
+  var start = new Date(startTime);
+  var timeInMiliseconds = new Date() - start;
+  this.timeReport.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60);
+  this.timeReport.minutes = Math.floor(
+    (timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60,
+  );
+  this.timeReport.seconds = Math.floor(
+    ((timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60 -
+      this.timeReport.minutes) *
+      60,
+  );
+  console.log(timeInMiliseconds);
 }
-
