@@ -1,7 +1,6 @@
 const User = require('../models/User');
 const Role = require('../models/Role');
-const { body, validationResult, check } = require('express-validator');
-const { sanitizeBody } = require('express-validator');
+const { validationResult } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -9,27 +8,6 @@ require('dotenv').config();
 
 class AuthController {
   register = [
-    body('fullName')
-      .isLength({ min: 1 })
-      .trim()
-      .withMessage('Fullname must be specified'),
-    body('email')
-      .isLength({ min: 1 })
-      .trim()
-      .withMessage('Email is specified')
-      .isEmail()
-      .withMessage('Email must be a valid email adrress')
-      .custom((value) => {
-        return User.findOne({ email: value }).then((user) => {
-          if (user) {
-            return Promise.reject('Email already in use');
-          }
-        });
-      }),
-    body('password')
-      .isLength({ min: 6 })
-      .trim()
-      .withMessage('Password must be 6 characters or greater'),
     async (req, res) => {
       try {
         const errors = validationResult(req);
@@ -41,18 +19,10 @@ class AuthController {
           );
         } else {
           const salt = await bcrypt.genSalt(10);
-          const tokenCreated = jwt.sign(
-            {
-              email: req.body.email,
-            },
-            process.env.TOKEN_SECREATE,
-            { expiresIn: process.env.JWT_TIMEOUT_DURATION },
-          );
           let user = new User();
           user.fullName = req.body.fullName;
           user.email = req.body.email;
           user.password = await bcrypt.hash(req.body.password, salt);
-          user.token = tokenCreated;
           user.role = {
             _id: '6188e2e979934adb9699ba5a',
             name: 'User',
@@ -75,16 +45,6 @@ class AuthController {
   ];
 
   login = [
-    body('email')
-      .isLength({ min: 1 })
-      .trim()
-      .withMessage('Email must be specified')
-      .isEmail()
-      .withMessage('Email must be a valid email adrress'),
-    body('password')
-      .isLength({ min: 6 })
-      .trim()
-      .withMessage('Password must be specified'),
     async (req, res) => {
       try {
         const errors = validationResult(req);
@@ -97,7 +57,7 @@ class AuthController {
         } else {
           await User.findOne({ email: req.body.email }).then((user) => {
             if (user) {
-              const validPassword = bcrypt.compare(
+              bcrypt.compare(
                 req.body.password,
                 user.password,
                 (error, isValid) => {

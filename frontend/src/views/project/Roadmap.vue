@@ -1,21 +1,26 @@
 <template>
   <div class="road-map">
     <h1>Roadmap</h1>
-    <div class="container" v-if="dataTask">
-      <div class="open status" v-for="(data, index) in dataTask" :key="index">
-        <div class="label">
-          {{ data.status.name }}
+    <div class="container-roadmap">
+          
+      <div class="open status" v-for="(data, index) in dataTask" :key="index" >
+        <div class="label" >
+          <span :style="{'background-color': colors[index]}">{{ data.status.name }}</span>
+          
           <span class="number">{{ data.tasks.length }}</span>
         </div>
-        <p @click="isShowAddTask = false" v-show="isShowAddTask">
-          + Add issue ....
-        </p>
-        <div class="addform" v-show="!isShowAddTask">
-          <add-task-form
-            v-on:cancelAddTaskIssue="cancelAddTaskIssue"
-          ></add-task-form>
+        <div class="addTask" v-if="index == 0">
+          <p @click="isShowAddTask = false" v-show="isShowAddTask">
+            + Add issue ....
+          </p>
+          <div class="addform" v-show="!isShowAddTask">
+            <add-task-form
+              v-on:closeAddtaskForm="closeAddtaskForm"
+            ></add-task-form>
+          </div>
         </div>
         <Container
+          class="container-card"
           group-name="trello"
           @drag-start="handleDragStart(index, $event)"
           @drop="handleDrop(index, $event)"
@@ -23,7 +28,12 @@
           :drop-placeholder="{ className: 'placeholder' }"
         >
           <Draggable v-for="(card, index) in data.tasks" :key="index">
-            <Card>{{ card.name }}</Card>
+            <Card
+              v-bind:card="card"
+              v-bind:project="currentProject"
+              class="card"
+              ><span>{{ card.name }}</span></Card
+            >
           </Draggable>
         </Container>
       </div>
@@ -32,34 +42,34 @@
 </template>
 
 <script>
-import Card from '../../components/ProjectCard.vue';
-import AddTaskForm from '../../components/AddTaskForm.vue';
-import { Container, Draggable } from 'vue-smooth-dnd';
-import { mapActions, mapGetters } from 'vuex';
+import Card from "../../components/ProjectCard.vue";
+import AddTaskForm from "../../components/AddTaskForm.vue";
+import { Container, Draggable } from "vue-smooth-dnd";
+import { mapActions, mapGetters } from "vuex";
+import colors from '../../initialCards'
 export default {
-  name: 'Roadmap',
+  name: "Roadmap",
   data() {
     return {
       draggingCard: {
-        lane: '',
+        lane: "",
         index: -1,
         cardData: {},
       },
       isShowAddTask: true,
+      colors: colors.colors
     };
   },
   computed: {
     ...mapGetters({
-      dataTask: 'TASKS/taskOfProject',
+      dataTask: "TASKS/taskOfProject",
+      currentProject: "TASKS/currentProject",
     }),
   },
-  created() {
-    this.getTaskOfProjectAction();
-  },
+  created() {},
   methods: {
     ...mapActions({
-      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
-      updateStatusOfTaskAction: 'TASKS/updateStatusOfTask',
+      removeCard: "TASKS/removeCard",
     }),
     handleDragStart(lane, dragResult) {
       const { payload, isSource } = dragResult;
@@ -80,13 +90,13 @@ export default {
       }
       if (removedIndex !== null) {
         localStorage.setItem(
-          'idTask',
-          this.dataTask[lane].tasks[removedIndex]._id,
+          "idTask",
+          this.dataTask[lane].tasks[removedIndex]._id
         );
         this.dataTask[lane].tasks.splice(removedIndex, 1);
       }
       if (addedIndex !== null) {
-        let card = { id: '', statusId: '', moved: { before: '', after: '' } };
+        let card = { id: "", statusId: "", moved: { before: "", after: "" } };
         card.statusId = this.dataTask[lane].status._id;
         if (this.dataTask[lane].tasks[addedIndex - 1]) {
           card.moved.before = this.dataTask[lane].tasks[addedIndex - 1]._id;
@@ -100,13 +110,14 @@ export default {
         }
 
         setTimeout(() => {
-          card.id = localStorage.getItem('idTask');
-          this.updateStatusOfTaskAction(card);
+          card.id = localStorage.getItem("idTask");
+          card.idProject = this.currentProject._id;
+          this.removeCard(card);
         }, 200);
         this.dataTask[lane].tasks.splice(
           addedIndex,
           0,
-          this.draggingCard.cardData,
+          this.draggingCard.cardData
         );
       }
     },
@@ -115,7 +126,11 @@ export default {
         index,
       };
     },
-    cancelAddTaskIssue() {},
+    closeAddtaskForm() {
+      this.isShowAddTask = true;
+    },
+    
+    
   },
   components: {
     Card,
@@ -128,12 +143,11 @@ export default {
 
 <style lang="scss" scoped>
 .road-map {
-  width: 80vw;
   float: left;
-  .container {
+  .container-roadmap {
+    width: 90%;
     display: flex;
     justify-content: space-between;
-    margin: 30px 0 15px;
     margin: 30px auto;
     .status {
       min-width: 18em;
@@ -145,7 +159,12 @@ export default {
       .label {
         padding: 15px 15px 0;
         font-weight: bolder;
-        margin-bottom: 20px;
+        margin-bottom: 20px; 
+        span {
+          padding: 3px 7px;
+          border-radius: 3px;
+          margin-right: 10px;
+        }
         .number {
           border: 1px solid rgb(240, 240, 218);
           padding: 3px 8px;
@@ -159,6 +178,7 @@ export default {
       }
       .content {
         background-color: rgb(255, 255, 255);
+
         margin: 15px;
         padding: 15px;
         border: 1px solid rgb(214, 212, 212);
@@ -211,30 +231,31 @@ export default {
           }
         }
       }
+      .container-card {
+        // border: 1px solid grey;
+        .card {
+          span {
+            font-weight: bolder;
+          }
+        }
+      }
     }
-    .open {
-      background-color: rgb(247, 247, 235);
       .addform {
         padding: 0px;
         border-radius: 5px;
         line-height: 25px;
       }
-    }
-    .inProgress {
-      background-color: rgb(233, 247, 224);
-    }
-    .resolved {
-      background-color: rgb(241, 245, 253);
-    }
-    .closed {
-      background-color: rgb(241, 227, 224);
-    }
   }
 }
+
 .placeholder {
   background-color: rgb(223, 191, 191);
   border-radius: 5px;
   transform: scaleY((0.85));
   transform-origin: 0% 0%;
 }
+.smooth-dnd-draggable-wrapper {
+  overflow: inherit !important;
+}
+
 </style>

@@ -13,6 +13,20 @@ const Task = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Status',
     },
+    moved: {
+      before: { type: String },
+      after: { type: String },
+    },
+    dueDate: {
+      type: Date
+    },
+    priority: {
+      type: String
+    },
+    assigned: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }
   },
   {
     timestamps: true,

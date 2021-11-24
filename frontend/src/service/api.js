@@ -18,23 +18,39 @@ const handleErrorResponse = (response, reject, message) => {
 };
 
 // let API_URL = 'http://localhost:3000/'
-let API_URL = process.env.API_URL;
+let API_URL = process.env.VUE_APP_API_URL;
 const headers = {
   Authorization: `Bearer ${localStorage.getItem('token')}`,
   'Content-Type': 'multipart/form-data',
 };
 
 const services = {
-  get(endPoint) {
+  // get(endPoint, params) {
+  //   return new Promise((resolve, reject) => {
+  //     axios
+  //       .get(`${API_URL}${endPoint}`, params, {
+  //         headers: localStorage.getItem('token')
+  //           ? { Authorization: `Bearer ${localStorage.getItem('token')}` }
+  //           : null,
+  //       })
+  //       .then((response) => {
+  //         handleSuccessResponse(response, resolve);
+  //       })
+  //       .catch((error) => {
+  //         handleErrorResponse(error, reject);
+  //       });
+  //   });
+  // },
+  get(endPoint, params, message) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${API_URL}${endPoint}`, {
+        .get(`${API_URL}${endPoint}`, params, {
           headers: localStorage.getItem('token')
             ? { Authorization: `Bearer ${localStorage.getItem('token')}` }
             : null,
         })
         .then((response) => {
-          handleSuccessResponse(response, resolve);
+          handleSuccessResponse(response, resolve, message);
         })
         .catch((error) => {
           handleErrorResponse(error, reject);
@@ -71,10 +87,10 @@ const services = {
         });
     });
   },
-  put(endPoint, message) {
+  put(endPoint, params, message) {
     return new Promise((resolve, reject) => {
       axios
-        .put(`${API_URL}${endPoint}`, {
+        .put(`${API_URL}${endPoint}`, params, {
           headers: localStorage.getItem('token')
             ? { Authorization: `Bearer ${localStorage.getItem('token')}` }
             : null,
@@ -90,7 +106,7 @@ const services = {
   delete(endPoint, params, message) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${API_URL}${endPoint}`, params, {
+        .delete(`${API_URL}${endPoint}`, params, {
           headers: localStorage.getItem('token')
             ? { Authorization: `Bearer ${localStorage.getItem('token')}` }
             : null,

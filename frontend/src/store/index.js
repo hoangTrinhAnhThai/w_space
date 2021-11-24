@@ -3,7 +3,10 @@ import Vuex from 'vuex';
 import Auth from './modules/auth.js';
 import Validation from './modules/validation';
 import ErrorMessage from './modules/errorMessage';
-import Task from './modules/tasks';
+import Task from './modules/project';
+import Logtime from './modules/logtime';
+import User from './modules/user'
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -12,5 +15,7 @@ export default new Vuex.Store({
     VALIDATION: Validation,
     ERROR: ErrorMessage,
     TASKS: Task,
+    LOGTIME: Logtime,
+    USER: User
   },
 });

@@ -7,7 +7,7 @@ const User = new Schema(
     email: { type: String, require: true },
     password: { type: String, require: true, minlength: 6 },
     token: { type: String },
-    phoneNumber: {type: String},
+    phoneNumber: { type: String },
     role: {
       type: Schema.Types.ObjectId,
       ref: 'Role',
