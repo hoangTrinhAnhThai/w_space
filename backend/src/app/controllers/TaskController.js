@@ -56,6 +56,8 @@ class TaskController {
               task.name = req.body.name;
               task.description = req.body.description;
               task.status = status;
+              task.dueDate= req.body.dueDate
+              task.priority= req.body.priority
               task.moved.before = null;
               Task.create(task).then((docTask) => {
                 Project.findById(req.params.id)
@@ -142,6 +144,9 @@ class TaskController {
             {
               name: req.body.name,
               description: req.body.description,
+              dueDate: req.body.dueDate,
+              priority: req.body.priority,
+              $push: {members: req.body.userId}
             },
             { new: true },
           )
@@ -177,6 +182,8 @@ class TaskController {
             {
               name: req.body.name,
               description: req.body.description,
+              dueDate: req.body.dueDate,
+              priority: req.body.priority,
             },
             { new: true },
           )

@@ -38,46 +38,74 @@ class ProjectController {
   ];
   editProject = [
     (req, res) => {
-      // try {
-      //   const errors = validationResult(req);
-      //   if (!errors.isEmpty()) {
-      //     return apiResponse.validationErrorWithData(
-      //       res,
-      //       'Validation Error',
-      //       errors.array(),
-      //     );
-      //   } else {
-          // for(let user of req.body.user)
-          User.findById(req.body.user).then((user) => {
-            if (user) {
-              Project.findByIdAndUpdate(
-                req.params.id,
-                {
-                  name: req.body.name,
-                  description: req.body.description,
-                  $push: {members: user._id}
-                },
-                { new: true },
-              )
-                .then((result) => {
-                  return apiResponse.successResponseWithData(
-                    res,
-                    'Edit project successfully',
-                    result,
-                  );
-                })
-                .catch((error) => {
-                  return apiResponse.ErrorResponse(res, error);
-                });
+      User.findById(req.body.user).then((user) => {
+        if (user) {
+          Project.findById(req.params.id).then((project) => {
+            if (project) {
+              let isExsitUser = false
+              if (project.members.length > 0) {
+                for (let member of project.members) {
+                  if (JSON.stringify(member._id) === JSON.stringify(user._id)) {
+                    isExsitUser = true
+                    break;
+                  }
+                }
+              }
+              console.log('joined', isExsitUser);
+              if (isExsitUser) {
+                return apiResponse.ErrorResponse(res, 'The member joined');
+              } else {
+                Project.findByIdAndUpdate(
+                  req.params.id,
+                  {
+                    name: req.body.name,
+                    description: req.body.description,
+                    $push: { members: user._id }
+                  },
+                  { new: true },
+                )
+                .populate('members').then((result) => {
+                    return apiResponse.successResponseWithData(
+                      res,
+                      'Edit project successfully',
+                      result,
+                    );
+                  })
+                  .catch((error) => {
+                    return apiResponse.ErrorResponse(res, error);
+                  });
+              }
             }
           })
-
         }
-      // } catch (error) {
-      //   return apiResponse.ErrorResponse(res, error);
-      // }
-    // },
+      })
+    }
   ];
+  removeMember = [
+    (req, res) => {
+      User.findById(req.body.user).then((user) => {
+        if (user) {
+          Project.findByIdAndUpdate(
+            req.params.id,
+            {
+              $pull: { members: user._id }
+            },
+            { new: true },
+          )
+          .populate('members').then((result) => {
+              return apiResponse.successResponseWithData(
+                res,
+                'Remove member successfully',
+                result,
+              );
+            })
+            .catch((error) => {
+              return apiResponse.ErrorResponse(res, error);
+            });
+        }
+      })
+    }
+  ]
   deleteProject = [
     (req, res) => {
       Project.findByIdAndDelete(req.params.id).then(() => {
