@@ -17,9 +17,15 @@ const Task = new Schema(
       before: { type: String },
       after: { type: String },
     },
-    logtimes: {
+    dueDate: {
+      type: Date
+    },
+    priority: {
+      type: String
+    },
+    assigned: {
       type: Schema.Types.ObjectId,
-      ref: 'Logtime',
+      ref: 'User'
     }
   },
   {

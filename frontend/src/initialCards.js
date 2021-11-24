@@ -142,7 +142,15 @@ const status = [
     __v: 0,
   },
 ];
+
+const colors = [
+  'rgb(181, 234, 234)',
+  'rgb(237, 246, 229)',
+  'rgb(255, 188, 188)',
+  'rgb(243, 139, 160)'
+]
 export default {
   tasks,
   status,
+  colors
 };

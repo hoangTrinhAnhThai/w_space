@@ -4,48 +4,96 @@
       <i class="bx bx-dots-vertical-rounded"></i>
       <div class="function">
         <ul>
-          <li><span><i class="bx bx-edit-alt"></i> Edit</span></li>
-          <li @click="deleteTask"><span><i class="bx bx-trash"></i> Delete</span></li>
+          <li @click="showTaskDetailModal">
+            <span><i class="bx bx-edit-alt"></i> Edit</span>
+          </li>
+          <li @click="deleteTask">
+            <span><i class="bx bx-trash"></i> Delete</span>
+          </li>
         </ul>
       </div>
     </div>
-
-    <slot />
+    <div class="content" @click="showTaskDetailModal">
+      <slot />
+      <div class="description" v-if="card.description">
+        {{card.description}}
+      </div>
+      <div class="dueDate">
+        <span v-if="card.dueDate" >
+          <span v-if="!deadline" style="color: red; font-weight: bolder">
+            <i class='bx bx-calendar'></i> {{ date }}, {{ month }} {{ year }}
+          </span>
+          <span v-else><i class='bx bx-calendar'></i> {{ date }}, {{ month }} {{ year }}</span>
+        </span>
+      </div>
+    </div>
+    <task-detail :task="card" :dueDate="(card.dueDate).split('T')[0]" ref="taskDetailModal"></task-detail>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
+import TaskDetail from "../components/modal/TaskDetail.vue";
+import helper from "../utils/data";
 export default {
   name: "Cards",
   props: {
     card: {
-      type: Object
+      type: Object,
     },
-    idProject: {
-      type: String
-    }
+    project: {
+      type: Object,
+    },
   },
-  
+  data() {
+    return {};
+  },
+  computed: {
+    deadline() {
+      return new Date(this.card.dueDate) >= new Date();
+    },
+    date() {
+      return new Date(this.card.dueDate).getDate();
+    },
+    year() {
+      return new Date(this.card.dueDate).getFullYear();
+    },
+    month() {
+      return helper.month[new Date(this.card.dueDate).getMonth()];
+    },
+  },
+
   methods: {
     ...mapActions({
-      deleteTaskAction: 'TASKS/deleteTask'
+      deleteTaskAction: "TASKS/deleteTask",
+      getLogtimes: "TASKS/getLogtimes",
     }),
     deleteTask() {
-      this.deleteTaskAction({idTask: this.card._id, idProject: this.idProject})
-    }
-  }
+      this.deleteTaskAction({
+        idTask: this.card._id,
+        idProject: this.project._id,
+      });
+    },
+    showTaskDetailModal() {
+      this.getLogtimes(this.card._id);
+      this.$refs.taskDetailModal.show();
+    },
+  },
+  components: {
+    TaskDetail,
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/style.scss';
+@import "../assets/style.scss";
 .card {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   background-color: rgb(255, 255, 255);
-  margin: 15px;
+  margin: 5px 15px;
   padding: 8px;
-  border: 1px solid rgb(214, 212, 212);
-  border-radius: 5px;
+  border: 1px solid $border-color;
+  border-radius: 3px;
   line-height: 25px;
   cursor: pointer;
   position: relative;
@@ -80,6 +128,20 @@ export default {
   .sign:focus {
     .function {
       display: block;
+    }
+  }
+  .content {
+    .description {
+      color: grey;
+      font-size: 80%;
+    }
+    .dueDate {
+      font-size: 80%;
+      span {
+        background-color: rgb(243, 240, 215);
+        padding: 3px 5px;
+        border-radius: 3px;
+      }
     }
   }
 }

@@ -23,7 +23,7 @@ class StatusController {
     (req, res) => {
       Status.find().then((status) => {
         if (status) {
-          return apiResponse.successResponseWithData(res, 'data', status);
+          return apiResponse.successResponseWithData(res, 'status', status);
         } else {
           return apiResponse.ErrorResponse(res, 'Not found project');
         }

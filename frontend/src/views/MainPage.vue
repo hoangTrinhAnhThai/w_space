@@ -36,17 +36,18 @@ export default {
   .sidebar {
     width: 15vw;
     min-width: 220px;
+    // position: fixed;
   }
   .nav {
     height: 7vh;
     min-height: 60px;
   }
   .main-container {
-    width: 85vw;
-    
-    // overflow-x: auto;
-    // overflow-y: hidden;
-    // white-space: nowrap;
+    width: 83vw;
+    height: 93vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
   }
 }
 </style>

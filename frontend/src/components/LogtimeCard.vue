@@ -18,29 +18,133 @@
           </optgroup>
         </select>
       </div>
-      <div class="function">
-        <ul>
+      <div class="function" >
+        <ul v-show="!logtime.isPlaying">
           <li><i class="bx bx-trash" @click="deteleLogtime"></i></li>
           <li><i class="bx bx-calendar"></i></li>
         </ul>
       </div>
-      <div class="description">
-        <b-button id="description-tooltip"
-          >Note</b-button
-        >
-        <b-tooltip target="description-tooltip" triggers="hover"
-          >description-tooltip</b-tooltip
-        >
+      <div class="description" tabindex="0">
+        <div class="note">
+          <span
+            v-if="logtime.note"
+            v-b-tooltip.hover
+            placement="bottom"
+            :title="logtime.note"
+            placeholder="note"
+            >{{ logtime.note }}</span
+          >
+          <span
+            v-else
+            v-b-tooltip.hover
+            placement="bottom"
+            :title="logtime.note"
+            placeholder="note"
+            >note</span
+          >
+        </div>
+        <div class="text">
+          <textarea
+            v-on:blur="handleBlur"
+            placeholder="note"
+            v-model="logtime.note"
+            rows="5"
+            cols="25"
+          ></textarea>
+        </div>
       </div>
       <div class="timer">
-        <div class="start-time">08:00</div>
+        <div class="start-time">
+          {{ new Date(logtime.createdAt).getHours() }}h{{
+            new Date(logtime.createdAt).getMinutes()
+          }}
+        </div>
         <div class="sign">-</div>
-        <div class="end-time">09:00</div>
+        <div v-if="logtime.stopTime" class="end-time">
+          {{ new Date(logtime.stopTime).getHours() }}h{{
+            new Date(logtime.stopTime).getMinutes()
+          }}
+        </div>
+        <div v-else class="end-time">
+          {{ new Date(logtime.createdAt).getHours() }}h{{
+            new Date(logtime.createdAt).getMinutes()
+          }}
+        </div>
       </div>
-      <div class="report">{{timeReport.hours}}h{{timeReport.minutes}}m{{timeReport.seconds}}</div>
+      <div class="report">
+        <span v-if="!logtime.isPlaying">
+          <span v-if="Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)">{{
+            Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)
+          }}</span>
+          <span v-else>00</span>h
+          <span
+            v-if="
+              Math.floor(
+                (logtime.timeInMiliseconds / 1000 / 60 / 60 -
+                  Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
+                  60
+              )
+            "
+          >
+            {{
+              Math.floor(
+                (logtime.timeInMiliseconds / 1000 / 60 / 60 -
+                  Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
+                  60
+              )
+            }}</span
+          ><span v-else>00</span>m
+          <span
+            v-if="
+              Math.floor(
+                ((logtime.timeInMiliseconds / 1000 / 60 / 60 -
+                  Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
+                  60 -
+                  Math.floor(
+                    (logtime.timeInMiliseconds / 1000 / 60 / 60 -
+                      Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
+                      60
+                  )) *
+                  60
+              )
+            "
+            >{{
+              Math.floor(
+                ((logtime.timeInMiliseconds / 1000 / 60 / 60 -
+                  Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
+                  60 -
+                  Math.floor(
+                    (logtime.timeInMiliseconds / 1000 / 60 / 60 -
+                      Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
+                      60
+                  )) *
+                  60
+              )
+            }}</span
+          >
+        </span>
+        <span v-else>
+          <span v-if="timeReport.hours">{{ timeReport.hours }}</span>
+          <span v-else>00</span>h
+          <span v-if="timeReport.minutes">{{ timeReport.minutes }}</span>
+          <span v-else>00</span>m
+          <span v-if="timeReport.seconds">{{ timeReport.seconds }}</span>
+          <span v-else>00</span>
+        </span>
+      </div>
       <div class="play-time">
-        <i id="play" class="bx bx-play" @click="startTime" v-show="!isPlay"></i>
-        <i id="stop" @click="stopTime" v-show="isPlay" class="bx bx-stop"></i>
+        <i
+          id="play"
+          class="bx bx-play"
+          @click="startTime"
+          v-show="!logtime.isPlaying"
+        ></i>
+        <i
+          id="stop"
+          @click="stopTime"
+          v-show="logtime.isPlaying"
+          class="bx bx-stop"
+        ></i>
       </div>
     </div>
   </div>
@@ -48,69 +152,97 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-
 export default {
   name: "LogtimeCard",
   props: {
     logtime: {
-      type: Object
-    }
+      type: Object,
+    },
   },
 
   data: () => ({
     isOpen: false,
-    isPlay: false,
-    nowTime: new Date(),
     myInterval: function () {},
     timeReport: {
-      hours: "",
-      minutes: "",
-      seconds: "",
+      hours: "00",
+      minutes: "00",
+      seconds: "00",
     },
   }),
   computed: {
     ...mapGetters({
       projectArray: "TASKS/projectArray",
       timeStart: "LOGTIME/timeStart",
+      logtimeArray: "LOGTIME/logtimeArray",
+      logtimeIsPlaying: "LOGTIME/logtimeIsPlaying",
     }),
   },
   components: {},
   methods: {
-    // ...mapActions({
-    //   getTasks: 'TASKS/getTasksArray',
-    // }),
     ...mapActions({
-      addStartTimeAction: "LOGTIME/addStartTime",
-      addRealTimeAction: "LOGTIME/addRealTime",
-      addStopTimeAction: "LOGTIME/addStopTime",
-      deteleLogtimeAction: "LOGTIME/deteleLogtime"
+      deteleLogtimeAction: "LOGTIME/deteleLogtime",
+      createLogtimeAction: "LOGTIME/createLogtime",
+      updateLogtimeAction: "LOGTIME/updateLogtime",
     }),
     startTime() {
-      this.myInterval = setInterval(this.showTime, 5000);
-      this.addStartTimeAction({startTime: this.nowTime, idTask: this.logtime.task});
-      localStorage.startTime = this.nowTime
-      this.isPlay = true;
+      this.updateLogtimeAction({
+        logtime: {
+          isPlaying: false,
+          stopTime: new Date(),
+          timeInMiliseconds:
+            new Date() - new Date(this.logtimeIsPlaying.startTime),
+        },
+        _id: this.logtimeIsPlaying._id,
+      });
+      if (this.logtime.stopTime) {
+        this.createLogtimeAction({
+          startTime: new Date(),
+          task: this.logtime.task,
+          isPlaying: true,
+        });
+      } else {
+        this.updateLogtimeAction({
+          logtime: { isPlaying: true, startTime: new Date() },
+          _id: this.logtime._id,
+        });
+      }
+      this.myInterval = setInterval(this.showTime, 1000);
     },
     stopTime() {
       clearInterval(this.myInterval);
-      this.isPlay = false;
-      // this.addStopTime(this.nowTime);
-      localStorage.stopTime = this.nowTime
-
+      this.updateLogtimeAction({
+        logtime: {
+          isPlaying: false,
+          stopTime: new Date(),
+          timeInMiliseconds: new Date() - new Date(this.logtime.startTime),
+        },
+        _id: this.logtime._id,
+      });
     },
+
     showTime() {
-      let timeNow = new Date();
-      this.addRealTimeAction(timeNow - this.nowTime);
-      var start = Date.parse(localStorage.startTime)
-      var timeInMiliseconds = timeNow - start 
-      this.timeReport.hours = Math.floor(timeInMiliseconds/1000/60/60);
-      this.timeReport.minutes = Math.floor((timeInMiliseconds/1000/60/60 - this.timeReport.hours)*60)
-      this.timeReport.seconds = Math.floor(((timeInMiliseconds/1000/60/60 - this.timeReport.hours)*60 - this.timeReport.minutes)*60)
-        
+      var start = new Date(this.logtimeIsPlaying.startTime);
+      var timeInMiliseconds = new Date() - start;
+      this.timeReport.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60);
+      this.timeReport.minutes = Math.floor(
+        (timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60
+      );
+      this.timeReport.seconds = Math.floor(
+        ((timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60 -
+          this.timeReport.minutes) *
+          60
+      );
     },
     deteleLogtime() {
-      this.deteleLogtimeAction(this.logtime._id)
-    }
+      this.deteleLogtimeAction(this.logtime._id);
+    },
+    handleBlur() {
+      console.log(this.logtime.note);
+      this.updateLogtimeAction({
+        logtime: {note: this.logtime.note},
+        _id: this.logtime._id,
+      });
+    },
   },
   watch: {
     // dataTask: {
@@ -120,11 +252,15 @@ export default {
     //   deep: true,
     // },
 
-    'seletedTask'() {
-      if(this.isPlay == true) {
-        console.log(this.seletedTask, localStorage.startTime);
-      }
-    }
+    "logtime.task"() {
+      this.updateLogtimeAction({
+        logtime: this.logtime,
+        _id: this.logtime._id,
+      });
+    },
+  },
+  created() {
+    this.myInterval = setInterval(this.showTime, 1000);
   },
 };
 </script>
@@ -133,13 +269,12 @@ export default {
 @import "../assets/style.scss";
 
 .logtime-card {
-  margin-top: 50px;
+  // margin-top: 10px;
   width: 100%;
+  // min-width: 850px;
   .container-card {
     width: 100%;
     display: flex;
-    border: 1px solid $border-color;
-    border-radius: 10px;
     justify-content: space-between;
     padding: 20px 15px;
     div {
@@ -180,17 +315,45 @@ export default {
     }
     .description {
       width: 20%;
-      button {
+      .note {
+        width: 180px;
+        span {
+          width: 180px;
+
+          padding-right: 15px;
+          border: 1px solid $border-color;
+          text-align: left;
+          padding: 5px 15px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          outline: none;
+          border-radius: 7px;
+          color: grey;
+        }
+      }
+      .text {
+        display: none;
+      }
+    }
+    .description:focus-within {
+      position: relative;
+      .text {
+        position: absolute;
+        top: 0;
+        display: inline-block;
         margin: 0;
         background-color: #fff;
         color: grey;
-        border: 1px solid white;
-        padding: 5px 15px;
-        width: 300px;
         text-align: left;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        outline: none;
+        border-radius: 7px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        textarea {
+          padding: 15px;
+          border: none;
+          outline: none;
+        }
       }
     }
     .timer {
@@ -207,8 +370,6 @@ export default {
       }
     }
     .play-time {
-      flex-basis: 5%;
-      i {
       #play {
         right: 0;
         border-radius: 10px;
@@ -255,8 +416,11 @@ export default {
     }
   }
   .description:hover {
-    button {
+    textarea {
       border: 1px solid $border-color;
+      outline: none;
+      border-radius: 10px;
+      // height: 50px;
     }
   }
 }

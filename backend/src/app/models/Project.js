@@ -15,6 +15,12 @@ const Project = new Schema(
         ref: 'Task',
       },
     ],
+    members: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ]
   },
   {
     timestamps: true,

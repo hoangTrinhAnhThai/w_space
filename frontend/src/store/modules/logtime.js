@@ -3,7 +3,8 @@ const state = {
     timeStart: '',
     realtime: '',
     timeStop: '',
-    logtimeArray: []
+    logtimeArray: [],
+    logtimeIsPlaying: {}
 };
 
 
@@ -19,6 +20,9 @@ const getters = {
     },
     logtimeArray(state) {
         return state.logtimeArray
+    },
+    logtimeIsPlaying(state) {
+        return state.logtimeIsPlaying
     }
 };
 const mutations = {
@@ -36,31 +40,53 @@ const mutations = {
     },
     setLogtimeArray(state, data) {
         state.logtimeArray = data
+    },
+    setLogtimeIsPlaying(state, data) {
+        state.logtimeIsPlaying = data
     }
 };
 
 const actions = {
-    addStartTime({ dispatch }, params) {
+    getAllLogtime({ commit }) {
+        commit('setLogtimeArray', [])
+        http.get('logtime').then((result) => {
+            console.log('logtime', result.data.data);
+            commit('setLogtimeArray', result.data.data)
+            for (let logtime of result.data.data) {
+                if (logtime.isPlaying == true) {
+                    commit('setLogtimeIsPlaying', logtime)
+                }
+            }
+        })
+    },
+    getAllLogtimeByDate({ commit }, params) {
+        console.log(params);
+        commit('setLogtimeArray', [])
+        http.post(`logtime/${params}`).then((result) => {
+            console.log('logtime', result);
+            commit('setLogtimeArray', result.data.data)
+            for (let logtime of result.data.data) {
+                if (logtime.isPlaying == true) {
+                    commit('setLogtimeIsPlaying', logtime)
+                }
+            }
+        })
+    },
+    deteleLogtime({ dispatch }, params) {
+        http.delete(`logtime/${params}`).then(() => {
+            dispatch('getAllLogtime')
+        })
+    },
+    createLogtime({ dispatch }, params) {
+        console.log('logtime add', params);
         http.post('logtime', params).then(() => {
             dispatch('getAllLogtime')
         })
     },
-    addRealTime({ commit }, params) {
-        commit('setRealTime', params)
-    },
-    addStopTime({ commit }, params) {
-        commit('setStopTime', params)
-        console.log('stop', params);
-    },
-    getAllLogtime({commit}) {
-        http.get('logtime').then((result) => {
-            console.log('logtime',result.data.data);
-        commit('setLogtimeArray', result.data.data)
-
-        })
-    },
-    deteleLogtime({dispatch}, params) {
-        http.delete(`logtime/${params}`).then(() => {
+    updateLogtime({ dispatch }, params) {
+        console.log('-----------', params);
+        http.put(`logtime/${params._id}`, params.logtime).then((result) => {
+            console.log(result.data);
             dispatch('getAllLogtime')
         })
     }

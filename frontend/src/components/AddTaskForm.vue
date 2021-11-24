@@ -29,13 +29,16 @@ export default {
     return {
       newTask: {
         name: '',
+        priority: '',
+        dueDate: '',
+        member: [],
       },
       errorMessage: '',
     };
   },
   computed: {
     ...mapGetters({
-      idProject: 'TASKS/idProject',
+      currentProject: 'TASKS/currentProject',
     }),
   },
   methods: {
@@ -43,7 +46,7 @@ export default {
       addNewTaskAction: 'TASKS/addNewTask',
     }),
     addtaskForm() {
-      this.addNewTaskAction({ task: this.newTask, idProject: this.idProject });
+      this.addNewTaskAction({ task: this.newTask, idProject: this.currentProject._id });
       this.$emit('closeAddtaskForm');
       this.newTask.name = '';
     },

@@ -2,6 +2,9 @@
   <b-modal ref="newProjectModal" hide-footer title="Add a new project">
     <div class="addProject">
       <div class="label">Name</div>
+      <div class="errors">
+        <p v-show="showErrors.emptyName" class="error">Name is required</p>
+      </div>
       <div class="d-block text-center content">
         <input
           class="textProject"
@@ -18,48 +21,100 @@
         alt=""
       />
     </div>
-    <!-- <div class="addMember">
-      <div class="content">
-        <i class="bx bx-user-plus"></i>
-        <input type="text" placeholder="Enter email address..." />
-      </div>
-      <button class="invite">Invite</button>
-    </div> -->
+    <add-member ref="addMemberModal" />
   </b-modal>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import AddMember from "./AddMember.vue";
+import { mapActions, mapGetters } from "vuex";
+import Vue from "vue";
 export default {
-  name: 'AddNewProjectModal',
+  name: "AddNewProjectModal",
+  props: {
+    // typeOfModal: {
+    //   type: String,
+    // },
+  },
   data() {
     return {
       project: {
-        name: '',
+        name: "",
       },
+      showErrors: {},
+      typeOfModal: ''
     };
   },
+  computed: {
+    ...mapGetters({
+      validateProject: "VALIDATION/validateProject",
+      projectEdit: "TASKS/projectEdit"
+    }),
+  },
   methods: {
-    show() {
+    show(project, typeOfModal) {
+      this.project = project
+      this.typeOfModal = typeOfModal
       this.$refs.newProjectModal.show();
     },
     hide() {
       this.$refs.newProjectModal.hide();
     },
     ...mapActions({
-      addProjectAction: 'TASKS/addProject',
+      addProjectAction: "TASKS/addProject",
+      editProjectAction: "TASKS/editProject"
     }),
+    editProject() {
+      this.editProjectAction({ idProject: this.project._id, project: this.project });
+    },
     addProject() {
-      this.addProjectAction(this.project);
-      this.hide()
-      this.project.name= ''
+      if (!this.validateBeforeSubmit()) {
+        console.log(this.showErrors);
+        return;
+      } else {
+        console.log('type', this.typeOfModal);
+        if (this.typeOfModal === 'editProject') {
+          this.editProject()
+          this.hide()
+        } else {
+          this.addProjectAction(this.project)
+          setTimeout(() => {
+            console.log('edit proj',this.projectEdit);
+          this.$refs.addMemberModal.show(this.projectEdit);
+          this.project.name = "";
+          }, 1000);
+          
+        }
+      }
+    },
+    validateBeforeSubmit() {
+      let passedValidate = true;
+      const errors = this.validateProject(this.project.name);
+      if (errors) {
+        Vue.set(
+          this.showErrors,
+          "emptyName",
+          this.showErrors && !!errors && errors.emptyName
+        );
+
+        passedValidate = false;
+      }
+      return passedValidate;
+    },
+  },
+  components: {
+    AddMember,
+  },
+  watch: {
+    "project.name"() {
+      Vue.set(this.showErrors, "emptyName", null);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/style.scss';
+@import "../../assets/style.scss";
 .content {
   border: 1px solid rgb(190, 187, 187);
   padding: none;
@@ -96,5 +151,11 @@ input {
 }
 img {
   width: 350px;
+}
+.errors {
+  margin: 0;
+  .error {
+    margin: 2px;
+  }
 }
 </style>

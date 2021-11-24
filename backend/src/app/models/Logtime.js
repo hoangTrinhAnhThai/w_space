@@ -8,6 +8,15 @@ const Logtime = new Schema(
         task: {
             type:  Schema.Types.ObjectId,
             ref: 'Task',
+        },
+        note: {
+            type: String
+        },
+        isPlaying: {
+            type: Boolean
+        },
+        timeInMiliseconds: {
+            type: String
         }
     },
     {
