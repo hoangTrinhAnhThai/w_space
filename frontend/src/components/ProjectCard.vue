@@ -16,27 +16,34 @@
     <div class="content" @click="showTaskDetailModal">
       <slot />
       <div class="description" v-if="card.description">
-        {{card.description}}
+        {{ card.description }}
       </div>
       <div class="dueDate">
-        <span v-if="card.dueDate" >
+        <span v-if="card.dueDate">
           <span v-if="!deadline" style="color: red; font-weight: bolder">
-            <i class='bx bx-calendar'></i> {{ date }}, {{ month }} {{ year }}
+            <i class="bx bx-calendar"></i> {{ date }}, {{ month }} {{ year }}
           </span>
-          <span v-else><i class='bx bx-calendar'></i> {{ date }}, {{ month }} {{ year }}</span>
+          <span v-else
+            ><i class="bx bx-calendar"></i> {{ date }}, {{ month }}
+            {{ year }}</span
+          >
         </span>
       </div>
     </div>
-    <task-detail :task="card" :dueDate="(card.dueDate).split('T')[0]" ref="taskDetailModal"></task-detail>
+    <task-detail
+      :task="card"
+      :dueDate="card.dueDate.split('T')[0]"
+      ref="taskDetailModal"
+    ></task-detail>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import TaskDetail from "../components/modal/TaskDetail.vue";
-import helper from "../utils/data";
+import { mapActions } from 'vuex';
+import TaskDetail from '../components/modal/TaskDetail.vue';
+import helper from '../utils/data';
 export default {
-  name: "Cards",
+  name: 'Cards',
   props: {
     card: {
       type: Object,
@@ -65,8 +72,8 @@ export default {
 
   methods: {
     ...mapActions({
-      deleteTaskAction: "TASKS/deleteTask",
-      getLogtimes: "TASKS/getLogtimes",
+      deleteTaskAction: 'TASKS/deleteTask',
+      getLogtimes: 'TASKS/getLogtimes',
     }),
     deleteTask() {
       this.deleteTaskAction({
@@ -86,7 +93,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/style.scss";
+@import '../assets/style.scss';
 .card {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   background-color: rgb(255, 255, 255);

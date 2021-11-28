@@ -108,7 +108,7 @@ const getters = {
       if (Object.keys(errors).length) return errors;
       return null;
     };
-  }
+  },
 };
 
 export default {

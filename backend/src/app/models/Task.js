@@ -18,15 +18,15 @@ const Task = new Schema(
       after: { type: String },
     },
     dueDate: {
-      type: Date
+      type: Date,
     },
     priority: {
-      type: String
+      type: String,
     },
     assigned: {
       type: Schema.Types.ObjectId,
-      ref: 'User'
-    }
+      ref: 'User',
+    },
   },
   {
     timestamps: true,

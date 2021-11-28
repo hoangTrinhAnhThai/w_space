@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve && node ./bin/www",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "start": "node server.js",
@@ -16,10 +16,14 @@
     "core-js": "^3.6.5",
     "express": "^4.17.1",
     "serve-static": "^1.14.1",
+    "socket.io-client": "^4.4.0",
+    "socketio": "^1.0.0",
     "tailwindcss": "^2.2.17",
     "vue": "^2.6.14",
+    "vue-chat-scroll": "^1.4.0",
     "vue-router": "^3.5.2",
     "vue-smooth-dnd": "^0.8.1",
+    "vue-socket.io": "^3.0.10",
     "vue2-datepicker": "^3.10.3",
     "vuex": "^3.6.2"
   },

@@ -26,11 +26,11 @@
 </template>
 
 <script>
-import AddMember from "./AddMember.vue";
-import { mapActions, mapGetters } from "vuex";
-import Vue from "vue";
+import AddMember from './AddMember.vue';
+import { mapActions, mapGetters } from 'vuex';
+import Vue from 'vue';
 export default {
-  name: "AddNewProjectModal",
+  name: 'AddNewProjectModal',
   props: {
     // typeOfModal: {
     //   type: String,
@@ -39,33 +39,36 @@ export default {
   data() {
     return {
       project: {
-        name: "",
+        name: '',
       },
       showErrors: {},
-      typeOfModal: ''
+      typeOfModal: '',
     };
   },
   computed: {
     ...mapGetters({
-      validateProject: "VALIDATION/validateProject",
-      projectEdit: "TASKS/projectEdit"
+      validateProject: 'VALIDATION/validateProject',
+      projectEdit: 'TASKS/projectEdit',
     }),
   },
   methods: {
     show(project, typeOfModal) {
-      this.project = project
-      this.typeOfModal = typeOfModal
+      this.project = project;
+      this.typeOfModal = typeOfModal;
       this.$refs.newProjectModal.show();
     },
     hide() {
       this.$refs.newProjectModal.hide();
     },
     ...mapActions({
-      addProjectAction: "TASKS/addProject",
-      editProjectAction: "TASKS/editProject"
+      addProjectAction: 'TASKS/addProject',
+      editProjectAction: 'TASKS/editProject',
     }),
     editProject() {
-      this.editProjectAction({ idProject: this.project._id, project: this.project });
+      this.editProjectAction({
+        idProject: this.project._id,
+        project: this.project,
+      });
     },
     addProject() {
       if (!this.validateBeforeSubmit()) {
@@ -74,16 +77,15 @@ export default {
       } else {
         console.log('type', this.typeOfModal);
         if (this.typeOfModal === 'editProject') {
-          this.editProject()
-          this.hide()
+          this.editProject();
+          this.hide();
         } else {
-          this.addProjectAction(this.project)
+          this.addProjectAction(this.project);
           setTimeout(() => {
-            console.log('edit proj',this.projectEdit);
-          this.$refs.addMemberModal.show(this.projectEdit);
-          this.project.name = "";
+            console.log('edit proj', this.projectEdit);
+            this.$refs.addMemberModal.show(this.projectEdit);
+            this.project.name = '';
           }, 1000);
-          
         }
       }
     },
@@ -93,8 +95,8 @@ export default {
       if (errors) {
         Vue.set(
           this.showErrors,
-          "emptyName",
-          this.showErrors && !!errors && errors.emptyName
+          'emptyName',
+          this.showErrors && !!errors && errors.emptyName,
         );
 
         passedValidate = false;
@@ -106,15 +108,15 @@ export default {
     AddMember,
   },
   watch: {
-    "project.name"() {
-      Vue.set(this.showErrors, "emptyName", null);
+    'project.name'() {
+      Vue.set(this.showErrors, 'emptyName', null);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
+@import '../../assets/style.scss';
 .content {
   border: 1px solid rgb(190, 187, 187);
   padding: none;

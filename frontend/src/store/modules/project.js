@@ -8,7 +8,7 @@ const state = {
   projectArray: [],
   currentProject: '',
   logtimes: '',
-  projectEdit: ''
+  projectEdit: '',
 };
 
 const getters = {
@@ -28,12 +28,11 @@ const getters = {
     return state.currentProject;
   },
   logtimes(state) {
-    return state.logtimes
+    return state.logtimes;
   },
   projectEdit(state) {
-    return state.projectEdit
-  }
-
+    return state.projectEdit;
+  },
 };
 
 const mutations = {
@@ -41,7 +40,7 @@ const mutations = {
     state.projectArray = data;
   },
   setProjectEdit(state, data) {
-    state.projectEdit = data
+    state.projectEdit = data;
   },
   setTasksArray(state, data) {
     state.tasksArray = data;
@@ -74,19 +73,19 @@ const mutations = {
   setLogtimes(state, data) {
     state.logtimes = data;
   },
-}
+};
 const actions = {
   addCurrentProject({ commit }, project) {
     console.log('current project ', project);
     commit('setCurrentProject', project);
   },
-  addProjectEdit({commit}, params) {
-    commit('setProjectEdit', params)
+  addProjectEdit({ commit }, params) {
+    commit('setProjectEdit', params);
   },
-  getLogtimes({commit}, idTask) { 
+  getLogtimes({ commit }, idTask) {
     http.get(`logtime/task/${idTask}`).then((result) => {
-      commit('setLogtimes', result.data.data)
-    })
+      commit('setLogtimes', result.data.data);
+    });
   },
   getStatus({ commit }) {
     http
@@ -152,16 +151,19 @@ const actions = {
     });
   },
   editProject({ commit, dispatch }, params) {
-    http.put(`project/${params.idProject}`, params.project).then((result) => {
-      commit('setProjectEdit', result.data.data)
-      dispatch('getProject');
-      console.log(result);
-    }).catch((err) => {
-      console.log(err.response.data.message);
-      commit('ERROR/setErrorMessage', err.response.data.message, {
-        root: true,
+    http
+      .put(`project/${params.idProject}`, params.project)
+      .then((result) => {
+        commit('setProjectEdit', result.data.data);
+        dispatch('getProject');
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        commit('ERROR/setErrorMessage', err.response.data.message, {
+          root: true,
+        });
       });
-    });
   },
   deleteTask({ dispatch }, params) {
     http
@@ -171,24 +173,27 @@ const actions = {
         dispatch('getTaskOfProject', params.idProject);
       });
   },
-  editTask({dispatch}, params) {
+  editTask({ dispatch }, params) {
     http.put(`project/task/${params.idTask}`, params.task).then((result) => {
       console.log('edit', result);
-      dispatch('getTaskOfProject', params.idProject)
-    })
-  },
-  removeMember({commit, dispatch}, params) {
-    http.put(`project/${params.idProject}/member`, params.project).then((result) => {
-      commit('setProjectEdit', result.data.data)
-      dispatch('getProject');
-      console.log(result);
-    }).catch((err) => {
-      console.log(err.response.data.message);
-      commit('ERROR/setErrorMessage', err.response.data.message, {
-        root: true,
-      });
+      dispatch('getTaskOfProject', params.idProject);
     });
-  }
+  },
+  removeMember({ commit, dispatch }, params) {
+    http
+      .put(`project/${params.idProject}/member`, params.project)
+      .then((result) => {
+        commit('setProjectEdit', result.data.data);
+        dispatch('getProject');
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        commit('ERROR/setErrorMessage', err.response.data.message, {
+          root: true,
+        });
+      });
+  },
 };
 
 export default {
