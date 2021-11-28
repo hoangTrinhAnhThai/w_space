@@ -18,7 +18,7 @@
           </optgroup>
         </select>
       </div>
-      <div class="function" >
+      <div class="function">
         <ul v-show="!logtime.isPlaying">
           <li><i class="bx bx-trash" @click="deteleLogtime"></i></li>
           <li><i class="bx bx-calendar"></i></li>
@@ -82,7 +82,7 @@
               Math.floor(
                 (logtime.timeInMiliseconds / 1000 / 60 / 60 -
                   Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                  60
+                  60,
               )
             "
           >
@@ -90,7 +90,7 @@
               Math.floor(
                 (logtime.timeInMiliseconds / 1000 / 60 / 60 -
                   Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                  60
+                  60,
               )
             }}</span
           ><span v-else>00</span>m
@@ -103,9 +103,9 @@
                   Math.floor(
                     (logtime.timeInMiliseconds / 1000 / 60 / 60 -
                       Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                      60
+                      60,
                   )) *
-                  60
+                  60,
               )
             "
             >{{
@@ -116,9 +116,9 @@
                   Math.floor(
                     (logtime.timeInMiliseconds / 1000 / 60 / 60 -
                       Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                      60
+                      60,
                   )) *
-                  60
+                  60,
               )
             }}</span
           >
@@ -151,9 +151,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "LogtimeCard",
+  name: 'LogtimeCard',
   props: {
     logtime: {
       type: Object,
@@ -164,25 +164,25 @@ export default {
     isOpen: false,
     myInterval: function () {},
     timeReport: {
-      hours: "00",
-      minutes: "00",
-      seconds: "00",
+      hours: '00',
+      minutes: '00',
+      seconds: '00',
     },
   }),
   computed: {
     ...mapGetters({
-      projectArray: "TASKS/projectArray",
-      timeStart: "LOGTIME/timeStart",
-      logtimeArray: "LOGTIME/logtimeArray",
-      logtimeIsPlaying: "LOGTIME/logtimeIsPlaying",
+      projectArray: 'TASKS/projectArray',
+      timeStart: 'LOGTIME/timeStart',
+      logtimeArray: 'LOGTIME/logtimeArray',
+      logtimeIsPlaying: 'LOGTIME/logtimeIsPlaying',
     }),
   },
   components: {},
   methods: {
     ...mapActions({
-      deteleLogtimeAction: "LOGTIME/deteleLogtime",
-      createLogtimeAction: "LOGTIME/createLogtime",
-      updateLogtimeAction: "LOGTIME/updateLogtime",
+      deteleLogtimeAction: 'LOGTIME/deteleLogtime',
+      createLogtimeAction: 'LOGTIME/createLogtime',
+      updateLogtimeAction: 'LOGTIME/updateLogtime',
     }),
     startTime() {
       this.updateLogtimeAction({
@@ -225,12 +225,12 @@ export default {
       var timeInMiliseconds = new Date() - start;
       this.timeReport.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60);
       this.timeReport.minutes = Math.floor(
-        (timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60
+        (timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60,
       );
       this.timeReport.seconds = Math.floor(
         ((timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60 -
           this.timeReport.minutes) *
-          60
+          60,
       );
     },
     deteleLogtime() {
@@ -239,7 +239,7 @@ export default {
     handleBlur() {
       console.log(this.logtime.note);
       this.updateLogtimeAction({
-        logtime: {note: this.logtime.note},
+        logtime: { note: this.logtime.note },
         _id: this.logtime._id,
       });
     },
@@ -252,7 +252,7 @@ export default {
     //   deep: true,
     // },
 
-    "logtime.task"() {
+    'logtime.task'() {
       this.updateLogtimeAction({
         logtime: this.logtime,
         _id: this.logtime._id,
@@ -266,7 +266,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/style.scss";
+@import '../assets/style.scss';
 
 .logtime-card {
   // margin-top: 10px;

@@ -14,7 +14,10 @@
               ></i>
               <router-link tag="li" to="/roadmap">Project</router-link>
             </span>
-            <i class="bx bx-plus" @click="showAddProjectModal({}, 'addProject')"></i>
+            <i
+              class="bx bx-plus"
+              @click="showAddProjectModal({}, 'addProject')"
+            ></i>
             <ul v-show="isShowProject" class="list-child">
               <li v-for="project in projects" :key="project._id">
                 <span class="nameProject" @click="getTaskOfProject(project)"
@@ -27,7 +30,10 @@
                     @click="showAddProjectModal(project, 'editProject')"
                     class="bx bx-edit-alt"
                   ></i>
-                  <i  @click="showAddMemberModal(project)" class='bx bx-user-plus'></i>
+                  <i
+                    @click="showAddMemberModal(project)"
+                    class="bx bx-user-plus"
+                  ></i>
                   <i
                     @click="deleteProject(project._id)"
                     class="bx bx-trash"
@@ -47,50 +53,46 @@
         </ul>
       </div>
     </div>
-    <add-new-project-modal
-      ref="newProjectModal"
-    ></add-new-project-modal>
+    <add-new-project-modal ref="newProjectModal"></add-new-project-modal>
     <add-member-modal ref="addMemberModal" />
-
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import AddNewProjectModal from "../components/modal/AddNewProject.vue";
-import AddMemberModal from "../components/modal/AddMember.vue";
+import { mapActions, mapGetters } from 'vuex';
+import AddNewProjectModal from '../components/modal/AddNewProject.vue';
+import AddMemberModal from '../components/modal/AddMember.vue';
 
 export default {
-  name: "Sidebar",
+  name: 'Sidebar',
   data: () => ({
     isShowProject: false,
   }),
   components: {
     AddNewProjectModal,
-    AddMemberModal
+    AddMemberModal,
   },
   computed: {
     ...mapGetters({
-      projects: "TASKS/projectArray",
+      projects: 'TASKS/projectArray',
     }),
   },
   methods: {
     showAddProjectModal(project, typeOfModal) {
-      this.addProjectEditAction(project)
+      this.addProjectEditAction(project);
 
       this.$refs.newProjectModal.show(project, typeOfModal);
     },
     showAddMemberModal(project) {
-      this.addProjectEditAction(project)
+      this.addProjectEditAction(project);
 
       this.$refs.addMemberModal.show(project);
-      
     },
     ...mapActions({
-      getTaskOfProjectAction: "TASKS/getTaskOfProject",
-      addCurrentProjectAction: "TASKS/addCurrentProject",
-      deleteProjectAction: "TASKS/deleteProject",
-      addProjectEditAction: "TASKS/addProjectEdit"
+      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
+      addCurrentProjectAction: 'TASKS/addCurrentProject',
+      deleteProjectAction: 'TASKS/deleteProject',
+      addProjectEditAction: 'TASKS/addProjectEdit',
     }),
     getTaskOfProject(project) {
       this.addCurrentProjectAction(project);

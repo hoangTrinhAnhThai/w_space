@@ -46,7 +46,10 @@ export default {
       addNewTaskAction: 'TASKS/addNewTask',
     }),
     addtaskForm() {
-      this.addNewTaskAction({ task: this.newTask, idProject: this.currentProject._id });
+      this.addNewTaskAction({
+        task: this.newTask,
+        idProject: this.currentProject._id,
+      });
       this.$emit('closeAddtaskForm');
       this.newTask.name = '';
     },

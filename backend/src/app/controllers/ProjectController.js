@@ -42,11 +42,11 @@ class ProjectController {
         if (user) {
           Project.findById(req.params.id).then((project) => {
             if (project) {
-              let isExsitUser = false
+              let isExsitUser = false;
               if (project.members.length > 0) {
                 for (let member of project.members) {
                   if (JSON.stringify(member._id) === JSON.stringify(user._id)) {
-                    isExsitUser = true
+                    isExsitUser = true;
                     break;
                   }
                 }
@@ -60,11 +60,12 @@ class ProjectController {
                   {
                     name: req.body.name,
                     description: req.body.description,
-                    $push: { members: user._id }
+                    $push: { members: user._id },
                   },
                   { new: true },
                 )
-                .populate('members').then((result) => {
+                  .populate('members')
+                  .then((result) => {
                     return apiResponse.successResponseWithData(
                       res,
                       'Edit project successfully',
@@ -76,10 +77,10 @@ class ProjectController {
                   });
               }
             }
-          })
+          });
         }
-      })
-    }
+      });
+    },
   ];
   removeMember = [
     (req, res) => {
@@ -88,11 +89,12 @@ class ProjectController {
           Project.findByIdAndUpdate(
             req.params.id,
             {
-              $pull: { members: user._id }
+              $pull: { members: user._id },
             },
             { new: true },
           )
-          .populate('members').then((result) => {
+            .populate('members')
+            .then((result) => {
               return apiResponse.successResponseWithData(
                 res,
                 'Remove member successfully',
@@ -103,9 +105,9 @@ class ProjectController {
               return apiResponse.ErrorResponse(res, error);
             });
         }
-      })
-    }
-  ]
+      });
+    },
+  ];
   deleteProject = [
     (req, res) => {
       Project.findByIdAndDelete(req.params.id).then(() => {
@@ -117,7 +119,8 @@ class ProjectController {
   showAllProjects = [
     (req, res) => {
       Project.find()
-        .populate('tasks').populate('members')
+        .populate('tasks')
+        .populate('members')
         .then((project) => {
           if (project) {
             return apiResponse.successResponseWithData(res, 'data', project);

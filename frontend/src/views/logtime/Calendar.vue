@@ -52,21 +52,25 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import LogtimeCard from "../../components/LogtimeCard.vue";
-import data from "../../utils/data";
-import DatePicker from "vue2-datepicker";
+import { mapActions, mapGetters } from 'vuex';
+import LogtimeCard from '../../components/LogtimeCard.vue';
+import data from '../../utils/data';
+import DatePicker from 'vue2-datepicker';
 export default {
-  name: "Logtime",
+  name: 'Logtime',
   data() {
     return {
       logtime: {},
-      date: sessionStorage.getItem('date') || `${new Date().getFullYear()}-${new Date().getMonth() +1}-${new Date().getDate()}`
+      date:
+        sessionStorage.getItem('date') ||
+        `${new Date().getFullYear()}-${
+          new Date().getMonth() + 1
+        }-${new Date().getDate()}`,
     };
   },
   computed: {
     ...mapGetters({
-      logtimeArray: "LOGTIME/logtimeArray",
+      logtimeArray: 'LOGTIME/logtimeArray',
     }),
     dateWeek() {
       return data.weekday[new Date(this.date).getDay()];
@@ -80,9 +84,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      getAllLogtimeAction: "LOGTIME/getAllLogtime",
-      createLogtimeAction: "LOGTIME/createLogtime",
-      getAllLogtimeByDate: "LOGTIME/getAllLogtimeByDate"
+      getAllLogtimeAction: 'LOGTIME/getAllLogtime',
+      createLogtimeAction: 'LOGTIME/createLogtime',
+      getAllLogtimeByDate: 'LOGTIME/getAllLogtimeByDate',
     }),
     createLogtime() {
       this.createLogtimeAction();
@@ -93,20 +97,20 @@ export default {
     DatePicker,
   },
   created() {
-    this.getAllLogtimeByDate(this.date)
+    this.getAllLogtimeByDate(this.date);
     // console.log(this.);
   },
   watch: {
-    'date'() {
-      sessionStorage.setItem('date', this.date )
-    this.getAllLogtimeByDate(this.date)
-    }
+    date() {
+      sessionStorage.setItem('date', this.date);
+      this.getAllLogtimeByDate(this.date);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
+@import '../../assets/style.scss';
 .logtime {
   margin: 0 auto;
   .container-logtime {

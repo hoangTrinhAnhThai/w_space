@@ -28,7 +28,8 @@
           <ul v-if="project">
             <li v-for="(member, index) in projectEdit.members" :key="index">
               <span class="user-joined"
-                >{{ member.email }} <i @click="removeMember(member._id)" class="bx bx-x"></i
+                >{{ member.email }}
+                <i @click="removeMember(member._id)" class="bx bx-x"></i
               ></span>
             </li>
           </ul>
@@ -39,34 +40,33 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { mapActions, mapGetters } from "vuex";
+import Vue from 'vue';
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "AddMemberModal",
+  name: 'AddMemberModal',
   data() {
     return {
-      email: "",
+      email: '',
       showErrors: {},
       project: {},
-      error: "",
+      error: '',
     };
   },
   computed: {
     ...mapGetters({
-      validateEmail: "VALIDATION/validateEmail",
-      userInfo: "USER/userInfo",
-      errorMessage: "ERROR/errorMessage",
-      projectEdit: "TASKS/projectEdit",
+      validateEmail: 'VALIDATION/validateEmail',
+      userInfo: 'USER/userInfo',
+      errorMessage: 'ERROR/errorMessage',
+      projectEdit: 'TASKS/projectEdit',
     }),
   },
   methods: {
     ...mapActions({
-      searchMemberAction: "USER/searchMember",
-      clearErrorMessage: "ERROR/clearErrorMessage",
-      addMemberAction: "TASKS/editProject",
-      removeMemberAction: "TASKS/removeMember",
-      removeMemberInforAction: "USER/removeMemberInfor"
-
+      searchMemberAction: 'USER/searchMember',
+      clearErrorMessage: 'ERROR/clearErrorMessage',
+      addMemberAction: 'TASKS/editProject',
+      removeMemberAction: 'TASKS/removeMember',
+      removeMemberInforAction: 'USER/removeMemberInfor',
     }),
     show(project) {
       this.project = project;
@@ -90,7 +90,7 @@ export default {
         project: project,
         idProject: this.project._id,
       });
-      this.email = "";
+      this.email = '';
       console.log(project.user);
       // this.hide();
     },
@@ -108,13 +108,13 @@ export default {
       if (errors) {
         Vue.set(
           this.showErrors,
-          "emptyEmail",
-          this.showErrors && !!errors && errors.emptyEmail
+          'emptyEmail',
+          this.showErrors && !!errors && errors.emptyEmail,
         );
         Vue.set(
           this.showErrors,
-          "invalidEmail",
-          this.showErrors && !!errors && errors.invalidEmail
+          'invalidEmail',
+          this.showErrors && !!errors && errors.invalidEmail,
         );
         passedValidate = false;
       }
@@ -123,11 +123,11 @@ export default {
   },
   watch: {
     email() {
-      Vue.set(this.showErrors, "emptyEmail", null);
-      Vue.set(this.showErrors, "invalidEmail", null);
+      Vue.set(this.showErrors, 'emptyEmail', null);
+      Vue.set(this.showErrors, 'invalidEmail', null);
       this.clearErrorMessage();
-      this.error = "";
-      this.removeMemberInforAction(null)
+      this.error = '';
+      this.removeMemberInforAction(null);
     },
   },
 };

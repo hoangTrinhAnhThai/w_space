@@ -1,11 +1,11 @@
 const Task = require('../models/Task');
 const Project = require('../models/Project');
 const Status = require('../models/Status');
-const Logtime = require('../models/Logtime')
+const Logtime = require('../models/Logtime');
 const { validationResult } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
 require('dotenv').config();
-const { addANode, dropANode } = require('../../utils/movedCard')
+const { addANode, dropANode } = require('../../utils/movedCard');
 
 class TaskController {
   showAllTask = [
@@ -23,7 +23,7 @@ class TaskController {
           return apiResponse.ErrorResponse(res, error);
         });
     },
-  ]
+  ];
   showTask = [
     (req, res) => {
       Task.findById(req.params.id)
@@ -38,7 +38,7 @@ class TaskController {
           return apiResponse.ErrorResponse(res, error);
         });
     },
-  ]
+  ];
   createTask = [
     (req, res) => {
       try {
@@ -56,8 +56,8 @@ class TaskController {
               task.name = req.body.name;
               task.description = req.body.description;
               task.status = status;
-              task.dueDate= req.body.dueDate
-              task.priority= req.body.priority
+              task.dueDate = req.body.dueDate;
+              task.priority = req.body.priority;
               task.moved.before = null;
               Task.create(task).then((docTask) => {
                 Project.findById(req.params.id)
@@ -68,7 +68,7 @@ class TaskController {
                         for (let task of project.tasks) {
                           if (
                             JSON.stringify(task.status) ==
-                            JSON.stringify(status._id) &&
+                              JSON.stringify(status._id) &&
                             task.moved.before == null
                           ) {
                             Task.findByIdAndUpdate(task._id, {
@@ -146,7 +146,7 @@ class TaskController {
               description: req.body.description,
               dueDate: req.body.dueDate,
               priority: req.body.priority,
-              $push: {members: req.body.userId}
+              $push: { members: req.body.userId },
             },
             { new: true },
           )
@@ -205,24 +205,25 @@ class TaskController {
   ];
   deleteTask = [
     (req, res) => {
-      Project.findById(req.params.idProject).populate('tasks').then((project) => {
-        if (project) {
-          if (project.tasks.length > 1) {
-            dropANode(project.tasks, req.params.idTask)
-            Logtime.find({ task: req.params.idTask }).then((logtimes) => {
-              for (let logtime of logtimes) {
-                Logtime.findByIdAndDelete(logtime._id).then(() => {
-                  return
-                })
-              }
-              Task.findByIdAndDelete(req.params.idTask).then(() => {
-                return apiResponse.successResponse(res, 'Delete Success');
-                })
+      Project.findById(req.params.idProject)
+        .populate('tasks')
+        .then((project) => {
+          if (project) {
+            if (project.tasks.length > 1) {
+              dropANode(project.tasks, req.params.idTask);
+              Logtime.find({ task: req.params.idTask }).then((logtimes) => {
+                for (let logtime of logtimes) {
+                  Logtime.findByIdAndDelete(logtime._id).then(() => {
+                    return;
+                  });
+                }
+                Task.findByIdAndDelete(req.params.idTask).then(() => {
+                  return apiResponse.successResponse(res, 'Delete Success');
+                });
               });
             }
-        }
-        })
-
+          }
+        });
     },
   ];
   moveCard = [
@@ -238,9 +239,13 @@ class TaskController {
             .then((project) => {
               if (project) {
                 if (project.tasks.length > 1) {
-                  dropANode(project.tasks, req.body.id)
-                  addANode(project.tasks, req.body.id, req.body.moved.before, req.body.moved.after)
-
+                  dropANode(project.tasks, req.body.id);
+                  addANode(
+                    project.tasks,
+                    req.body.id,
+                    req.body.moved.before,
+                    req.body.moved.after,
+                  );
                 }
               }
             });
