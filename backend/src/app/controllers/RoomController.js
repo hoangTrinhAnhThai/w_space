@@ -10,7 +10,7 @@ class RoomController {
         .then((room) => {
           return apiResponse.successResponseWithData(
             res,
-            'show task success',
+            'show room success',
             room,
           );
         })
@@ -26,7 +26,7 @@ class RoomController {
         .then((rooms) => {
           return apiResponse.successResponseWithData(
             res,
-            'show task success',
+            'show room success',
             rooms,
           );
         })
@@ -38,8 +38,6 @@ class RoomController {
   createRoom = [
     (req, res) => {
       console.log(req.body);
-    //   const room = new Room();
-    //   room.name = req.body.name;
       Room.create(req.body.room).then((room) => {
         return apiResponse.successResponseWithData(
           res,
