@@ -41,10 +41,10 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/api/room`)
+    axios.get(`http://localhost:3000/room/`)
     .then(response => {
-      console.log(response.data);
-      this.rooms = response.data
+      console.log(response.data.data);
+      this.rooms = response.data.data
     })
     .catch(e => {
       this.errors.push(e)

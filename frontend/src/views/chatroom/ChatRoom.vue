@@ -13,8 +13,8 @@
               left
               src="http://placehold.it/50/55C1E7/fff&text=ME"
               rounded="circle"
-              width="75"
-              height="75"
+              width="50"
+              height="50"
               alt="img"
               class="m-1"
             />
@@ -83,13 +83,16 @@ export default {
       errors: [],
       nickname: this.$route.params.nickname,
       chat: {},
-      socket: io('http://localhost:4000', {transports: ['websocket', 'polling', 'flashsocket']}),
+      socket: io("http://localhost:4000", {
+        transports: ["websocket", "polling", "flashsocket"],
+      }),
     };
   },
   created() {
     axios
       .get(`http://localhost:3000/api/chat/` + this.$route.params.id)
       .then((response) => {
+        console.log("chatres", response);
         if (response.data) {
           this.chats = response.data;
         }
@@ -128,6 +131,7 @@ export default {
       axios
         .post(`http://localhost:3000/api/chat`, this.chat)
         .then((response) => {
+          console.log(response.data);
           this.socket.emit("save-message", response.data);
           this.chat.message = "";
         })
