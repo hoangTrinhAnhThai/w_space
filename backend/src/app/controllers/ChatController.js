@@ -7,18 +7,18 @@ require('dotenv').config();
 
 
 class ChatController {
-    getAllChat = [
+    getAllChats = [
         (req, res) => {
-            Chat.find().then((chats) => {
+            Chat.find().sort({ createdAt: 1 }).then((chats) => {
                 return apiResponse.successResponseWithData(res, 'Get all chats successfully', chats)
             }).catch((error) => {
                 return apiResponse.ErrorResponse(res, error)
             })
         }
     ]
-    getSingleChatById =[
+    getSingleChatByRoomId =[
         (req, res) => {
-            Chat.findById(req.params.id).then((chat) => {
+            Chat.find({room: req.params.id}).sort({ createdAt: 1 }).then((chat) => {
                 return apiResponse.successResponseWithData(res, 'Get chat successfully', chat )
             }).catch((error) => {
                 return apiResponse.ErrorResponse(res, error)
@@ -26,7 +26,7 @@ class ChatController {
         }
     ]
 
-    creatChat = [
+    createChat = [
         (req, res) => {
             Chat.create(req.body).then((result) => {
                 return apiResponse.successResponseWithData(res, 'Create chat successfully', result )
@@ -35,7 +35,7 @@ class ChatController {
             })
         }
     ]
-    update = [
+    updateChat = [
         (req, res) => {
             Chat.findByIdAndUpdate(req.params.id, req.body.chat).then((result) => {
                 return apiResponse.successResponseWithData(res, 'Update chat successfully', result )
@@ -45,7 +45,7 @@ class ChatController {
         }
     ]
 
-    delete = [
+    deleteChat = [
         (req, res) => {
             Chat.findByIdAndDelete(req.params.id).then((result) => {
                 return apiResponse.successResponseWithData(res, 'Delete chat successfully', result )

@@ -7,12 +7,13 @@ const Chat = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'Task',
         },
-        nickName: {
-            type: String
-        },
         message: {
             type: String
-        }
+        },
+        createdBy: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+          },
     },
     {
         timestamps: true,
