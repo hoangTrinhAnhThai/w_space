@@ -21,6 +21,10 @@ const Project = new Schema(
         ref: 'User',
       },
     ],
+    roomChat: {
+      type: Schema.Types.ObjectId,
+      ref: 'Room',
+    }
   },
   {
     timestamps: true,

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const Room = new Schema(
   {
-    roomName: { type: String, maxlength: 255 },
+    name: { type: String, maxlength: 255 },
   },
   {
     timestamps: true,

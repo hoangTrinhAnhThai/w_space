@@ -2,16 +2,10 @@ const express = require('express');
 const router = express.Router();
 const projectController = require('../../app/controllers/ProjectController');
 const taskController = require('../../app/controllers/TaskController');
-const statusController = require('../../app/controllers/StatusController');
 const {
   projectValidation,
   taskValidation,
-  statusValidation,
-} = require('../../middle-ware/validation');
-
-// status
-router.get('/status', statusController.showStatus);
-router.post('/status', statusValidation(), statusController.createStatus);
+} = require('../../middleware/validation');
 
 // task
 router.get('/tasks/', taskValidation(), taskController.showAllTask);

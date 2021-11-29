@@ -4,7 +4,7 @@ const authController = require('../../app/controllers/AuthController');
 const {
   loginValidation,
   registerValidation,
-} = require('../../middle-ware/validation');
+} = require('../../middleware/validation');
 
 router.post('/login', loginValidation(), authController.login);
 router.post('/register', registerValidation(), authController.register);

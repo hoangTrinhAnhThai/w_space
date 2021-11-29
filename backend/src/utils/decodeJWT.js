@@ -2,8 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../app/models/User');
 const apiResponse = require('../utils/apiResponse');
 
-exports.auth = function (req, res) {
-  if (req.headers && req.headers.authorization) {
+const host =  function (req, res) {
     var authorization = req.headers.authorization.split(' ')[1],
       decoded;
     try {
@@ -11,10 +10,7 @@ exports.auth = function (req, res) {
     } catch (e) {
       return apiResponse.unauthorizedResponse(res, 'Unauthorized');
     }
-    var userEmail = decoded.email;
-    User.findOne({ email: userEmail }).then(function (user) {
-      return apiResponse.successResponseWithData(res, 'user', user);
-    });
-  }
-  return res.send(500);
+    return decoded._id;
 };
+
+module.exports = host
