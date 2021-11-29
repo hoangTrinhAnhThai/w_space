@@ -6,7 +6,7 @@ import Calendar from '../views/logtime/Calendar.vue';
 import Roadmap from '../views/project/Roadmap.vue';
 import Login from '../views/Auth/Login.vue';
 import Signup from '../views/Auth/Register.vue';
-import ChatRoom from '../views/chatroom/ChatRoom.vue';
+import ChatRoom from '../views/chat/ChatRoom.vue';
 import RoomList from '../views/chatroom/RoomList.vue'
 import AddRoom from '../views/chatroom/AddRoom.vue'
 import JoinRoom from '../views/chatroom/JoinRoom.vue'
@@ -30,11 +30,11 @@ const routes = [
         name: Roadmap,
         component: Roadmap,
       },
-      // {
-      //   path: '/chatroom',
-      //   name: ChatRoom,
-      //   component: ChatRoom,
-      // },
+      {
+        path: '/chatroom',
+        name: ChatRoom,
+        component: ChatRoom,
+      },
     ],
   },
 

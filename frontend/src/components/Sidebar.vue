@@ -12,7 +12,14 @@
                 class="bx bxs-down-arrow"
                 v-show="isShowProject"
               ></i>
-              <router-link tag="li" to="/roadmap">Project</router-link>
+              <router-link
+                tag="li"
+                :to="{
+                  path: '/roadmap',
+                  params: { id: '61a050672c01acb54fafeb06' },
+                }"
+                >Project</router-link
+              >
             </span>
             <i
               class="bx bx-plus"
@@ -20,11 +27,11 @@
             ></i>
             <ul v-show="isShowProject" class="list-child">
               <li v-for="project in projects" :key="project._id">
-                <span class="nameProject" @click="getTaskOfProject(project)"
-                  ><i class="bx bx-chevron-right"></i>
-                  <span id="name">{{ project.name }}</span></span
+                
+                <!-- <router-link tag="li" :to="{ name: 'Roadmap'}">{{project.name}}</router-link> -->
+                <span class="nameProject" @click="getTaskOfProject(project)">
+                  <span id="name"><i class="bx bx-chevron-right"></i> {{ project.name }}</span></span
                 >
-
                 <div class="function">
                   <i
                     @click="showAddProjectModal(project, 'editProject')"
@@ -47,8 +54,42 @@
             <router-link tag="li" to="/logtime">Logtime</router-link>
           </li>
           <li>
-            <i class="bx bxs-right-arrow"></i
-            ><router-link tag="li" to="/chatroom">Chat</router-link>
+            <span @click="isShowChat = !isShowChat">
+              <i v-show="!isShowChat" class="bx bxs-right-arrow"></i>
+              <i
+                @click="isShowChat = !isShowChat"
+                class="bx bxs-down-arrow"
+                v-show="isShowChat"
+              ></i>
+              <router-link tag="li" to="/chatroom">ChatRoom</router-link>
+            </span>
+            <i
+              class="bx bx-plus"
+              @click="showAddProjectModal({}, 'addProject')"
+            ></i>
+            <ul v-show="isShowChat" class="list-child">
+              <li v-for="(room, index) in rooms" :key="index">
+                <div class="nameProject" @click="getTaskOfProject(project)"
+                  >
+                  <span id="name"><i class="bx bx-chevron-right"></i> {{ room.name }}</span>
+                </div>
+
+                <div class="function">
+                  <i
+                    @click="showAddProjectModal(project, 'editProject')"
+                    class="bx bx-edit-alt"
+                  ></i>
+                  <i
+                    @click="showAddMemberModal(project)"
+                    class="bx bx-user-plus"
+                  ></i>
+                  <i
+                    @click="deleteProject(project._id)"
+                    class="bx bx-trash"
+                  ></i>
+                </div>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
@@ -59,14 +100,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import AddNewProjectModal from '../components/modal/AddNewProject.vue';
-import AddMemberModal from '../components/modal/AddMember.vue';
+import { mapActions, mapGetters } from "vuex";
+import AddNewProjectModal from "../components/modal/AddNewProject.vue";
+import AddMemberModal from "../components/modal/AddMember.vue";
 
 export default {
-  name: 'Sidebar',
+  name: "Sidebar",
   data: () => ({
     isShowProject: false,
+    isShowChat: false,
   }),
   components: {
     AddNewProjectModal,
@@ -74,7 +116,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projects: 'TASKS/projectArray',
+      projects: "TASKS/projectArray",
+      rooms: "CHAT/rooms",
     }),
   },
   methods: {
@@ -85,14 +128,14 @@ export default {
     },
     showAddMemberModal(project) {
       this.addProjectEditAction(project);
-
       this.$refs.addMemberModal.show(project);
     },
     ...mapActions({
-      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
-      addCurrentProjectAction: 'TASKS/addCurrentProject',
-      deleteProjectAction: 'TASKS/deleteProject',
-      addProjectEditAction: 'TASKS/addProjectEdit',
+      getTaskOfProjectAction: "TASKS/getTaskOfProject",
+      addCurrentProjectAction: "TASKS/addCurrentProject",
+      deleteProjectAction: "TASKS/deleteProject",
+      getProject: "TASKS/getProject",
+      addProjectEditAction: "TASKS/addProjectEdit",
     }),
     getTaskOfProject(project) {
       this.addCurrentProjectAction(project);
@@ -101,6 +144,9 @@ export default {
     deleteProject(idProject) {
       this.deleteProjectAction(idProject);
     },
+  },
+  created() {
+    this.getProject();
   },
 };
 </script>

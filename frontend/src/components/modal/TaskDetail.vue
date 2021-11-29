@@ -4,7 +4,7 @@
     hide-footer
     :title="task.name"
     class="task-detail"
-    size="lg"
+    size="lg md"
   >
     <div class="container">
       <div class="left-container">
@@ -49,11 +49,12 @@
           </div>
         </div>
       </div>
-      <div class="right-container">
-        <div class="assign">
+      <div class="right-container" >
+        <div class="assign" tabindex="1">
           <label for="">Assigned</label>
-          <input type="text" name="" id="" />
-          <select>
+          <!-- <div class="assign-input"  type="text" name="" id="" /> -->
+          <select class="assign-select">
+            <option :value="currentProject.createdBy">{{currentProject.createdBy.email}}</option>
             <option
               v-for="(user, index) in currentProject.members"
               :key="index"
@@ -65,6 +66,7 @@
         <div class="priority">
           <label for="">Priority</label>
           <select v-model="task.priority">
+            <option style="font-size: 12px; font-weight: bolder" value="" disabled selected>Select the priority </option>
             <option value="high">High</option>
             <option value="normal">Normal</option>
             <option value="low">Low</option>
@@ -72,7 +74,7 @@
         </div>
         <div class="due-date">
           <label for="">Due date</label>
-          <DatePicker v-model="date" :clearable="false" class="datepicker" />
+          <DatePicker v-model="task.dueDate" :clearable="false" class="datepicker" />
         </div>
         <div class="report-time">
           <label for="">Logtime</label>
@@ -112,9 +114,8 @@ export default {
   },
   data() {
     return {
-      date: `${new Date().getFullYear()}-${
-        new Date().getMonth() + 1
-      }-${new Date().getDate()}`,
+      dueDate: this.task.dueDate.split('T')[0],
+      assignedList: []
     };
   },
   computed: {
@@ -149,7 +150,7 @@ export default {
     // this.task.dueDate = `${new Date(this.task.dueDate).getFullYear()}-${new Date(this.task.dueDate).getMonth()}-${new Date(this.task.dueDate).getDate()}`
     // this.task.dueDate =(this.task.dueDate).split('T')[0];
     // console.log((this.task.dueDate).split('T')[0]);
-    console.log(this.date);
+    // console.log(this.date);
   },
 };
 </script>
@@ -241,6 +242,14 @@ export default {
       border-radius: 3px;
       li {
       }
+    }
+    .assign-select {
+      display: none;
+    }
+    .assign:focus {
+      .assign-select {
+      display: block;
+    }
     }
   }
 }

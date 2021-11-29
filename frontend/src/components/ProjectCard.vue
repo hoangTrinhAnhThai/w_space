@@ -32,7 +32,6 @@
     </div>
     <task-detail
       :task="card"
-      :dueDate="card.dueDate.split('T')[0]"
       ref="taskDetailModal"
     ></task-detail>
   </div>
@@ -146,7 +145,6 @@ export default {
       font-size: 80%;
       span {
         background-color: rgb(243, 240, 215);
-        padding: 3px 5px;
         border-radius: 3px;
       }
     }

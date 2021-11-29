@@ -30,11 +30,12 @@ const actions = {
     http
       .post('auth/login', params)
       .then((response) => {
-        commit('setUserInfo', response.data);
-        localStorage.setItem('token', response.data.accessToken);
-        localStorage.setItem('user', JSON.stringify(response.data));
+        commit('setUserInfo', response.data.data);
+        console.log(response.data);
+        localStorage.setItem('token', response.data.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.data));
         commit('ERROR/clearErrorMessage', null, { root: true });
-        router.go();
+        // router.go();
       })
       .catch((err) => {
         commit('ERROR/setErrorMessage', err.response.data.message, {

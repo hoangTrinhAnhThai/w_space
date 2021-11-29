@@ -89,7 +89,7 @@ const actions = {
   },
   getStatus({ commit }) {
     http
-      .get('project/status')
+      .get('status')
       .then((result) => {
         commit('setStatus', result.data.data);
       })
