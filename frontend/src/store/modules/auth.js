@@ -57,14 +57,12 @@ const actions = {
         });
       });
   },
-  getUserByToken({ commit, dispatch }) {
+  getUserByToken({ commit }) {
     http
-      .get('/user/')
+      .get('auth/')
       .then((response) => {
-        console.log('get user', response.data);
-        localStorage.setItem('user', JSON.stringify(response.data));
-        commit('setUserInfo', response.data);
-        dispatch('getNotifications');
+        localStorage.setItem('user', JSON.stringify(response.data.data));
+        commit('setUserInfo', response.data.data);
         commit('ERROR/clearErrorMessage', null, { root: true });
       })
       .catch((error) => {
