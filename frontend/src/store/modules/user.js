@@ -17,7 +17,7 @@ const mutations = {
     state.userInfo = userInfo;
   },
   setMemberInfor(state, userInfo) {
-    state.userInfo = userInfo;
+    state.memberInfor = userInfo;
   },
 };
 const actions = {

@@ -35,7 +35,7 @@ const actions = {
         localStorage.setItem('token', response.data.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.data));
         commit('ERROR/clearErrorMessage', null, { root: true });
-        // router.go();
+        router.go();
       })
       .catch((err) => {
         commit('ERROR/setErrorMessage', err.response.data.message, {

@@ -24,7 +24,6 @@ class ChatController {
   ];
   getSingleChatByRoomId = [
     (req, res) => {
-      console.log('id rom', req.params.id);
       Chat.find({ room: req.params.id })
         .sort({ createdAt: 1 })
         .then((chat) => {

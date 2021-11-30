@@ -88,8 +88,10 @@ export default {
 .chat-room {
   position: relative;
   height: 90vh;
+    min-width: 500px;
+
   .container-chat {
-    min-width: 850px;
+    min-width: 500px;
     position: relative;
   }
   .layout-chat {

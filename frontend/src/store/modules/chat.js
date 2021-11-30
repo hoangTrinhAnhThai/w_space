@@ -27,6 +27,9 @@ const mutations = {
   addMessage(state, data) {
     state.chats.push(data);
   },
+  logMess() {
+    console.log('aaa');
+  }
 };
 const actions = {
   getAllRooms({ commit }) {
@@ -35,7 +38,7 @@ const actions = {
       commit('setRooms', response.data.data);
     });
   },
-  getAllChatByIdRoom({ commit }, params) {
+  getAllChatByIdRoom({ commit, dispatch }, params) {
     http.get(`chat/${params}`).then((response) => {
       console.log(response.data.data);
       commit('setChats', response.data.data);
@@ -43,9 +46,10 @@ const actions = {
     socket.on(
       'new-message',
       function (data) {
-        if (data.message.room === '61a3c3c63a93c1454bdc6ae4') {
-          console.log('data ne -----', data);
-          commit('addMessage', data.message);
+        if (data.message.room === params) {
+          // commit('addMessage', data.message);
+      dispatch('getAllChatByIdRoom', params);
+
         }
       }.bind(this),
     );
@@ -55,6 +59,7 @@ const actions = {
       console.log(response.data.data);
       socket.emit('save-message', response.data.data);
       dispatch('getAllChatByIdRoom', params.idRoom);
+      // commit('logMess')
     });
   },
 };

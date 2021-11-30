@@ -17,6 +17,9 @@ const routes = [
     path: '/',
     name: MainPage,
     component: MainPage,
+    meta: {
+      requiresAuth: true
+    },
     children: [
       {
         path: '/logtime',
@@ -81,5 +84,23 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if(to.matched.some((record) => record.meta.requiresAuth)) {
+    if(!localStorage.getItem('token')) {
+      next('/login')
+    } else {
+      next()
+    }
+    next()
+  } else {
+    if(!localStorage.getItem('token')) {
+      next()
+    } else {
+      next('/')
+    }
+    next()
+  }
 });
 export default router;
