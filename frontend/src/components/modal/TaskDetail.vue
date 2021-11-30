@@ -49,16 +49,29 @@
           </div>
         </div>
       </div>
-      <div class="right-container" >
+      <div class="right-container">
         <div class="assign" tabindex="1">
           <label for="">Assigned</label>
-          <!-- <div class="assign-input"  type="text" name="" id="" /> -->
-          <select class="assign-select">
-            <option :value="currentProject.createdBy">{{currentProject.createdBy.email}}</option>
-            <option
-              v-for="(user, index) in currentProject.members"
-              :key="index"
-            >
+          <!-- <div class="select">
+            <ul>
+              <li v-for="(member, index) in listMember" :key="index">
+                <label class="label-for-check" :for="member.email"
+                  >{{ member.email }}
+                </label>
+                <input
+                  class="check-with-label checkbox"
+                  v-model="memberSelected"
+                  :value="member.email"
+                  :id="member.email"
+                  type="checkbox"
+                />
+                <span class="icon"><i class="bx bx-user-check"></i></span>
+              </li>
+            </ul>
+          </div> -->
+          <select class="assign-select" v-model="memberSelected">
+            <!-- <option selected value="" disabled>Select assign task</option> -->
+            <option v-for="(user, index) in listMember" :key="index">
               {{ user.email }}
             </option>
           </select>
@@ -66,7 +79,14 @@
         <div class="priority">
           <label for="">Priority</label>
           <select v-model="task.priority">
-            <option style="font-size: 12px; font-weight: bolder" value="" disabled selected>Select the priority </option>
+            <option
+              style="font-size: 12px; font-weight: bolder"
+              value=""
+              disabled
+              selected
+            >
+              Select the priority
+            </option>
             <option value="high">High</option>
             <option value="normal">Normal</option>
             <option value="low">Low</option>
@@ -74,7 +94,7 @@
         </div>
         <div class="due-date">
           <label for="">Due date</label>
-          <DatePicker v-model="task.dueDate" :clearable="false" class="datepicker" />
+          <DatePicker v-model="date" :clearable="false" class="datepicker" />
         </div>
         <div class="report-time">
           <label for="">Logtime</label>
@@ -114,8 +134,9 @@ export default {
   },
   data() {
     return {
-      dueDate: this.task.dueDate.split('T')[0],
-      assignedList: []
+      assignedList: [],
+      memberSelected: [],
+      date: new Date(this.task.dueDate),
     };
   },
   computed: {
@@ -123,6 +144,24 @@ export default {
       logtimes: 'TASKS/logtimes',
       currentProject: 'TASKS/currentProject',
     }),
+    due() {
+      if (this.task.dueDate) {
+        return new Date(this.task.dueDate);
+      } else {
+        return new Date();
+      }
+    },
+    listMember() {
+      let list = [];
+      list.push(this.currentProject.createdBy);
+      if (this.currentProject.members.length > 0) {
+        for (let member of this.currentProject.members) {
+          list.push(member);
+        }
+      }
+      console.log(list);
+      return list;
+    },
   },
   methods: {
     ...mapActions({
@@ -135,6 +174,7 @@ export default {
       this.$refs.taskDetailModal.hide();
     },
     changeTaskDetail() {
+      this.task.dueDate = this.date;
       this.editTaskAction({
         idTask: this.task._id,
         idProject: this.currentProject._id,
@@ -145,12 +185,6 @@ export default {
   },
   components: {
     DatePicker,
-  },
-  created() {
-    // this.task.dueDate = `${new Date(this.task.dueDate).getFullYear()}-${new Date(this.task.dueDate).getMonth()}-${new Date(this.task.dueDate).getDate()}`
-    // this.task.dueDate =(this.task.dueDate).split('T')[0];
-    // console.log((this.task.dueDate).split('T')[0]);
-    // console.log(this.date);
   },
 };
 </script>
@@ -223,8 +257,7 @@ export default {
     div {
       margin-bottom: 15px;
     }
-    select,
-    input {
+    select {
       width: 100%;
       height: 35px;
       border: 1px solid rgb(204, 204, 204);
@@ -243,13 +276,39 @@ export default {
       li {
       }
     }
-    .assign-select {
-      display: none;
+    .assign {
+      ul {
+        list-style: none;
+        padding: 0;
+        li {
+          display: flex;
+          cursor: pointer;
+          .checkbox {
+            border: none;
+            margin-top: 7px;
+            margin-left: 5px;
+            display: none;
+          }
+          .label-for-check + .check-with-label:checked {
+            font-weight: bold;
+          }
+          .icon {
+            display: none;
+            font-size: 20px;
+            margin-left: 5px;
+            margin-top: -3px;
+            color: $color;
+          }
+          .check-with-label:checked + span {
+            display: block;
+          }
+        }
+      }
     }
     .assign:focus {
       .assign-select {
-      display: block;
-    }
+        display: block;
+      }
     }
   }
 }

@@ -18,6 +18,20 @@
       <div class="description" v-if="card.description">
         {{ card.description }}
       </div>
+      <div class="priority" v-if="card.priority">
+        <span v-if="card.priority === 'high'"
+          ><b-icon variant="danger" icon="exclamation-triangle"></b-icon>
+          <b-icon variant="danger" icon="exclamation-triangle"></b-icon>
+          <b-icon variant="danger" icon="exclamation-triangle"></b-icon
+        ></span>
+        <span v-if="card.priority === 'normal'"
+          ><b-icon variant="warning" icon="exclamation-triangle"></b-icon>
+          <b-icon variant="warning" icon="exclamation-triangle"></b-icon
+        ></span>
+        <span v-if="card.priority === 'low'"
+          ><b-icon variant="success" icon="exclamation-triangle"></b-icon
+        ></span>
+      </div>
       <div class="dueDate">
         <span v-if="card.dueDate">
           <span v-if="!deadline" style="color: red; font-weight: bolder">
@@ -30,10 +44,7 @@
         </span>
       </div>
     </div>
-    <task-detail
-      :task="card"
-      ref="taskDetailModal"
-    ></task-detail>
+    <task-detail :task="card" ref="taskDetailModal"></task-detail>
   </div>
 </template>
 
@@ -141,10 +152,14 @@ export default {
       color: grey;
       font-size: 80%;
     }
+    .priority {
+      b-icon {
+        margin-right: 10px;
+      }
+    }
     .dueDate {
       font-size: 80%;
       span {
-        background-color: rgb(243, 240, 215);
         border-radius: 3px;
       }
     }

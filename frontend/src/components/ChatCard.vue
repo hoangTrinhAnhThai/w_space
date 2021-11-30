@@ -8,32 +8,32 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
 export default {
-  name: "ChatCard",
+  name: 'ChatCard',
   data() {
     return {
-      message: "",
+      message: '',
     };
   },
   methods: {
     ...mapActions({
-      sendMessageAction: "CHAT/sendMessage",
+      sendMessageAction: 'CHAT/sendMessage',
     }),
     sendMessage() {
       this.sendMessageAction({
-        idRoom: "61a3c3c63a93c1454bdc6ae4",
-        chat: { room: "61a3c3c63a93c1454bdc6ae4", message: this.message },
+        idRoom: '61a3c3c63a93c1454bdc6ae4',
+        chat: { room: '61a3c3c63a93c1454bdc6ae4', message: this.message },
       });
-      this.message = ''
-      document.getElementById("content").focus();
+      this.message = '';
+      document.getElementById('content').focus();
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/style.scss";
+@import '../assets/style.scss';
 .chat-card {
   .container-card {
     width: 100%;

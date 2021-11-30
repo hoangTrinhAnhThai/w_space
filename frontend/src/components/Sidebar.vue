@@ -13,11 +13,9 @@
                 v-show="isShowProject"
               ></i>
               <router-link
+                id="roadmap-header"
                 tag="li"
-                :to="{
-                  path: '/roadmap',
-                  params: { id: '61a050672c01acb54fafeb06' },
-                }"
+                :to="`/roadmap/${projects[0]._id}`"
                 >Project</router-link
               >
             </span>
@@ -27,10 +25,9 @@
             ></i>
             <ul v-show="isShowProject" class="list-child">
               <li v-for="project in projects" :key="project._id">
-                
-                <!-- <router-link tag="li" :to="{ name: 'Roadmap'}">{{project.name}}</router-link> -->
-                <span class="nameProject" @click="getTaskOfProject(project)">
-                  <span id="name"><i class="bx bx-chevron-right"></i> {{ project.name }}</span></span
+                <router-link tag="li" :to="`/roadmap/${project._id}`"
+                  ><i class="bx bx-chevron-right"></i>
+                  {{ project.name }}</router-link
                 >
                 <div class="function">
                   <i
@@ -67,11 +64,12 @@
               class="bx bx-plus"
               @click="showAddProjectModal({}, 'addProject')"
             ></i>
-            <ul v-show="isShowChat" class="list-child">
+            <!-- <ul v-show="isShowChat" class="list-child">
               <li v-for="(room, index) in rooms" :key="index">
-                <div class="nameProject" @click="getTaskOfProject(project)"
+                <div class="nameProject" @click="getTaskOfProject(project)">
+                  <span id="name"
+                    ><i class="bx bx-chevron-right"></i> {{ room.name }}</span
                   >
-                  <span id="name"><i class="bx bx-chevron-right"></i> {{ room.name }}</span>
                 </div>
 
                 <div class="function">
@@ -89,7 +87,7 @@
                   ></i>
                 </div>
               </li>
-            </ul>
+            </ul> -->
           </li>
         </ul>
       </div>
@@ -100,12 +98,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import AddNewProjectModal from "../components/modal/AddNewProject.vue";
-import AddMemberModal from "../components/modal/AddMember.vue";
+import { mapActions, mapGetters } from 'vuex';
+import AddNewProjectModal from '../components/modal/AddNewProject.vue';
+import AddMemberModal from '../components/modal/AddMember.vue';
 
 export default {
-  name: "Sidebar",
+  name: 'Sidebar',
   data: () => ({
     isShowProject: false,
     isShowChat: false,
@@ -116,14 +114,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projects: "TASKS/projectArray",
-      rooms: "CHAT/rooms",
+      projects: 'TASKS/projectArray',
+      rooms: 'CHAT/rooms',
     }),
   },
   methods: {
     showAddProjectModal(project, typeOfModal) {
       this.addProjectEditAction(project);
-
       this.$refs.newProjectModal.show(project, typeOfModal);
     },
     showAddMemberModal(project) {
@@ -131,15 +128,16 @@ export default {
       this.$refs.addMemberModal.show(project);
     },
     ...mapActions({
-      getTaskOfProjectAction: "TASKS/getTaskOfProject",
-      addCurrentProjectAction: "TASKS/addCurrentProject",
-      deleteProjectAction: "TASKS/deleteProject",
-      getProject: "TASKS/getProject",
-      addProjectEditAction: "TASKS/addProjectEdit",
+      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
+      addCurrentProjectAction: 'TASKS/addCurrentProject',
+      deleteProjectAction: 'TASKS/deleteProject',
+      getProject: 'TASKS/getProject',
+      addProjectEditAction: 'TASKS/addProjectEdit',
+      getStatus: 'TASKS/getStatus',
     }),
     getTaskOfProject(project) {
       this.addCurrentProjectAction(project);
-      this.getTaskOfProjectAction(project._id);
+      this.getTaskOfProjectAction(project);
     },
     deleteProject(idProject) {
       this.deleteProjectAction(idProject);
@@ -147,6 +145,14 @@ export default {
   },
   created() {
     this.getProject();
+  },
+  watch: {
+    $route(to) {
+      if (to.name.name === 'Roadmap') {
+        this.getStatus();
+        this.getTaskOfProject(to.params.id);
+      }
+    },
   },
 };
 </script>
@@ -172,6 +178,11 @@ export default {
         cursor: pointer;
         list-style: none;
         li {
+          #roadmap-header {
+            color: grey;
+            font-weight: normal;
+            background-color: none;
+          }
           display: inline-block;
           position: relative;
           .list-child {
@@ -218,5 +229,9 @@ export default {
       }
     }
   }
+}
+.router-link-exact-active {
+  color: rgb(14, 13, 13);
+  font-weight: bolder;
 }
 </style>
