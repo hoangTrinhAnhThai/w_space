@@ -3,7 +3,7 @@ const Room = require('../models/Room');
 const { validationResult } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
 const User = require('../models/User');
-const host = require('../../utils/decodeJWT')
+const host = require('../../utils/decodeJWT');
 require('dotenv').config();
 
 class ProjectController {
@@ -22,7 +22,7 @@ class ProjectController {
             let newProject = new Project();
             newProject.name = req.body.name;
             newProject.description = req.body.description;
-            newProject.createdBy = user
+            newProject.createdBy = user;
             newProject.save(function (err) {
               if (err) {
                 return apiResponse.ErrorResponse(res, 'err');
@@ -33,16 +33,14 @@ class ProjectController {
                     'Add new project successfully',
                     newProject,
                   );
-                })
+                });
               }
-
             });
           }
         } catch (error) {
           return apiResponse.ErrorResponse(res, error);
         }
-      })
-
+      });
     },
   ];
   editProject = [
@@ -128,10 +126,7 @@ class ProjectController {
   showAllProjects = [
     (req, res) => {
       User.findById(host(req, res)).then((user) => {
-        Project.find({ $or: [
-          {createdBy: user}, 
-          {members: user}
-        ] })
+        Project.find({ $or: [{ createdBy: user }, { members: user }] })
           .populate('tasks')
           .populate('members')
           .populate('createdBy')
@@ -142,8 +137,8 @@ class ProjectController {
               return apiResponse.ErrorResponse(res, 'Not found project');
             }
           });
-      })
-    }
+      });
+    },
   ];
   showProject = [
     (req, res) => {

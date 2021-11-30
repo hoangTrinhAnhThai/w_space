@@ -209,21 +209,21 @@ class TaskController {
         .populate('tasks')
         .then((project) => {
           if (project) {
-              dropANode(project.tasks, req.params.idTask);
-              Logtime.find({ task: req.params.idTask }).then((logtimes) => {
-                console.log(logtimes);
-                if(logtimes.length > 0) {
-                  for (let logtime of logtimes) {
-                    Logtime.findByIdAndDelete(logtime._id).then(() => {
-                      return;
-                    });
-                  }
+            dropANode(project.tasks, req.params.idTask);
+            Logtime.find({ task: req.params.idTask }).then((logtimes) => {
+              console.log(logtimes);
+              if (logtimes.length > 0) {
+                for (let logtime of logtimes) {
+                  Logtime.findByIdAndDelete(logtime._id).then(() => {
+                    return;
+                  });
                 }
-                Task.findByIdAndDelete(req.params.idTask).then(() => {
-                  console.log('xoa ok');
-                  return apiResponse.successResponse(res, 'Delete Success');
-                });
+              }
+              Task.findByIdAndDelete(req.params.idTask).then(() => {
+                console.log('xoa ok');
+                return apiResponse.successResponse(res, 'Delete Success');
               });
+            });
           }
         });
     },

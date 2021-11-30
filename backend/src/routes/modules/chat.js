@@ -1,16 +1,16 @@
 const express = require('express');
 const server = require('http').createServer(express);
-const io = require('socket.io')(server,{
+const io = require('socket.io')(server, {
   cors: {
-    origin: "http://localhost:8080",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
-    credentials: true
+    origin: 'http://localhost:8080',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['my-custom-header'],
+    credentials: true,
   },
-  allowEIO3: true 
+  allowEIO3: true,
 });
 const router = express.Router();
-const chatController = require('../../app/controllers/ChatController')
+const chatController = require('../../app/controllers/ChatController');
 
 router.get('/', chatController.getAllChats);
 router.get('/:id', chatController.getSingleChatByRoomId);
