@@ -13,9 +13,13 @@
                 v-show="isShowProject"
               ></i>
               <router-link
+                v-if="projects.length > 0"
                 id="roadmap-header"
                 tag="li"
                 :to="`/roadmap/${projects[0]._id}`"
+                >Project</router-link
+              >
+              <router-link v-else id="roadmap-header" tag="li" :to="`/roadmap`"
                 >Project</router-link
               >
             </span>
@@ -58,36 +62,29 @@
                 class="bx bxs-down-arrow"
                 v-show="isShowChat"
               ></i>
-              <router-link tag="li" to="/chatroom">ChatRoom</router-link>
+              <router-link
+                id="chat-header"
+                v-if="rooms.length > 0"
+                tag="li"
+                :to="`/chatroom/${rooms[0]._id}`"
+                >ChatRoom</router-link
+              >
+              <router-link id="chat-header" v-else tag="li" :to="`/chatroom`"
+                >ChatRoom</router-link
+              >
             </span>
             <i
               class="bx bx-plus"
               @click="showAddProjectModal({}, 'addProject')"
             ></i>
-            <!-- <ul v-show="isShowChat" class="list-child">
+            <ul v-show="isShowChat" class="list-child">
               <li v-for="(room, index) in rooms" :key="index">
-                <div class="nameProject" @click="getTaskOfProject(project)">
-                  <span id="name"
-                    ><i class="bx bx-chevron-right"></i> {{ room.name }}</span
-                  >
-                </div>
-
-                <div class="function">
-                  <i
-                    @click="showAddProjectModal(project, 'editProject')"
-                    class="bx bx-edit-alt"
-                  ></i>
-                  <i
-                    @click="showAddMemberModal(project)"
-                    class="bx bx-user-plus"
-                  ></i>
-                  <i
-                    @click="deleteProject(project._id)"
-                    class="bx bx-trash"
-                  ></i>
-                </div>
+                <router-link tag="li" :to="`/chatroom/${room._id}`"
+                  ><i class="bx bx-chevron-right"></i>
+                  {{ room.name }}</router-link
+                >
               </li>
-            </ul> -->
+            </ul>
           </li>
         </ul>
       </div>
@@ -134,6 +131,7 @@ export default {
       getProject: 'TASKS/getProject',
       addProjectEditAction: 'TASKS/addProjectEdit',
       getStatus: 'TASKS/getStatus',
+      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
     }),
     getTaskOfProject(project) {
       this.addCurrentProjectAction(project);
@@ -151,6 +149,8 @@ export default {
       if (to.name.name === 'Roadmap') {
         this.getStatus();
         this.getTaskOfProject(to.params.id);
+      } else if (to.name.name === 'ChatRoom') {
+        this.getAllChatByIdRoom(to.params.id);
       }
     },
   },
@@ -178,7 +178,8 @@ export default {
         cursor: pointer;
         list-style: none;
         li {
-          #roadmap-header {
+          #roadmap-header,
+          #chat-header {
             color: grey;
             font-weight: normal;
             background-color: none;

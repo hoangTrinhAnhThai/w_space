@@ -39,6 +39,8 @@ export default {
     width: 100%;
     background-color: rgb(216, 210, 210);
     padding: 10px;
+    display: flex;
+    flex-wrap: nowrap;
     #content {
       width: 97%;
       white-space: nowrap;

@@ -5,12 +5,14 @@ import { BootstrapVue, IconsPlugin, BootstrapVueIcons } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import '@fortawesome/fontawesome-free';
+import VueChatScroll from 'vue-chat-scroll';
 import store from './store';
 import 'vue2-datepicker/index.css';
 import VueSocketIO from 'vue-socket.io';
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(BootstrapVueIcons);
+Vue.use(VueChatScroll);
 
 Vue.config.productionTip = false;
 Vue.use(

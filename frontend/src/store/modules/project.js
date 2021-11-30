@@ -111,9 +111,6 @@ const actions = {
     http.get(`project/${idProject}`).then((result) => {
       commit('setTasksArray', result.data.data.tasks);
       commit('setTaskAsStatus');
-      // dispatch('getStatus').then(() => {
-      //   commit('setTaskAsStatus');
-      // });
     });
   },
   getProject({ commit }) {
@@ -192,11 +189,24 @@ const actions = {
   },
   removeMember({ commit, dispatch }, params) {
     http
-      .put(`project/${params.idProject}/member`, params.project)
+      .put(`project/${params.idProject}/member/remove`, params.project)
       .then((result) => {
         commit('setProjectEdit', result.data.data);
         dispatch('getProject');
-        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        commit('ERROR/setErrorMessage', err.response.data.message, {
+          root: true,
+        });
+      });
+  },
+  addMember({ commit, dispatch }, params) {
+    http
+      .put(`project/${params.idProject}/member/add`, params.project)
+      .then((result) => {
+        commit('setProjectEdit', result.data.data);
+        dispatch('getProject');
       })
       .catch((err) => {
         console.log(err.response.data.message);

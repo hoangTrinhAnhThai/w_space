@@ -15,10 +15,10 @@
       <div class="member-search">
         <div
           class="user-found"
-          v-if="userInfo && !errorMessage"
-          @click="addMember(userInfo._id)"
+          v-if="memberInfor && !errorMessage"
+          @click="addMember(memberInfor._id)"
         >
-          <span>{{ userInfo.email }}</span>
+          <span>{{ memberInfor.email }}</span>
         </div>
         <div class="errors" v-if="errorMessage">
           {{ errorMessage }} <br />
@@ -55,7 +55,7 @@ export default {
   computed: {
     ...mapGetters({
       validateEmail: 'VALIDATION/validateEmail',
-      userInfo: 'USER/userInfo',
+      memberInfor: 'USER/memberInfor',
       errorMessage: 'ERROR/errorMessage',
       projectEdit: 'TASKS/projectEdit',
     }),
@@ -64,7 +64,7 @@ export default {
     ...mapActions({
       searchMemberAction: 'USER/searchMember',
       clearErrorMessage: 'ERROR/clearErrorMessage',
-      addMemberAction: 'TASKS/editProject',
+      addMemberAction: 'TASKS/addMember',
       removeMemberAction: 'TASKS/removeMember',
       removeMemberInforAction: 'USER/removeMemberInfor',
     }),

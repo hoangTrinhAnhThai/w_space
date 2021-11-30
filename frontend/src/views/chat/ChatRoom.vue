@@ -1,29 +1,11 @@
 <template>
   <div class="chat-room">
     <div class="container-chat">
-      <div class="header">Ten chat room</div>
-      <hr />
-      <!-- <div class="content" v-chat-scroll>
-        <ul>
-          <li v-for="(chat, index) in chats" :key="index">
-            {{ chat.message }}
-          </li>
-        </ul>
-      </div> -->
+      <!-- <div class="header">Ten chat room</div> -->
+      <!-- <hr /> -->
       <div class="layout-chat" v-chat-scroll>
         <div class="content" v-for="(chat, index) in chats" :key="index">
-          <div class="left-chat-card" v-if="index % 3 == 0">
-            <div class="content-chat left">
-              <div class="img">
-                <img
-                  src="https://i.pinimg.com/736x/21/2d/12/212d12e421963f8a66f95aece1182069.jpg"
-                  alt=""
-                />
-              </div>
-              <p>{{ chat.message }}</p>
-            </div>
-          </div>
-          <div class="right-chat-card" v-else>
+          <div class="right-chat-card" v-if="chat.createdBy == userInfo._id">
             <div class="content-chat right">
               <p>{{ chat.message }}</p>
               <div class="img">
@@ -34,10 +16,31 @@
               </div>
             </div>
           </div>
+          <div class="left-chat-card" v-else>
+            <div class="content-chat left">
+              <div class="img">
+                <img
+                  src="https://i.pinimg.com/736x/21/2d/12/212d12e421963f8a66f95aece1182069.jpg"
+                  alt=""
+                />
+              </div>
+              <p>{{ chat.message }}</p>
+            </div>
+          </div>
         </div>
       </div>
       <div class="write-content">
-        <chat-card />
+        <div class="chat-card">
+          <div class="container-card">
+            <input
+              id="content"
+              v-model="message"
+              type="text"
+              placeholder="..."
+            />
+            <i class="bx bx-paper-plane" @click="sendMessage"></i>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -45,28 +48,37 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import VueChatScroll from 'vue-chat-scroll';
-import Vue from 'vue';
-Vue.use(VueChatScroll);
-import ChatCard from '../../components/ChatCard.vue';
+// import ChatCard from "../../components/ChatCard.vue";
 
 export default {
   name: 'ChatRoom',
-  components: {
-    ChatCard,
+  data() {
+    return {
+      message: '',
+    };
   },
   computed: {
     ...mapGetters({
       chats: 'CHAT/chats',
+      userInfo: 'AUTH/userInfo',
     }),
   },
   methods: {
     ...mapActions({
       getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
+      sendMessageAction: 'CHAT/sendMessage',
     }),
+    sendMessage() {
+      this.sendMessageAction({
+        idRoom: this.$route.params.id,
+        chat: { room: this.$route.params.id, message: this.message },
+      });
+      this.message = '';
+      document.getElementById('content').focus();
+    },
   },
   created() {
-    this.getAllChatByIdRoom('61a3c3c63a93c1454bdc6ae4');
+    this.getAllChatByIdRoom(this.$route.params.id);
   },
 };
 </script>
@@ -75,17 +87,16 @@ export default {
 @import '../../assets/style.scss';
 .chat-room {
   position: relative;
-  // min-height: 92vh;
+  height: 90vh;
   .container-chat {
-    width: 90%;
     min-width: 850px;
+    position: relative;
   }
   .layout-chat {
-    overflow: scroll;
     overflow-y: scroll;
-    height: 67vh;
+    height: 86.9vh;
+
     .content {
-      // height: 60vh;
       overflow: auto;
       .right-chat-card {
         max-width: 70%;
@@ -155,6 +166,43 @@ export default {
         }
       }
     }
+  }
+  .write-content {
+    width: 100%;
+    // position: absolute;
+    // bottom: 0;
+  }
+  .chat-card {
+    .container-card {
+      width: 100%;
+      background-color: rgb(216, 210, 210);
+      padding: 10px;
+      display: flex;
+      flex-wrap: nowrap;
+      #content {
+        width: 97%;
+        white-space: nowrap;
+        background-color: #fff;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        border: 1px solid $border-color;
+        padding: 7px 15px;
+        border-radius: 300px;
+        outline: none;
+      }
+      i {
+        font-size: 25px;
+        margin-left: 10px;
+        position: relative;
+        top: 5px;
+      }
+      i:hover {
+        color: rgb(138, 138, 138);
+      }
+    }
+  }
+  ::placeholder {
+    color: rgb(196, 191, 191);
   }
 }
 </style>

@@ -23,9 +23,11 @@ export default {
       getProject: 'TASKS/getProject',
       getStatus: 'TASKS/getStatus',
       getAllRooms: 'CHAT/getAllRooms',
+      getUserByToken: 'AUTH/getUserByToken',
     }),
   },
   created() {
+    this.getUserByToken();
     this.getProject();
     this.getAllRooms();
   },
@@ -35,10 +37,10 @@ export default {
 <style lang="scss" scoped>
 .main-page {
   display: flex;
+  height: 100vh;
   .sidebar {
     width: 15vw;
     min-width: 220px;
-    // position: fixed;
   }
   .nav {
     height: 7vh;
@@ -46,10 +48,6 @@ export default {
   }
   .main-container {
     width: 83vw;
-    height: 93vh;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
   }
 }
 </style>

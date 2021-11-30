@@ -29,7 +29,17 @@ const routes = [
         component: Roadmap,
       },
       {
-        path: '/chatroom',
+        path: '/roadmap',
+        name: Roadmap,
+        component: Roadmap,
+      },
+      {
+        path: '/chatroom/:id',
+        name: ChatRoom,
+        component: ChatRoom,
+      },
+      {
+        path: '/chatroom/',
         name: ChatRoom,
         component: ChatRoom,
       },
@@ -62,7 +72,7 @@ const routes = [
     component: JoinRoom,
   },
   {
-    path: '/chat-room/:id/:nickname',
+    path: '/chat-room/:id',
     name: 'ChatRoom',
     component: ChatRoom,
   },
