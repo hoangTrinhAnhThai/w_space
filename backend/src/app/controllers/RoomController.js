@@ -1,6 +1,9 @@
 const Room = require('../models/Room');
-const { validationResult } = require('express-validator');
+const User = require('../models/User');
+
 const apiResponse = require('../../utils/apiResponse');
+const host = require('../../utils/decodeJWT');
+
 require('dotenv').config();
 
 class RoomController {
@@ -21,23 +24,25 @@ class RoomController {
   ];
   showAllRoom = [
     (req, res) => {
-      Room.find()
-        .sort({ createdAt: -1 })
-        .then((rooms) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'show room success',
-            rooms,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, 'error');
-        });
+      User.findById(host(req, res)).then((user) => {
+        console.log('hi', user);
+        Room.find({ $or: [{ createdBy: user }, { members: user }] })
+          .sort({ createdAt: -1 })
+          .then((rooms) => {
+            return apiResponse.successResponseWithData(
+              res,
+              'show room success',
+              rooms,
+            );
+          })
+          .catch((error) => {
+            return apiResponse.ErrorResponse(res, 'error');
+          });
+      });
     },
   ];
   createRoom = [
     (req, res) => {
-      console.log(req.body);
       Room.create(req.body.room).then((room) => {
         return apiResponse.successResponseWithData(
           res,

@@ -1,9 +1,10 @@
 const User = require('../models/User');
-const Role = require('../models/Role');
 const { validationResult } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const host = require('../../utils/decodeJWT');
+
 require('dotenv').config();
 
 class AuthController {
@@ -107,6 +108,17 @@ class AuthController {
       } catch (err) {
         return apiResponse.ErrorResponse(res, err);
       }
+    },
+  ];
+  getUserInfor = [
+    (req, res) => {
+      User.findById(host(req, res)).then((user) => {
+        return apiResponse.successResponseWithData(
+          res,
+          'user information',
+          user,
+        );
+      });
     },
   ];
 }

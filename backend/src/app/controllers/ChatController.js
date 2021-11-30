@@ -1,8 +1,8 @@
 const Chat = require('../models/Chat');
-const { validationResult } = require('express-validator');
+const User = require('../models/User');
 const apiResponse = require('../../utils/apiResponse');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const host = require('../../utils/decodeJWT');
+
 require('dotenv').config();
 
 class ChatController {
@@ -24,6 +24,7 @@ class ChatController {
   ];
   getSingleChatByRoomId = [
     (req, res) => {
+      console.log('id rom', req.params.id);
       Chat.find({ room: req.params.id })
         .sort({ createdAt: 1 })
         .then((chat) => {
@@ -41,17 +42,21 @@ class ChatController {
 
   createChat = [
     (req, res) => {
-      Chat.create(req.body)
-        .then((result) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'Create chat successfully',
-            result,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, error);
-        });
+      User.findById(host(req, res)).then((user) => {
+        let chat = new Chat(req.body);
+        chat.createdBy = user;
+        Chat.create(chat)
+          .then((result) => {
+            return apiResponse.successResponseWithData(
+              res,
+              'Create chat successfully',
+              result,
+            );
+          })
+          .catch((error) => {
+            return apiResponse.ErrorResponse(res, error);
+          });
+      });
     },
   ];
   updateChat = [

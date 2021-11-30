@@ -21,7 +21,7 @@ const Project = new Schema(
         ref: 'User',
       },
     ],
-    roomChat: {
+    room: {
       type: Schema.Types.ObjectId,
       ref: 'Room',
     },
