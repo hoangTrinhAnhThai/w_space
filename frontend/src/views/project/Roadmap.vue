@@ -67,7 +67,6 @@ export default {
       currentProject: 'TASKS/currentProject',
     }),
   },
-  created() {},
   methods: {
     ...mapActions({
       removeCard: 'TASKS/removeCard',

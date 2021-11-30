@@ -6,8 +6,8 @@
         <b-link href="#/add-room">(Add Room)</b-link>
       </h2>
       <b-table striped hover :items="rooms" :fields="fields">
-         <template v-slot:cell(actions)="data">
-           <button @click.stop="join(data.item._id)">Join</button>
+        <template v-slot:cell(actions)="data">
+          <button @click.stop="join(data.item._id)">Join</button>
         </template>
         <!-- <template slot="actions" scope="row">
           <b-btn size="sm" @click.stop="join(row._id)">Join</b-btn>
@@ -15,7 +15,7 @@
       </b-table>
       <ul v-if="errors && errors.length">
         <li v-for="(error, index) of errors" :key="index">
-          {{error.message}}
+          {{ error.message }}
         </li>
       </ul>
     </b-col>
@@ -23,12 +23,11 @@
 </template>
 
 <script>
-
-import axios from 'axios'
+import axios from 'axios';
 
 export default {
   name: 'BookList',
-  data () {
+  data() {
     return {
       // fields: {
       //   room_name: { label: 'Room Name', sortable: true, 'class': 'text-center' },
@@ -37,27 +36,28 @@ export default {
       // },
       fields: ['_id', 'createdAt', 'updatedAt', 'actions'],
       rooms: [],
-      errors: []
-    }
+      errors: [],
+    };
   },
-  created () {
-    axios.get(`http://localhost:3000/room/`)
-    .then(response => {
-      console.log(response.data.data);
-      this.rooms = response.data.data
-    })
-    .catch(e => {
-      this.errors.push(e)
-    })
+  created() {
+    axios
+      .get(`http://localhost:3000/room/`)
+      .then((response) => {
+        console.log(response.data.data);
+        this.rooms = response.data.data;
+      })
+      .catch((e) => {
+        this.errors.push(e);
+      });
   },
   methods: {
-    join (id) {
+    join(id) {
       console.log(id);
       this.$router.push({
         name: 'JoinRoom',
-        params: { id: id }
-      })
-    }
-  }
-}
+        params: { id: id },
+      });
+    },
+  },
+};
 </script>

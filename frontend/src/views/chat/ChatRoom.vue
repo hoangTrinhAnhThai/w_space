@@ -44,35 +44,35 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import VueChatScroll from "vue-chat-scroll";
-import Vue from "vue";
+import { mapActions, mapGetters } from 'vuex';
+import VueChatScroll from 'vue-chat-scroll';
+import Vue from 'vue';
 Vue.use(VueChatScroll);
-import ChatCard from "../../components/ChatCard.vue";
+import ChatCard from '../../components/ChatCard.vue';
 
 export default {
-  name: "ChatRoom",
+  name: 'ChatRoom',
   components: {
     ChatCard,
   },
   computed: {
     ...mapGetters({
-      chats: "CHAT/chats",
+      chats: 'CHAT/chats',
     }),
   },
   methods: {
     ...mapActions({
-      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
+      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
     }),
   },
   created() {
-    this.getAllChatByIdRoom("61a3c3c63a93c1454bdc6ae4");
+    this.getAllChatByIdRoom('61a3c3c63a93c1454bdc6ae4');
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
+@import '../../assets/style.scss';
 .chat-room {
   position: relative;
   // min-height: 92vh;

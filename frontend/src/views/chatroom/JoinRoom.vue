@@ -25,33 +25,35 @@
 </template>
 
 <script>
-import axios from "axios";
-import io from "socket.io-client";
+import axios from 'axios';
+import io from 'socket.io-client';
 export default {
-  name: "JoinRoom",
+  name: 'JoinRoom',
   data() {
     return {
       chat: {},
-      socket: io("http://localhost:4000", { transports: ["websocket", 'polling', 'flashsocket'] }),
+      socket: io('http://localhost:4000', {
+        transports: ['websocket', 'polling', 'flashsocket'],
+      }),
     };
   },
   methods: {
     onSubmit(evt) {
       evt.preventDefault();
       this.chat.room = this.$route.params.id;
-      this.chat.message = this.chat.nickname + " join the room";
+      this.chat.message = this.chat.nickname + ' join the room';
       axios
         .post(`http://localhost:3000/api/chat`, this.chat)
         .then((response) => {
-          console.log("nick", response.data);
-          this.socket.emit("save-message", {
+          console.log('nick', response.data);
+          this.socket.emit('save-message', {
             room: this.chat.room,
             nickname: this.chat.nickname,
-            message: "Join this room",
+            message: 'Join this room',
             created_date: new Date(),
           });
           this.$router.push({
-            name: "ChatRoom",
+            name: 'ChatRoom',
             params: {
               id: this.$route.params.id,
               nickname: response.data.nickname,

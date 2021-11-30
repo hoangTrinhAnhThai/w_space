@@ -46,7 +46,17 @@ const mutations = {
     state.tasksArray = data;
   },
   setCurrentProject(state, data) {
-    state.currentProject = data;
+    if (typeof data == typeof 'String') {
+      for (let project of state.projectArray) {
+        if (project._id === data) {
+          state.currentProject = project;
+          break;
+        }
+      }
+    } else {
+      state.currentProject = data;
+    }
+    console.log(state.currentProject);
   },
   setTaskAsStatus(state) {
     state.taskOfProject = [];
@@ -76,7 +86,6 @@ const mutations = {
 };
 const actions = {
   addCurrentProject({ commit }, project) {
-    console.log('current project ', project);
     commit('setCurrentProject', project);
   },
   addProjectEdit({ commit }, params) {
@@ -98,12 +107,13 @@ const actions = {
       });
   },
 
-  getTaskOfProject({ commit, dispatch }, idProject) {
+  getTaskOfProject({ commit }, idProject) {
     http.get(`project/${idProject}`).then((result) => {
       commit('setTasksArray', result.data.data.tasks);
-      dispatch('getStatus').then(() => {
-        commit('setTaskAsStatus');
-      });
+      commit('setTaskAsStatus');
+      // dispatch('getStatus').then(() => {
+      //   commit('setTaskAsStatus');
+      // });
     });
   },
   getProject({ commit }) {
@@ -122,6 +132,7 @@ const actions = {
       .post('project', params)
       .then((result) => {
         dispatch('addProjectEdit', result.data.data);
+        dispatch('getProject');
         console.log(result.data.data);
       })
       .catch((error) => {

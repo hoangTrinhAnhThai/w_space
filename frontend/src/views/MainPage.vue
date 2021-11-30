@@ -22,12 +22,12 @@ export default {
     ...mapActions({
       getProject: 'TASKS/getProject',
       getStatus: 'TASKS/getStatus',
-      getAllRooms: 'CHAT/getAllRooms'
+      getAllRooms: 'CHAT/getAllRooms',
     }),
   },
   created() {
     this.getProject();
-    this.getAllRooms()
+    this.getAllRooms();
   },
 };
 </script>

@@ -7,11 +7,9 @@ import Roadmap from '../views/project/Roadmap.vue';
 import Login from '../views/Auth/Login.vue';
 import Signup from '../views/Auth/Register.vue';
 import ChatRoom from '../views/chat/ChatRoom.vue';
-import RoomList from '../views/chatroom/RoomList.vue'
-import AddRoom from '../views/chatroom/AddRoom.vue'
-import JoinRoom from '../views/chatroom/JoinRoom.vue'
-
-
+import RoomList from '../views/chatroom/RoomList.vue';
+import AddRoom from '../views/chatroom/AddRoom.vue';
+import JoinRoom from '../views/chatroom/JoinRoom.vue';
 
 Vue.use(VueRouter);
 const routes = [
@@ -26,7 +24,7 @@ const routes = [
         component: Calendar,
       },
       {
-        path: '/roadmap',
+        path: '/roadmap/:id',
         name: Roadmap,
         component: Roadmap,
       },
@@ -51,23 +49,23 @@ const routes = [
   {
     path: '/roomlist',
     name: 'RoomList',
-    component: RoomList
+    component: RoomList,
   },
   {
     path: '/add-room',
     name: 'AddRoom',
-    component: AddRoom
+    component: AddRoom,
   },
   {
     path: '/join-room/:id',
     name: 'JoinRoom',
-    component: JoinRoom
+    component: JoinRoom,
   },
   {
     path: '/chat-room/:id/:nickname',
     name: 'ChatRoom',
-    component: ChatRoom
-  }
+    component: ChatRoom,
+  },
 ];
 
 const router = new VueRouter({

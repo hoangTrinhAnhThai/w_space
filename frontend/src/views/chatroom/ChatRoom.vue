@@ -70,21 +70,21 @@
 </template>
 
 <script>
-import axios from "axios";
-import io from "socket.io-client";
-import VueChatScroll from "vue-chat-scroll";
-import Vue from "vue";
+import axios from 'axios';
+import io from 'socket.io-client';
+import VueChatScroll from 'vue-chat-scroll';
+import Vue from 'vue';
 Vue.use(VueChatScroll);
 export default {
-  name: "ChatRoom",
+  name: 'ChatRoom',
   data() {
     return {
       chats: [],
       errors: [],
       nickname: this.$route.params.nickname,
       chat: {},
-      socket: io("http://localhost:4000", {
-        transports: ["websocket", "polling", "flashsocket"],
+      socket: io('http://localhost:4000', {
+        transports: ['websocket', 'polling', 'flashsocket'],
       }),
     };
   },
@@ -92,7 +92,7 @@ export default {
     axios
       .get(`http://localhost:3000/api/chat/` + this.$route.params.id)
       .then((response) => {
-        console.log("chatres", response);
+        console.log('chatres', response);
         if (response.data) {
           this.chats = response.data;
         }
@@ -102,26 +102,26 @@ export default {
       });
 
     this.socket.on(
-      "new-message",
+      'new-message',
       function (data) {
         if (data.message.room === this.$route.params.id) {
           console.log(this.chats);
           console.log(data.message);
           this.chats.push(data.message);
         }
-      }.bind(this)
+      }.bind(this),
     );
   },
   methods: {
     logout() {
-      this.socket.emit("save-message", {
+      this.socket.emit('save-message', {
         room: this.chat.room,
         nickname: this.chat.nickname,
-        message: this.chat.nickname + " left this room",
+        message: this.chat.nickname + ' left this room',
         created_date: new Date(),
       });
       this.$router.push({
-        name: "RoomList",
+        name: 'RoomList',
       });
     },
     onSubmit(evt) {
@@ -132,8 +132,8 @@ export default {
         .post(`http://localhost:3000/api/chat`, this.chat)
         .then((response) => {
           console.log(response.data);
-          this.socket.emit("save-message", response.data);
-          this.chat.message = "";
+          this.socket.emit('save-message', response.data);
+          this.chat.message = '';
         })
         .catch((e) => {
           this.errors.push(e);
