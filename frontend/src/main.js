@@ -9,6 +9,7 @@ import VueChatScroll from 'vue-chat-scroll';
 import store from './store';
 import 'vue2-datepicker/index.css';
 import VueSocketIO from 'vue-socket.io';
+import vuetify from './plugins/vuetify'
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(BootstrapVueIcons);
@@ -25,5 +26,6 @@ Vue.use(
 new Vue({
   render: (h) => h(App),
   router,
-  store,
+  vuetify,
+  store
 }).$mount('#app');

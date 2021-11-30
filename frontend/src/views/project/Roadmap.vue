@@ -33,7 +33,7 @@
               v-bind:card="card"
               v-bind:project="currentProject"
               class="card"
-              ><span>{{ card.name }}</span></Card
+              ></Card
             >
           </Draggable>
         </Container>

@@ -52,29 +52,20 @@
       <div class="right-container">
         <div class="assign" tabindex="1">
           <label for="">Assigned</label>
-          <!-- <div class="select">
-            <ul>
-              <li v-for="(member, index) in listMember" :key="index">
-                <label class="label-for-check" :for="member.email"
-                  >{{ member.email }}
-                </label>
-                <input
-                  class="check-with-label checkbox"
-                  v-model="memberSelected"
-                  :value="member.email"
-                  :id="member.email"
-                  type="checkbox"
-                />
-                <span class="icon"><i class="bx bx-user-check"></i></span>
-              </li>
-            </ul>
-          </div> -->
-          <select class="assign-select" v-model="memberSelected">
-            <!-- <option selected value="" disabled>Select assign task</option> -->
+          <v-autocomplete
+          v-model="memberSelected"
+            chips
+            clearable
+            small-chips
+            :items="listMember"
+            item-text="email"
+              item-value="email"
+          ></v-autocomplete>
+          <!-- <select class="assign-select" v-model="memberSelected">
             <option v-for="(user, index) in listMember" :key="index">
               {{ user.email }}
             </option>
-          </select>
+          </select> -->
         </div>
         <div class="priority">
           <label for="">Priority</label>
@@ -116,17 +107,17 @@
       </div>
     </div>
     <div class="button">
-      <button class="save" @click="changeTaskDetail">Save</button>
-      <button class="cancel">Cancel</button>
+      <v-btn elevation="2" class="save" @click="changeTaskDetail">Save</v-btn>
+      <v-btn elevation="2" class="cancel">Cancel</v-btn>
     </div>
   </b-modal>
 </template>
 
 <script>
-import DatePicker from 'vue2-datepicker';
-import { mapActions, mapGetters } from 'vuex';
+import DatePicker from "vue2-datepicker";
+import { mapActions, mapGetters } from "vuex";
 export default {
-  name: 'task-detail',
+  name: "task-detail",
   props: {
     task: {
       type: Object,
@@ -141,8 +132,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      logtimes: 'TASKS/logtimes',
-      currentProject: 'TASKS/currentProject',
+      logtimes: "TASKS/logtimes",
+      currentProject: "TASKS/currentProject",
     }),
     due() {
       if (this.task.dueDate) {
@@ -165,7 +156,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      editTaskAction: 'TASKS/editTask',
+      editTaskAction: "TASKS/editTask",
     }),
     show() {
       this.$refs.taskDetailModal.show();
@@ -190,7 +181,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/style.scss';
+@import "../../assets/style.scss";
 .container {
   display: flex;
   textarea {
@@ -315,13 +306,13 @@ export default {
 
 .button {
   float: right;
-  button {
-    border: 1px solid rgb(204, 204, 204);
-    border-radius: 3px;
-    padding: 5px;
-    width: 70px;
-    margin: 10px 0 10px 10px;
-  }
+  // v-btn {
+  //   border: 1px solid rgb(204, 204, 204);
+  //   border-radius: 3px;
+  //   padding: 5px;
+  //   width: 70px;
+  //   margin: 10px 0 10px 10px;
+  // }
   .save {
     background-color: $color;
     color: white;
