@@ -88,7 +88,7 @@ export default {
 .chat-room {
   position: relative;
   height: 90vh;
-    min-width: 500px;
+  min-width: 500px;
 
   .container-chat {
     min-width: 500px;
@@ -156,7 +156,7 @@ export default {
           }
           p {
             background-color: $color;
-            color: rgb(207, 180, 180);
+            color: rgb(255, 255, 255);
             padding: 10px 25px;
             border-top-right-radius: 300px;
             border-bottom-right-radius: 300px;

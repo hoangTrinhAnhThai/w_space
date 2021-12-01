@@ -18,7 +18,7 @@ const routes = [
     name: MainPage,
     component: MainPage,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
     },
     children: [
       {
@@ -87,20 +87,20 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if(to.matched.some((record) => record.meta.requiresAuth)) {
-    if(!localStorage.getItem('token')) {
-      next('/login')
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!localStorage.getItem('token')) {
+      next('/login');
     } else {
-      next()
+      next();
     }
-    next()
+    next();
   } else {
-    if(!localStorage.getItem('token')) {
-      next()
+    if (!localStorage.getItem('token')) {
+      next();
     } else {
-      next('/')
+      next('/');
     }
-    next()
+    next();
   }
 });
 export default router;

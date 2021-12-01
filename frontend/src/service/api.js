@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Vue from 'vue';
+import interceptors from '../helper/interceptors';
 
 const handleSuccessResponse = (response, resolve, message) => {
   resolve(response);
@@ -104,5 +105,7 @@ const services = {
     });
   },
 };
+
+interceptors(services)
 
 export default services;

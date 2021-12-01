@@ -83,10 +83,8 @@ export default {
     login() {
       if (!this.validateBeforeSubmit()) {
         this.disabledLogin = true;
-        console.log('false');
         return;
       } else {
-        console.log('ok');
         this.loginAction(this.loginInput);
       }
     },

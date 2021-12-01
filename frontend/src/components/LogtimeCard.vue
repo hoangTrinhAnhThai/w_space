@@ -2,25 +2,20 @@
   <div class="logtime-card">
     <div class="container-card">
       <div class="project">
-        <select name="" id="" v-model="logtime.task">
-          <optgroup
-            v-for="(project, index) in projectArray"
-            :key="index"
-            :label="project.name"
-          >
-            <option
-              v-for="(task, index) in project.tasks"
-              :key="index"
-              :value="task._id"
-            >
-              {{ task.name }}
-            </option>
-          </optgroup>
-        </select>
+        <v-select
+          v-model="logtime.task"
+          :items="tasks"
+          item-text="taskName"
+          item-value="taskId"
+          label="Your task"
+        >
+        </v-select>
       </div>
       <div class="function">
         <ul v-show="!logtime.isPlaying">
-          <li><i class="bx bx-trash" @click="deteleLogtime"></i></li>
+          <li>
+              <i class="bx bx-trash" @click="deteleLogtime"></i>
+          </li>
           <li><i class="bx bx-calendar"></i></li>
         </ul>
       </div>
@@ -43,14 +38,14 @@
             >note</span
           >
         </div>
-        <div class="text">
-          <textarea
+        <div class="textarea">
+          <v-textarea
             v-on:blur="handleBlur"
-            placeholder="note"
             v-model="logtime.note"
-            rows="5"
-            cols="25"
-          ></textarea>
+            solo
+            name="input-7-4"
+            label="Note"
+          ></v-textarea>
         </div>
       </div>
       <div class="timer">
@@ -176,6 +171,16 @@ export default {
       logtimeArray: 'LOGTIME/logtimeArray',
       logtimeIsPlaying: 'LOGTIME/logtimeIsPlaying',
     }),
+    tasks() {
+      let list = [];
+      for (let project of this.projectArray) {
+        list.push({ header: `${project.name}` });
+        for (let task of project.tasks) {
+          list.push({ taskName: task.name, taskId: task._id });
+        }
+      }
+      return list;
+    },
   },
   components: {},
   methods: {
@@ -237,7 +242,6 @@ export default {
       this.deteleLogtimeAction(this.logtime._id);
     },
     handleBlur() {
-      console.log(this.logtime.note);
       this.updateLogtimeAction({
         logtime: { note: this.logtime.note },
         _id: this.logtime._id,
@@ -269,9 +273,7 @@ export default {
 @import '../assets/style.scss';
 
 .logtime-card {
-  // margin-top: 10px;
   width: 100%;
-  // min-width: 850px;
   .container-card {
     width: 100%;
     display: flex;
@@ -319,7 +321,6 @@ export default {
         width: 180px;
         span {
           width: 180px;
-
           padding-right: 15px;
           border: 1px solid $border-color;
           text-align: left;
@@ -332,28 +333,16 @@ export default {
           color: grey;
         }
       }
-      .text {
+      .textarea {
         display: none;
       }
     }
     .description:focus-within {
       position: relative;
-      .text {
+      .textarea {
         position: absolute;
         top: 0;
         display: inline-block;
-        margin: 0;
-        background-color: #fff;
-        color: grey;
-        text-align: left;
-        outline: none;
-        border-radius: 7px;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-        textarea {
-          padding: 15px;
-          border: none;
-          outline: none;
-        }
       }
     }
     .timer {
@@ -417,10 +406,9 @@ export default {
   }
   .description:hover {
     textarea {
-      border: 1px solid $border-color;
-      outline: none;
+      // border: 1px solid $border-color;
+      // outline: none;
       border-radius: 10px;
-      // height: 50px;
     }
   }
 }

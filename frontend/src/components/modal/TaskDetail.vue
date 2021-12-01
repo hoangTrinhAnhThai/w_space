@@ -6,7 +6,95 @@
     class="task-detail"
     size="lg md"
   >
-    <div class="container">
+    <v-row>
+      <v-col class="block" cols="8">
+        <v-row>
+          <v-text-field v-model="task.name"></v-text-field>
+        </v-row>
+        <v-row align="center">
+          <v-textarea
+            class="mx-2"
+            v-model="task.description"
+            label="Description"
+            rows="4"
+          ></v-textarea>
+        </v-row>
+        <v-row>
+          <v-textarea
+            append-icon="mdi-comment"
+            class="mx-2"
+            label="Comment"
+            rows="1"
+          ></v-textarea>
+        </v-row>
+        <v-row>
+          <template v-for="item in items">
+            <v-list-item :key="item.title">
+              <v-list-item-avatar>
+                <v-img :src="item.avatar"></v-img>
+              </v-list-item-avatar>
+
+              <v-list-item-content>
+                <v-list-item-title v-html="item.title"></v-list-item-title>
+                <v-list-item-subtitle
+                  v-html="item.subtitle"
+                ></v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-row>
+      </v-col>
+      <v-col class="block" cols="17">
+        <v-row align="center">
+          <v-select
+            v-model="memberSelected"
+            :items="listMember"
+            chips
+            label="Assigned"
+            item-text="email"
+            item-value="email"
+            clearable
+            small-chips
+          ></v-select>
+        </v-row>
+        <v-row align="center">
+          <v-select
+            v-model="task.priority"
+            chips
+            label="Priority"
+            clearable
+            small-chips
+            :items="priorities"
+          >
+          </v-select>
+        </v-row>
+        <v-row align="center">
+          <v-spacer></v-spacer>
+          <v-col cols="24">
+            <v-row>
+              <label for="">Due date</label>
+            </v-row>
+            <v-row>
+              <DatePicker
+                v-model="date"
+                :clearable="false"
+                class="datepicker"
+              />
+            </v-row>
+          </v-col>
+          <div class="due-date"></div>
+        </v-row>
+      </v-col>
+    </v-row>
+
+    <v-row class="center">
+      <v-btn color="green darken-1" text width="80"> Close </v-btn>
+      <v-btn color="blue darken-1" text width="80" @click="changeTaskDetail">
+        Save
+      </v-btn>
+    </v-row>
+
+    <!-- <div class="container">
       <div class="left-container">
         <div class="description">
           <label for="">Description</label>
@@ -61,11 +149,11 @@
             item-text="email"
               item-value="email"
           ></v-autocomplete>
-          <!-- <select class="assign-select" v-model="memberSelected">
+          <select class="assign-select" v-model="memberSelected">
             <option v-for="(user, index) in listMember" :key="index">
               {{ user.email }}
             </option>
-          </select> -->
+          </select>
         </div>
         <div class="priority">
           <label for="">Priority</label>
@@ -109,15 +197,15 @@
     <div class="button">
       <v-btn elevation="2" class="save" @click="changeTaskDetail">Save</v-btn>
       <v-btn elevation="2" class="cancel">Cancel</v-btn>
-    </div>
+    </div> -->
   </b-modal>
 </template>
 
 <script>
-import DatePicker from "vue2-datepicker";
-import { mapActions, mapGetters } from "vuex";
+import DatePicker from 'vue2-datepicker';
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "task-detail",
+  name: 'task-detail',
   props: {
     task: {
       type: Object,
@@ -127,13 +215,32 @@ export default {
     return {
       assignedList: [],
       memberSelected: [],
-      date: new Date(this.task.dueDate),
+      date: this.task.dueDate? new Date(this.task.dueDate) : new Date(),
+      priorities: ['high', 'normal', 'low'],
+      items: [
+        {
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
+          title: 'Brunch this weekend?',
+          subtitle: `<span class="text--primary">Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+        },
+        {
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
+          title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
+          subtitle: `<span class="text--primary">to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend.`,
+        },
+        {
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
+          title: 'Oui oui',
+          subtitle:
+            '<span class="text--primary">Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?',
+        },
+      ],
     };
   },
   computed: {
     ...mapGetters({
-      logtimes: "TASKS/logtimes",
-      currentProject: "TASKS/currentProject",
+      logtimes: 'TASKS/logtimes',
+      currentProject: 'TASKS/currentProject',
     }),
     due() {
       if (this.task.dueDate) {
@@ -145,18 +252,20 @@ export default {
     listMember() {
       let list = [];
       list.push(this.currentProject.createdBy);
-      if (this.currentProject.members.length > 0) {
+      if (
+        this.currentProject.members &&
+        this.currentProject.members.length > 0
+      ) {
         for (let member of this.currentProject.members) {
           list.push(member);
         }
       }
-      console.log(list);
       return list;
     },
   },
   methods: {
     ...mapActions({
-      editTaskAction: "TASKS/editTask",
+      editTaskAction: 'TASKS/editTask',
     }),
     show() {
       this.$refs.taskDetailModal.show();
@@ -176,146 +285,20 @@ export default {
   },
   components: {
     DatePicker,
-  },
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
-.container {
-  display: flex;
-  textarea {
-    padding: 15px;
-    outline: none;
-    width: 84%;
-    border: 1px solid rgb(204, 204, 204);
-    height: 106px;
-  }
-  .left-container {
-    width: 70%;
-    .description,
-    .activity {
-      margin: 0px 0 10px;
-    }
-    .description {
-      display: flex;
-      flex-direction: column;
-      textarea {
-        margin-left: 11%;
-      }
-    }
-    .activity {
-      .comment {
-        .write-content {
-          display: flex;
-          textarea {
-          }
-        }
-        .content {
-          ul {
-            margin: 10px 0;
-            padding: 0;
-            li {
-              display: flex;
-              width: 95%;
-              .avt {
-                margin-top: 7px;
-              }
-              .content {
-                .name {
-                  font-weight: bolder;
-                }
-                .comment-content {
-                  background-color: rgb(243, 241, 241);
-                  padding: 10px;
-                  border-radius: 5px;
-                  border: 1px solid $border-color;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 15px;
-    }
-  }
-  .right-container {
-    div {
-      margin-bottom: 15px;
-    }
-    select {
-      width: 100%;
-      height: 35px;
-      border: 1px solid rgb(204, 204, 204);
-      border-radius: 3px;
-      outline: none;
-    }
-    .datepicker {
-      height: 35px;
-      width: 100%;
-    }
-    ul.logtime {
-      padding: 0;
-      background-color: rgb(230, 224, 224);
-      padding: 15px;
-      border-radius: 3px;
-      li {
-      }
-    }
-    .assign {
-      ul {
-        list-style: none;
-        padding: 0;
-        li {
-          display: flex;
-          cursor: pointer;
-          .checkbox {
-            border: none;
-            margin-top: 7px;
-            margin-left: 5px;
-            display: none;
-          }
-          .label-for-check + .check-with-label:checked {
-            font-weight: bold;
-          }
-          .icon {
-            display: none;
-            font-size: 20px;
-            margin-left: 5px;
-            margin-top: -3px;
-            color: $color;
-          }
-          .check-with-label:checked + span {
-            display: block;
-          }
-        }
-      }
-    }
-    .assign:focus {
-      .assign-select {
-        display: block;
-      }
-    }
-  }
+.datepicker {
+  width: 100%;
 }
 
-.button {
-  float: right;
-  // v-btn {
-  //   border: 1px solid rgb(204, 204, 204);
-  //   border-radius: 3px;
-  //   padding: 5px;
-  //   width: 70px;
-  //   margin: 10px 0 10px 10px;
-  // }
-  .save {
-    background-color: $color;
-    color: white;
-  }
+.v-list-item__content {
+  margin-left: 20px !important;
+}
+
+.v-chip.v-size--small {
+  margin-top: 15px !important;
 }
 </style>

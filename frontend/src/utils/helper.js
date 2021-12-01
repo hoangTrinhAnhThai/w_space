@@ -1,3 +1,5 @@
+import Vue from "vue";
+
 export function sort(list) {
   const result = list.sort(function (a, b) {
     if (a.moved.before === null) {
@@ -23,5 +25,10 @@ export function showTime(startTime) {
       this.timeReport.minutes) *
       60,
   );
-  console.log(timeInMiliseconds);
+}
+
+export function decodeToken() {
+  const token = localStorage.getItem('token')
+  let user = Vue.$jwt.decode(token, process.env.VUE_APP_TOKEN_SECRET);
+  return user.user
 }

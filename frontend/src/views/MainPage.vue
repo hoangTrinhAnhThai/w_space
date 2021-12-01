@@ -43,11 +43,12 @@ export default {
     min-width: 220px;
   }
   .nav {
-    height: 7vh;
-    min-height: 60px;
+    height: 73px;
+    // min-height: 60px;
+    width: 85vw;
   }
   .main-container {
-    width: 83vw;
+    width: 85vw;
   }
 }
 </style>

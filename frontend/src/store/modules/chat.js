@@ -29,37 +29,31 @@ const mutations = {
   },
   logMess() {
     console.log('aaa');
-  }
+  },
 };
 const actions = {
   getAllRooms({ commit }) {
     http.get('room').then((response) => {
-      console.log(response);
       commit('setRooms', response.data.data);
     });
   },
   getAllChatByIdRoom({ commit, dispatch }, params) {
     http.get(`chat/${params}`).then((response) => {
-      console.log(response.data.data);
       commit('setChats', response.data.data);
     });
     socket.on(
       'new-message',
       function (data) {
         if (data.message.room === params) {
-          // commit('addMessage', data.message);
-      dispatch('getAllChatByIdRoom', params);
-
+          dispatch('getAllChatByIdRoom', params);
         }
       }.bind(this),
     );
   },
   sendMessage({ dispatch }, params) {
     http.post(`chat/`, params.chat).then((response) => {
-      console.log(response.data.data);
       socket.emit('save-message', response.data.data);
       dispatch('getAllChatByIdRoom', params.idRoom);
-      // commit('logMess')
     });
   },
 };

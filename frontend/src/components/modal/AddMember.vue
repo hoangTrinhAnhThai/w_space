@@ -77,7 +77,6 @@ export default {
     },
     searchMember() {
       if (!this.validateBeforeSubmit()) {
-        console.log(this.showErrors);
         return;
       } else {
         this.searchMemberAction({ email: this.email });
@@ -91,7 +90,6 @@ export default {
         idProject: this.project._id,
       });
       this.email = '';
-      console.log(project.user);
       // this.hide();
     },
     removeMember(userId) {

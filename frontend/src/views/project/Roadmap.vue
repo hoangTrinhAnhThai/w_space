@@ -23,18 +23,23 @@
         <Container
           class="container-card"
           group-name="trello"
+          drag-class="ticket-ghost"
+          drop-class="ticket-ghost-drop"
           @drag-start="handleDragStart(index, $event)"
           @drop="handleDrop(index, $event)"
           :get-child-payload="getChildPayload"
-          :drop-placeholder="{ className: 'placeholder' }"
+          :drop-placeholder="{
+            className: 'drop-preview',
+            animationDuration: '150',
+            showOnTop: true,
+          }"
         >
           <Draggable v-for="(card, index) in data.tasks" :key="index">
             <Card
               v-bind:card="card"
               v-bind:project="currentProject"
               class="card"
-              ></Card
-            >
+            ></Card>
           </Draggable>
         </Container>
       </div>
@@ -43,17 +48,17 @@
 </template>
 
 <script>
-import Card from '../../components/ProjectCard.vue';
-import AddTaskForm from '../../components/AddTaskForm.vue';
-import { Container, Draggable } from 'vue-smooth-dnd';
-import { mapActions, mapGetters } from 'vuex';
-import colors from '../../utils/data';
+import Card from "../../components/ProjectCard.vue";
+import AddTaskForm from "../../components/AddTaskForm.vue";
+import { Container, Draggable } from "vue-smooth-dnd";
+import { mapActions, mapGetters } from "vuex";
+import colors from "../../utils/data";
 export default {
-  name: 'Roadmap',
+  name: "Roadmap",
   data() {
     return {
       draggingCard: {
-        lane: '',
+        lane: "",
         index: -1,
         cardData: {},
       },
@@ -63,13 +68,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      dataTask: 'TASKS/taskOfProject',
-      currentProject: 'TASKS/currentProject',
+      dataTask: "TASKS/taskOfProject",
+      currentProject: "TASKS/currentProject",
     }),
   },
   methods: {
     ...mapActions({
-      removeCard: 'TASKS/removeCard',
+      removeCard: "TASKS/removeCard",
     }),
     handleDragStart(lane, dragResult) {
       const { payload, isSource } = dragResult;
@@ -90,13 +95,13 @@ export default {
       }
       if (removedIndex !== null) {
         localStorage.setItem(
-          'idTask',
-          this.dataTask[lane].tasks[removedIndex]._id,
+          "idTask",
+          this.dataTask[lane].tasks[removedIndex]._id
         );
         this.dataTask[lane].tasks.splice(removedIndex, 1);
       }
       if (addedIndex !== null) {
-        let card = { id: '', statusId: '', moved: { before: '', after: '' } };
+        let card = { id: "", statusId: "", moved: { before: "", after: "" } };
         card.statusId = this.dataTask[lane].status._id;
         if (this.dataTask[lane].tasks[addedIndex - 1]) {
           card.moved.before = this.dataTask[lane].tasks[addedIndex - 1]._id;
@@ -110,14 +115,14 @@ export default {
         }
 
         setTimeout(() => {
-          card.id = localStorage.getItem('idTask');
+          card.id = localStorage.getItem("idTask");
           card.idProject = this.currentProject._id;
           this.removeCard(card);
         }, 200);
         this.dataTask[lane].tasks.splice(
           addedIndex,
           0,
-          this.draggingCard.cardData,
+          this.draggingCard.cardData
         );
       }
     },
@@ -246,12 +251,12 @@ export default {
   }
 }
 
-.placeholder {
-  background-color: rgb(223, 191, 191);
-  border-radius: 5px;
-  transform: scaleY((0.85));
-  transform-origin: 0% 0%;
-}
+// .placeholder {
+//   background-color: rgb(236, 181, 181) !important;
+//   border-radius: 5px;
+//   transform: scaleY((0.85));
+//   transform-origin: 0% 0%;
+// }
 .smooth-dnd-draggable-wrapper {
   overflow: inherit !important;
 }

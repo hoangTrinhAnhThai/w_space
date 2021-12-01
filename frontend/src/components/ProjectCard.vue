@@ -1,49 +1,47 @@
 <template>
-  <div class="card">
-    <v-card elevation="2" @click="showTaskDetailModal" >
-      <v-card-title size="12">{{ card.name }}</v-card-title>
-      <v-card-subtitle>{{ card.description }}</v-card-subtitle>
-      <v-card-text
-        ><span v-if="card.dueDate">
-          <span v-if="!deadline" style="color: red; font-weight: bolder">
-            <i class="bx bx-calendar"></i> {{ date }}, {{ month }} {{ year }}
-          </span>
-          <span v-else
-            ><i class="bx bx-calendar"></i> {{ date }}, {{ month }}
-            {{ year }}</span
-          >
-        </span></v-card-text
-      >
-      <div class="menu">
-        <v-menu  transition="slide-y-transition" bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <i v-bind="attrs" v-on="on" class="bx bx-dots-vertical-rounded"></i>
-          </template>
-          <v-list>
-            <v-list-item @click="showTaskDetailModal">
-              <v-list-item-title>
-                <i class="bx bx-edit-alt"></i> Edit</v-list-item-title
-              >
-            </v-list-item>
-            <v-list-item @click="deleteTask">
-              <v-list-item-title>
-                <i class="bx bx-trash"></i> Delete</v-list-item-title
-              >
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </div>
-    </v-card>
+  <v-card elevation="2" @click="showTaskDetailModal">
+    <v-card-title font-size="12">{{ card.name }}</v-card-title>
+    <v-card-subtitle font-size="12">{{ card.description }}</v-card-subtitle>
+    <v-card-text
+      ><span v-if="card.dueDate">
+        <span v-if="!deadline" style="color: red; font-size: 12px">
+          <i class="bx bx-calendar"></i> {{ date }}, {{ month }} {{ year }}
+        </span>
+        <span v-else style="color: green; font-size: 12px"
+          ><i class="bx bx-calendar"></i> {{ date }}, {{ month }}
+          {{ year }}</span
+        >
+      </span>
+    </v-card-text>
+    <div class="menu">
+      <v-menu transition="slide-y-transition" bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <i v-bind="attrs" v-on="on" class="bx bx-dots-vertical-rounded"></i>
+        </template>
+        <v-list>
+          <v-list-item @click="showTaskDetailModal">
+            <v-list-item-title>
+              <i class="bx bx-edit-alt"></i> Edit</v-list-item-title
+            >
+          </v-list-item>
+          <v-list-item @click="deleteTask">
+            <v-list-item-title>
+              <i class="bx bx-trash"></i> Delete</v-list-item-title
+            >
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </div>
     <task-detail :task="card" ref="taskDetailModal"></task-detail>
-  </div>
+  </v-card>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import TaskDetail from "../components/modal/TaskDetail.vue";
-import helper from "../utils/data";
+import { mapActions } from 'vuex';
+import TaskDetail from '../components/modal/TaskDetail.vue';
+import helper from '../utils/data';
 export default {
-  name: "Cards",
+  name: 'Cards',
   props: {
     card: {
       type: Object,
@@ -72,8 +70,8 @@ export default {
 
   methods: {
     ...mapActions({
-      deleteTaskAction: "TASKS/deleteTask",
-      getLogtimes: "TASKS/getLogtimes",
+      deleteTaskAction: 'TASKS/deleteTask',
+      getLogtimes: 'TASKS/getLogtimes',
     }),
     deleteTask() {
       this.deleteTaskAction({
@@ -92,8 +90,10 @@ export default {
 };
 </script>
 
-// <style lang="scss" scoped>
+<style lang="scss" scoped>
 .card {
+  margin: 10px 0;
+  border: none;
   position: relative;
   .menu {
     position: absolute;
@@ -101,67 +101,4 @@ export default {
     top: 15px;
   }
 }
-// @import "../assets/style.scss";
-// .card {
-//   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-//   background-color: rgb(255, 255, 255);
-//   margin: 5px 15px;
-//   padding: 8px;
-//   border: 1px solid $border-color;
-//   border-radius: 3px;
-//   line-height: 25px;
-//   cursor: pointer;
-//   position: relative;
-//   .sign {
-//     position: absolute;
-//     right: 10px;
-//     color: grey;
-//     .function {
-//       position: absolute;
-//       top: 15px;
-//       width: 150px;
-//       right: -10px;
-//       z-index: 10000 !important;
-//       background-color: white;
-//       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-//       display: none;
-//       ul {
-//         list-style: none;
-//         margin: 0;
-//         padding: 0;
-//         li:hover {
-//           background-color: rgb(208, 231, 208);
-//         }
-//         li {
-//           span {
-//             padding: 15px 10px;
-//           }
-//         }
-//       }
-//     }
-//   }
-//   .sign:focus {
-//     .function {
-//       display: block;
-//     }
-//   }
-//   .content {
-//     .description {
-//       color: grey;
-//       font-size: 80%;
-//     }
-//     .priority {
-//       b-icon {
-//         margin-right: 10px;
-//       }
-//     }
-//     .dueDate {
-//       font-size: 80%;
-//       span {
-//         border-radius: 3px;
-//       }
-//     }
-//   }
-// }
-//
 </style>

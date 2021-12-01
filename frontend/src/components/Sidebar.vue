@@ -143,6 +143,12 @@ export default {
   },
   created() {
     this.getProject();
+    if (this.$route.name.name === 'Roadmap') {
+      this.getStatus();
+      this.getTaskOfProject(this.$route.params.id);
+    } else if (this.$route.name.name === 'ChatRoom') {
+      this.getAllChatByIdRoom(this.$route.params.id);
+    }
   },
   watch: {
     $route(to) {

@@ -27,6 +27,7 @@
     "vue-smooth-dnd": "^0.8.1",
     "vue-socket.io": "^3.0.10",
     "vue2-datepicker": "^3.10.3",
+    "vuejs-jwt": "^1.1.0",
     "vuetify": "^2.6.1",
     "vuex": "^3.6.2"
   },

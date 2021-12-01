@@ -29,16 +29,26 @@
           </div>
         </div>
       </div>
-      <div class="add-time-entry">
-        <div class="search">
-          <i class="bx bx-search-alt-2"></i>
-          <input type="text" />
-        </div>
-        <div class="filter"><i class="bx bx-filter-alt"></i> Filter</div>
-        <div class="add-project">
-          <button @click="createLogtime">Add new time entry</button>
-        </div>
-      </div>
+      <v-row style="margin-top: 20px" sm="6">
+        <v-col cols="3">
+          <v-text-field
+            label="Search"
+            placeholder="Placeholder"
+            outlined
+            dense
+          ></v-text-field>
+        </v-col>
+        <v-col cols="1">
+          <v-btn style="width: 100%" elevation="2"
+            ><i class="bx bx-filter-alt"></i
+          ></v-btn>
+        </v-col>
+        <v-col cols="2">
+          <v-btn color="primary" elevation="2" @click="createLogtime"
+            >Add new time entry</v-btn
+          >
+        </v-col>
+      </v-row>
       <div class="logtime-card">
         <logtime-card
           v-for="(logtime, index) in logtimeArray"
@@ -98,7 +108,6 @@ export default {
   },
   created() {
     this.getAllLogtimeByDate(this.date);
-    // console.log(this.);
   },
   watch: {
     date() {
@@ -116,7 +125,7 @@ export default {
   .container-logtime {
     margin: 20px auto;
     width: 90%;
-    min-width: 850px;
+    min-width: 870px;
     i {
       font-size: 21px;
     }

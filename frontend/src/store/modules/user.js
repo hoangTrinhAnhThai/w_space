@@ -22,15 +22,12 @@ const mutations = {
 };
 const actions = {
   searchMember({ commit }, params) {
-    console.log('email', params);
     http
       .post('user', params)
       .then((result) => {
-        console.log('user', result.data.data);
         commit('setMemberInfor', result.data.data);
       })
       .catch((err) => {
-        console.log(err.response.data.message);
         commit('ERROR/setErrorMessage', err.response.data.message, {
           root: true,
         });

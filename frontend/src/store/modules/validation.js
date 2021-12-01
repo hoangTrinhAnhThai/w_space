@@ -99,7 +99,7 @@ const getters = {
       return null;
     };
   },
-  validateProject() {
+  validateName() {
     return (nameProject) => {
       const errors = {};
       if (!nameProject) {

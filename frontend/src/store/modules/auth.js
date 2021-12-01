@@ -1,5 +1,6 @@
 import http from '../../service/api.js';
 import router from '../../router/index.js';
+import { decodeToken } from '../../utils/helper';
 const state = {
   userInfo: null,
 };
@@ -31,9 +32,7 @@ const actions = {
       .post('auth/login', params)
       .then((response) => {
         commit('setUserInfo', response.data.data);
-        console.log(response.data);
         localStorage.setItem('token', response.data.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.data));
         commit('ERROR/clearErrorMessage', null, { root: true });
         router.go();
       })
@@ -46,8 +45,7 @@ const actions = {
   register({ commit }, params) {
     http
       .post('auth/register', params, 'Create a new account successfully!')
-      .then((response) => {
-        console.log('get user', response);
+      .then(() => {
         commit('ERROR/clearErrorMessage', null, { root: true });
         router.push('/login');
       })
@@ -58,19 +56,8 @@ const actions = {
       });
   },
   getUserByToken({ commit }) {
-    http
-      .get('auth/')
-      .then((response) => {
-        localStorage.setItem('user', JSON.stringify(response.data.data));
-        commit('setUserInfo', response.data.data);
-        commit('ERROR/clearErrorMessage', null, { root: true });
-      })
-      .catch((error) => {
-        commit('ERROR/setErrorMessage', error.response.data.message, {
-          root: true,
-        });
-        console.log(error.response.data.message);
-      });
+    commit('setUserInfo', decodeToken());
+    commit('ERROR/clearErrorMessage', null, { root: true });
   },
   logout({ commit }) {
     localStorage.clear();

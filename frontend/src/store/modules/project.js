@@ -34,9 +34,35 @@ const getters = {
     return state.projectEdit;
   },
 };
-
+// const formatDataProject = function(data) {
+//   const dataFormat = data.map(dataItem => (
+//     {
+//       _id: dataItem._id,
+//       createdAt: dataItem.createdAt,
+//       createdBy: dataItem.createdBy,
+//       members: dataItem.members,
+//       name: dataItem.name,
+//       room: dataItem.room,
+//       updatedAt: dataItem.updatedAt,
+//       tasks: dataItem.tasks.map(task => (
+//         {
+//           createdAt: task.createdAt,
+//           description: task.description,
+//           dueDate: task.dueDate ? task.dueDate : "Hello",
+//           moved: task.moved,
+//           name: task.name,
+//           priority: task.priority,
+//           status: task.status,
+//           updatedAt: task.updatedAt,
+//           _id: task._id
+//         }
+//       ))
+//     }))
+//   return dataFormat;
+// }
 const mutations = {
   setProject(state, data) {
+    // state.projectArray = formatDataProject(data);
     state.projectArray = data;
   },
   setProjectEdit(state, data) {
@@ -46,17 +72,7 @@ const mutations = {
     state.tasksArray = data;
   },
   setCurrentProject(state, data) {
-    if (typeof data == typeof 'String') {
-      for (let project of state.projectArray) {
-        if (project._id === data) {
-          state.currentProject = project;
-          break;
-        }
-      }
-    } else {
-      state.currentProject = data;
-    }
-    console.log(state.currentProject);
+    state.currentProject = data;
   },
   setTaskAsStatus(state) {
     state.taskOfProject = [];
@@ -72,7 +88,6 @@ const mutations = {
       statusListFormat.tasks = sort(statusList.tasks);
       state.taskOfProject.push(statusListFormat);
     }
-    console.log('last project', state.taskOfProject);
   },
   setStatus(state, data) {
     state.statusArray = data;
@@ -86,7 +101,13 @@ const mutations = {
 };
 const actions = {
   addCurrentProject({ commit }, project) {
-    commit('setCurrentProject', project);
+    if (typeof project == typeof 'String') {
+      http.get(`project/${project}`).then((result) => {
+        commit('setCurrentProject', result.data.data);
+      });
+    } else {
+      commit('setCurrentProject', project);
+    }
   },
   addProjectEdit({ commit }, params) {
     commit('setProjectEdit', params);
@@ -102,8 +123,10 @@ const actions = {
       .then((result) => {
         commit('setStatus', result.data.data);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        commit('ERROR/setErrorMessage', err.response.data.message, {
+          root: true,
+        });
       });
   },
 
@@ -118,43 +141,40 @@ const actions = {
       .get('project')
       .then((result) => {
         commit('setProject', result.data.data);
-        console.log('project', result.data.data);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        commit('ERROR/setErrorMessage', err.response.data.message, {
+          root: true,
+        });
       });
   },
-  addProject({ dispatch }, params) {
+  addProject({ commit, dispatch }, params) {
     http
       .post('project', params)
       .then((result) => {
         dispatch('addProjectEdit', result.data.data);
         dispatch('getProject');
-        console.log(result.data.data);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        commit('ERROR/setErrorMessage', err.response.data.message, {
+          root: true,
+        });
       });
   },
   addNewTask({ dispatch }, params) {
-    console.log(params.task);
     http
       .post(`project/${params.idProject}/task`, params.task)
-      .then((result) => {
-        console.log(result);
+      .then(() => {
         dispatch('getTaskOfProject', params.idProject);
       });
   },
   removeCard({ commit }, data) {
-    console.log(data);
-    http.post('project/task', data).then((result) => {
-      console.log(result);
+    http.post('project/task', data).then(() => {
       commit('logMess');
     });
   },
   deleteProject({ dispatch }, idProject) {
-    http.delete(`project/${idProject}`).then((result) => {
-      console.log('deletePr', result);
+    http.delete(`project/${idProject}`).then(() => {
       dispatch('getProject');
     });
   },
@@ -164,10 +184,8 @@ const actions = {
       .then((result) => {
         commit('setProjectEdit', result.data.data);
         dispatch('getProject');
-        console.log(result);
       })
       .catch((err) => {
-        console.log(err.response.data.message);
         commit('ERROR/setErrorMessage', err.response.data.message, {
           root: true,
         });
@@ -176,14 +194,12 @@ const actions = {
   deleteTask({ dispatch }, params) {
     http
       .delete(`project/${params.idProject}/${params.idTask}`)
-      .then((result) => {
-        console.log(result);
+      .then(() => {
         dispatch('getTaskOfProject', params.idProject);
       });
   },
   editTask({ dispatch }, params) {
-    http.put(`project/task/${params.idTask}`, params.task).then((result) => {
-      console.log('edit', result);
+    http.put(`project/task/${params.idTask}`, params.task).then(() => {
       dispatch('getTaskOfProject', params.idProject);
     });
   },
@@ -195,7 +211,6 @@ const actions = {
         dispatch('getProject');
       })
       .catch((err) => {
-        console.log(err.response.data.message);
         commit('ERROR/setErrorMessage', err.response.data.message, {
           root: true,
         });
@@ -209,7 +224,6 @@ const actions = {
         dispatch('getProject');
       })
       .catch((err) => {
-        console.log(err.response.data.message);
         commit('ERROR/setErrorMessage', err.response.data.message, {
           root: true,
         });
