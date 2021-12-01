@@ -65,10 +65,10 @@ class AuthController {
                   if (isValid) {
                     const tokenCreated = jwt.sign(
                       {
-                        _id: user._id,
-                        email: req.body.email,
+                        user: user
+                        
                       },
-                      process.env.TOKEN_SECREATE,
+                      process.env.TOKEN_SECRET,
                       { expiresIn: process.env.JWT_TIMEOUT_DURATION },
                     );
                     let userData = {

@@ -186,6 +186,7 @@ class ProjectController {
     (req, res) => {
       Project.findById(req.params.id)
         .populate('tasks')
+        .populate('members')
         .populate('createdBy')
         .then((project) => {
           return apiResponse.successResponseWithData(
