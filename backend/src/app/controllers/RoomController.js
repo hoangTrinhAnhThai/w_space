@@ -25,7 +25,6 @@ class RoomController {
   showAllRoom = [
     (req, res) => {
       User.findById(host(req, res)).then((user) => {
-        console.log('hi', user);
         Room.find({ $or: [{ createdBy: user }, { members: user }] })
           .sort({ createdAt: -1 })
           .then((rooms) => {
@@ -54,7 +53,6 @@ class RoomController {
   ];
   updateRoom = [
     (req, res) => {
-      console.log(req.body);
       Room.findByIdAndUpdate(
         req.params.id,
         {
@@ -62,7 +60,6 @@ class RoomController {
         },
         { new: true, useFindAndModify: false },
       ).then((result) => {
-        console.log('result', result);
         return apiResponse.successResponseWithData(
           res,
           'Update room success',

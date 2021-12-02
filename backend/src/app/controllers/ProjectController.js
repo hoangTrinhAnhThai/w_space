@@ -106,7 +106,6 @@ class ProjectController {
                   )
                     .populate('members')
                     .then((project) => {
-                      console.log('-----------', project);
                       Room.findByIdAndUpdate(project.room._id, {
                         members: project.members,
                       }).then(() => {

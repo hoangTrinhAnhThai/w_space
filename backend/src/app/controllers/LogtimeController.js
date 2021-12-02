@@ -66,7 +66,6 @@ class LogtimeController {
         task: req.params.task,
       })
         .then((logtimes) => {
-          console.log(req.params.task);
           return apiResponse.successResponseWithData(
             res,
             req.params.task,
@@ -97,7 +96,6 @@ class LogtimeController {
   ];
   updateLogtime = [
     (req, res) => {
-      console.log(req.body);
       LogTime.findByIdAndUpdate(
         req.params.id,
         {
@@ -110,7 +108,6 @@ class LogtimeController {
         },
         { new: true, useFindAndModify: false },
       ).then((result) => {
-        console.log('result', result);
         return apiResponse.successResponseWithData(
           res,
           'Update logtime success',

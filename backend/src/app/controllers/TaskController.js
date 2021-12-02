@@ -1,4 +1,5 @@
 const Task = require('../models/Task');
+const User = require('../models/User');
 const Project = require('../models/Project');
 const Status = require('../models/Status');
 const Logtime = require('../models/Logtime');
@@ -12,7 +13,6 @@ class TaskController {
     (req, res) => {
       Task.find()
         .then((task) => {
-          console.log(task);
           return apiResponse.successResponseWithData(
             res,
             'show task success',
@@ -139,6 +139,15 @@ class TaskController {
             errors.array(),
           );
         } else {
+          if(req.body.assigned) {
+            console.log('assigned',req.body.assigned );
+            let assigned={};
+            User.findById(req.body.assigned).then((member) => {
+              assigned = member;
+              console.log('=======',assigned);
+              return 
+            } )
+          }
           Task.findByIdAndUpdate(
             req.params.id,
             {
@@ -146,11 +155,12 @@ class TaskController {
               description: req.body.description,
               dueDate: req.body.dueDate,
               priority: req.body.priority,
-              $push: { members: req.body.userId },
+              assigned: assigned
             },
             { new: true },
           )
             .then((result) => {
+              console.log('ok');
               return apiResponse.successResponseWithData(
                 res,
                 'Edit task successfully',
@@ -166,43 +176,43 @@ class TaskController {
       }
     },
   ];
-  editTask = [
-    (req, res) => {
-      try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-          return apiResponse.validationErrorWithData(
-            res,
-            'Validation Error',
-            errors.array(),
-          );
-        } else {
-          Task.findByIdAndUpdate(
-            req.params.id,
-            {
-              name: req.body.name,
-              description: req.body.description,
-              dueDate: req.body.dueDate,
-              priority: req.body.priority,
-            },
-            { new: true },
-          )
-            .then((result) => {
-              return apiResponse.successResponseWithData(
-                res,
-                'Edit task successfully',
-                result,
-              );
-            })
-            .catch((error) => {
-              return apiResponse.ErrorResponse(res, error);
-            });
-        }
-      } catch (error) {
-        return apiResponse.ErrorResponse(res, error);
-      }
-    },
-  ];
+  // editTask = [
+  //   (req, res) => {
+  //     try {
+  //       const errors = validationResult(req);
+  //       if (!errors.isEmpty()) {
+  //         return apiResponse.validationErrorWithData(
+  //           res,
+  //           'Validation Error',
+  //           errors.array(),
+  //         );
+  //       } else {
+  //         Task.findByIdAndUpdate(
+  //           req.params.id,
+  //           {
+  //             name: req.body.name,
+  //             description: req.body.description,
+  //             dueDate: req.body.dueDate,
+  //             priority: req.body.priority,
+  //           },
+  //           { new: true },
+  //         )
+  //           .then((result) => {
+  //             return apiResponse.successResponseWithData(
+  //               res,
+  //               'Edit task successfully',
+  //               result,
+  //             );
+  //           })
+  //           .catch((error) => {
+  //             return apiResponse.ErrorResponse(res, error);
+  //           });
+  //       }
+  //     } catch (error) {
+  //       return apiResponse.ErrorResponse(res, error);
+  //     }
+  //   },
+  // ];
   deleteTask = [
     (req, res) => {
       Project.findById(req.params.idProject)
@@ -211,7 +221,6 @@ class TaskController {
           if (project) {
             dropANode(project.tasks, req.params.idTask);
             Logtime.find({ task: req.params.idTask }).then((logtimes) => {
-              console.log(logtimes);
               if (logtimes.length > 0) {
                 for (let logtime of logtimes) {
                   Logtime.findByIdAndDelete(logtime._id).then(() => {
@@ -220,7 +229,6 @@ class TaskController {
                 }
               }
               Task.findByIdAndDelete(req.params.idTask).then(() => {
-                console.log('xoa ok');
                 return apiResponse.successResponse(res, 'Delete Success');
               });
             });
