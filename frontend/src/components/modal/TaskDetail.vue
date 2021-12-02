@@ -215,7 +215,7 @@ export default {
     return {
       assignedList: [],
       memberSelected: [],
-      date: this.task.dueDate? new Date(this.task.dueDate) : new Date(),
+      date: this.task.dueDate ? new Date(this.task.dueDate) : new Date(),
       priorities: ['high', 'normal', 'low'],
       items: [
         {
@@ -285,7 +285,7 @@ export default {
   },
   components: {
     DatePicker,
-  }
+  },
 };
 </script>
 

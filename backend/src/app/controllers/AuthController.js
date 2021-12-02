@@ -65,8 +65,7 @@ class AuthController {
                   if (isValid) {
                     const tokenCreated = jwt.sign(
                       {
-                        user: user
-                        
+                        user: user,
                       },
                       process.env.TOKEN_SECRET,
                       { expiresIn: process.env.JWT_TIMEOUT_DURATION },

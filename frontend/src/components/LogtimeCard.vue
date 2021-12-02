@@ -14,7 +14,7 @@
       <div class="function">
         <ul v-show="!logtime.isPlaying">
           <li>
-              <i class="bx bx-trash" @click="deteleLogtime"></i>
+            <i class="bx bx-trash" @click="deteleLogtime"></i>
           </li>
           <li><i class="bx bx-calendar"></i></li>
         </ul>

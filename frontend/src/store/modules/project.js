@@ -162,11 +162,9 @@ const actions = {
       });
   },
   addNewTask({ dispatch }, params) {
-    http
-      .post(`project/${params.idProject}/task`, params.task)
-      .then(() => {
-        dispatch('getTaskOfProject', params.idProject);
-      });
+    http.post(`project/${params.idProject}/task`, params.task).then(() => {
+      dispatch('getTaskOfProject', params.idProject);
+    });
   },
   removeCard({ commit }, data) {
     http.post('project/task', data).then(() => {
@@ -192,11 +190,9 @@ const actions = {
       });
   },
   deleteTask({ dispatch }, params) {
-    http
-      .delete(`project/${params.idProject}/${params.idTask}`)
-      .then(() => {
-        dispatch('getTaskOfProject', params.idProject);
-      });
+    http.delete(`project/${params.idProject}/${params.idTask}`).then(() => {
+      dispatch('getTaskOfProject', params.idProject);
+    });
   },
   editTask({ dispatch }, params) {
     http.put(`project/task/${params.idTask}`, params.task).then(() => {

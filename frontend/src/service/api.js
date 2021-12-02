@@ -106,6 +106,6 @@ const services = {
   },
 };
 
-interceptors(services)
+interceptors(services);
 
 export default services;

@@ -1,7 +1,6 @@
 <template>
   <b-modal ref="newProjectModal" hide-footer title="Add a new project">
     <div class="addProject">
-      
       <v-text-field
         label="Name project ..."
         class="textProject"
@@ -17,24 +16,24 @@
 </template>
 
 <script>
-import AddMember from "./AddMember.vue";
-import { mapActions, mapGetters } from "vuex";
-import Vue from "vue";
+import AddMember from './AddMember.vue';
+import { mapActions, mapGetters } from 'vuex';
+import Vue from 'vue';
 export default {
-  name: "AddNewProjectModal",
+  name: 'AddNewProjectModal',
   data() {
     return {
       project: {
-        name: "",
+        name: '',
       },
       showErrors: {},
-      typeOfModal: "",
+      typeOfModal: '',
     };
   },
   computed: {
     ...mapGetters({
-      validateName: "VALIDATION/validateName",
-      projectEdit: "TASKS/projectEdit",
+      validateName: 'VALIDATION/validateName',
+      projectEdit: 'TASKS/projectEdit',
     }),
   },
   methods: {
@@ -47,8 +46,8 @@ export default {
       this.$refs.newProjectModal.hide();
     },
     ...mapActions({
-      addProjectAction: "TASKS/addProject",
-      editProjectAction: "TASKS/editProject",
+      addProjectAction: 'TASKS/addProject',
+      editProjectAction: 'TASKS/editProject',
     }),
     editProject() {
       this.editProjectAction({
@@ -60,14 +59,14 @@ export default {
       if (!this.validateBeforeSubmit()) {
         return;
       } else {
-        if (this.typeOfModal === "editProject") {
+        if (this.typeOfModal === 'editProject') {
           this.editProject();
           this.hide();
         } else {
           this.addProjectAction(this.project);
           setTimeout(() => {
             this.$refs.addMemberModal.show(this.projectEdit);
-            this.project.name = "";
+            this.project.name = '';
           }, 1000);
         }
       }
@@ -78,8 +77,8 @@ export default {
       if (errors) {
         Vue.set(
           this.showErrors,
-          "emptyName",
-          this.showErrors && !!errors && errors.emptyName
+          'emptyName',
+          this.showErrors && !!errors && errors.emptyName,
         );
 
         passedValidate = false;
@@ -91,19 +90,19 @@ export default {
     AddMember,
   },
   watch: {
-    "project.name"() {
-      Vue.set(this.showErrors, "emptyName", null);
+    'project.name'() {
+      Vue.set(this.showErrors, 'emptyName', null);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
+@import '../../assets/style.scss';
 .errors {
   margin-bottom: 15px;
   .error {
     margin: 2px;
-  } 
+  }
 }
 </style>
