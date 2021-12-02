@@ -1,7 +1,7 @@
 <template>
-  <v-card :loading="loading" class="mx-auto my-12" max-width="374">
+  <v-card :loading="loading" >
     <v-textarea
-      class="mx-2"
+      class="mx-4"
       v-model.trim="newTask.name"
       label="Name"
       rows="1"
@@ -10,7 +10,7 @@
       <v-btn color="blue-grey lighten-3" text @click="closeAddtaskForm">
         Cancel
       </v-btn>
-      <v-btn color="deep-purple lighten-2" text @click="addtaskForm">
+      <v-btn color="rgb(39, 102, 120)" text @click="addtaskForm">
         Add
       </v-btn>
     </v-card-actions>
@@ -62,28 +62,13 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-// .add-task-form {
-//   margin: 15px;
-//   padding: 8px;
-//   border: 1px solid rgb(214, 212, 212);
-//   border-radius: 5px;
-//   line-height: 25px;
-//   cursor: pointer;
-//   min-height: 100px;
-//   textarea {
-//     width: 100%;
-//     border: none;
-//     outline: none;
-//   }
-//   button {
-//     border: 1px solid rgb(185, 184, 184);
-//     margin-right: 10px;
-//     background-color: #fff;
-//     padding: 3px 5px;
-//     font-size: 11px;
-//     border-radius: 5px;
-//     color: rgb(100, 99, 99);
-//   }
-// }
+<style scoped>
+.v-card {
+  width: 96%;
+  padding: 10px 0;
+}
+.v-btn {
+  font-size: 10px !important;
+  margin-left: 15px;
+}
 </style>

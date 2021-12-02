@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main>
+    <v-main class="app">
       <router-view />
     </v-main>
   </v-app>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'App',
+  name: "App",
 
   data: () => ({
     //
@@ -16,3 +16,8 @@ export default {
 };
 </script>
 <style src="./assets/modifyVuetify.css"></style>
+<style scoped>
+.v-main {
+  overflow: hidden;
+}
+</style>

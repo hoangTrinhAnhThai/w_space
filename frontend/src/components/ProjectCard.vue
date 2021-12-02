@@ -1,6 +1,6 @@
 <template>
   <v-card elevation="2" @click="showTaskDetailModal">
-    <v-card-title font-size="12">{{ card.name }}</v-card-title>
+    <v-card-title style="color: rgb(39, 102, 120); font-size: 15px">{{ card.name }}</v-card-title>
     <v-card-subtitle font-size="12">{{ card.description }}</v-card-subtitle>
     <v-card-text
       ><span v-if="card.dueDate">
@@ -72,6 +72,7 @@ export default {
     ...mapActions({
       deleteTaskAction: 'TASKS/deleteTask',
       getLogtimes: 'TASKS/getLogtimes',
+      addCurrentTask: 'TASKS/addCurrentTask'
     }),
     deleteTask() {
       this.deleteTaskAction({
@@ -80,6 +81,7 @@ export default {
       });
     },
     showTaskDetailModal() {
+      this.addCurrentTask()
       this.getLogtimes(this.card._id);
       this.$refs.taskDetailModal.show();
     },
@@ -89,6 +91,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+.v-card-title, .v-card-subtitle {
+  color: rgb(39, 102, 120) !important;
+}
+</style>
 
 <style lang="scss" scoped>
 .card {

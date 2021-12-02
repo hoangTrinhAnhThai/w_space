@@ -48,8 +48,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-// import ChatCard from "../../components/ChatCard.vue";
-
 export default {
   name: 'ChatRoom',
   data() {

@@ -12,15 +12,16 @@
                 class="bx bxs-down-arrow"
                 v-show="isShowProject"
               ></i>
+              
               <router-link
                 v-if="projects.length > 0"
                 id="roadmap-header"
                 tag="li"
                 :to="`/roadmap/${projects[0]._id}`"
-                >Project</router-link
+                > Project</router-link
               >
               <router-link v-else id="roadmap-header" tag="li" :to="`/roadmap`"
-                >Project</router-link
+                > Project</router-link
               >
             </span>
             <i
@@ -30,8 +31,8 @@
             <ul v-show="isShowProject" class="list-child">
               <li v-for="project in projects" :key="project._id">
                 <router-link tag="li" :to="`/roadmap/${project._id}`"
-                  ><i class="bx bx-chevron-right"></i>
-                  {{ project.name }}</router-link
+                  >
+                  <i class='bx bxl-trello'></i>  {{ project.name }}</router-link
                 >
                 <div class="function">
                   <i
@@ -80,8 +81,8 @@
             <ul v-show="isShowChat" class="list-child">
               <li v-for="(room, index) in rooms" :key="index">
                 <router-link tag="li" :to="`/chatroom/${room._id}`"
-                  ><i class="bx bx-chevron-right"></i>
-                  {{ room.name }}</router-link
+                  >
+                  <i class='bx bx-chat' ></i> {{ room.name }}</router-link
                 >
               </li>
             </ul>
@@ -95,12 +96,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import AddNewProjectModal from '../components/modal/AddNewProject.vue';
-import AddMemberModal from '../components/modal/AddMember.vue';
+import { mapActions, mapGetters } from "vuex";
+import AddNewProjectModal from "../components/modal/AddNewProject.vue";
+import AddMemberModal from "../components/modal/AddMember.vue";
 
 export default {
-  name: 'Sidebar',
+  name: "Sidebar",
   data: () => ({
     isShowProject: false,
     isShowChat: false,
@@ -111,8 +112,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projects: 'TASKS/projectArray',
-      rooms: 'CHAT/rooms',
+      projects: "TASKS/projectArray",
+      rooms: "CHAT/rooms",
     }),
   },
   methods: {
@@ -125,13 +126,13 @@ export default {
       this.$refs.addMemberModal.show(project);
     },
     ...mapActions({
-      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
-      addCurrentProjectAction: 'TASKS/addCurrentProject',
-      deleteProjectAction: 'TASKS/deleteProject',
-      getProject: 'TASKS/getProject',
-      addProjectEditAction: 'TASKS/addProjectEdit',
-      getStatus: 'TASKS/getStatus',
-      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
+      getTaskOfProjectAction: "TASKS/getTaskOfProject",
+      addCurrentProjectAction: "TASKS/addCurrentProject",
+      deleteProjectAction: "TASKS/deleteProject",
+      getProject: "TASKS/getProject",
+      addProjectEditAction: "TASKS/addProjectEdit",
+      getStatus: "TASKS/getStatus",
+      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
     }),
     getTaskOfProject(project) {
       this.addCurrentProjectAction(project);
@@ -143,19 +144,19 @@ export default {
   },
   created() {
     this.getProject();
-    if (this.$route.name.name === 'Roadmap') {
+    if (this.$route.name.name === "Roadmap") {
       this.getStatus();
       this.getTaskOfProject(this.$route.params.id);
-    } else if (this.$route.name.name === 'ChatRoom') {
+    } else if (this.$route.name.name === "ChatRoom") {
       this.getAllChatByIdRoom(this.$route.params.id);
     }
   },
   watch: {
     $route(to) {
-      if (to.name.name === 'Roadmap') {
+      if (to.name.name === "Roadmap") {
         this.getStatus();
         this.getTaskOfProject(to.params.id);
-      } else if (to.name.name === 'ChatRoom') {
+      } else if (to.name.name === "ChatRoom") {
         this.getAllChatByIdRoom(to.params.id);
       }
     },
@@ -163,16 +164,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "../assets/style.scss";
 .sidebar {
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(246, 245, 245);
   height: 100vh;
-  color: rgb(121, 121, 119);
   .workspace {
     line-height: 30px;
     .container {
       padding: 20px 15px;
       .label {
-        color: grey;
         text-transform: uppercase;
         padding: 0;
         margin: 0;
@@ -186,7 +186,6 @@ export default {
         li {
           #roadmap-header,
           #chat-header {
-            color: grey;
             font-weight: normal;
             background-color: none;
           }
@@ -196,12 +195,22 @@ export default {
             list-style: square;
             position: relative;
             left: 5px;
+            -webkit-transition: height 0.3s ease-in;
+            -moz-transition: height 0.3s ease-in;
+            -o-transition: height 0.3s ease-in;
+            -ms-transition: height 0.3s ease-in;
+            transition: height 0.3s ease-in;
             li:hover {
               .function {
                 display: block;
               }
             }
             li {
+              -webkit-transition: background-color 0.3s ease;
+              -moz-transition: background-color 0.3s ease;
+              -o-transition: background-color 0.3s ease;
+              -ms-transition: background-color 0.3s ease;
+              transition: background-color 0.3s ease;
               .nameProject {
                 display: inline-block;
                 width: 100px;
@@ -231,14 +240,14 @@ export default {
         }
         i {
           margin-right: 0.5em;
-          color: rgb(158, 158, 156);
+          color: rgb(167, 164, 164);
         }
       }
     }
   }
 }
 .router-link-exact-active {
-  color: rgb(14, 13, 13);
-  font-weight: bolder;
+  font-weight: 800;
+  color: rgb(39, 102, 120);
 }
 </style>
