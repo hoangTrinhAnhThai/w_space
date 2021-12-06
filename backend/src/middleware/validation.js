@@ -3,7 +3,8 @@ const User = require('../app/models/User');
 
 exports.registerValidation = () => {
   return [
-    check('fullName').trim().notEmpty().withMessage('Fullname is required'),
+    check('firstName').trim().notEmpty().withMessage('Firstname is required'),
+    check('lastName').trim().notEmpty().withMessage('Lastname is required'),
     check('email')
       .trim()
       .isLength({ min: 1 })

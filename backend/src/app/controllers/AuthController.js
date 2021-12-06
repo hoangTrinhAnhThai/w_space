@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Role = require('../models/Role');
 const { validationResult } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
 const bcrypt = require('bcrypt');
@@ -21,23 +22,23 @@ class AuthController {
         } else {
           const salt = await bcrypt.genSalt(10);
           let user = new User();
-          user.fullName = req.body.fullName;
+          user.firstName = req.body.firstName;
+          user.lastName = req.body.lastName;
           user.email = req.body.email;
           user.password = await bcrypt.hash(req.body.password, salt);
-          user.role = {
-            _id: '6188e2e979934adb9699ba5a',
-            name: 'User',
-          };
-          user.save(function (err) {
-            if (err) {
-              return apiResponse.ErrorResponse(res, err);
-            }
-            return apiResponse.successResponseWithData(
-              res,
-              'register success',
-              user,
-            );
-          });
+          Role.findOne({ name: 'User' }).then((role) => {
+            user.role = role
+            user.save(function (err) {
+              if (err) {
+                return apiResponse.ErrorResponse(res, err);
+              }
+              return apiResponse.successResponseWithData(
+                res,
+                'register success',
+                user,
+              );
+            });
+          })
         }
       } catch (err) {
         return apiResponse.ErrorResponse(res, err);
@@ -72,7 +73,8 @@ class AuthController {
                     );
                     let userData = {
                       _id: user._id,
-                      fullName: user.fullName,
+                      firstName: user.firstName,
+                      lastName: user.lastName,
                       email: user.email,
                       token: tokenCreated,
                       password: user.password,
