@@ -407,4 +407,7 @@ export default {
 h1 {
   margin-top: 20px;
 }
+label {
+  font-size: 0.875em;
+}
 </style>
