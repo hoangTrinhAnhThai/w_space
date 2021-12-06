@@ -14,8 +14,8 @@ const User = new Schema(
       ref: 'Role',
     },
     avatar: {
-      type: String
-    }
+      type: String,
+    },
   },
   {
     timestamps: true,

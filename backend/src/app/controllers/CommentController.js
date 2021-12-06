@@ -46,16 +46,17 @@ class ChatController {
         comment.createdBy = user;
         Comment.create(comment)
           .then((result) => {
-              Task.findByIdAndUpdate(
-                  req.params.id,
-                  { $push: { tasks: docTask._id } },
-                  { new: true, useFindAndModify: false }).then((task) => {
-                    return apiResponse.successResponseWithData(
-                        res,
-                        'Create comment successfully',
-                        result,
-                      );
-                  })
+            Task.findByIdAndUpdate(
+              req.params.id,
+              { $push: { tasks: docTask._id } },
+              { new: true, useFindAndModify: false },
+            ).then((task) => {
+              return apiResponse.successResponseWithData(
+                res,
+                'Create comment successfully',
+                result,
+              );
+            });
           })
           .catch((error) => {
             return apiResponse.ErrorResponse(res, error);

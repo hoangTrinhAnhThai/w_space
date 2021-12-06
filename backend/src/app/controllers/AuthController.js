@@ -26,10 +26,11 @@ class AuthController {
           user.lastName = req.body.lastName;
           user.email = req.body.email;
           user.password = await bcrypt.hash(req.body.password, salt);
-          user.avatar = (req.body.firstName).charAt(0) + (req.body.lastName).charAt(0)
-          console.log('------------------------',user.avatar);
+          user.avatar =
+            req.body.firstName.charAt(0) + req.body.lastName.charAt(0);
+          console.log('------------------------', user.avatar);
           Role.findOne({ name: 'User' }).then((role) => {
-            user.role = role
+            user.role = role;
             user.save(function (err) {
               if (err) {
                 return apiResponse.ErrorResponse(res, err);
@@ -40,7 +41,7 @@ class AuthController {
                 user,
               );
             });
-          })
+          });
         }
       } catch (err) {
         return apiResponse.ErrorResponse(res, err);

@@ -148,7 +148,7 @@ class TaskController {
               description: req.body.description,
               dueDate: req.body.dueDate,
               priority: req.body.priority,
-              assigned: req.body.assigned
+              assigned: req.body.assigned,
             },
             { new: true },
           )
