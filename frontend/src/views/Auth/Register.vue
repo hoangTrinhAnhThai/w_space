@@ -21,14 +21,27 @@
         </div>
         <div class="form-group">
           <input
-            v-model="registerInput.fullName"
+            v-model="registerInput.firstName"
             class="form-control"
             type="text"
-            placeholder="Full name"
+            placeholder="First name"
           />
           <div class="errors">
-            <p v-show="showErrors.emptyFullName" class="error">
-              FullName is required
+            <p v-show="showErrors.emptyFirstName" class="error">
+              FirstName is required
+            </p>
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            v-model="registerInput.lastName"
+            class="form-control"
+            type="text"
+            placeholder="Last name"
+          />
+          <div class="errors">
+            <p v-show="showErrors.emptyLastName" class="error">
+              LastName is required
             </p>
           </div>
         </div>
@@ -115,7 +128,8 @@ export default {
         password: '',
         confirmPassword: '',
         email: '',
-        fullName: '',
+        firstName: '',
+        lastName: '',
         phoneNumber: '',
       },
       disabledRegister: false,
@@ -156,8 +170,13 @@ export default {
         );
         Vue.set(
           this.showErrors,
-          'emptyFullName',
-          this.showErrors && !!errors && errors.emptyFullName,
+          'emptyFirstName',
+          this.showErrors && !!errors && errors.emptyFirstName,
+        );
+        Vue.set(
+          this.showErrors,
+          'emptyLastName',
+          this.showErrors && !!errors && errors.emptyLastName,
         );
         Vue.set(
           this.showErrors,
@@ -226,8 +245,13 @@ export default {
       this.disabledRegister = false;
       this.clearErrorMessage();
     },
-    'registerInput.fullName'() {
-      Vue.set(this.showErrors, 'emptyFullName', null);
+    'registerInput.firstName'() {
+      Vue.set(this.showErrors, 'emptyFirstName', null);
+      this.disabledRegister = false;
+      this.clearErrorMessage();
+    },
+    'registerInput.lastName'() {
+      Vue.set(this.showErrors, 'emptyLastName', null);
       this.disabledRegister = false;
       this.clearErrorMessage();
     },

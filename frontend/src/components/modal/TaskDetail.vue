@@ -54,7 +54,7 @@
       <v-col class="block" cols="17">
         <v-row align="center">
           <v-select
-            v-model="memberSelected"
+            v-model="task.assigned"
             :items="listMember"
             chips
             label="Assigned"
@@ -99,7 +99,7 @@
         <v-btn color="green darken-1" text width="80" @click="hide" style="margin-left: 15px">
           Close
         </v-btn>
-        <v-btn color="blue darken-1" text width="80" @click="changeTaskDetail">
+        <v-btn class="save-btn" color="blue darken-1" text width="80" @click="changeTaskDetail">
           Save
         </v-btn>
       </v-col>
@@ -120,7 +120,6 @@ export default {
   },
   data() {
     return {
-      memberSelected: '',
       date: this.task.dueDate ? new Date(this.task.dueDate) : new Date(),
       priorities: ["high", "normal", "low"],
       items: [
@@ -177,7 +176,6 @@ export default {
     },
     changeTaskDetail() {
       this.task.dueDate = this.date;
-      this.task.assigned = this.memberSelected
       console.log(this.task);
 
       this.editTaskAction({

@@ -41,8 +41,11 @@ const getters = {
       if (registerInput.email && !EMAIL_REGEX.test(registerInput.email)) {
         errors.invalidEmail = true;
       }
-      if (!registerInput.fullName) {
-        errors.emptyFullName = true;
+      if (!registerInput.firstName) {
+        errors.emptyFirstName = true;
+      }
+      if (!registerInput.lastName) {
+        errors.emptyLastName = true;
       }
       if (!registerInput.phoneNumber) {
         errors.emptyPhoneNumber = true;

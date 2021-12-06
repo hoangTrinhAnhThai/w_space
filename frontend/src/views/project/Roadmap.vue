@@ -156,26 +156,15 @@ export default {
 <style scoped>
 .v-main {
     width: 100%;
-    min-width: 1400px;
-    overflow-x: scroll !important;
-    min-height: 92vh;
+    min-width: 1000px;
+    height: 92vh;
     white-space: nowrap;
+    overflow: scroll !important;
 }
 
 .roadmap {
   width: 90%;
-  margin: 50px auto;
-}
-.status {
-  margin: 10px 20px 0;
-  background-color: rgb(246, 245, 245);
-  height: 100%;
-  padding: 20px 10px 50px;
-  border-radius: 5px;
-}
-
-.status:hover {
-  background-color: rgb(246, 245, 250);
+  margin: 20px auto;
 }
 
 .name-status {
@@ -188,11 +177,26 @@ export default {
 }
 
 .addTask .v-btn{
-  /* background-color: red; */
   width: 96%;
   padding: 5px;
   border: none;
   font-size: 10px;
 }
 
+</style>
+
+<style lang="scss" scoped>
+@import "../../assets/style.scss";
+.status {
+  /* margin: 10px 20px 0; */
+  margin: 10px;
+  background-color: $color2;
+  height: 100%;
+  padding: 20px 10px 50px;
+  border-radius: 5px;
+}
+
+.status:hover {
+  background-color: rgb(198, 217, 240);
+}
 </style>

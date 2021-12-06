@@ -80,21 +80,29 @@ export default {
   },
 };
 </script>
-
+<style scoped>
+.v-main {
+  width: 100%;
+  min-width: 1000px;
+  min-height: 92vh;
+  height: 92vh;
+  white-space: nowrap;
+  overflow: scroll !important;
+}
+</style>
 <style lang="scss" scoped>
 @import '../../assets/style.scss';
+
 .chat-room {
   position: relative;
-  height: 90vh;
   min-width: 500px;
-
   .container-chat {
     min-width: 500px;
     position: relative;
   }
   .layout-chat {
     overflow-y: scroll;
-    height: 86.9vh;
+    height: 76.9vh;
 
     .content {
       overflow: auto;
@@ -120,7 +128,7 @@ export default {
             }
           }
           p {
-            background-color: rgb(197, 191, 191);
+            background-color: $color2;
             padding: 10px 25px;
             border-top-left-radius: 300px;
             border-bottom-left-radius: 300px;
@@ -175,7 +183,7 @@ export default {
   .chat-card {
     .container-card {
       width: 100%;
-      background-color: rgb(216, 210, 210);
+      background-color: rgb(39, 102, 120);
       padding: 10px;
       display: flex;
       flex-wrap: nowrap;

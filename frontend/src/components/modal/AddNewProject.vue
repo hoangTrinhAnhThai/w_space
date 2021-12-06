@@ -24,7 +24,7 @@
     <v-row>
       <v-col class="btn-container">
         <v-btn @click="hide" class="hide" text>Close</v-btn>
-        <v-btn @click="addProject" class="continue" text>Continue</v-btn>
+        <v-btn class="save-btn continue" @click="addProject" text>Continue</v-btn>
       </v-col>
     </v-row>
     <add-member ref="addMemberModal" v-on:closeModal="hide" />

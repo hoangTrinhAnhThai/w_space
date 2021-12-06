@@ -39,16 +39,20 @@ export default {
   display: flex;
   height: 100vh;
   .sidebar {
-    width: 15vw;
-    min-width: 220px;
+    // width: 100%;
+    // width: 15vw;
+    // min-width: 14em;
+  }
+  .content {
+    width: 99% !important;
   }
   .nav {
     height: 73px;
-    // min-height: 60px;
-    width: 85vw;
+    width: 100% !important;
   }
   .main-container {
-    width: 85vw;
+    // width: 84vw !important;
+
   }
 }
 </style>

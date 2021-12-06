@@ -1,7 +1,7 @@
 <template>
   <v-main>
     <v-row class="row1">
-      <v-col cols="9">
+      <v-col cols="8">
         <v-btn-toggle class="calendar">
           <v-btn>
             <i style="font-size: 20px" class="bx bxs-chevron-left"></i>
@@ -15,24 +15,26 @@
           </v-btn>
         </v-btn-toggle>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="4">
         <v-btn-toggle class="date-week">
           <v-btn> Day </v-btn>
           <v-btn> Week </v-btn>
         </v-btn-toggle>
-        <v-btn style="margin-left: 10px">
-          <i class="bx bx-sync"></i>
-        </v-btn>
-        <v-btn style="margin-left: 10px">
-          <i class="bx bx-user"></i>
-        </v-btn>
-        <v-btn style="margin-left: 10px">
-          <i class="bx bx-edit"></i>
-        </v-btn>
+        <v-btn-toggle class="calendar">
+          <v-btn style="margin-left: 10px">
+            <i class="bx bx-sync"></i>
+          </v-btn>
+          <v-btn style="margin-left: 10px">
+            <i class="bx bx-user"></i>
+          </v-btn>
+          <v-btn style="margin-left: 10px">
+            <i class="bx bx-edit"></i>
+          </v-btn>
+        </v-btn-toggle>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="2">
+      <v-col cols="3">
         <v-text-field label="Search"></v-text-field>
       </v-col>
       <v-col cols="1">
@@ -41,7 +43,12 @@
         ></v-btn>
       </v-col>
       <v-col cols="2">
-        <v-btn elevation="2" @click="createLogtime">Add new time entry</v-btn>
+        <v-btn
+          elevation="2"
+          style="color: white !important; background-color: rgb(39, 102, 120)"
+          @click="createLogtime"
+          >Add new time entry</v-btn
+        >
       </v-col>
     </v-row>
     <v-row>
@@ -119,11 +126,12 @@ export default {
 </script>
 <style scoped>
 .v-main {
-    width: 100%;
-    min-width: 1000px;
-    overflow-x: scroll !important;
-    min-height: 92vh;
-    white-space: nowrap;
+  width: 100%;
+  min-width: 1000px;
+  min-height: 92vh;
+  height: 92vh;
+  white-space: nowrap;
+  overflow: scroll !important;
 }
 .row {
   width: 95%;

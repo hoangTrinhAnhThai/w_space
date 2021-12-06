@@ -164,6 +164,7 @@ const actions = {
             .then((result) => {
                 dispatch('addProjectEdit', result.data.data);
                 dispatch('getProject');
+                dispatch('CHAT/getAllRooms', null, {root: true})
             })
             .catch((err) => {
                 commit('ERROR/setErrorMessage', err.response.data.message, {
