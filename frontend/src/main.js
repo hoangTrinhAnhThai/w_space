@@ -11,7 +11,7 @@ import 'vue2-datepicker/index.css';
 import VueSocketIO from 'vue-socket.io';
 import vuetify from './plugins/vuetify';
 import VueJWT from 'vuejs-jwt';
-import '@mdi/font/css/materialdesignicons.css'
+import '@mdi/font/css/materialdesignicons.css';
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
@@ -21,10 +21,10 @@ Vue.use(VueJWT);
 
 Vue.config.productionTip = false;
 Vue.use(
-    new VueSocketIO({
-        debug: true,
-        connection: 'http://localhost:4000',
-    }),
+  new VueSocketIO({
+    debug: true,
+    connection: 'http://localhost:4000',
+  }),
 );
 // Vue.use(Vuetify)
 
@@ -35,8 +35,8 @@ Vue.use(
 // })
 
 new Vue({
-    render: (h) => h(App),
-    router,
-    vuetify,
-    store,
+  render: (h) => h(App),
+  router,
+  vuetify,
+  store,
 }).$mount('#app');

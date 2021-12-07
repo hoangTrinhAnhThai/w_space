@@ -9,7 +9,6 @@ import Login from '../views/Auth/Login.vue';
 import Signup from '../views/Auth/Register.vue';
 import ChatRoom from '../views/chat/ChatRoom.vue';
 
-
 Vue.use(VueRouter);
 const routes = [
   {
@@ -49,7 +48,6 @@ const routes = [
         path: '/profile',
         name: Profile,
         component: Profile,
-        
       },
     ],
   },
@@ -64,8 +62,6 @@ const routes = [
     name: Login,
     component: Login,
   },
- 
-
 ];
 
 const router = new VueRouter({

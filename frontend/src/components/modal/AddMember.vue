@@ -65,42 +65,42 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { mapActions, mapGetters } from "vuex";
+import Vue from 'vue';
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "AddMemberModal",
+  name: 'AddMemberModal',
   data() {
     return {
-      email: "",
+      email: '',
       showErrors: {},
       project: {},
-      error: "",
+      error: '',
     };
   },
   computed: {
     ...mapGetters({
-      validateEmail: "VALIDATION/validateEmail",
-      memberInfor: "USER/memberInfor",
-      errorMessage: "ERROR/errorMessage",
-      projectEdit: "TASKS/projectEdit",
+      validateEmail: 'VALIDATION/validateEmail',
+      memberInfor: 'USER/memberInfor',
+      errorMessage: 'ERROR/errorMessage',
+      projectEdit: 'TASKS/projectEdit',
     }),
   },
   methods: {
     ...mapActions({
-      searchMemberAction: "USER/searchMember",
-      clearErrorMessage: "ERROR/clearErrorMessage",
-      addMemberAction: "TASKS/addMember",
-      removeMemberAction: "TASKS/removeMember",
-      removeMemberInforAction: "USER/removeMemberInfor",
+      searchMemberAction: 'USER/searchMember',
+      clearErrorMessage: 'ERROR/clearErrorMessage',
+      addMemberAction: 'TASKS/addMember',
+      removeMemberAction: 'TASKS/removeMember',
+      removeMemberInforAction: 'USER/removeMemberInfor',
     }),
     show(project) {
       this.project = project;
       this.$refs.addMemberModal.show();
     },
     hide() {
-      this.$emit("closeModal");
+      this.$emit('closeModal');
       this.clearErrorMessage();
-      this.error = "";
+      this.error = '';
       this.$refs.addMemberModal.hide();
     },
     searchMember() {
@@ -126,7 +126,7 @@ export default {
         project: project,
         idProject: this.project._id,
       });
-      this.email = "";
+      this.email = '';
       // this.hide();
     },
     removeMember(userId) {
@@ -143,13 +143,13 @@ export default {
       if (errors) {
         Vue.set(
           this.showErrors,
-          "emptyEmail",
-          this.showErrors && !!errors && errors.emptyEmail
+          'emptyEmail',
+          this.showErrors && !!errors && errors.emptyEmail,
         );
         Vue.set(
           this.showErrors,
-          "invalidEmail",
-          this.showErrors && !!errors && errors.invalidEmail
+          'invalidEmail',
+          this.showErrors && !!errors && errors.invalidEmail,
         );
         passedValidate = false;
       }
@@ -158,10 +158,10 @@ export default {
   },
   watch: {
     email() {
-      Vue.set(this.showErrors, "emptyEmail", null);
-      Vue.set(this.showErrors, "invalidEmail", null);
+      Vue.set(this.showErrors, 'emptyEmail', null);
+      Vue.set(this.showErrors, 'invalidEmail', null);
       this.clearErrorMessage();
-      this.error = "";
+      this.error = '';
       this.removeMemberInforAction(null);
     },
   },

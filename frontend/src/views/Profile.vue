@@ -20,6 +20,9 @@
               style="display: none"
             />
           </v-row>
+          <v-row v-if="avatar">
+            <v-btn class="save-btn"> Save </v-btn>
+          </v-row>
         </v-col>
         <v-col cols="9">
           <v-row>
@@ -82,6 +85,7 @@
                     outlined
                     dense
                     v-model="password.oldPassword"
+                    type="password"
                   ></v-text-field>
                 </v-row>
                 <v-row>
@@ -168,11 +172,11 @@
 </template>
 
 <script>
-// import axios from "axios";
-import { mapGetters } from "vuex";
-// import Vue from "vue";
+import axios from 'axios';
+import { mapActions, mapGetters } from 'vuex';
+import Vue from 'vue';
 export default {
-  name: "user-account",
+  name: 'user-account',
   data() {
     return {
       password: {
@@ -181,202 +185,202 @@ export default {
         newPassword: null,
       },
       isloaded: false,
-      avatar: "",
+      avatar: '',
       disabledChangeInfo: false,
       showErrors: {},
     };
   },
   computed: {
     ...mapGetters({
-      userInfo: "AUTH/userInfo",
-      validationInformation: "VALIDATION/validationInformation",
-      validationPassword: "VALIDATION/validationPassword",
+      userInfo: 'AUTH/userInfo',
+      validationInformation: 'VALIDATION/validationInformation',
+      validationPassword: 'VALIDATION/validationPassword',
     }),
   },
-  //   methods: {
-  //     ...mapActions({
-  //       changeAvatarAction: "PROFILE/changeAvatar",
-  //       updateInfo: "PROFILE/updateInfo",
-  //       updatePassword: "PROFILE/updatePassword",
-  //     }),
-  //     changeInf() {
-  //       if (!this.validatedChangeInfoBeforeSubmit()) {
-  //         this.disabledChangeInfo = true;
-  //         return;
-  //       } else {
-  //         this.updateInfo(this.userInfo.userDetail);
-  //       }
-  //     },
-  //     changePassword() {
-  //       if (!this.validatedPasswordBeforeSubmit()) {
-  //         this.disabledChangeInfo = true;
-  //         return;
-  //       } else {
-  //         this.updatePassword(this.password);
-  //       }
-  //     },
-  //     handleClickInputFile() {
-  //       this.$refs.fileInputAvt.click();
-  //     },
-  //     onFileChange(e) {
-  //       this.isDisableButton = true;
-  //       const formData = new FormData();
-  //       formData.append("file", e.target.files[0]);
-  //       formData.append("upload_preset", "wfcqkljk");
-  //       axios
-  //         .post(
-  //           "https://api.cloudinary.com/v1_1/dj5xafymg/image/upload",
-  //           formData
-  //         )
-  //         .then((response) => {
-  //           this.avatar = response.data.url;
-  //           this.isDisableButton = false;
-  //         })
-  //         .catch((error) => {
-  //           console.log(error);
-  //         });
-  //     },
-  //     changeAvt() {
-  //       this.isloaded = true;
-  //       const formData = new FormData();
-  //       formData.append("avatar", this.avatar);
-  //       this.changeAvatarAction(formData);
-  //     },
-  //     validatedChangeInfoBeforeSubmit() {
-  //       let passedValidate = true;
-  //       const errors = this.validationInformation(this.userInfo.userDetail);
-  //       if (errors) {
-  //         Vue.set(
-  //           this.showErrors,
-  //           "emptyNameUserDetail",
-  //           this.showErrors && !!errors && errors.emptyNameUserDetail
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "nameUserDetailMaxLength",
-  //           this.showErrors && !!errors && errors.nameUserDetailMaxLength
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "emptyBirth",
-  //           this.showErrors && !!errors && errors.emptyBirth
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "emptyPhoneNumber",
-  //           this.showErrors && !!errors && errors.emptyPhoneNumber
-  //         );
-  //         passedValidate = false;
-  //       }
-  //       return passedValidate;
-  //     },
-  //     validatedPasswordBeforeSubmit() {
-  //       let passedValidate = true;
-  //       const errors = this.validationPassword(this.password);
-  //       if (errors) {
-  //         Vue.set(
-  //           this.showErrors,
-  //           "emptyPassword",
-  //           this.showErrors && !!errors && errors.emptyPassword
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "oldPasswordMinLength",
-  //           this.showErrors && !!errors && errors.oldPasswordMinLength
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "oldPasswordMaxLength",
-  //           this.showErrors && !!errors && errors.oldPasswordMaxLength
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "emptyNewPassword",
-  //           this.showErrors && !!errors && errors.emptyNewPassword
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "newPasswordMinLength",
-  //           this.showErrors && !!errors && errors.newPasswordMinLength
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "newPasswordMaxLength",
-  //           this.showErrors && !!errors && errors.newPasswordMaxLength
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "emptyConfirmPassword",
-  //           this.showErrors && !!errors && errors.emptyConfirmPassword
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "confirmPasswordMinLength",
-  //           this.showErrors && !!errors && errors.confirmPasswordMinLength
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "confirmPasswordMaxLength",
-  //           this.showErrors && !!errors && errors.confirmPasswordMaxLength
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "oldPassWordBeSameNewPassword",
-  //           this.showErrors && !!errors && errors.oldPassWordBeSameNewPassword
-  //         );
-  //         Vue.set(
-  //           this.showErrors,
-  //           "cofirmationNotMatch",
-  //           this.showErrors && !!errors && errors.cofirmationNotMatch
-  //         );
-  //         passedValidate = false;
-  //       }
-  //       return passedValidate;
-  //     },
-  //   },
-  //   watch: {
-  //     "userInfo.userDetail"() {
-  //       Vue.set(this.showErrors, "emptyNameUserDetail", null);
-  //       this.disabledChangeInfo = false;
-  //     },
-  //     "userInfo.userDetail.nameUserDetail"() {
-  //       Vue.set(this.showErrors, "emptyNameUserDetail", null);
-  //       Vue.set(this.showErrors, "nameUserDetailMaxLength", null);
-  //       this.disabledChangeInfo = false;
-  //     },
-  //     "userInfo.userDetail.phoneNumber"() {
-  //       Vue.set(this.showErrors, "emptyBirth", null);
-  //       this.disabledChangeInfo = false;
-  //     },
-  //     "userInfo.userDetail.birth"() {
-  //       Vue.set(this.showErrors, "emptyPhoneNumber", null);
-  //       this.disabledChangeInfo = false;
-  //     },
-  //     "password.oldPassword"() {
-  //       Vue.set(this.showErrors, "emptyPassword", null);
-  //       Vue.set(this.showErrors, "oldPasswordMinLength", null);
-  //       Vue.set(this.showErrors, "oldPasswordMaxLength", null);
-  //       Vue.set(this.showErrors, "oldPassWordBeSameNewPassword", null);
-  //       Vue.set(this.showErrors, "cofirmationNotMatch", null);
-  //       this.disabledPassword = false;
-  //     },
-  //     "password.newPassword"() {
-  //       Vue.set(this.showErrors, "emptyNewPassword", null);
-  //       Vue.set(this.showErrors, "newPasswordMinLength", null);
-  //       Vue.set(this.showErrors, "newPasswordMaxLength", null);
-  //       Vue.set(this.showErrors, "oldPassWordBeSameNewPassword", null);
-  //       Vue.set(this.showErrors, "cofirmationNotMatch", null);
-  //       this.disabledPassword = false;
-  //     },
-  //     "password.confirmPassword"() {
-  //       Vue.set(this.showErrors, "emptyConfirmPassword", null);
-  //       Vue.set(this.showErrors, "confirmPasswordMinLength", null);
-  //       Vue.set(this.showErrors, "confirmPasswordMaxLength", null);
-  //       Vue.set(this.showErrors, "oldPassWordBeSameNewPassword", null);
-  //       Vue.set(this.showErrors, "cofirmationNotMatch", null);
-  //       this.disabledPassword = false;
-  //     },
-  //   },
+  methods: {
+    ...mapActions({
+      changeAvatarAction: 'PROFILE/changeAvatar',
+      updateInfo: 'PROFILE/updateInfo',
+      updatePassword: 'PROFILE/updatePassword',
+    }),
+    changeInf() {
+      if (!this.validatedChangeInfoBeforeSubmit()) {
+        this.disabledChangeInfo = true;
+        return;
+      } else {
+        this.updateInfo(this.userInfo.userDetail);
+      }
+    },
+    changePassword() {
+      if (!this.validatedPasswordBeforeSubmit()) {
+        this.disabledChangeInfo = true;
+        return;
+      } else {
+        this.updatePassword(this.password);
+      }
+    },
+    handleClickInputFile() {
+      this.$refs.fileInputAvt.click();
+    },
+    onFileChange(e) {
+      this.isDisableButton = true;
+      const formData = new FormData();
+      formData.append('file', e.target.files[0]);
+      formData.append('upload_preset', 'wfcqkljk');
+      axios
+        .post(
+          'https://api.cloudinary.com/v1_1/dj5xafymg/image/upload',
+          formData,
+        )
+        .then((response) => {
+          this.avatar = response.data.url;
+          this.isDisableButton = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    changeAvt() {
+      this.isloaded = true;
+      const formData = new FormData();
+      formData.append('avatar', this.avatar);
+      this.changeAvatarAction(formData);
+    },
+    validatedChangeInfoBeforeSubmit() {
+      let passedValidate = true;
+      const errors = this.validationInformation(this.userInfo.userDetail);
+      if (errors) {
+        Vue.set(
+          this.showErrors,
+          'emptyNameUserDetail',
+          this.showErrors && !!errors && errors.emptyNameUserDetail,
+        );
+        Vue.set(
+          this.showErrors,
+          'nameUserDetailMaxLength',
+          this.showErrors && !!errors && errors.nameUserDetailMaxLength,
+        );
+        Vue.set(
+          this.showErrors,
+          'emptyBirth',
+          this.showErrors && !!errors && errors.emptyBirth,
+        );
+        Vue.set(
+          this.showErrors,
+          'emptyPhoneNumber',
+          this.showErrors && !!errors && errors.emptyPhoneNumber,
+        );
+        passedValidate = false;
+      }
+      return passedValidate;
+    },
+    validatedPasswordBeforeSubmit() {
+      let passedValidate = true;
+      const errors = this.validationPassword(this.password);
+      if (errors) {
+        Vue.set(
+          this.showErrors,
+          'emptyPassword',
+          this.showErrors && !!errors && errors.emptyPassword,
+        );
+        Vue.set(
+          this.showErrors,
+          'oldPasswordMinLength',
+          this.showErrors && !!errors && errors.oldPasswordMinLength,
+        );
+        Vue.set(
+          this.showErrors,
+          'oldPasswordMaxLength',
+          this.showErrors && !!errors && errors.oldPasswordMaxLength,
+        );
+        Vue.set(
+          this.showErrors,
+          'emptyNewPassword',
+          this.showErrors && !!errors && errors.emptyNewPassword,
+        );
+        Vue.set(
+          this.showErrors,
+          'newPasswordMinLength',
+          this.showErrors && !!errors && errors.newPasswordMinLength,
+        );
+        Vue.set(
+          this.showErrors,
+          'newPasswordMaxLength',
+          this.showErrors && !!errors && errors.newPasswordMaxLength,
+        );
+        Vue.set(
+          this.showErrors,
+          'emptyConfirmPassword',
+          this.showErrors && !!errors && errors.emptyConfirmPassword,
+        );
+        Vue.set(
+          this.showErrors,
+          'confirmPasswordMinLength',
+          this.showErrors && !!errors && errors.confirmPasswordMinLength,
+        );
+        Vue.set(
+          this.showErrors,
+          'confirmPasswordMaxLength',
+          this.showErrors && !!errors && errors.confirmPasswordMaxLength,
+        );
+        Vue.set(
+          this.showErrors,
+          'oldPassWordBeSameNewPassword',
+          this.showErrors && !!errors && errors.oldPassWordBeSameNewPassword,
+        );
+        Vue.set(
+          this.showErrors,
+          'cofirmationNotMatch',
+          this.showErrors && !!errors && errors.cofirmationNotMatch,
+        );
+        passedValidate = false;
+      }
+      return passedValidate;
+    },
+  },
+  watch: {
+    'userInfo.userDetail'() {
+      Vue.set(this.showErrors, 'emptyNameUserDetail', null);
+      this.disabledChangeInfo = false;
+    },
+    'userInfo.userDetail.nameUserDetail'() {
+      Vue.set(this.showErrors, 'emptyNameUserDetail', null);
+      Vue.set(this.showErrors, 'nameUserDetailMaxLength', null);
+      this.disabledChangeInfo = false;
+    },
+    'userInfo.userDetail.phoneNumber'() {
+      Vue.set(this.showErrors, 'emptyBirth', null);
+      this.disabledChangeInfo = false;
+    },
+    'userInfo.userDetail.birth'() {
+      Vue.set(this.showErrors, 'emptyPhoneNumber', null);
+      this.disabledChangeInfo = false;
+    },
+    'password.oldPassword'() {
+      Vue.set(this.showErrors, 'emptyPassword', null);
+      Vue.set(this.showErrors, 'oldPasswordMinLength', null);
+      Vue.set(this.showErrors, 'oldPasswordMaxLength', null);
+      Vue.set(this.showErrors, 'oldPassWordBeSameNewPassword', null);
+      Vue.set(this.showErrors, 'cofirmationNotMatch', null);
+      this.disabledPassword = false;
+    },
+    'password.newPassword'() {
+      Vue.set(this.showErrors, 'emptyNewPassword', null);
+      Vue.set(this.showErrors, 'newPasswordMinLength', null);
+      Vue.set(this.showErrors, 'newPasswordMaxLength', null);
+      Vue.set(this.showErrors, 'oldPassWordBeSameNewPassword', null);
+      Vue.set(this.showErrors, 'cofirmationNotMatch', null);
+      this.disabledPassword = false;
+    },
+    'password.confirmPassword'() {
+      Vue.set(this.showErrors, 'emptyConfirmPassword', null);
+      Vue.set(this.showErrors, 'confirmPasswordMinLength', null);
+      Vue.set(this.showErrors, 'confirmPasswordMaxLength', null);
+      Vue.set(this.showErrors, 'oldPassWordBeSameNewPassword', null);
+      Vue.set(this.showErrors, 'cofirmationNotMatch', null);
+      this.disabledPassword = false;
+    },
+  },
 };
 </script>
 <style scoped>
@@ -409,5 +413,21 @@ h1 {
 }
 label {
   font-size: 0.875em;
+}
+img,
+.v-avatar {
+  width: 220px !important;
+  height: 200px !important;
+  border-radius: 50%;
+}
+
+i {
+  font-size: 30px;
+  margin: 20px auto;
+  width: 100%;
+  padding-left: 90px;
+}
+.avatar .v-btn {
+  width: 220px;
 }
 </style>

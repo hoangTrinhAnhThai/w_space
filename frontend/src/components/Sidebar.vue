@@ -94,9 +94,19 @@
                 @click="showAddProjectModal({}, 'addProject')"
               ></i>
               <ul v-show="isShowChat" class="list-child">
-                <li @click="clearMessage" v-for="(room, index) in rooms" :key="index">
+                <li
+                  @click="clearMessage"
+                  v-for="(room, index) in rooms"
+                  :key="index"
+                >
                   <router-link tag="li" :to="`/chatroom/${room._id}`">
-                    <v-badge inline color="red" :content="messages" :value="messages" style="font-weight: lighter" >
+                    <v-badge
+                      inline
+                      color="red"
+                      :content="messages"
+                      :value="messages"
+                      style="font-weight: lighter"
+                    >
                       <i class="bx bx-chat"></i>{{ room.name }}
                     </v-badge>
                   </router-link>
@@ -114,18 +124,18 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import AddNewProjectModal from "../components/modal/AddNewProject.vue";
-import AddMemberModal from "../components/modal/AddMember.vue";
+import { mapActions, mapGetters } from 'vuex';
+import AddNewProjectModal from '../components/modal/AddNewProject.vue';
+import AddMemberModal from '../components/modal/AddMember.vue';
 
 export default {
-  name: "Sidebar",
+  name: 'Sidebar',
   data: () => ({
     isShowProject: false,
     isShowChat: false,
     drawer: true,
     mini: true,
-    messages: 6
+    messages: 6,
   }),
   components: {
     AddNewProjectModal,
@@ -133,8 +143,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projects: "TASKS/projectArray",
-      rooms: "CHAT/rooms",
+      projects: 'TASKS/projectArray',
+      rooms: 'CHAT/rooms',
     }),
   },
   methods: {
@@ -147,14 +157,14 @@ export default {
       this.$refs.addMemberModal.show(project);
     },
     ...mapActions({
-      getTaskOfProjectAction: "TASKS/getTaskOfProject",
-      addCurrentProjectAction: "TASKS/addCurrentProject",
-      deleteProjectAction: "TASKS/deleteProject",
-      getProject: "TASKS/getProject",
-      addProjectEditAction: "TASKS/addProjectEdit",
-      getStatus: "TASKS/getStatus",
-      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
-      addCurrentRoom: "CHAT/addCurrentRoom",
+      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
+      addCurrentProjectAction: 'TASKS/addCurrentProject',
+      deleteProjectAction: 'TASKS/deleteProject',
+      getProject: 'TASKS/getProject',
+      addProjectEditAction: 'TASKS/addProjectEdit',
+      getStatus: 'TASKS/getStatus',
+      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
+      addCurrentRoom: 'CHAT/addCurrentRoom',
     }),
     getTaskOfProject(project) {
       this.addCurrentProjectAction(project);
@@ -164,25 +174,25 @@ export default {
       this.deleteProjectAction(idProject);
     },
     clearMessage() {
-      this.messages = 0
-    }
+      this.messages = 0;
+    },
   },
   created() {
     this.getProject();
-    if (this.$route.name.name === "Roadmap") {
+    if (this.$route.name.name === 'Roadmap') {
       this.getStatus();
       this.getTaskOfProject(this.$route.params.id);
-    } else if (this.$route.name.name === "ChatRoom") {
+    } else if (this.$route.name.name === 'ChatRoom') {
       this.addCurrentRoom(this.$route.params.id);
       this.getAllChatByIdRoom(this.$route.params.id);
     }
   },
   watch: {
     $route(to) {
-      if (to.name.name === "Roadmap") {
+      if (to.name.name === 'Roadmap') {
         this.getStatus();
         this.getTaskOfProject(to.params.id);
-      } else if (to.name.name === "ChatRoom") {
+      } else if (to.name.name === 'ChatRoom') {
         this.addCurrentRoom(to.params.id);
         this.getAllChatByIdRoom(to.params.id);
       }
@@ -191,7 +201,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../assets/style.scss";
+@import '../assets/style.scss';
 .sidebar {
   background-color: rgb(39, 102, 120) !important;
   color: white;

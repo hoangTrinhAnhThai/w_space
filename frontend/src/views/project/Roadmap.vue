@@ -10,17 +10,17 @@
             >
               {{ data.status.name }}
             </span>
-            <span >{{ data.tasks.length }}</span>
+            <span>{{ data.tasks.length }}</span>
           </v-col>
         </v-row>
         <v-row>
-          <div class="addTask" style="margin: 5px;" v-if="index == 0">
+          <div class="addTask" style="margin: 5px" v-if="index == 0">
             <v-btn text @click="isShowAddTask = false" v-show="isShowAddTask">
               + Add issue ....
             </v-btn>
-          
-            <div class="addform"  v-show="!isShowAddTask">
-              <add-task-form 
+
+            <div class="addform" v-show="!isShowAddTask">
+              <add-task-form
                 v-on:closeAddtaskForm="closeAddtaskForm"
               ></add-task-form>
             </div>
@@ -41,7 +41,11 @@
               showOnTop: true,
             }"
           >
-            <Draggable style="margin: 5px" v-for="(card, index) in data.tasks" :key="index">
+            <Draggable
+              style="margin: 5px"
+              v-for="(card, index) in data.tasks"
+              :key="index"
+            >
               <Card
                 v-bind:card="card"
                 v-bind:project="currentProject"
@@ -56,17 +60,17 @@
 </template>
 
 <script>
-import Card from "../../components/ProjectCard.vue";
-import AddTaskForm from "../../components/AddTaskForm.vue";
-import { Container, Draggable } from "vue-smooth-dnd";
-import { mapActions, mapGetters } from "vuex";
-import colors from "../../utils/data";
+import Card from '../../components/ProjectCard.vue';
+import AddTaskForm from '../../components/AddTaskForm.vue';
+import { Container, Draggable } from 'vue-smooth-dnd';
+import { mapActions, mapGetters } from 'vuex';
+import colors from '../../utils/data';
 export default {
-  name: "Roadmap",
+  name: 'Roadmap',
   data() {
     return {
       draggingCard: {
-        lane: "",
+        lane: '',
         index: -1,
         cardData: {},
       },
@@ -76,13 +80,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      dataTask: "TASKS/taskOfProject",
-      currentProject: "TASKS/currentProject",
+      dataTask: 'TASKS/taskOfProject',
+      currentProject: 'TASKS/currentProject',
     }),
   },
   methods: {
     ...mapActions({
-      removeCard: "TASKS/removeCard",
+      removeCard: 'TASKS/removeCard',
     }),
     handleDragStart(lane, dragResult) {
       const { payload, isSource } = dragResult;
@@ -103,13 +107,13 @@ export default {
       }
       if (removedIndex !== null) {
         localStorage.setItem(
-          "idTask",
-          this.dataTask[lane].tasks[removedIndex]._id
+          'idTask',
+          this.dataTask[lane].tasks[removedIndex]._id,
         );
         this.dataTask[lane].tasks.splice(removedIndex, 1);
       }
       if (addedIndex !== null) {
-        let card = { id: "", statusId: "", moved: { before: "", after: "" } };
+        let card = { id: '', statusId: '', moved: { before: '', after: '' } };
         card.statusId = this.dataTask[lane].status._id;
         if (this.dataTask[lane].tasks[addedIndex - 1]) {
           card.moved.before = this.dataTask[lane].tasks[addedIndex - 1]._id;
@@ -123,14 +127,14 @@ export default {
         }
 
         setTimeout(() => {
-          card.id = localStorage.getItem("idTask");
+          card.id = localStorage.getItem('idTask');
           card.idProject = this.currentProject._id;
           this.removeCard(card);
         }, 200);
         this.dataTask[lane].tasks.splice(
           addedIndex,
           0,
-          this.draggingCard.cardData
+          this.draggingCard.cardData,
         );
       }
     },
@@ -142,7 +146,6 @@ export default {
     closeAddtaskForm() {
       this.isShowAddTask = true;
     },
-    
   },
   components: {
     Card,
@@ -155,11 +158,11 @@ export default {
 
 <style scoped>
 .v-main {
-    width: 100%;
-    min-width: 1000px;
-    height: 92vh;
-    white-space: nowrap;
-    overflow: scroll !important;
+  width: 100%;
+  min-width: 1000px;
+  height: 92vh;
+  white-space: nowrap;
+  overflow: scroll !important;
 }
 
 .roadmap {
@@ -176,17 +179,16 @@ export default {
   overflow: inherit !important;
 }
 
-.addTask .v-btn{
+.addTask .v-btn {
   width: 96%;
   padding: 5px;
   border: none;
   font-size: 10px;
 }
-
 </style>
 
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
+@import '../../assets/style.scss';
 .status {
   /* margin: 10px 20px 0; */
   margin: 10px;

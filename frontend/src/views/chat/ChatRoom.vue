@@ -11,16 +11,16 @@
         <div class="right-chat-card" v-if="chat.createdBy._id == userInfo._id">
           <div class="content-chat right">
             <p>{{ chat.message }}</p>
-              <v-avatar size=45 color="green" class="img">
-                <span class="white--text">{{chat.createdBy.avatar}}</span>
-              </v-avatar>
+            <v-avatar size="45" color="green" class="img">
+              <span class="white--text">{{ chat.createdBy.avatar }}</span>
+            </v-avatar>
           </div>
         </div>
         <div class="left-chat-card" v-else>
           <div class="content-chat left">
             <div class="img">
-              <v-avatar size=45 color="red">
-                <span class="white--text">{{chat.createdBy.avatar}}</span>
+              <v-avatar size="45" color="red">
+                <span class="white--text">{{ chat.createdBy.avatar }}</span>
               </v-avatar>
             </div>
             <p>
@@ -52,53 +52,53 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "ChatRoom",
+  name: 'ChatRoom',
   data() {
     return {
-      message: "",
+      message: '',
     };
   },
   computed: {
     ...mapGetters({
-      chats: "CHAT/chats",
-      userInfo: "AUTH/userInfo",
-      validateText: "VALIDATION/validateText",
-      currentRoom: "CHAT/currentRoom",
+      chats: 'CHAT/chats',
+      userInfo: 'AUTH/userInfo',
+      validateText: 'VALIDATION/validateText',
+      currentRoom: 'CHAT/currentRoom',
     }),
   },
   methods: {
     ...mapActions({
-      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
-      sendMessageAction: "CHAT/sendMessage",
+      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
+      sendMessageAction: 'CHAT/sendMessage',
     }),
     sendMessage(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-          document.getElementById("content").focus();
+          document.getElementById('content').focus();
           return;
         } else {
           this.sendMessageAction({
             idRoom: this.$route.params.id,
             chat: { room: this.$route.params.id, message: this.message },
           });
-          this.message = "";
-          document.getElementById("content").focus();
+          this.message = '';
+          document.getElementById('content').focus();
         }
       }
     },
     sendMessageByClick() {
       if (!this.validateBeforeSubmit()) {
-        document.getElementById("content").focus();
+        document.getElementById('content').focus();
         return;
       } else {
         this.sendMessageAction({
           idRoom: this.$route.params.id,
           chat: { room: this.$route.params.id, message: this.message },
         });
-        this.message = "";
-        document.getElementById("content").focus();
+        this.message = '';
+        document.getElementById('content').focus();
       }
     },
     noop() {},
@@ -153,7 +153,7 @@ h1 {
 }
 </style>
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
+@import '../../assets/style.scss';
 
 .chat-room {
   position: relative;

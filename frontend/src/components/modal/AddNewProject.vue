@@ -25,7 +25,9 @@
     <v-row>
       <v-col class="btn-container">
         <v-btn @click="hide" class="hide" text>Close</v-btn>
-        <v-btn class="save-btn continue" @click="addProject" text>Continue</v-btn>
+        <v-btn class="save-btn continue" @click="addProject" text
+          >Continue</v-btn
+        >
       </v-col>
     </v-row>
     <add-member ref="addMemberModal" v-on:closeModal="hide" />
@@ -33,25 +35,25 @@
 </template>
 
 <script>
-import AddMember from "./AddMember.vue";
-import { mapActions, mapGetters } from "vuex";
-import Vue from "vue";
+import AddMember from './AddMember.vue';
+import { mapActions, mapGetters } from 'vuex';
+import Vue from 'vue';
 export default {
-  name: "AddNewProjectModal",
+  name: 'AddNewProjectModal',
   data() {
     return {
       project: {
-        name: ''
+        name: '',
       },
       name: '',
       showErrors: {},
-      typeOfModal: "",
+      typeOfModal: '',
     };
   },
   computed: {
     ...mapGetters({
-      validateName: "VALIDATION/validateText",
-      projectEdit: "TASKS/projectEdit",
+      validateName: 'VALIDATION/validateText',
+      projectEdit: 'TASKS/projectEdit',
     }),
   },
   methods: {
@@ -64,8 +66,8 @@ export default {
       this.$refs.newProjectModal.hide();
     },
     ...mapActions({
-      addProjectAction: "TASKS/addProject",
-      editProjectAction: "TASKS/editProject",
+      addProjectAction: 'TASKS/addProject',
+      editProjectAction: 'TASKS/editProject',
     }),
     editProject() {
       this.editProjectAction({
@@ -77,34 +79,34 @@ export default {
       if (!this.validateBeforeSubmit()) {
         return;
       } else {
-        if (this.typeOfModal === "editProject") {
+        if (this.typeOfModal === 'editProject') {
           this.editProject();
           this.hide();
         } else {
           this.addProjectAction(this.project);
           setTimeout(() => {
             this.$refs.addMemberModal.show(this.projectEdit);
-            this.name = "";
+            this.name = '';
           }, 1000);
         }
       }
     },
     addProjectByKey(e) {
-      if(e.keyCode === 13) {
+      if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-        return;
-      } else {
-        if (this.typeOfModal === "editProject") {
-          this.editProject();
-          this.hide();
+          return;
         } else {
-          this.addProjectAction(this.project);
-          setTimeout(() => {
-            this.$refs.addMemberModal.show(this.projectEdit);
-            this.name = "";
-          }, 1000);
+          if (this.typeOfModal === 'editProject') {
+            this.editProject();
+            this.hide();
+          } else {
+            this.addProjectAction(this.project);
+            setTimeout(() => {
+              this.$refs.addMemberModal.show(this.projectEdit);
+              this.name = '';
+            }, 1000);
+          }
         }
-      }
       }
     },
     validateBeforeSubmit() {
@@ -113,8 +115,8 @@ export default {
       if (errors) {
         Vue.set(
           this.showErrors,
-          "emptyName",
-          this.showErrors && !!errors && errors.emptyName
+          'emptyName',
+          this.showErrors && !!errors && errors.emptyName,
         );
 
         passedValidate = false;
@@ -123,14 +125,14 @@ export default {
     },
   },
   created() {
-    this.project.name = this.projectEdit.name
+    this.project.name = this.projectEdit.name;
   },
   components: {
     AddMember,
   },
   watch: {
-    "project.name"() {
-      Vue.set(this.showErrors, "emptyName", null);
+    'project.name'() {
+      Vue.set(this.showErrors, 'emptyName', null);
     },
   },
 };

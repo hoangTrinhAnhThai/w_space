@@ -1,5 +1,5 @@
 <template>
-  <v-card :loading="loading" >
+  <v-card :loading="loading">
     <v-textarea
       class="mx-4"
       v-model.trim="newTask.name"
@@ -10,9 +10,7 @@
       <v-btn color="blue-grey lighten-3" text @click="closeAddtaskForm">
         Cancel
       </v-btn>
-      <v-btn color="rgb(39, 102, 120)" text @click="addtaskForm">
-        Add
-      </v-btn>
+      <v-btn color="rgb(39, 102, 120)" text @click="addtaskForm"> Add </v-btn>
     </v-card-actions>
   </v-card>
 </template>
