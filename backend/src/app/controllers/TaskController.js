@@ -11,7 +11,7 @@ const { addANode, dropANode } = require('../../utils/movedCard');
 class TaskController {
   showAllTask = [
     (req, res) => {
-      Task.find()
+      Task.find().populate('comments')
         .then((task) => {
           return apiResponse.successResponseWithData(
             res,
@@ -26,7 +26,7 @@ class TaskController {
   ];
   showTask = [
     (req, res) => {
-      Task.findById(req.params.id)
+      Task.findById(req.params.id).populate('comments')
         .then((task) => {
           return apiResponse.successResponseWithData(
             res,

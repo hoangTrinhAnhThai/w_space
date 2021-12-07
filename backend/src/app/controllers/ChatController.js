@@ -24,7 +24,7 @@ class ChatController {
   ];
   getSingleChatByRoomId = [
     (req, res) => {
-      Chat.find({ room: req.params.id })
+      Chat.find({ room: req.params.id }).populate("createdBy")
         .sort({ createdAt: 1 })
         .then((chat) => {
           return apiResponse.successResponseWithData(

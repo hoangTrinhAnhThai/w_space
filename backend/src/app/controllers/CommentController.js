@@ -1,11 +1,13 @@
 const Comment = require('../models/Comment');
+const Task = require('../models/Task');
+
 const User = require('../models/User');
 const apiResponse = require('../../utils/apiResponse');
 const host = require('../../utils/decodeJWT');
 
 require('dotenv').config();
 
-class ChatController {
+class CommentController {
   getAllComments = [
     (req, res) => {
       Chat.find()
@@ -22,9 +24,9 @@ class ChatController {
         });
     },
   ];
-  getCommentByRoomTask = [
+  getCommentByIdTask = [
     (req, res) => {
-      Chat.find({ room: req.params.id })
+      Comment.find({ room: req.params.id }).populate('createdBy')
         .sort({ createdAt: 1 })
         .then((comment) => {
           return apiResponse.successResponseWithData(
@@ -42,22 +44,17 @@ class ChatController {
   createComment = [
     (req, res) => {
       User.findById(host(req, res)).then((user) => {
-        let comment = new Comment(req.body);
+        let comment = new Comment();
+        comment.content = req.body.content
         comment.createdBy = user;
+        comment.task = req.params.id
         Comment.create(comment)
-          .then((result) => {
-            Task.findByIdAndUpdate(
-              req.params.id,
-              { $push: { tasks: docTask._id } },
-              { new: true, useFindAndModify: false },
-            ).then((task) => {
-              return apiResponse.successResponseWithData(
-                res,
-                'Create comment successfully',
-                result,
-              );
-            });
-          })
+          .then((doc_comment) => {
+            return apiResponse.successResponseWithData(
+              res,
+              'Create comment successfully',
+              doc_comment,
+          )})
           .catch((error) => {
             return apiResponse.ErrorResponse(res, error);
           });

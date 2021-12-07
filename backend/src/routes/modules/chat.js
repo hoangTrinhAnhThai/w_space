@@ -20,7 +20,6 @@ router.delete('/:id', chatController.deleteChat);
 
 server.listen(4000);
 
-// socket io
 io.on('connection', function (socket) {
   console.log('User connected');
   socket.on('disconnect', function () {
