@@ -248,13 +248,11 @@ const actions = {
     },
     addComment({dispatch}, params) {
         http.post(`project/task/${params.idTask}/comment`, params.comment).then((result) => {
-            console.log(result.data.data);
             socket.emit('save-comment', result.data.data);
             dispatch('getCommentByIdTask', params.idTask);
         })
     },
     getCommentByIdTask({commit, dispatch}, params) {
-        console.log(params);
         http.get(`project/task/${params}/comment`).then((result) => {
             commit('setComments' , result.data.data)
         })

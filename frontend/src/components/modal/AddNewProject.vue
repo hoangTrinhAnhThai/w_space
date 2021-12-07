@@ -61,7 +61,6 @@ export default {
       this.$refs.newProjectModal.show();
     },
     hide() {
-      console.log('edit', this.projectEdit.name, this.project.name);
       this.$refs.newProjectModal.hide();
     },
     ...mapActions({

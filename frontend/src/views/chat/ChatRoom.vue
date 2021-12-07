@@ -75,7 +75,6 @@ export default {
     }),
     sendMessage(e) {
       if (e.keyCode === 13) {
-        console.log("hii");
         if (!this.validateBeforeSubmit()) {
           document.getElementById("content").focus();
           return;

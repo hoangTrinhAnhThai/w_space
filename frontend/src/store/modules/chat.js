@@ -37,7 +37,6 @@ const mutations = {
         state.currentRoom = room
       }
     }
-    
   },
   logMess() {
     console.log('aaa');
