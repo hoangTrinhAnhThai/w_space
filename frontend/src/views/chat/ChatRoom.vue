@@ -1,78 +1,115 @@
 <template>
   <div class="chat-room">
-    <div class="container-chat">
-      <!-- <div class="header">Ten chat room</div> -->
-      <!-- <hr /> -->
-      <div class="layout-chat" v-chat-scroll>
-        <div class="content" v-for="(chat, index) in chats" :key="index">
-          <div class="right-chat-card" v-if="chat.createdBy == userInfo._id">
-            <div class="content-chat right">
-              <p>{{ chat.message }}</p>
-              <div class="img">
-                <img
-                  src="https://i2.wp.com/scr.vn/wp-content/uploads/2020/07/avt-cute.jpg?resize=575%2C575&ssl=1"
-                  alt=""
-                />
-              </div>
-            </div>
+    <v-row>
+      <v-col cols="11"
+        ><h1>#{{ currentRoom.name }}</h1></v-col
+      >
+    </v-row>
+    <hr />
+    <div class="layout-chat" v-chat-scroll>
+      <div class="content" v-for="(chat, index) in chats" :key="index">
+        <div class="right-chat-card" v-if="chat.createdBy._id == userInfo._id">
+          <div class="content-chat right">
+            <p>{{ chat.message }}</p>
+              <v-avatar size=45 color="green" class="img">
+                <span class="white--text">{{chat.createdBy.avatar}}</span>
+              </v-avatar>
           </div>
-          <div class="left-chat-card" v-else>
-            <div class="content-chat left">
-              <div class="img">
-                <img
-                  src="https://i.pinimg.com/736x/21/2d/12/212d12e421963f8a66f95aece1182069.jpg"
-                  alt=""
-                />
-              </div>
-              <p>{{ chat.message }}</p>
+        </div>
+        <div class="left-chat-card" v-else>
+          <div class="content-chat left">
+            <div class="img">
+              <v-avatar size=45 color="red">
+                <span class="white--text">{{chat.createdBy.avatar}}</span>
+              </v-avatar>
             </div>
+            <p>
+              {{ chat.message }}
+            </p>
           </div>
         </div>
       </div>
-      <div class="write-content">
-        <div class="chat-card">
-          <div class="container-card">
-            <input
-              id="content"
-              v-model="message"
-              type="text"
-              placeholder="..."
-            />
-            <i class="bx bx-paper-plane" @click="sendMessage"></i>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div class="write-content">
+      <v-text-field
+        placeholder="Write message..."
+        outlined
+        dense
+        id="content"
+        v-model="message"
+        v-on:keyup="sendMessage"
+      ></v-text-field>
+      <v-btn
+        class="save-btn"
+        @click="sendMessageByClick"
+        text
+        style="height: 100%"
+      >
+        SEND
+      </v-btn>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
-  name: 'ChatRoom',
+  name: "ChatRoom",
   data() {
     return {
-      message: '',
+      message: "",
     };
   },
   computed: {
     ...mapGetters({
-      chats: 'CHAT/chats',
-      userInfo: 'AUTH/userInfo',
+      chats: "CHAT/chats",
+      userInfo: "AUTH/userInfo",
+      validateText: "VALIDATION/validateText",
+      currentRoom: "CHAT/currentRoom",
     }),
   },
   methods: {
     ...mapActions({
-      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
-      sendMessageAction: 'CHAT/sendMessage',
+      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
+      sendMessageAction: "CHAT/sendMessage",
     }),
-    sendMessage() {
-      this.sendMessageAction({
-        idRoom: this.$route.params.id,
-        chat: { room: this.$route.params.id, message: this.message },
-      });
-      this.message = '';
-      document.getElementById('content').focus();
+    sendMessage(e) {
+      if (e.keyCode === 13) {
+        console.log("hii");
+        if (!this.validateBeforeSubmit()) {
+          document.getElementById("content").focus();
+          return;
+        } else {
+          this.sendMessageAction({
+            idRoom: this.$route.params.id,
+            chat: { room: this.$route.params.id, message: this.message },
+          });
+          this.message = "";
+          document.getElementById("content").focus();
+        }
+      }
+    },
+    sendMessageByClick() {
+      if (!this.validateBeforeSubmit()) {
+        document.getElementById("content").focus();
+        return;
+      } else {
+        this.sendMessageAction({
+          idRoom: this.$route.params.id,
+          chat: { room: this.$route.params.id, message: this.message },
+        });
+        this.message = "";
+        document.getElementById("content").focus();
+      }
+    },
+    noop() {},
+    validateBeforeSubmit() {
+      let passedValidate = true;
+      const errors = this.validateText(this.message);
+      if (errors) {
+        passedValidate = false;
+      }
+      return passedValidate;
     },
   },
   created() {
@@ -89,20 +126,48 @@ export default {
   white-space: nowrap;
   overflow: scroll !important;
 }
+.write-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  padding: 20px 30px;
+}
+
+.theme--light.v-input {
+  width: 85%;
+  border-radius: none !important;
+  margin-right: 10px;
+}
+
+.v-btn:not(.v-btn--round).v-size--default {
+  height: 100% !important;
+  top: -10px;
+  padding: 13px 25px;
+  border: none;
+}
+
+i:hover {
+  color: rgb(144, 142, 218);
+}
+h1 {
+  margin: 0px 10px;
+}
 </style>
 <style lang="scss" scoped>
-@import '../../assets/style.scss';
+@import "../../assets/style.scss";
 
 .chat-room {
   position: relative;
   min-width: 500px;
+  overflow-wrap: anywhere;
   .container-chat {
     min-width: 500px;
     position: relative;
   }
   .layout-chat {
     overflow-y: scroll;
-    height: 76.9vh;
+    padding-bottom: 20px;
+    height: calc(100vh - 220px);
 
     .content {
       overflow: auto;
@@ -130,13 +195,12 @@ export default {
           p {
             background-color: $color2;
             padding: 10px 25px;
-            border-top-left-radius: 300px;
-            border-bottom-left-radius: 300px;
-            border-top-right-radius: 300px;
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
+            border-top-right-radius: 50px;
             margin: 10px 0;
             position: relative;
-            right: 45px;
-            float: right;
+            right: 50px;
           }
         }
       }
@@ -164,49 +228,21 @@ export default {
             background-color: $color;
             color: rgb(255, 255, 255);
             padding: 10px 25px;
-            border-top-right-radius: 300px;
-            border-bottom-right-radius: 300px;
-            border-top-left-radius: 300px;
+            border-top-right-radius: 50px;
+            border-bottom-right-radius: 50px;
+            border-top-left-radius: 50px;
             margin: 10px 0;
             position: relative;
-            left: 43px;
+            left: 50px;
           }
         }
       }
     }
   }
-  .write-content {
-    width: 100%;
-    // position: absolute;
-    // bottom: 0;
-  }
   .chat-card {
-    .container-card {
-      width: 100%;
-      background-color: rgb(39, 102, 120);
-      padding: 10px;
-      display: flex;
-      flex-wrap: nowrap;
-      #content {
-        width: 97%;
-        white-space: nowrap;
-        background-color: #fff;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        border: 1px solid $border-color;
-        padding: 7px 15px;
-        border-radius: 300px;
-        outline: none;
-      }
-      i {
-        font-size: 25px;
-        margin-left: 10px;
-        position: relative;
-        top: 5px;
-      }
-      i:hover {
-        color: rgb(138, 138, 138);
-      }
+    background-color: $color;
+    .btn {
+      background-color: $color;
     }
   }
   ::placeholder {

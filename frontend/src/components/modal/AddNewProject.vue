@@ -11,6 +11,7 @@
           label="Name project ..."
           class="textProject"
           v-model="project.name"
+          v-on:keyup="addProjectByKey"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -49,7 +50,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      validateName: "VALIDATION/validateName",
+      validateName: "VALIDATION/validateText",
       projectEdit: "TASKS/projectEdit",
     }),
   },
@@ -87,6 +88,24 @@ export default {
             this.name = "";
           }, 1000);
         }
+      }
+    },
+    addProjectByKey(e) {
+      if(e.keyCode === 13) {
+        if (!this.validateBeforeSubmit()) {
+        return;
+      } else {
+        if (this.typeOfModal === "editProject") {
+          this.editProject();
+          this.hide();
+        } else {
+          this.addProjectAction(this.project);
+          setTimeout(() => {
+            this.$refs.addMemberModal.show(this.projectEdit);
+            this.name = "";
+          }, 1000);
+        }
+      }
       }
     },
     validateBeforeSubmit() {

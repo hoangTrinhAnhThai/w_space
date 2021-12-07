@@ -38,21 +38,12 @@ export default {
 .main-page {
   display: flex;
   height: 100vh;
-  .sidebar {
-    // width: 100%;
-    // width: 15vw;
-    // min-width: 14em;
-  }
   .content {
     width: 99% !important;
   }
   .nav {
-    height: 73px;
+    height: 70px;
     width: 100% !important;
-  }
-  .main-container {
-    // width: 84vw !important;
-
   }
 }
 </style>

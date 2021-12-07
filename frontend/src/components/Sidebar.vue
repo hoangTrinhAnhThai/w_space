@@ -1,8 +1,12 @@
 <template>
   <div class="sidebar">
-    <v-navigation-drawer :mini-variant.sync="mini" permanent style="background-color: rgb(39, 102, 120) !important">
+    <v-navigation-drawer
+      :mini-variant.sync="mini"
+      permanent
+      style="background-color: rgb(39, 102, 120) !important"
+    >
       <v-btn color="deep-purple lighten-5" icon @click.stop="mini = !mini">
-         <v-icon v-if="mini">mdi-home</v-icon>
+        <v-icon v-if="mini">mdi-home</v-icon>
         <v-icon v-if="!mini">mdi-chevron-left</v-icon>
       </v-btn>
       <div class="workspace" v-show="!mini">
@@ -90,10 +94,12 @@
                 @click="showAddProjectModal({}, 'addProject')"
               ></i>
               <ul v-show="isShowChat" class="list-child">
-                <li v-for="(room, index) in rooms" :key="index">
+                <li @click="clearMessage" v-for="(room, index) in rooms" :key="index">
                   <router-link tag="li" :to="`/chatroom/${room._id}`">
-                    <i class="bx bx-chat"></i> {{ room.name }}</router-link
-                  >
+                    <v-badge inline color="red" :content="messages" :value="messages" style="font-weight: lighter" >
+                      <i class="bx bx-chat"></i>{{ room.name }}
+                    </v-badge>
+                  </router-link>
                 </li>
               </ul>
             </li>
@@ -119,6 +125,7 @@ export default {
     isShowChat: false,
     drawer: true,
     mini: true,
+    messages: 6
   }),
   components: {
     AddNewProjectModal,
@@ -147,6 +154,7 @@ export default {
       addProjectEditAction: "TASKS/addProjectEdit",
       getStatus: "TASKS/getStatus",
       getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
+      addCurrentRoom: "CHAT/addCurrentRoom",
     }),
     getTaskOfProject(project) {
       this.addCurrentProjectAction(project);
@@ -155,6 +163,9 @@ export default {
     deleteProject(idProject) {
       this.deleteProjectAction(idProject);
     },
+    clearMessage() {
+      this.messages = 0
+    }
   },
   created() {
     this.getProject();
@@ -162,6 +173,7 @@ export default {
       this.getStatus();
       this.getTaskOfProject(this.$route.params.id);
     } else if (this.$route.name.name === "ChatRoom") {
+      this.addCurrentRoom(this.$route.params.id);
       this.getAllChatByIdRoom(this.$route.params.id);
     }
   },
@@ -171,6 +183,7 @@ export default {
         this.getStatus();
         this.getTaskOfProject(to.params.id);
       } else if (to.name.name === "ChatRoom") {
+        this.addCurrentRoom(to.params.id);
         this.getAllChatByIdRoom(to.params.id);
       }
     },

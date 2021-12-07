@@ -1,6 +1,9 @@
 import http from '../../service/api.js';
 import { sort } from '../../utils/helper';
-
+import io from 'socket.io-client';
+const socket = io('http://localhost:5000', {
+  transports: ['websocket', 'polling', 'flashsocket'],
+});
 const state = {
     tasksArray: [],
     taskOfProject: [],
@@ -9,7 +12,8 @@ const state = {
     currentProject: '',
     logtimes: '',
     projectEdit: '',
-    currentTask: {}
+    currentTask: {},
+    comments: []
 };
 
 const getters = {
@@ -36,6 +40,9 @@ const getters = {
     },
     currentTask(state) {
         return state.currentTask
+    }, 
+    comments(state) {
+        return state.comments
     }
 };
 // const formatDataProject = function(data) {
@@ -105,6 +112,9 @@ const mutations = {
     setLogtimes(state, data) {
         state.logtimes = data;
     },
+    setComments(state, data) {
+        state.comments = data
+    }
 };
 const actions = {
     addCurrentProject({ commit }, project) {
@@ -236,6 +246,28 @@ const actions = {
                 });
             });
     },
+    addComment({dispatch}, params) {
+        http.post(`project/task/${params.idTask}/comment`, params.comment).then((result) => {
+            console.log(result.data.data);
+            socket.emit('save-comment', result.data.data);
+            dispatch('getCommentByIdTask', params.idTask);
+        })
+    },
+    getCommentByIdTask({commit, dispatch}, params) {
+        console.log(params);
+        http.get(`project/task/${params}/comment`).then((result) => {
+            commit('setComments' , result.data.data)
+        })
+        socket.on(
+            'new-comment',
+            function (data) {
+              if (data.message.task === params.idTask) {
+                dispatch('getCommentByIdTask', params.idTask);
+              }
+            }.bind(this),
+          );
+    }
+    
 };
 
 export default {

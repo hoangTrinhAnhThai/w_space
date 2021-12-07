@@ -21,8 +21,7 @@ export default {};
 .nav {
   border-bottom: 1px solid rgb(199, 199, 199);
   .content {
-    width: 85%;
-    // background-color: red;
+    width: 98%;
     margin: 15px auto 0;
     display: flex;
     justify-content: space-between;

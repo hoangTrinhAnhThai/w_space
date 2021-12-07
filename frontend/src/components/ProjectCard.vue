@@ -72,7 +72,8 @@ export default {
     ...mapActions({
       deleteTaskAction: 'TASKS/deleteTask',
       getLogtimes: 'TASKS/getLogtimes',
-      addCurrentTask: 'TASKS/addCurrentTask'
+      addCurrentTask: 'TASKS/addCurrentTask',
+      getCommentByIdTask: 'TASKS/getCommentByIdTask'
     }),
     deleteTask() {
       this.deleteTaskAction({
@@ -81,7 +82,8 @@ export default {
       });
     },
     showTaskDetailModal() {
-      this.addCurrentTask()
+      this.getCommentByIdTask(this.card._id)
+      this.addCurrentTask(this.card)
       this.getLogtimes(this.card._id);
       this.$refs.taskDetailModal.show();
     },

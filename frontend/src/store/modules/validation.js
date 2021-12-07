@@ -102,10 +102,10 @@ const getters = {
       return null;
     };
   },
-  validateName() {
-    return (nameProject) => {
+  validateText() {
+    return (text) => {
       const errors = {};
-      if (!nameProject) {
+      if (!text) {
         errors.emptyName = true;
       }
       if (Object.keys(errors).length) return errors;

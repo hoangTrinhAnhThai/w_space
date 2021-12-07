@@ -7,6 +7,7 @@ const socket = io('http://localhost:4000', {
 const state = {
   rooms: [],
   chats: [],
+  currentRoom: {}
 };
 
 const getters = {
@@ -16,6 +17,9 @@ const getters = {
   chats(state) {
     return state.chats;
   },
+  currentRoom(state) {
+    return state.currentRoom
+  }
 };
 const mutations = {
   setRooms(state, data) {
@@ -27,9 +31,18 @@ const mutations = {
   addMessage(state, data) {
     state.chats.push(data);
   },
+  setCurrentRoom(state, data) {
+    for(let room of state.rooms) {
+      if(room._id == data) {
+        state.currentRoom = room
+      }
+    }
+    
+  },
   logMess() {
     console.log('aaa');
   },
+  
 };
 const actions = {
   getAllRooms({ commit }) {
@@ -49,6 +62,9 @@ const actions = {
         }
       }.bind(this),
     );
+  },
+  addCurrentRoom({commit}, params) {
+    commit('setCurrentRoom', params)
   },
   sendMessage({ dispatch }, params) {
     http.post(`chat/`, params.chat).then((response) => {

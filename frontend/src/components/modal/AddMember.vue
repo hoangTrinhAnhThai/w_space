@@ -11,6 +11,7 @@
           v-model="email"
           append-icon="mdi-account-plus"
           label="Email"
+          v-on:keyup="searchMemberByKeyUp"
         >
         </v-text-field>
       </v-col>
@@ -109,6 +110,15 @@ export default {
         this.searchMemberAction({ email: this.email });
       }
     },
+    searchMemberByKeyUp(e) {
+      if (e.keyCode === 13) {
+        if (!this.validateBeforeSubmit()) {
+          return;
+        } else {
+          this.searchMemberAction({ email: this.email });
+        }
+      }
+    },
     addMember(userId) {
       let project = new Object();
       project.user = userId;
@@ -175,5 +185,4 @@ export default {
   text-transform: lowercase !important;
   text-align: left !important;
 }
-
 </style>
