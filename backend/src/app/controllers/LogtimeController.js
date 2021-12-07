@@ -79,7 +79,6 @@ class LogtimeController {
   ];
   createLogtime = [
     (req, res) => {
-      console.log(req.body);
       const logtime = new Logtime();
       logtime.startTime = req.body.startTime;
       logtime.task = req.body.task;

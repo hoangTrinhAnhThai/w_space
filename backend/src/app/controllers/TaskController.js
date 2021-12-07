@@ -65,7 +65,6 @@ class TaskController {
                   .then((project) => {
                     if (project) {
                       if (project.tasks.length > 0) {
-                        console.log('length > 0');
                         for (let task of project.tasks) {
                           if (
                             JSON.stringify(task.status) ==
@@ -140,7 +139,6 @@ class TaskController {
             errors.array(),
           );
         } else {
-          console.log(req.body);
           Task.findByIdAndUpdate(
             req.params.id,
             {
@@ -153,7 +151,6 @@ class TaskController {
             { new: true },
           )
             .then((result) => {
-              console.log('ok');
               return apiResponse.successResponseWithData(
                 res,
                 'Edit task successfully',

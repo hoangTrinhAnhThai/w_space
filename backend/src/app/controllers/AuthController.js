@@ -28,7 +28,6 @@ class AuthController {
           user.password = await bcrypt.hash(req.body.password, salt);
           user.avatar =
             req.body.firstName.charAt(0) + req.body.lastName.charAt(0);
-          console.log('------------------------', user.avatar);
           Role.findOne({ name: 'User' }).then((role) => {
             user.role = role;
             user.save(function (err) {

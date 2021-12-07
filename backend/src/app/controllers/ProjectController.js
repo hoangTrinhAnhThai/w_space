@@ -89,7 +89,6 @@ class ProjectController {
                     }
                   }
                 }
-                console.log('joined', isExsitUser);
                 if (
                   isExsitUser ||
                   JSON.stringify(user._id) ===
