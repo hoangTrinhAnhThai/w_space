@@ -26,9 +26,8 @@ router.put('/task/:id', taskValidation(), taskController.editTask);
 router.delete('/:idProject/:idTask', taskController.deleteTask);
 router.post('/task', taskController.moveCard);
 
-router.post('/task/:id/comment', commentController.createComment)
-router.get('/task/:id/comment', commentController.getCommentByIdTask)
-
+router.post('/task/:id/comment', commentController.createComment);
+router.get('/task/:id/comment', commentController.getCommentByIdTask);
 
 // project
 router.get('/:id', projectController.showProject);

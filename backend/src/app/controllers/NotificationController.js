@@ -9,7 +9,7 @@ class NotificationController {
   getAllNotifications = [
     (req, res) => {
       User.findById(host(req, res)).then((user) => {
-        Notification.find({'listContent.member': user})
+        Notification.find({ 'listContent.member': user })
           .sort({ createdAt: 1 })
           .then((notifications) => {
             return apiResponse.successResponseWithData(
@@ -27,13 +27,16 @@ class NotificationController {
   getNotificationByRoomId = [
     (req, res) => {
       User.findById(host(req, res)).then((user) => {
-        Notification.findOne({ room: req.params.id }).populate("createdBy")
+        Notification.findOne({ room: req.params.id })
+          .populate('createdBy')
           .sort({ createdAt: 1 })
           .then((notification) => {
-            let listNotification = {}
+            let listNotification = {};
             for (let content of notification.listContent) {
-              if (JSON.stringify(user._id) == JSON.stringify(content.member._id)) {
-                listNotification = content
+              if (
+                JSON.stringify(user._id) == JSON.stringify(content.member._id)
+              ) {
+                listNotification = content;
               }
             }
             return apiResponse.successResponseWithData(
@@ -47,7 +50,6 @@ class NotificationController {
           });
       });
     },
-
   ];
 
   createNotification = [

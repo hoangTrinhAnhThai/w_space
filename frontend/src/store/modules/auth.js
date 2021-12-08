@@ -2,17 +2,16 @@ import http from '../../service/api.js';
 import router from '../../router/index.js';
 import { decodeToken } from '../../utils/helper';
 
-const formatDataUser = function(data) {
-  const dataFormat = 
-    {
-      _id: data._id,
-      avatar: data.avatar,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-    }
+const formatDataUser = function (data) {
+  const dataFormat = {
+    _id: data._id,
+    avatar: data.avatar,
+    email: data.email,
+    firstName: data.firstName,
+    lastName: data.lastName,
+  };
   return dataFormat;
-}
+};
 
 const state = {
   userInfo: null,

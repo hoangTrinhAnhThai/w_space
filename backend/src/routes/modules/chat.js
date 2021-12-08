@@ -27,7 +27,6 @@ io.on('connection', function (socket) {
   });
   socket.on('save-message', function (data) {
     io.emit('new-message', { message: data });
-    
   });
 });
 module.exports = router;

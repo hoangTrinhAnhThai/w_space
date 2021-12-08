@@ -18,24 +18,23 @@ const Notification = new Schema(
           ref: 'User',
         },
         count: {
-          type: Number
+          type: Number,
         },
         unreadCount: {
-          type: Number
+          type: Number,
         },
         contents: [
           {
             message: {
-              type: String
+              type: String,
             },
             createdBy: {
               type: Schema.Types.ObjectId,
               ref: 'User',
-            }
-          }
-        ]
-
-      }
+            },
+          },
+        ],
+      },
     ],
     createdBy: {
       type: Schema.Types.ObjectId,

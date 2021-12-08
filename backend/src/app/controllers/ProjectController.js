@@ -27,18 +27,28 @@ class ProjectController {
             Room.create({ name: req.body.name, createdBy: user }).then(
               (room) => {
                 newProject.room = room;
-                Project.create(newProject).then((project) => {
-                  Notification.create({room: room._id, project: project._id, listContent: {member: user, count: 0, unreadCount: 0, contents: {message: '', createdBy: null}}}).then((result) => {
-                    return apiResponse.successResponseWithData(
-                      res,
-                      'Add new project successfully',
-                      project,
-                    );
+                Project.create(newProject)
+                  .then((project) => {
+                    Notification.create({
+                      room: room._id,
+                      project: project._id,
+                      listContent: {
+                        member: user,
+                        count: 0,
+                        unreadCount: 0,
+                        contents: { message: '', createdBy: null },
+                      },
+                    }).then((result) => {
+                      return apiResponse.successResponseWithData(
+                        res,
+                        'Add new project successfully',
+                        project,
+                      );
+                    });
                   })
-                 
-                }).catch((err) => {
-                  return apiResponse.ErrorResponse(res, err);
-                })
+                  .catch((err) => {
+                    return apiResponse.ErrorResponse(res, err);
+                  });
               },
             );
           }
@@ -110,16 +120,25 @@ class ProjectController {
                       Room.findByIdAndUpdate(project.room._id, {
                         members: project.members,
                       }).then(() => {
-                        Notification.findOneAndUpdate({room: project.room._id}, {
-                          $push: {listContent: {member: user._id, count: 0, unreadCount: 0, contents: {message: '', createdBy: null}}}
-                        }).then((result) => {
+                        Notification.findOneAndUpdate(
+                          { room: project.room._id },
+                          {
+                            $push: {
+                              listContent: {
+                                member: user._id,
+                                count: 0,
+                                unreadCount: 0,
+                                contents: { message: '', createdBy: null },
+                              },
+                            },
+                          },
+                        ).then((result) => {
                           return apiResponse.successResponseWithData(
                             res,
                             'Edit project successfully',
                             project,
                           );
-                        })
-                        
+                        });
                       });
                     })
                     .catch((error) => {
@@ -148,9 +167,12 @@ class ProjectController {
               Room.findByIdAndUpdate(project.room._id, {
                 members: project.members,
               }).then(() => {
-                Notification.findOneAndUpdate({room: project.room._id}, {
-                  $pull: { listContent: {member: user._id} }
-                })
+                Notification.findOneAndUpdate(
+                  { room: project.room._id },
+                  {
+                    $pull: { listContent: { member: user._id } },
+                  },
+                );
                 return apiResponse.successResponseWithData(
                   res,
                   'Remove project successfully',
@@ -176,7 +198,8 @@ class ProjectController {
   showAllProjects = [
     (req, res) => {
       User.findById(host(req, res)).then((user) => {
-        Project.find({ $or: [{ createdBy: user }, { members: user }] }).sort({ createdAt: -1 })
+        Project.find({ $or: [{ createdBy: user }, { members: user }] })
+          .sort({ createdAt: -1 })
           .populate('tasks')
           .populate('members')
           .populate('createdBy')

@@ -1,5 +1,9 @@
 import http from '../../service/api.js';
-import { sort, sortLeaderProjects, sortMemberProjects } from '../../utils/helper';
+import {
+  sort,
+  sortLeaderProjects,
+  sortMemberProjects,
+} from '../../utils/helper';
 import io from 'socket.io-client';
 const socket = io('http://localhost:5000', {
   transports: ['websocket', 'polling', 'flashsocket'],
@@ -50,53 +54,48 @@ const getters = {
   },
 };
 
-const formatDataProject = function(data) {
-  const dataFormat = data.map(dataItem => (
-    {
-      _id: dataItem._id,
-      createdAt: dataItem.createdAt,
-      createdBy: {
-        _id: dataItem.createdBy._id,
-        avatar: dataItem.createdBy.avatar,
-        email: dataItem.createdBy.email,
-        firstName: dataItem.createdBy.firstName,
-        lastName: dataItem.createdBy.lastName,
-      },
-      members: dataItem.members.map(member => (
-        {
-          _id: member._id,
-        avatar: member.avatar,
-        email: member.email,
-        firstName: member.firstName,
-        lastName: member.lastName,
-        }
-      )),
-      name: dataItem.name,
-      room: dataItem.room,
-      tasks: dataItem.tasks.map(task => (
-        {
-          description: task.description,
-          dueDate: task.dueDate,
-          moved: task.moved,
-          name: task.name,
-          priority: task.priority,
-          status: task.status,
-          _id: task._id
-        }
-      ))
-    }))
+const formatDataProject = function (data) {
+  const dataFormat = data.map((dataItem) => ({
+    _id: dataItem._id,
+    createdAt: dataItem.createdAt,
+    createdBy: {
+      _id: dataItem.createdBy._id,
+      avatar: dataItem.createdBy.avatar,
+      email: dataItem.createdBy.email,
+      firstName: dataItem.createdBy.firstName,
+      lastName: dataItem.createdBy.lastName,
+    },
+    members: dataItem.members.map((member) => ({
+      _id: member._id,
+      avatar: member.avatar,
+      email: member.email,
+      firstName: member.firstName,
+      lastName: member.lastName,
+    })),
+    name: dataItem.name,
+    room: dataItem.room,
+    tasks: dataItem.tasks.map((task) => ({
+      description: task.description,
+      dueDate: task.dueDate,
+      moved: task.moved,
+      name: task.name,
+      priority: task.priority,
+      status: task.status,
+      _id: task._id,
+    })),
+  }));
   return dataFormat;
-}
+};
 const mutations = {
   setCurrentTask(state, data) {
     state.currentTask = data;
   },
   setProjectsOfLeader(state, data) {
-    let listData = formatDataProject(data)
+    let listData = formatDataProject(data);
     state.projectsOfLeader = sortLeaderProjects(listData);
   },
   setProjectOfMember(state, data) {
-    let listData = formatDataProject(data)
+    let listData = formatDataProject(data);
     state.projectsOfMember = sortMemberProjects(listData);
   },
 
@@ -169,7 +168,7 @@ const actions = {
           root: true,
         });
       });
-  }, 
+  },
   getTaskOfProject({ commit }, idProject) {
     http.get(`project/${idProject}`).then((result) => {
       commit('setTasksArray', result.data.data.tasks);

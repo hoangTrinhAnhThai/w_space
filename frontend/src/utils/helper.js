@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import store from '../store/modules/auth'
+import store from '../store/modules/auth';
 export function sort(list) {
   const result = list.sort(function (a, b) {
     if (a.moved.before === null) {
@@ -34,10 +34,14 @@ export function decodeToken() {
 }
 
 export function sortLeaderProjects(projects) {
-  let listProject = projects.filter(project => project.createdBy._id === store.state.userInfo._id)
+  let listProject = projects.filter(
+    (project) => project.createdBy._id === store.state.userInfo._id,
+  );
   return listProject;
 }
 export function sortMemberProjects(projects) {
-  let listProject = projects.filter(project => project.createdBy._id !== store.state.userInfo._id)
+  let listProject = projects.filter(
+    (project) => project.createdBy._id !== store.state.userInfo._id,
+  );
   return listProject;
 }

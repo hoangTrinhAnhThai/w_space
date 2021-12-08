@@ -26,7 +26,8 @@ class CommentController {
   ];
   getCommentByIdTask = [
     (req, res) => {
-      Comment.find({ room: req.params.id }).populate('createdBy')
+      Comment.find({ room: req.params.id })
+        .populate('createdBy')
         .sort({ createdAt: 1 })
         .then((comment) => {
           return apiResponse.successResponseWithData(
@@ -45,16 +46,17 @@ class CommentController {
     (req, res) => {
       User.findById(host(req, res)).then((user) => {
         let comment = new Comment();
-        comment.content = req.body.content
+        comment.content = req.body.content;
         comment.createdBy = user;
-        comment.task = req.params.id
+        comment.task = req.params.id;
         Comment.create(comment)
           .then((doc_comment) => {
             return apiResponse.successResponseWithData(
               res,
               'Create comment successfully',
               doc_comment,
-          )})
+            );
+          })
           .catch((error) => {
             return apiResponse.ErrorResponse(res, error);
           });
