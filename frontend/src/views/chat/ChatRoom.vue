@@ -167,6 +167,7 @@ h1 {
     overflow-y: scroll;
     padding-bottom: 20px;
     height: calc(100vh - 220px);
+    padding: 30px;
 
     .content {
       overflow: auto;
@@ -192,7 +193,7 @@ h1 {
             }
           }
           p {
-            background-color: $color2;
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
             padding: 10px 25px;
             border-top-left-radius: 50px;
             border-bottom-left-radius: 50px;
@@ -224,8 +225,10 @@ h1 {
             }
           }
           p {
-            background-color: $color;
-            color: rgb(255, 255, 255);
+            // background-color: $color;
+            // color: rgb(255, 255, 255);
+            background-color: $color2;
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
             padding: 10px 25px;
             border-top-right-radius: 50px;
             border-bottom-right-radius: 50px;

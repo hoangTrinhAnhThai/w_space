@@ -166,14 +166,21 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      projectArray: 'TASKS/projectArray',
+      projectsOfLeader: 'TASKS/projectsOfLeader',
+      projectsOfMember: 'TASKS/projectsOfMember',
       timeStart: 'LOGTIME/timeStart',
       logtimeArray: 'LOGTIME/logtimeArray',
       logtimeIsPlaying: 'LOGTIME/logtimeIsPlaying',
     }),
     tasks() {
       let list = [];
-      for (let project of this.projectArray) {
+      for (let project of this.projectsOfLeader) {
+        list.push({ header: `${project.name}` });
+        for (let task of project.tasks) {
+          list.push({ taskName: task.name, taskId: task._id });
+        }
+      }
+      for (let project of this.projectsOfMember) {
         list.push({ header: `${project.name}` });
         for (let task of project.tasks) {
           list.push({ taskName: task.name, taskId: task._id });

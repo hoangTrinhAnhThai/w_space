@@ -23,10 +23,10 @@
                 ></i>
 
                 <router-link
-                  v-if="projects.length > 0"
+                  v-if="projectsOfLeader.length > 0"
                   id="roadmap-header"
                   tag="li"
-                  :to="`/roadmap/${projects[0]._id}`"
+                  :to="`/roadmap/${projectsOfLeader[0]._id}`"
                 >
                   Project</router-link
                 >
@@ -44,9 +44,9 @@
                 @click="showAddProjectModal({}, 'addProject')"
               ></i>
               <ul v-show="isShowProject" class="list-child">
-                <li v-for="project in projects" :key="project._id">
+                <li v-for="project in projectsOfLeader" :key="project._id">
                   <router-link tag="li" :to="`/roadmap/${project._id}`">
-                    <i class="bx bxl-trello"></i>
+                    <i class='bx bxs-flag-alt'></i>
                     {{ project.name }}</router-link
                   >
                   <div class="function">
@@ -64,6 +64,12 @@
                     ></i>
                   </div>
                 </li>
+                <li v-for="project in projectsOfMember" :key="project._id">
+                  <router-link tag="li" :to="`/roadmap/${project._id}`">
+                    <i class="bx bxl-trello"></i>
+                    {{ project.name }}</router-link
+                  >
+                </li>
               </ul>
             </li>
             <li>
@@ -80,7 +86,7 @@
                 ></i>
                 <router-link
                   id="chat-header"
-                  v-if="rooms.length > 0"
+                  v-if="rooms && rooms.length > 0"
                   tag="li"
                   :to="`/chatroom/${rooms[0]._id}`"
                   >ChatRoom</router-link
@@ -134,7 +140,7 @@ export default {
     isShowProject: false,
     isShowChat: false,
     drawer: true,
-    mini: true,
+    mini: false,
     messages: 6,
   }),
   components: {
@@ -143,7 +149,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projects: 'TASKS/projectArray',
+      projectsOfLeader: 'TASKS/projectsOfLeader',
+      projectsOfMember: 'TASKS/projectsOfMember',
       rooms: 'CHAT/rooms',
     }),
   },
@@ -286,7 +293,8 @@ export default {
   }
 }
 .router-link-exact-active {
-  font-weight: 800;
+  font-weight: 700;
+  font-style: italic;
   // color: rgb(39, 102, 120);
 }
 </style>

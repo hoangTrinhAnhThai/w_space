@@ -55,6 +55,7 @@ const actions = {
     socket.on(
       'new-message',
       function (data) {
+        console.log('------------------------------------------------',data.message);
         if (data.message.room === params) {
           dispatch('getAllChatByIdRoom', params);
         }

@@ -3,16 +3,35 @@ const Schema = mongoose.Schema;
 
 const Notification = new Schema(
   {
-    content: {
-        type:String
+    room: {
+      type: Schema.Types.ObjectId,
+      ref: 'Room',
     },
-    count: {
-        total: {type: Number},
-        unread: {type: Number}
-    },    
-    type: {
-        type: String
+    project: {
+      type: Schema.Types.ObjectId,
+      ref: 'Project',
     },
+    listContent: [
+      {
+        member: {
+          type: Schema.Types.ObjectId,
+          ref: 'User',
+        },
+        count: {
+          type: Number
+        },
+        unreadCount: {
+          type: Number
+        },
+        content: {
+          type: String
+        },
+        createdBy: {
+          type: Schema.Types.ObjectId,
+          ref: 'User',
+        }
+      }
+    ],
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',

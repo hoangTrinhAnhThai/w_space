@@ -159,7 +159,7 @@
             </v-row>
             <v-row>
               <v-col cols="1">
-                <v-btn class="save-btn" @click="changePassword">
+                <v-btn class="" @click="changePassword">
                   SAVE CHANGES
                 </v-btn>
               </v-col>
