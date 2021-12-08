@@ -8,35 +8,46 @@ require('dotenv').config();
 class NotificationController {
   getAllNotifications = [
     (req, res) => {
-      Notification.find()
-        .sort({ createdAt: 1 })
-        .then((notifications) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'Get all notifications successfully',
-            notifications,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, error);
-        });
+      User.findById(host(req, res)).then((user) => {
+        Notification.find({'listContent.member': user})
+          .sort({ createdAt: 1 })
+          .then((notifications) => {
+            return apiResponse.successResponseWithData(
+              res,
+              'Get all notifications successfully',
+              notifications,
+            );
+          })
+          .catch((error) => {
+            return apiResponse.ErrorResponse(res, error);
+          });
+      });
     },
   ];
-  getSingleNotificationByRoomId = [
+  getNotificationByRoomId = [
     (req, res) => {
-      Notification.find({ room: req.params.id }).populate("createdBy")
-        .sort({ createdAt: 1 })
-        .then((notification) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'Get notification successfully',
-            notification,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, error);
-        });
+      User.findById(host(req, res)).then((user) => {
+        Notification.findOne({ room: req.params.id }).populate("createdBy")
+          .sort({ createdAt: 1 })
+          .then((notification) => {
+            let listNotification = {}
+            for (let content of notification.listContent) {
+              if (JSON.stringify(user._id) == JSON.stringify(content.member._id)) {
+                listNotification = content
+              }
+            }
+            return apiResponse.successResponseWithData(
+              res,
+              'Get notification successfully',
+              listNotification,
+            );
+          })
+          .catch((error) => {
+            return apiResponse.ErrorResponse(res, error);
+          });
+      });
     },
+
   ];
 
   createNotification = [

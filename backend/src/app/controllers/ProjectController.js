@@ -28,7 +28,7 @@ class ProjectController {
               (room) => {
                 newProject.room = room;
                 Project.create(newProject).then((project) => {
-                  Notification.create({room: room._id, project: project._id, listContent: {member: user, count: 0, unreadCount: 0, content: '', createdBy: null}}).then((result) => {
+                  Notification.create({room: room._id, project: project._id, listContent: {member: user, count: 0, unreadCount: 0, contents: {message: '', createdBy: null}}}).then((result) => {
                     return apiResponse.successResponseWithData(
                       res,
                       'Add new project successfully',
@@ -111,7 +111,7 @@ class ProjectController {
                         members: project.members,
                       }).then(() => {
                         Notification.findOneAndUpdate({room: project.room._id}, {
-                          $push: {listContent: {member: user._id, count: 0, unreadCount: 0, content: '', createdBy: null}}
+                          $push: {listContent: {member: user._id, count: 0, unreadCount: 0, contents: {message: '', createdBy: null}}}
                         }).then((result) => {
                           return apiResponse.successResponseWithData(
                             res,

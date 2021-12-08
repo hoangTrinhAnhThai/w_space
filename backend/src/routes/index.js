@@ -4,6 +4,7 @@ const logtimeRouter = require('./modules/logtime');
 const user = require('./modules/user');
 const chat = require('./modules/chat');
 const room = require('./modules/room');
+const notification = require('./modules/notification');
 const status = require('./modules/status');
 const auth = require('../middleware/jwt');
 
@@ -15,5 +16,6 @@ function route(app) {
   app.use('/chat', auth, chat);
   app.use('/room', auth, room);
   app.use('/status', status);
+  app.use('/notification',notification )
 }
 module.exports = route;

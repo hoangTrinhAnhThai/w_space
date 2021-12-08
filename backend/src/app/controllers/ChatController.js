@@ -1,4 +1,5 @@
 const Chat = require('../models/Chat');
+const Notification = require('../models/Notification');
 const User = require('../models/User');
 const apiResponse = require('../../utils/apiResponse');
 const host = require('../../utils/decodeJWT');
@@ -45,12 +46,25 @@ class ChatController {
         let chat = new Chat(req.body);
         chat.createdBy = user;
         Chat.create(chat)
-          .then((result) => {
-            return apiResponse.successResponseWithData(
-              res,
-              'Create chat successfully',
-              result,
-            );
+          .then((chat) => {
+            Notification.findOne({ room: req.body.room }).then((notification) => {
+              let listContent = notification.listContent
+              for (let content of listContent) {
+                if (JSON.stringify(user._id) != JSON.stringify(content.member._id)) {
+                  content.count += 1
+                  content.unreadCount += 1
+                  content.contents.push({message: chat.message, createdBy: chat.createdBy})
+                }
+              }
+              Notification.findByIdAndUpdate(notification._id, { listContent: listContent }).then((result) => {
+                return apiResponse.successResponseWithData(
+                  res,
+                  'Create chat successfully',
+                  chat,
+                );
+              })
+            })
+
           })
           .catch((error) => {
             return apiResponse.ErrorResponse(res, error);
