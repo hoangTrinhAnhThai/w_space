@@ -73,17 +73,30 @@ class NotificationController {
   ];
   updateNotification = [
     (req, res) => {
-      Notification.findByIdAndUpdate(req.params.id, req.body.notification)
-        .then((result) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'Update notification successfully',
-            result,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, error);
-        });
+      User.findById(host(req, res)).then((user) => {
+        Notification.findOne({ room: req.params.id }).then(
+          (notification) => {
+            let listContent = notification.listContent;
+            for (let content of listContent) {
+              if (
+                JSON.stringify(user._id) ==
+                JSON.stringify(content.member._id)
+              ) {
+                content.unreadCount = 0;
+              }
+            }
+            Notification.findByIdAndUpdate(notification._id, {
+              listContent: listContent,
+            }).then((result) => {
+              return apiResponse.successResponseWithData(
+                res,
+                'Update chat successfully',
+                result,
+              );
+            });
+          },
+        );
+      });
     },
   ];
 

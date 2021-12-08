@@ -26,6 +26,7 @@ const mutations = {
   setNotifications(state, data) {
     state.notifications = formatDataProject(data);
   },
+  
 };
 
 const actions = {
@@ -41,6 +42,19 @@ const actions = {
         });
       });
   },
+  removeUnreadNotification({commit,dispatch}, params) {
+    http
+    .put(`notification/${params}`, null)
+    .then((result) => {
+      console.log(result);
+      dispatch('getAllNotification');
+    })
+    .catch((err) => {
+      commit('ERROR/setErrorMessage', err.response.data.message, {
+        root: true,
+      });
+    });
+  }
 };
 
 export default {
