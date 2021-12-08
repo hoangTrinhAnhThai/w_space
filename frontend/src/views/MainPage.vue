@@ -24,12 +24,14 @@ export default {
       getStatus: 'TASKS/getStatus',
       getAllRooms: 'CHAT/getAllRooms',
       getUserByToken: 'AUTH/getUserByToken',
+      getAllNotification: 'NOTIFICATION/getAllNotification'
     }),
   },
   created() {
     this.getUserByToken();
     this.getProject();
     this.getAllRooms();
+    this.getAllNotification()
   },
 };
 </script>

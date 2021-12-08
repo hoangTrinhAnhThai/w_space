@@ -20,7 +20,6 @@ const state = {
 
 const mutations = {
   setUserInfo(state, userInfo) {
-    console.log(userInfo);
     state.userInfo = formatDataUser(userInfo);
   },
 };
