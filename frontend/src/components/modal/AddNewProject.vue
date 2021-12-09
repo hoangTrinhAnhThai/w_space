@@ -12,12 +12,13 @@
           class="textProject"
           v-model="project.name"
           v-on:keyup="addProjectByKey"
+          id="content"
         ></v-text-field>
       </v-col>
     </v-row>
     <v-row style="position: relative; top: -20px">
       <v-col>
-        <span v-show="showErrors.emptyName" class="error"
+        <span v-show="showErrors.emptyName" class="errors"
           >Name is required</span
         >
       </v-col>
@@ -52,7 +53,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      validateName: 'VALIDATION/validateText',
+      validateText: 'VALIDATION/validateText',
       projectEdit: 'TASKS/projectEdit',
     }),
   },
@@ -77,6 +78,8 @@ export default {
     },
     addProject() {
       if (!this.validateBeforeSubmit()) {
+        document.getElementById("content").focus();
+
         return;
       } else {
         if (this.typeOfModal === 'editProject') {
@@ -94,6 +97,8 @@ export default {
     addProjectByKey(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
+        document.getElementById("content").focus();
+
           return;
         } else {
           if (this.typeOfModal === 'editProject') {
@@ -111,7 +116,7 @@ export default {
     },
     validateBeforeSubmit() {
       let passedValidate = true;
-      const errors = this.validateName(this.project.name);
+      const errors = this.validateText(this.project.name);
       if (errors) {
         Vue.set(
           this.showErrors,

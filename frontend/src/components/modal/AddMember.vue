@@ -12,6 +12,7 @@
           append-icon="mdi-account-plus"
           label="Email"
           v-on:keyup="searchMemberByKeyUp"
+          id="content"
         >
         </v-text-field>
       </v-col>
@@ -31,13 +32,13 @@
         >
           {{ memberInfor.email }}
         </v-btn>
-        <span class="error" v-if="errorMessage">
+        <span class="errors" v-if="errorMessage">
           {{ errorMessage }} <br />
         </span>
-        <span v-show="showErrors.emptyEmail" class="error"
+        <span v-show="showErrors.emptyEmail" class="errors"
           >Email is required</span
         >
-        <span v-show="showErrors.invalidEmail" class="error"
+        <span v-show="showErrors.invalidEmail" class="errors"
           >Email is invalid</span
         >
       </v-col>
@@ -105,6 +106,8 @@ export default {
     },
     searchMember() {
       if (!this.validateBeforeSubmit()) {
+        document.getElementById("content").focus();
+
         return;
       } else {
         this.searchMemberAction({ email: this.email });
@@ -113,6 +116,8 @@ export default {
     searchMemberByKeyUp(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
+        document.getElementById("content").focus();
+
           return;
         } else {
           this.searchMemberAction({ email: this.email });
