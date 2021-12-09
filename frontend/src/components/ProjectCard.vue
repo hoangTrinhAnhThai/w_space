@@ -1,49 +1,56 @@
 <template>
-  <div class="card">
-    <div class="sign" tabindex="0">
-      <i class="bx bx-dots-vertical-rounded"></i>
-      <div class="function">
-        <ul>
-          <li @click="showTaskDetailModal">
-            <span><i class="bx bx-edit-alt"></i> Edit</span>
-          </li>
-          <li @click="deleteTask">
-            <span><i class="bx bx-trash"></i> Delete</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="content" @click="showTaskDetailModal">
-      <slot />
-      <div class="description" v-if="card.description">
-        {{ card.description }}
-      </div>
-      <div class="dueDate">
-        <span v-if="card.dueDate">
-          <span v-if="!deadline" style="color: red; font-weight: bolder">
-            <i class="bx bx-calendar"></i> {{ date }}, {{ month }} {{ year }}
-          </span>
-          <span v-else
-            ><i class="bx bx-calendar"></i> {{ date }}, {{ month }}
-            {{ year }}</span
-          >
+  <v-card elevation="2" @click="showTaskDetailModal">
+    <v-card-title style="color: rgb(39, 102, 120); font-size: 15px">{{
+      card.name
+    }}</v-card-title>
+    <v-card-subtitle font-size="12">{{ card.description }}</v-card-subtitle>
+
+    <v-card-text>
+      <span v-if="card.dueDate">
+        <span v-if="!deadline" style="color: red; font-size: 12px">
+          <i class="bx bx-calendar"></i> {{ date }}, {{ month }} {{ year }}
         </span>
-      </div>
+        <span v-else style="color: green; font-size: 12px"
+          ><i class="bx bx-calendar"></i> {{ date }}, {{ month }}
+          {{ year }}</span
+        >
+      </span>
+      <v-avatar v-if="card.assigned" color="primary" size="24">
+        <span style="font-size: 10px">
+          {{ assignForTask.firstName.charAt(0)
+          }}{{ assignForTask.lastName.charAt(0) }}
+        </span>
+      </v-avatar>
+    </v-card-text>
+    <div class="menu">
+      <v-menu transition="slide-y-transition" bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <i v-bind="attrs" v-on="on" class="bx bx-dots-vertical-rounded"></i>
+        </template>
+        <v-list>
+          <v-list-item @click="showTaskDetailModal">
+            <v-list-item-title>
+              <i class="bx bx-edit-alt"></i> Edit</v-list-item-title
+            >
+          </v-list-item>
+          <v-list-item @click="deleteTask">
+            <v-list-item-title>
+              <i class="bx bx-trash"></i> Delete</v-list-item-title
+            >
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
-    <task-detail
-      :task="card"
-      :dueDate="card.dueDate.split('T')[0]"
-      ref="taskDetailModal"
-    ></task-detail>
-  </div>
+    <task-detail :task="card" ref="taskDetailModal"></task-detail>
+  </v-card>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import TaskDetail from '../components/modal/TaskDetail.vue';
-import helper from '../utils/data';
+import { mapActions, mapGetters } from "vuex";
+import TaskDetail from "../components/modal/TaskDetail.vue";
+import helper from "../utils/data";
 export default {
-  name: 'Cards',
+  name: "Cards",
   props: {
     card: {
       type: Object,
@@ -68,12 +75,35 @@ export default {
     month() {
       return helper.month[new Date(this.card.dueDate).getMonth()];
     },
+    ...mapGetters({
+      currentProject: "TASKS/currentProject",
+    }),
+    assignForTask() {
+      let assigned = {};
+      let list = [];
+      if (this.currentProject.members.length > 0) {
+        for (let member of this.currentProject.members) {
+          list.push(member);
+        }
+      }
+      list.push(this.currentProject.createdBy);
+      for (let member of list) {
+        if (member._id == this.card.assigned) {
+          assigned = member;
+          break;
+        }
+      }
+
+      return assigned;
+    },
   },
 
   methods: {
     ...mapActions({
-      deleteTaskAction: 'TASKS/deleteTask',
-      getLogtimes: 'TASKS/getLogtimes',
+      deleteTaskAction: "TASKS/deleteTask",
+      getLogtimes: "TASKS/getLogtimes",
+      addCurrentTask: "TASKS/addCurrentTask",
+      getCommentByIdTask: "TASKS/getCommentByIdTask",
     }),
     deleteTask() {
       this.deleteTaskAction({
@@ -82,6 +112,8 @@ export default {
       });
     },
     showTaskDetailModal() {
+      this.getCommentByIdTask(this.card._id);
+      this.addCurrentTask(this.card);
       this.getLogtimes(this.card._id);
       this.$refs.taskDetailModal.show();
     },
@@ -91,65 +123,22 @@ export default {
   },
 };
 </script>
+<style scoped>
+.v-card-title,
+.v-card-subtitle {
+  color: rgb(39, 102, 120) !important;
+}
+</style>
 
 <style lang="scss" scoped>
-@import '../assets/style.scss';
 .card {
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  background-color: rgb(255, 255, 255);
-  margin: 5px 15px;
-  padding: 8px;
-  border: 1px solid $border-color;
-  border-radius: 3px;
-  line-height: 25px;
-  cursor: pointer;
+  margin: 10px 0;
+  border: none;
   position: relative;
-  .sign {
+  .menu {
     position: absolute;
     right: 10px;
-    color: grey;
-    .function {
-      position: absolute;
-      top: 15px;
-      width: 150px;
-      right: -10px;
-      z-index: 10000 !important;
-      background-color: white;
-      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-      display: none;
-      ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        li:hover {
-          background-color: rgb(208, 231, 208);
-        }
-        li {
-          span {
-            padding: 15px 10px;
-          }
-        }
-      }
-    }
-  }
-  .sign:focus {
-    .function {
-      display: block;
-    }
-  }
-  .content {
-    .description {
-      color: grey;
-      font-size: 80%;
-    }
-    .dueDate {
-      font-size: 80%;
-      span {
-        background-color: rgb(243, 240, 215);
-        padding: 3px 5px;
-        border-radius: 3px;
-      }
-    }
+    top: 15px;
   }
 }
 </style>

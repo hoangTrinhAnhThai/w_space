@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Vue from 'vue';
+import interceptors from '../helper/interceptors';
 
 const handleSuccessResponse = (response, resolve, message) => {
   resolve(response);
@@ -25,26 +26,10 @@ const headers = {
 };
 
 const services = {
-  // get(endPoint, params) {
-  //   return new Promise((resolve, reject) => {
-  //     axios
-  //       .get(`${API_URL}${endPoint}`, params, {
-  //         headers: localStorage.getItem('token')
-  //           ? { Authorization: `Bearer ${localStorage.getItem('token')}` }
-  //           : null,
-  //       })
-  //       .then((response) => {
-  //         handleSuccessResponse(response, resolve);
-  //       })
-  //       .catch((error) => {
-  //         handleErrorResponse(error, reject);
-  //       });
-  //   });
-  // },
-  get(endPoint, params, message) {
+  get(endPoint, message) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${API_URL}${endPoint}`, params, {
+        .get(`${API_URL}${endPoint}`, {
           headers: localStorage.getItem('token')
             ? { Authorization: `Bearer ${localStorage.getItem('token')}` }
             : null,
@@ -103,10 +88,10 @@ const services = {
         });
     });
   },
-  delete(endPoint, params, message) {
+  delete(endPoint, message) {
     return new Promise((resolve, reject) => {
       axios
-        .delete(`${API_URL}${endPoint}`, params, {
+        .delete(`${API_URL}${endPoint}`, {
           headers: localStorage.getItem('token')
             ? { Authorization: `Bearer ${localStorage.getItem('token')}` }
             : null,
@@ -120,5 +105,7 @@ const services = {
     });
   },
 };
+
+interceptors(services);
 
 export default services;

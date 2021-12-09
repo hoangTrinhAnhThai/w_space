@@ -1,41 +1,67 @@
 <template>
-  <b-modal ref="addMemberModal" hide-footer title="Add members">
-    <div class="container">
-      <div class="content">
-        <i class="bx bx-user-plus"></i>
-        <input
+  <b-modal
+    ref="addMemberModal"
+    hide-header-close
+    hide-footer
+    title="Add members"
+  >
+    <v-row>
+      <v-col cols="10">
+        <v-text-field
           v-model="email"
-          type="text"
-          placeholder="Enter email address..."
-        />
-      </div>
-      <button @click="searchMember" class="invite">
-        <i class="bx bx-search-alt"></i>
-      </button>
-      <div class="member-search">
-        <div
-          class="user-found"
-          v-if="userInfo && !errorMessage"
-          @click="addMember(userInfo._id)"
+          append-icon="mdi-account-plus"
+          label="Email"
+          v-on:keyup="searchMemberByKeyUp"
+          id="content"
         >
-          <span>{{ userInfo.email }}</span>
-        </div>
-        <div class="errors" v-if="errorMessage">
+        </v-text-field>
+      </v-col>
+      <v-col cols="1" style="position: relative">
+        <v-btn style="position: absolute; bottom: 15px" @click="searchMember">
+          <i class="bx bx-search-alt"></i>
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row class="row-member-search">
+      <v-col class="col-member-search" cols="10">
+        <v-btn
+          style="width: 100%; text-align: left"
+          text
+          v-if="memberInfor && !errorMessage"
+          @click="addMember(memberInfor._id)"
+        >
+          {{ memberInfor.email }}
+        </v-btn>
+        <span class="errors" v-if="errorMessage">
           {{ errorMessage }} <br />
-          {{ this.error }}
-        </div>
-        <div class="list-user">
-          <ul v-if="project">
-            <li v-for="(member, index) in projectEdit.members" :key="index">
-              <span class="user-joined"
-                >{{ member.email }}
-                <i @click="removeMember(member._id)" class="bx bx-x"></i
-              ></span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+        </span>
+        <span v-show="showErrors.emptyEmail" class="errors"
+          >Email is required</span
+        >
+        <span v-show="showErrors.invalidEmail" class="errors"
+          >Email is invalid</span
+        >
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-chip-group v-if="project" mandatory active-class="primary--text">
+        <v-chip
+          v-for="member in projectEdit.members"
+          :key="member._id"
+          close
+          @click:close="removeMember(member._id)"
+        >
+          {{ member.email }}
+        </v-chip>
+      </v-chip-group>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-btn @click="hide" style="margin-left: 15px; float: right"
+          >Close</v-btn
+        >
+      </v-col>
+    </v-row>
   </b-modal>
 </template>
 
@@ -55,7 +81,7 @@ export default {
   computed: {
     ...mapGetters({
       validateEmail: 'VALIDATION/validateEmail',
-      userInfo: 'USER/userInfo',
+      memberInfor: 'USER/memberInfor',
       errorMessage: 'ERROR/errorMessage',
       projectEdit: 'TASKS/projectEdit',
     }),
@@ -64,7 +90,7 @@ export default {
     ...mapActions({
       searchMemberAction: 'USER/searchMember',
       clearErrorMessage: 'ERROR/clearErrorMessage',
-      addMemberAction: 'TASKS/editProject',
+      addMemberAction: 'TASKS/addMember',
       removeMemberAction: 'TASKS/removeMember',
       removeMemberInforAction: 'USER/removeMemberInfor',
     }),
@@ -73,14 +99,29 @@ export default {
       this.$refs.addMemberModal.show();
     },
     hide() {
+      this.$emit('closeModal');
+      this.clearErrorMessage();
+      this.error = '';
       this.$refs.addMemberModal.hide();
     },
     searchMember() {
       if (!this.validateBeforeSubmit()) {
-        console.log(this.showErrors);
+        document.getElementById('content').focus();
+
         return;
       } else {
         this.searchMemberAction({ email: this.email });
+      }
+    },
+    searchMemberByKeyUp(e) {
+      if (e.keyCode === 13) {
+        if (!this.validateBeforeSubmit()) {
+          document.getElementById('content').focus();
+
+          return;
+        } else {
+          this.searchMemberAction({ email: this.email });
+        }
       }
     },
     addMember(userId) {
@@ -91,7 +132,6 @@ export default {
         idProject: this.project._id,
       });
       this.email = '';
-      console.log(project.user);
       // this.hide();
     },
     removeMember(userId) {
@@ -132,76 +172,22 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  .content {
-    border: 1px solid grey;
-    padding: none;
-    width: 85%;
-    padding: 5px;
-    input {
-      background-color: #fff;
-      border: none;
-      outline: none;
-      width: 85%;
-      font-size: 13px;
-      margin-left: 15px;
-      position: relative;
-      top: -2px;
-    }
-  }
-  .invite {
-    border: 1px solid grey;
-    border-radius: 5px;
-    padding: 5px 10px;
-    background-color: rgb(177, 221, 247);
-    margin-left: 10px;
-  }
-  .member-search {
-    width: 85%;
-
-    .user-found {
-      width: 100%;
-      border: 1px solid rgb(128, 128, 128);
-      border-top: none;
-      padding: 3px 5px;
-    }
-    .user-found:hover {
-      background-color: rgb(177, 221, 247);
-    }
-    .errors {
-      color: rgb(209, 104, 104);
-      font-style: italic;
-    }
-    .list-user {
-      margin-top: 15px;
-      ul {
-        list-style: none;
-        padding: 0;
-        display: flex;
-        flex-wrap: wrap;
-        li {
-          margin-right: 10px;
-          margin-top: 10px;
-          .user-joined {
-            background-color: rgb(240, 238, 238);
-            border-radius: 50px;
-            padding: 3px 5px;
-          }
-          i {
-            position: relative;
-            top: 3px;
-            font-size: 18px;
-          }
-          i:hover {
-            color: grey;
-          }
-        }
-      }
-    }
-  }
+<style scoped>
+.row-member-search {
+  position: relative;
+  top: -7px;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.col-member-search {
+  transition-delay: 01s;
+  cursor: pointer;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.v-btn {
+  margin: 0 !important;
+  text-transform: lowercase !important;
+  text-align: left !important;
 }
 </style>

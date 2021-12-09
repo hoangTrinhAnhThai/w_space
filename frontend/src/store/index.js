@@ -6,6 +6,8 @@ import ErrorMessage from './modules/errorMessage';
 import Task from './modules/project';
 import Logtime from './modules/logtime';
 import User from './modules/user';
+import Chat from './modules/chat';
+import Notification from './modules/notification';
 
 Vue.use(Vuex);
 
@@ -17,5 +19,7 @@ export default new Vuex.Store({
     TASKS: Task,
     LOGTIME: Logtime,
     USER: User,
+    CHAT: Chat,
+    NOTIFICATION: Notification,
   },
 });

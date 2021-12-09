@@ -1,45 +1,62 @@
 <template>
-  <div class="road-map">
-    <h1>Roadmap</h1>
-    <div class="container-roadmap">
-      <div class="open status" v-for="(data, index) in dataTask" :key="index">
-        <div class="label">
-          <span :style="{ 'background-color': colors[index] }">{{
-            data.status.name
-          }}</span>
-
-          <span class="number">{{ data.tasks.length }}</span>
-        </div>
-        <div class="addTask" v-if="index == 0">
-          <p @click="isShowAddTask = false" v-show="isShowAddTask">
-            + Add issue ....
-          </p>
-          <div class="addform" v-show="!isShowAddTask">
-            <add-task-form
-              v-on:closeAddtaskForm="closeAddtaskForm"
-            ></add-task-form>
-          </div>
-        </div>
-        <Container
-          class="container-card"
-          group-name="trello"
-          @drag-start="handleDragStart(index, $event)"
-          @drop="handleDrop(index, $event)"
-          :get-child-payload="getChildPayload"
-          :drop-placeholder="{ className: 'placeholder' }"
-        >
-          <Draggable v-for="(card, index) in data.tasks" :key="index">
-            <Card
-              v-bind:card="card"
-              v-bind:project="currentProject"
-              class="card"
-              ><span>{{ card.name }}</span></Card
+  <v-main>
+    <v-row class="roadmap">
+      <v-col class="status" v-for="(data, index) in dataTask" :key="index">
+        <v-row>
+          <v-col style="text-align: center">
+            <span
+              class="name-status"
+              :style="{ 'background-color': colors[index] }"
             >
-          </Draggable>
-        </Container>
-      </div>
-    </div>
-  </div>
+              {{ data.status.name }}
+            </span>
+            <span>{{ data.tasks.length }}</span>
+          </v-col>
+        </v-row>
+        <v-row>
+          <div class="addTask" style="margin: 5px" v-if="index == 0">
+            <v-btn text @click="isShowAddTask = false" v-show="isShowAddTask">
+              + Add issue ....
+            </v-btn>
+
+            <div class="addform" v-show="!isShowAddTask">
+              <add-task-form
+                v-on:closeAddtaskForm="closeAddtaskForm"
+              ></add-task-form>
+            </div>
+          </div>
+        </v-row>
+        <v-row>
+          <Container
+            class="container-card"
+            group-name="trello"
+            drag-class="ticket-ghost"
+            drop-class="ticket-ghost-drop"
+            @drag-start="handleDragStart(index, $event)"
+            @drop="handleDrop(index, $event)"
+            :get-child-payload="getChildPayload"
+            :drop-placeholder="{
+              className: 'drop-preview',
+              animationDuration: '150',
+              showOnTop: true,
+            }"
+          >
+            <Draggable
+              style="margin: 5px"
+              v-for="(card, index) in data.tasks"
+              :key="index"
+            >
+              <Card
+                v-bind:card="card"
+                v-bind:project="currentProject"
+                class="card"
+              ></Card>
+            </Draggable>
+          </Container>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-main>
 </template>
 
 <script>
@@ -67,7 +84,6 @@ export default {
       currentProject: 'TASKS/currentProject',
     }),
   },
-  created() {},
   methods: {
     ...mapActions({
       removeCard: 'TASKS/removeCard',
@@ -140,120 +156,48 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.road-map {
-  float: left;
-  .container-roadmap {
-    width: 90%;
-    display: flex;
-    justify-content: space-between;
-    margin: 30px auto;
-    .status {
-      min-width: 18em;
-      width: 18em;
-      margin: 0 5px;
-      border-radius: 5px;
-      height: 100%;
-      padding-bottom: 25px;
-      .label {
-        padding: 15px 15px 0;
-        font-weight: bolder;
-        margin-bottom: 20px;
-        span {
-          padding: 3px 7px;
-          border-radius: 3px;
-          margin-right: 10px;
-        }
-        .number {
-          border: 1px solid rgb(240, 240, 218);
-          padding: 3px 8px;
-          border-radius: 30px;
-          width: 30px;
-          background-color: #fff;
-        }
-      }
-      p {
-        padding: 0 15px;
-      }
-      .content {
-        background-color: rgb(255, 255, 255);
-
-        margin: 15px;
-        padding: 15px;
-        border: 1px solid rgb(214, 212, 212);
-        border-radius: 5px;
-        line-height: 25px;
-        .project-name {
-          color: rgb(129, 194, 182);
-          font-weight: bold;
-          display: flex;
-          justify-content: space-between;
-          .more {
-            .icon {
-              padding: 1px 10px 0;
-              border-radius: 5px;
-              border: 1px solid rgb(240, 238, 238);
-            }
-            i:focus .list {
-              display: block;
-            }
-            .list {
-              display: none;
-              position: absolute;
-              border-radius: 5px;
-              // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-              border: 1px solid rgb(241, 238, 238);
-              ul {
-                border-radius: 5px;
-                list-style: none;
-                margin: 10px 0;
-                padding: 0;
-                background-color: #fff;
-                color: rgb(56, 56, 56);
-                li {
-                  padding: 2px 20px;
-                }
-                li:hover {
-                  background-color: rgb(241, 240, 239);
-                }
-              }
-            }
-          }
-        }
-        .last-content {
-          display: flex;
-          .assign {
-            margin-right: 15px;
-            background-color: rgb(247, 231, 231);
-            padding: 1px 7px;
-            border-radius: 5px;
-          }
-        }
-      }
-      .container-card {
-        // border: 1px solid grey;
-        .card {
-          span {
-            font-weight: bolder;
-          }
-        }
-      }
-    }
-    .addform {
-      padding: 0px;
-      border-radius: 5px;
-      line-height: 25px;
-    }
-  }
+<style scoped>
+.v-main {
+  width: 100%;
+  min-width: 1000px;
+  height: 92vh;
+  white-space: nowrap;
+  overflow: scroll !important;
 }
 
-.placeholder {
-  background-color: rgb(223, 191, 191);
+.roadmap {
+  width: 90%;
+  margin: 20px auto;
+}
+
+.name-status {
+  margin-right: 5px;
+  padding: 2px 3px;
   border-radius: 5px;
-  transform: scaleY((0.85));
-  transform-origin: 0% 0%;
 }
 .smooth-dnd-draggable-wrapper {
   overflow: inherit !important;
+}
+
+.addTask .v-btn {
+  width: 96%;
+  padding: 5px;
+  border: none;
+  font-size: 10px;
+}
+</style>
+
+<style lang="scss" scoped>
+@import '../../assets/style.scss';
+.status {
+  margin: 10px;
+  background-color: $color2;
+  height: 100%;
+  padding: 20px 10px 50px;
+  border-radius: 5px;
+}
+
+.status:hover {
+  background-color: rgb(246, 245, 245);
 }
 </style>

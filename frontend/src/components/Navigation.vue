@@ -19,9 +19,9 @@ export default {};
 
 <style lang="scss" scoped>
 .nav {
-  border-bottom: 1px solid rgb(238, 236, 236);
+  border-bottom: 1px solid rgb(199, 199, 199);
   .content {
-    width: 95%;
+    width: 98%;
     margin: 15px auto 0;
     display: flex;
     justify-content: space-between;

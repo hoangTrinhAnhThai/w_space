@@ -1,6 +1,9 @@
 const Room = require('../models/Room');
-const { validationResult } = require('express-validator');
+const User = require('../models/User');
+
 const apiResponse = require('../../utils/apiResponse');
+const host = require('../../utils/decodeJWT');
+
 require('dotenv').config();
 
 class RoomController {
@@ -10,7 +13,7 @@ class RoomController {
         .then((room) => {
           return apiResponse.successResponseWithData(
             res,
-            'show task success',
+            'show room success',
             room,
           );
         })
@@ -21,25 +24,24 @@ class RoomController {
   ];
   showAllRoom = [
     (req, res) => {
-      Room.find()
-        .sort({ createdAt: -1 })
-        .then((rooms) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'show task success',
-            rooms,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, 'error');
-        });
+      User.findById(host(req, res)).then((user) => {
+        Room.find({ $or: [{ createdBy: user }, { members: user }] })
+          .sort({ createdAt: -1 })
+          .then((rooms) => {
+            return apiResponse.successResponseWithData(
+              res,
+              'show room success',
+              rooms,
+            );
+          })
+          .catch((error) => {
+            return apiResponse.ErrorResponse(res, 'error');
+          });
+      });
     },
   ];
   createRoom = [
     (req, res) => {
-      console.log(req.body);
-    //   const room = new Room();
-    //   room.name = req.body.name;
       Room.create(req.body.room).then((room) => {
         return apiResponse.successResponseWithData(
           res,
@@ -51,7 +53,6 @@ class RoomController {
   ];
   updateRoom = [
     (req, res) => {
-      console.log(req.body);
       Room.findByIdAndUpdate(
         req.params.id,
         {
@@ -59,7 +60,6 @@ class RoomController {
         },
         { new: true, useFindAndModify: false },
       ).then((result) => {
-        console.log('result', result);
         return apiResponse.successResponseWithData(
           res,
           'Update room success',

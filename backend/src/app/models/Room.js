@@ -3,7 +3,17 @@ const Schema = mongoose.Schema;
 
 const Room = new Schema(
   {
-    roomName: { type: String, maxlength: 255 },
+    name: { type: String, maxlength: 255 },
+    members: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,

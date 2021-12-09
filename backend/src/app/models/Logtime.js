@@ -18,6 +18,10 @@ const Logtime = new Schema(
     timeInMiliseconds: {
       type: String,
     },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,

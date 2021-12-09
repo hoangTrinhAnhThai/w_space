@@ -22,10 +22,16 @@ export default {
     ...mapActions({
       getProject: 'TASKS/getProject',
       getStatus: 'TASKS/getStatus',
+      getAllRooms: 'CHAT/getAllRooms',
+      getUserByToken: 'AUTH/getUserByToken',
+      getAllNotification: 'NOTIFICATION/getAllNotification',
     }),
   },
   created() {
+    this.getUserByToken();
     this.getProject();
+    this.getAllRooms();
+    this.getAllNotification();
   },
 };
 </script>
@@ -33,21 +39,13 @@ export default {
 <style lang="scss" scoped>
 .main-page {
   display: flex;
-  .sidebar {
-    width: 15vw;
-    min-width: 220px;
-    // position: fixed;
+  height: 100vh;
+  .content {
+    width: 99% !important;
   }
   .nav {
-    height: 7vh;
-    min-height: 60px;
-  }
-  .main-container {
-    width: 83vw;
-    height: 93vh;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
+    height: 70px;
+    width: 100% !important;
   }
 }
 </style>

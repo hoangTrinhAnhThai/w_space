@@ -1,27 +1,37 @@
 <template>
-  <b-modal ref="newProjectModal" hide-footer title="Add a new project">
-    <div class="addProject">
-      <div class="label">Name</div>
-      <div class="errors">
-        <p v-show="showErrors.emptyName" class="error">Name is required</p>
-      </div>
-      <div class="d-block text-center content">
-        <input
+  <b-modal
+    ref="newProjectModal"
+    hide-header-close
+    hide-footer
+    title="Add a new project"
+  >
+    <v-row>
+      <v-col>
+        <v-text-field
+          label="Name project ..."
           class="textProject"
-          type="text"
-          placeholder="Name project ...."
           v-model="project.name"
-        />
-      </div>
-      <button @click="addProject" class="addProjectButton">Continue</button>
-    </div>
-    <div class="img">
-      <img
-        src="https://paramountinteriors.com/documents//hypercollaboration/2-people-working-in-teams-innovate-faster-achieve-better-results-and-report-higher-job-satisfaction-8007.jpg"
-        alt=""
-      />
-    </div>
-    <add-member ref="addMemberModal" />
+          v-on:keyup="addProjectByKey"
+          id="content"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row style="position: relative; top: -20px">
+      <v-col>
+        <span v-show="showErrors.emptyName" class="errors"
+          >Name is required</span
+        >
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="btn-container">
+        <v-btn @click="hide" class="hide" text>Close</v-btn>
+        <v-btn class="save-btn continue" @click="addProject" text
+          >Continue</v-btn
+        >
+      </v-col>
+    </v-row>
+    <add-member ref="addMemberModal" v-on:closeModal="hide" />
   </b-modal>
 </template>
 
@@ -31,23 +41,19 @@ import { mapActions, mapGetters } from 'vuex';
 import Vue from 'vue';
 export default {
   name: 'AddNewProjectModal',
-  props: {
-    // typeOfModal: {
-    //   type: String,
-    // },
-  },
   data() {
     return {
       project: {
         name: '',
       },
+      name: '',
       showErrors: {},
       typeOfModal: '',
     };
   },
   computed: {
     ...mapGetters({
-      validateProject: 'VALIDATION/validateProject',
+      validateText: 'VALIDATION/validateText',
       projectEdit: 'TASKS/projectEdit',
     }),
   },
@@ -72,26 +78,45 @@ export default {
     },
     addProject() {
       if (!this.validateBeforeSubmit()) {
-        console.log(this.showErrors);
+        document.getElementById('content').focus();
+
         return;
       } else {
-        console.log('type', this.typeOfModal);
         if (this.typeOfModal === 'editProject') {
           this.editProject();
           this.hide();
         } else {
           this.addProjectAction(this.project);
           setTimeout(() => {
-            console.log('edit proj', this.projectEdit);
             this.$refs.addMemberModal.show(this.projectEdit);
-            this.project.name = '';
+            this.name = '';
           }, 1000);
+        }
+      }
+    },
+    addProjectByKey(e) {
+      if (e.keyCode === 13) {
+        if (!this.validateBeforeSubmit()) {
+          document.getElementById('content').focus();
+
+          return;
+        } else {
+          if (this.typeOfModal === 'editProject') {
+            this.editProject();
+            this.hide();
+          } else {
+            this.addProjectAction(this.project);
+            setTimeout(() => {
+              this.$refs.addMemberModal.show(this.projectEdit);
+              this.name = '';
+            }, 1000);
+          }
         }
       }
     },
     validateBeforeSubmit() {
       let passedValidate = true;
-      const errors = this.validateProject(this.project.name);
+      const errors = this.validateText(this.project.name);
       if (errors) {
         Vue.set(
           this.showErrors,
@@ -104,6 +129,9 @@ export default {
       return passedValidate;
     },
   },
+  created() {
+    this.project.name = this.projectEdit.name;
+  },
   components: {
     AddMember,
   },
@@ -114,50 +142,16 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import '../../assets/style.scss';
-.content {
-  border: 1px solid rgb(190, 187, 187);
-  padding: none;
-  width: 75%;
-  margin: 0 auto;
-  border-radius: 5px;
-  padding: 5px;
-  float: left;
-  outline-color: rgb(75, 176, 99);
+<style scoped>
+.v-col,
+.v-row {
+  padding: 0 !important;
+  margin: 0 !important;
 }
-.textProject {
-  width: 95%;
+.v-btn {
+  float: right;
 }
-input {
-  background-color: #fff;
-  border: none;
-  outline: none;
-  font-size: 13px;
-  position: relative;
-  top: -2px;
-}
-.addProjectButton,
-.invite {
-  border: 1px solid $color;
-  border-radius: 5px;
-  padding: 5px 10px;
-  margin-left: 15px;
-  width: 100px;
-  background-color: $color;
-}
-.img {
-  margin: 0 auto;
-  width: 350px;
-}
-img {
-  width: 350px;
-}
-.errors {
-  margin: 0;
-  .error {
-    margin: 2px;
-  }
+.hide {
+  margin-left: 15px !important;
 }
 </style>

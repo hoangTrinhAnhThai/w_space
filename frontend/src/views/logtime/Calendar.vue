@@ -1,54 +1,77 @@
 <template>
-  <div class="logtime">
-    <div class="container-logtime">
-      <div class="header">
-        <div class="content1 content">
-          <div class="left">
-            <i class="bx bxs-chevron-left"></i>
-          </div>
-          <div class="calendar">
+  <v-main>
+    <v-row class="row1">
+      <v-col cols="8">
+        <v-btn-toggle class="calendar">
+          <v-btn>
+            <i style="font-size: 20px" class="bx bxs-chevron-left"></i>
+          </v-btn>
+          <v-btn>
             <i class="bx bxs-calendar"></i>
             <DatePicker v-model="date" :clearable="false" class="datepicker" />
-          </div>
-          <div class="right">
+          </v-btn>
+          <v-btn>
             <i class="bx bxs-chevron-right"></i>
-          </div>
-          <div class="nowDate">{{ dateWeek }}, {{ dateMonth }} {{ month }}</div>
-        </div>
-        <div class="content2 content">
-          <div class="day">Day</div>
-          <div class="week">Week</div>
-          <div class="sync">
+          </v-btn>
+        </v-btn-toggle>
+      </v-col>
+      <v-col cols="1">
+        <v-btn-toggle class="date-week1">
+          <v-btn> Day </v-btn>
+          <v-btn> Week </v-btn>
+        </v-btn-toggle>
+      </v-col>
+      <v-col cols="2">
+        <div class="date-week2">
+          <v-btn text>
             <i class="bx bx-sync"></i>
-          </div>
-          <div class="user">
+          </v-btn>
+          <v-btn text>
             <i class="bx bx-user"></i>
-          </div>
-          <div class="edit">
+          </v-btn>
+          <v-btn text>
             <i class="bx bx-edit"></i>
-          </div>
+          </v-btn>
         </div>
-      </div>
-      <div class="add-time-entry">
-        <div class="search">
-          <i class="bx bx-search-alt-2"></i>
-          <input type="text" />
-        </div>
-        <div class="filter"><i class="bx bx-filter-alt"></i> Filter</div>
-        <div class="add-project">
-          <button @click="createLogtime">Add new time entry</button>
-        </div>
-      </div>
-      <div class="logtime-card">
-        <logtime-card
-          v-for="(logtime, index) in logtimeArray"
-          :key="index"
-          v-bind:logtime="logtime"
-          class="logtime-content"
-        />
-      </div>
-    </div>
-  </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="3">
+        <v-text-field label="Search"></v-text-field>
+      </v-col>
+      <v-col cols="1">
+        <v-btn style="height: 80%; width: 100%"
+          ><i class="bx bx-filter-alt"></i
+        ></v-btn>
+      </v-col>
+      <v-col cols="2">
+        <v-btn
+          elevation="2"
+          style="
+            height: 80%;
+            color: white !important;
+            background-color: rgb(39, 102, 120);
+          "
+          @click="createLogtime"
+          >Add new time entry</v-btn
+        >
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-card>
+        <v-list shaped>
+          <v-list-item-group>
+            <logtime-card
+              v-for="(logtime, index) in logtimeArray"
+              :key="index"
+              v-bind:logtime="logtime"
+              class="logtime-content"
+            />
+          </v-list-item-group>
+        </v-list>
+      </v-card>
+    </v-row>
+  </v-main>
 </template>
 
 <script>
@@ -62,7 +85,7 @@ export default {
     return {
       logtime: {},
       date:
-        sessionStorage.getItem('date') ||
+        sessionStorage.getItem('date') ? sessionStorage.getItem('date'):
         `${new Date().getFullYear()}-${
           new Date().getMonth() + 1
         }-${new Date().getDate()}`,
@@ -98,7 +121,6 @@ export default {
   },
   created() {
     this.getAllLogtimeByDate(this.date);
-    // console.log(this.);
   },
   watch: {
     date() {
@@ -108,129 +130,38 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import '../../assets/style.scss';
-.logtime {
+<style scoped>
+.v-main {
+  width: 100%;
+  min-width: 1000px;
+  min-height: 92vh;
+  height: 92vh;
+  white-space: nowrap;
+  overflow: scroll !important;
+}
+.row {
+  width: 95%;
   margin: 0 auto;
-  .container-logtime {
-    margin: 20px auto;
-    width: 90%;
-    min-width: 850px;
-    i {
-      font-size: 21px;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      .content {
-        display: flex;
-        div {
-          padding: 5px 10px;
-        }
-      }
-      .content {
-        .left,
-        .day {
-          border: 1px solid $border-color;
-          border-top-left-radius: 7px;
-          border-bottom-left-radius: 7px;
-        }
-        .calendar {
-          border-top: 1px solid $border-color;
-          border-bottom: 1px solid $border-color;
-          border-right: 1px solid $border-color;
-          position: relative;
+}
+.row1 .v-btn {
+  width: 50px !important;
+  height: 40px !important;
+}
 
-          .datepicker {
-            opacity: 0;
-            width: 40px;
-            margin: 0;
-            height: 20px;
-            padding: 0;
-            position: absolute;
-            right: 0;
-          }
-          .bxs-calendar {
-          }
-        }
-        .right,
-        .week {
-          border: 1px solid $border-color;
-          border-top-right-radius: 7px;
-          border-bottom-right-radius: 7px;
-          border-left: none;
-        }
-        .sync,
-        .user,
-        .edit {
-          border: 1px solid $border-color;
-          border-radius: 7px;
-          margin-left: 7px;
-        }
-        div:hover {
-          background-color: rgb(226, 224, 224);
-        }
-        .nowDate:hover {
-          background-color: #fff;
-        }
-      }
-    }
-    .add-time-entry {
-      margin: 20px 0 50px;
-      display: flex;
+i {
+  font-size: 15px;
+}
+.datepicker {
+  opacity: 0;
+  width: 40px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 0;
+}
 
-      div {
-        display: flex;
-        align-self: center;
-        margin-right: 20px;
-        input,
-        button {
-          outline: none;
-          border: none;
-        }
-        i {
-          font-size: 17px;
-          margin-top: 5px;
-        }
-        button {
-          background-color: $color;
-          color: rgb(255, 255, 255);
-          font-weight: 500;
-          padding: 7px 15px;
-          border-radius: 7px;
-        }
-      }
-      .filter,
-      .search {
-        border-radius: 7px;
-        border: 1px solid $border-color;
-        border-radius: 7px;
-        padding: 5px 15px;
-      }
-      .filter:hover {
-        background-color: rgb(226, 224, 224);
-      }
-      button:hover {
-        background-color: rgb(132, 199, 132);
-      }
-    }
-    .logtime-card {
-      .logtime-content {
-        border-top: 1px solid $border-color;
-        border-right: 1px solid $border-color;
-        border-left: 1px solid $border-color;
-      }
-      .logtime-content:last-child {
-        border-bottom: 1px solid $border-color;
-        border-bottom-right-radius: 10px;
-        border-bottom-left-radius: 10px;
-      }
-      .logtime-content:first-child {
-        border-top-right-radius: 10px;
-        border-top-left-radius: 10px;
-      }
-    }
-  }
+.date-week2 .v-btn {
+  margin-left: 5px;
+  background-color: rgb(247, 247, 247);
 }
 </style>

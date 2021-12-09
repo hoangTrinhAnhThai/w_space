@@ -21,6 +21,10 @@ const Project = new Schema(
         ref: 'User',
       },
     ],
+    room: {
+      type: Schema.Types.ObjectId,
+      ref: 'Room',
+    },
   },
   {
     timestamps: true,

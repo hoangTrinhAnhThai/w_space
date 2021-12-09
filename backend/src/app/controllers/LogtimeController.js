@@ -1,10 +1,12 @@
 const Task = require('../models/Task');
 const LogTime = require('../models/Logtime');
-const { validationResult } = require('express-validator');
+const User = require('../models/User');
 const apiResponse = require('../../utils/apiResponse');
 const Logtime = require('../models/Logtime');
 const endOfDay = require('date-fns/endOfDay');
 const startOfDay = require('date-fns/startOfDay');
+const host = require('../../utils/decodeJWT');
+
 require('dotenv').config();
 
 class LogtimeController {
@@ -25,39 +27,46 @@ class LogtimeController {
   ];
   showAllLogtime = [
     (req, res) => {
-      LogTime.find()
-        .sort({ createdAt: -1 })
-        .then((logtimes) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'show task success',
-            logtimes,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, 'error');
-        });
+      User.findById(host(req, res)).then((user) => {
+        LogTime.find({ createdBy: user })
+          .sort({ createdAt: -1 })
+          .then((logtimes) => {
+            return apiResponse.successResponseWithData(
+              res,
+              'show logtimes success',
+              logtimes,
+            );
+          })
+          .catch((error) => {
+            return apiResponse.ErrorResponse(res, 'error');
+          });
+      })
     },
   ];
   showAllLogtimeByDate = [
     (req, res) => {
-      LogTime.find({
-        createdAt: {
-          $gte: startOfDay(new Date(req.params.date)),
-          $lte: endOfDay(new Date(req.params.date)),
-        },
+      User.findById(host(req, res)).then((user) => {
+        LogTime.find(
+          {
+            $and: [{ createdBy: user }, {
+              createdAt: {
+                $gte: startOfDay(new Date(req.params.date)),
+                $lte: endOfDay(new Date(req.params.date)),
+              }
+            }]
+          })
+          .sort({ createdAt: -1 })
+          .then((logtimes) => {
+            return apiResponse.successResponseWithData(
+              res,
+              'show tasks success',
+              logtimes,
+            );
+          })
+          .catch((error) => {
+            return apiResponse.ErrorResponse(res, error);
+          });
       })
-        .sort({ createdAt: -1 })
-        .then((logtimes) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'show tasks success',
-            logtimes,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, error);
-        });
     },
   ];
   showAllLogtimeByTask = [
@@ -66,7 +75,6 @@ class LogtimeController {
         task: req.params.task,
       })
         .then((logtimes) => {
-          console.log(req.params.task);
           return apiResponse.successResponseWithData(
             res,
             req.params.task,
@@ -80,24 +88,27 @@ class LogtimeController {
   ];
   createLogtime = [
     (req, res) => {
-      console.log(req.body);
-      const logtime = new Logtime();
-      logtime.startTime = req.body.startTime;
-      logtime.task = req.body.task;
-      logtime.note = req.body.note;
-      logtime.isPlaying = req.body.isPlaying;
-      LogTime.create(logtime).then((logtime) => {
-        return apiResponse.successResponseWithData(
-          res,
-          'Add logtime success',
-          logtime,
-        );
-      });
+      User.findById(host(req, res)).then((user) => {
+        let logtime = new Logtime();
+        logtime.startTime = req.body.startTime;
+        logtime.task = req.body.task;
+        logtime.note = req.body.note;
+        logtime.isPlaying = req.body.isPlaying;
+        logtime.createdBy = user
+        LogTime.create(logtime ).then((logtime) => {
+          return apiResponse.successResponseWithData(
+            res,
+            'Add logtime success',
+            logtime,
+          );
+        }).catch((error) => {
+          return apiResponse.ErrorResponse(res, error)
+        })
+      })
     },
   ];
   updateLogtime = [
     (req, res) => {
-      console.log(req.body);
       LogTime.findByIdAndUpdate(
         req.params.id,
         {
@@ -110,7 +121,6 @@ class LogtimeController {
         },
         { new: true, useFindAndModify: false },
       ).then((result) => {
-        console.log('result', result);
         return apiResponse.successResponseWithData(
           res,
           'Update logtime success',

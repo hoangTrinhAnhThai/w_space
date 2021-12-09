@@ -1,30 +1,25 @@
 <template>
   <div class="logtime-card">
-    <div class="container-card">
-      <div class="project">
-        <select name="" id="" v-model="logtime.task">
-          <optgroup
-            v-for="(project, index) in projectArray"
-            :key="index"
-            :label="project.name"
-          >
-            <option
-              v-for="(task, index) in project.tasks"
-              :key="index"
-              :value="task._id"
-            >
-              {{ task.name }}
-            </option>
-          </optgroup>
-        </select>
-      </div>
-      <div class="function">
+    <v-row>
+      <v-col cols="3">
+        <v-select
+          v-model="logtime.task"
+          :items="tasks"
+          item-text="taskName"
+          item-value="taskId"
+          label="Your task"
+        >
+        </v-select>
+      </v-col>
+      <v-col cols="1" class="functions">
         <ul v-show="!logtime.isPlaying">
-          <li><i class="bx bx-trash" @click="deteleLogtime"></i></li>
+          <li>
+            <i class="bx bx-trash" @click="deteleLogtime"></i>
+          </li>
           <li><i class="bx bx-calendar"></i></li>
         </ul>
-      </div>
-      <div class="description" tabindex="0">
+      </v-col>
+      <v-col cols="2" class="description" tabindex="0">
         <div class="note">
           <span
             v-if="logtime.note"
@@ -43,110 +38,38 @@
             >note</span
           >
         </div>
-        <div class="text">
-          <textarea
+        <div class="textarea">
+          <v-textarea
             v-on:blur="handleBlur"
-            placeholder="note"
             v-model="logtime.note"
-            rows="5"
-            cols="25"
-          ></textarea>
+            solo
+            label="Note"
+            cols="40"
+          ></v-textarea>
         </div>
-      </div>
-      <div class="timer">
-        <div class="start-time">
-          {{ new Date(logtime.createdAt).getHours() }}h{{
-            new Date(logtime.createdAt).getMinutes()
-          }}
-        </div>
-        <div class="sign">-</div>
-        <div v-if="logtime.stopTime" class="end-time">
-          {{ new Date(logtime.stopTime).getHours() }}h{{
-            new Date(logtime.stopTime).getMinutes()
-          }}
-        </div>
-        <div v-else class="end-time">
-          {{ new Date(logtime.createdAt).getHours() }}h{{
-            new Date(logtime.createdAt).getMinutes()
-          }}
-        </div>
-      </div>
-      <div class="report">
+      </v-col>
+      <v-col cols="2">
+        <span>{{ timeStart }} - {{ timeStop }}</span>
+      </v-col>
+      <v-col cols="1">
         <span v-if="!logtime.isPlaying">
-          <span v-if="Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)">{{
-            Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)
-          }}</span>
-          <span v-else>00</span>h
-          <span
-            v-if="
-              Math.floor(
-                (logtime.timeInMiliseconds / 1000 / 60 / 60 -
-                  Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                  60,
-              )
-            "
-          >
-            {{
-              Math.floor(
-                (logtime.timeInMiliseconds / 1000 / 60 / 60 -
-                  Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                  60,
-              )
-            }}</span
-          ><span v-else>00</span>m
-          <span
-            v-if="
-              Math.floor(
-                ((logtime.timeInMiliseconds / 1000 / 60 / 60 -
-                  Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                  60 -
-                  Math.floor(
-                    (logtime.timeInMiliseconds / 1000 / 60 / 60 -
-                      Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                      60,
-                  )) *
-                  60,
-              )
-            "
-            >{{
-              Math.floor(
-                ((logtime.timeInMiliseconds / 1000 / 60 / 60 -
-                  Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                  60 -
-                  Math.floor(
-                    (logtime.timeInMiliseconds / 1000 / 60 / 60 -
-                      Math.floor(logtime.timeInMiliseconds / 1000 / 60 / 60)) *
-                      60,
-                  )) *
-                  60,
-              )
-            }}</span
-          >
+          {{ timeReportIsNotPlaying }}
         </span>
         <span v-else>
-          <span v-if="timeReport.hours">{{ timeReport.hours }}</span>
-          <span v-else>00</span>h
-          <span v-if="timeReport.minutes">{{ timeReport.minutes }}</span>
-          <span v-else>00</span>m
-          <span v-if="timeReport.seconds">{{ timeReport.seconds }}</span>
-          <span v-else>00</span>
+          <span>{{ hours >= 10 ? hours : `0${hours}` }}:</span>
+          <span>{{ minutes >= 10 ? minutes : `0${minutes}` }}:</span>
+          <span>{{ seconds >= 10 ? seconds : `0${seconds}` }}</span>
         </span>
-      </div>
-      <div class="play-time">
-        <i
-          id="play"
-          class="bx bx-play"
-          @click="startTime"
-          v-show="!logtime.isPlaying"
-        ></i>
-        <i
-          id="stop"
-          @click="stopTime"
-          v-show="logtime.isPlaying"
-          class="bx bx-stop"
-        ></i>
-      </div>
-    </div>
+      </v-col>
+      <v-col cols="1" class="play-time">
+        <v-btn text id="play" @click="startTime" v-show="!logtime.isPlaying">
+          <i class="bx bx-play"></i>
+        </v-btn>
+        <v-btn text id="stop" @click="stopTime" v-show="logtime.isPlaying">
+          <i class="bx bx-stop"></i>
+        </v-btn>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -163,19 +86,87 @@ export default {
   data: () => ({
     isOpen: false,
     myInterval: function () {},
-    timeReport: {
-      hours: '00',
-      minutes: '00',
-      seconds: '00',
-    },
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   }),
   computed: {
     ...mapGetters({
-      projectArray: 'TASKS/projectArray',
-      timeStart: 'LOGTIME/timeStart',
+      projectsOfLeader: 'TASKS/projectsOfLeader',
+      projectsOfMember: 'TASKS/projectsOfMember',
       logtimeArray: 'LOGTIME/logtimeArray',
       logtimeIsPlaying: 'LOGTIME/logtimeIsPlaying',
     }),
+    tasks() {
+      let list = [];
+      for (let project of this.projectsOfLeader) {
+        list.push({ header: `${project.name}` });
+        for (let task of project.tasks) {
+          list.push({ taskName: task.name, taskId: task._id });
+        }
+      }
+      for (let project of this.projectsOfMember) {
+        list.push({ header: `${project.name}` });
+        for (let task of project.tasks) {
+          list.push({ taskName: task.name, taskId: task._id });
+        }
+      }
+      return list;
+    },
+    timeReportIsNotPlaying() {
+      let totalSecond = 0;
+      let hour = 0;
+      let minute = 0;
+      let second = 0;
+      if (this.logtime.timeInMiliseconds) {
+        totalSecond = this.logtime.timeInMiliseconds / 1000 / 60 / 60;
+        hour = Math.floor(totalSecond);
+        minute = Math.floor((totalSecond - hour) * 60);
+        second = Math.floor(((totalSecond - hour) * 60 - minute) * 60);
+      }
+      if (hour < 10) {
+        hour = `0${hour}`;
+      }
+      if (minute < 10) {
+        minute = `0${minute}`;
+      }
+      if (second < 10) {
+        second = `0${second}`;
+      }
+      return `${hour}:${minute}:${second}`;
+    },
+    timeStart() {
+      let hour = 0;
+      let minute = 0;
+      if (this.logtime.createdAt) {
+        hour = new Date(this.logtime.createdAt).getHours();
+        minute = new Date(this.logtime.createdAt).getMinutes();
+      }
+      if (hour < 10) {
+        hour = `0${hour}`;
+      }
+      if (minute < 10) {
+        minute = `0${minute}`;
+      }
+      return `${hour}h${minute}`;
+    },
+    timeStop() {
+      let hour = 0;
+      let minute = 0;
+      if (this.logtime.stopTime) {
+        hour = new Date(this.logtime.stopTime).getHours();
+        minute = new Date(this.logtime.stopTime).getMinutes();
+        if (hour < 10) {
+          hour = `0${hour}`;
+        }
+        if (minute < 10) {
+          minute = `0${minute}`;
+        }
+        return `${hour}h${minute}`;
+      } else {
+        return this.timeStart;
+      }
+    },
   },
   components: {},
   methods: {
@@ -219,17 +210,16 @@ export default {
         _id: this.logtime._id,
       });
     },
-
     showTime() {
       var start = new Date(this.logtimeIsPlaying.startTime);
       var timeInMiliseconds = new Date() - start;
-      this.timeReport.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60);
-      this.timeReport.minutes = Math.floor(
-        (timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60,
+      this.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60);
+      this.minutes = Math.floor(
+        (timeInMiliseconds / 1000 / 60 / 60 - this.hours) * 60,
       );
-      this.timeReport.seconds = Math.floor(
-        ((timeInMiliseconds / 1000 / 60 / 60 - this.timeReport.hours) * 60 -
-          this.timeReport.minutes) *
+      this.seconds = Math.floor(
+        ((timeInMiliseconds / 1000 / 60 / 60 - this.hours) * 60 -
+          this.minutes) *
           60,
       );
     },
@@ -237,7 +227,6 @@ export default {
       this.deteleLogtimeAction(this.logtime._id);
     },
     handleBlur() {
-      console.log(this.logtime.note);
       this.updateLogtimeAction({
         logtime: { note: this.logtime.note },
         _id: this.logtime._id,
@@ -264,164 +253,91 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import '../assets/style.scss';
-
+<style scoped>
 .logtime-card {
-  // margin-top: 10px;
   width: 100%;
-  // min-width: 850px;
-  .container-card {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 20px 15px;
-    div {
-      display: flex;
-      align-self: center;
-    }
-    .project {
-      width: 30%;
-      position: relative;
+  margin: 0 auto;
+  padding: 20px;
+}
+#play {
+  font-size: 20px;
+  border: none;
+  height: 40px;
+}
 
-      select {
-        border: 1px solid rgb(224, 221, 221);
-        width: 350px;
-        outline: none;
-        padding: 5px;
-        border-radius: 5px;
-      }
-    }
+#stop {
+  border: none;
+  font-size: 20px;
+  background-color: rgb(250, 71, 71);
+  height: 40px;
+}
+#stop:hover {
+  background-color: rgb(241, 111, 111);
+}
+.play-time i {
+  color: white;
+}
+.logtime-card:hover #play i {
+  color: rgb(39, 102, 120);
+}
+#play:hover {
+  background-color: rgba(39, 102, 120, 0.9);
+}
+#play:hover i {
+  color: white !important;
+}
+.col {
+  margin: 0 auto;
+  text-align: center;
+}
+ul {
+  display: flex;
+  list-style: none;
+}
+ul i {
+  font-size: 25px;
+}
+.col {
+  display: flex;
+  align-self: center;
+}
+.v-textarea {
+  display: none;
+  padding: 15px 5px;
+}
+.description {
+  cursor: pointer;
+}
+.description:focus-within {
+  position: relative;
+}
+.description:focus-within .v-textarea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+}
+.note {
+  width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.functions {
+  color: white;
+}
 
-    .function {
-      width: 10%;
-      text-align: center;
-      ul {
-        margin: 0 auto;
-        list-style: none;
-        color: grey;
-        display: flex;
-        padding: 0;
-        li {
-          margin-right: 5px;
-          border: 1px solid white;
-          padding: 0 5px;
-          border-radius: 5px;
-          font-size: 20px;
-          color: white;
-        }
-      }
-    }
-    .description {
-      width: 20%;
-      .note {
-        width: 180px;
-        span {
-          width: 180px;
+.logtime-card:hover .functions i {
+  border: 1px solid rgba(39, 102, 120, 0.3);
+  padding: 5px;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+.logtime-card:hover .functions {
+  color: rgba(39, 102, 120, 0.7);
+}
 
-          padding-right: 15px;
-          border: 1px solid $border-color;
-          text-align: left;
-          padding: 5px 15px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          outline: none;
-          border-radius: 7px;
-          color: grey;
-        }
-      }
-      .text {
-        display: none;
-      }
-    }
-    .description:focus-within {
-      position: relative;
-      .text {
-        position: absolute;
-        top: 0;
-        display: inline-block;
-        margin: 0;
-        background-color: #fff;
-        color: grey;
-        text-align: left;
-        outline: none;
-        border-radius: 7px;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-        textarea {
-          padding: 15px;
-          border: none;
-          outline: none;
-        }
-      }
-    }
-    .timer {
-      width: 10%;
-      .sign {
-        margin: 0 10px;
-      }
-    }
-    .report {
-      width: 15% p {
-        margin: 0 auto;
-        background-color: rgb(218, 214, 214);
-        border-radius: 5px;
-      }
-    }
-    .play-time {
-      #play {
-        right: 0;
-        border-radius: 10px;
-        padding: 10px;
-        font-size: 20px;
-        color: white;
-      }
-      #stop {
-        right: 0;
-        border-radius: 10px;
-        padding: 10px;
-        font-size: 20px;
-        color: white;
-        background-color: rgb(248, 51, 51);
-      }
-    }
-  }
-  .container-card:hover {
-    .play-time {
-      #play {
-        background-color: #fff;
-        color: grey;
-      }
-      #stop {
-        background-color: rgb(197, 49, 49);
-        color: rgb(209, 207, 207);
-      }
-    }
-    .play-time:hover #play {
-      background-color: $color;
-      color: white;
-    }
-    .function {
-      display: flex;
-      align-self: center;
-      li {
-        display: inline;
-        color: grey;
-        border: 1px solid rgb(201, 198, 198);
-      }
-      li:hover {
-        background-color: rgb(219, 219, 223);
-      }
-    }
-  }
-  .description:hover {
-    textarea {
-      border: 1px solid $border-color;
-      outline: none;
-      border-radius: 10px;
-      // height: 50px;
-    }
-  }
+.functions i:hover {
+  background-color: rgba(39, 102, 120, 0.4);
 }
 </style>

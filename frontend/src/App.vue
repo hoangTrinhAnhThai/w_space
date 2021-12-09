@@ -1,14 +1,23 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+  <v-app>
+    <v-main class="app">
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
 <script>
 export default {
   name: 'App',
-  components: {},
+
+  data: () => ({
+    //
+  }),
 };
 </script>
-
-<style></style>
+<style src="./assets/modifyVuetify.css"></style>
+<style scoped>
+.v-main {
+  overflow: hidden;
+}
+</style>

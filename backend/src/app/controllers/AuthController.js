@@ -4,6 +4,8 @@ const { validationResult } = require('express-validator');
 const apiResponse = require('../../utils/apiResponse');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const host = require('../../utils/decodeJWT');
+
 require('dotenv').config();
 
 class AuthController {
@@ -20,22 +22,24 @@ class AuthController {
         } else {
           const salt = await bcrypt.genSalt(10);
           let user = new User();
-          user.fullName = req.body.fullName;
+          user.firstName = req.body.firstName;
+          user.lastName = req.body.lastName;
           user.email = req.body.email;
           user.password = await bcrypt.hash(req.body.password, salt);
-          user.role = {
-            _id: '6188e2e979934adb9699ba5a',
-            name: 'User',
-          };
-          user.save(function (err) {
-            if (err) {
-              return apiResponse.ErrorResponse(res, err);
-            }
-            return apiResponse.successResponseWithData(
-              res,
-              'register success',
-              user,
-            );
+          user.avatar =
+            req.body.firstName.charAt(0) + req.body.lastName.charAt(0);
+          Role.findOne({ name: 'User' }).then((role) => {
+            user.role = role;
+            user.save(function (err) {
+              if (err) {
+                return apiResponse.ErrorResponse(res, err);
+              }
+              return apiResponse.successResponseWithData(
+                res,
+                'register success',
+                user,
+              );
+            });
           });
         }
       } catch (err) {
@@ -64,15 +68,15 @@ class AuthController {
                   if (isValid) {
                     const tokenCreated = jwt.sign(
                       {
-                        _id: user._id,
-                        email: req.body.email,
+                        user: user,
                       },
-                      process.env.TOKEN_SECREATE,
+                      process.env.TOKEN_SECRET,
                       { expiresIn: process.env.JWT_TIMEOUT_DURATION },
                     );
                     let userData = {
                       _id: user._id,
-                      fullName: user.fullName,
+                      firstName: user.firstName,
+                      lastName: user.lastName,
                       email: user.email,
                       token: tokenCreated,
                       password: user.password,
@@ -107,6 +111,17 @@ class AuthController {
       } catch (err) {
         return apiResponse.ErrorResponse(res, err);
       }
+    },
+  ];
+  getUserInfor = [
+    (req, res) => {
+      User.findById(host(req, res)).then((user) => {
+        return apiResponse.successResponseWithData(
+          res,
+          'user information',
+          user,
+        );
+      });
     },
   ];
 }

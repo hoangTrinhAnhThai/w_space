@@ -27,6 +27,10 @@ const Task = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,

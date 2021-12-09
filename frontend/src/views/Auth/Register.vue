@@ -11,24 +11,37 @@
             placeholder="Email"
           />
           <div class="errors">
-            <p v-show="showErrors.emptyEmail" class="error">
+            <p v-show="showErrors.emptyEmail" class="errors">
               Email is required
             </p>
-            <p v-show="showErrors.invalidEmail" class="error">
+            <p v-show="showErrors.invalidEmail" class="errors">
               Email is invalid
             </p>
           </div>
         </div>
         <div class="form-group">
           <input
-            v-model="registerInput.fullName"
+            v-model="registerInput.firstName"
             class="form-control"
             type="text"
-            placeholder="Full name"
+            placeholder="First name"
           />
           <div class="errors">
-            <p v-show="showErrors.emptyFullName" class="error">
-              FullName is required
+            <p v-show="showErrors.emptyFirstName" class="errors">
+              FirstName is required
+            </p>
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            v-model="registerInput.lastName"
+            class="form-control"
+            type="text"
+            placeholder="Last name"
+          />
+          <div class="errors">
+            <p v-show="showErrors.emptyLastName" class="errors">
+              LastName is required
             </p>
           </div>
         </div>
@@ -40,13 +53,13 @@
             placeholder="Password"
           />
           <div class="errors">
-            <p v-show="showErrors.emptyPassword" class="error">
+            <p v-show="showErrors.emptyPassword" class="errors">
               Password is required
             </p>
-            <p v-show="showErrors.passwordMinLength" class="error">
+            <p v-show="showErrors.passwordMinLength" class="errors">
               Password must have at least 6 letters
             </p>
-            <p v-show="showErrors.passwordMaxLength" class="error">
+            <p v-show="showErrors.passwordMaxLength" class="errors">
               Password must have at most 255 letters
             </p>
           </div>
@@ -59,16 +72,19 @@
             placeholder="Confirm password"
           />
           <div class="errors">
-            <p v-show="showErrors.emptyConfirmPassword" class="error">
+            <p v-show="showErrors.emptyConfirmPassword" class="errors">
               Confirm Password is required
             </p>
-            <p v-show="showErrors.confirmPasswordMinLength" class="error">
+            <p v-show="showErrors.confirmPasswordMinLength" class="errors">
               Confirm Password must have at least 6 letters
             </p>
-            <p v-show="showErrors.confirmPasswordMaxLength" class="error">
+            <p v-show="showErrors.confirmPasswordMaxLength" class="errors">
               Confirm Password must have at most 255 letters
             </p>
-            <p v-show="showErrors.confirmPasswordNotSamePassword" class="error">
+            <p
+              v-show="showErrors.confirmPasswordNotSamePassword"
+              class="errors"
+            >
               The Confirm Password confirmation dose not match
             </p>
           </div>
@@ -81,7 +97,7 @@
             placeholder="Phone number"
           />
           <div class="errors">
-            <p v-show="showErrors.emptyPhoneNumber" class="error">
+            <p v-show="showErrors.emptyPhoneNumber" class="errors">
               PhoneNumber is required
             </p>
           </div>
@@ -115,7 +131,8 @@ export default {
         password: '',
         confirmPassword: '',
         email: '',
-        fullName: '',
+        firstName: '',
+        lastName: '',
         phoneNumber: '',
       },
       disabledRegister: false,
@@ -156,8 +173,13 @@ export default {
         );
         Vue.set(
           this.showErrors,
-          'emptyFullName',
-          this.showErrors && !!errors && errors.emptyFullName,
+          'emptyFirstName',
+          this.showErrors && !!errors && errors.emptyFirstName,
+        );
+        Vue.set(
+          this.showErrors,
+          'emptyLastName',
+          this.showErrors && !!errors && errors.emptyLastName,
         );
         Vue.set(
           this.showErrors,
@@ -226,8 +248,13 @@ export default {
       this.disabledRegister = false;
       this.clearErrorMessage();
     },
-    'registerInput.fullName'() {
-      Vue.set(this.showErrors, 'emptyFullName', null);
+    'registerInput.firstName'() {
+      Vue.set(this.showErrors, 'emptyFirstName', null);
+      this.disabledRegister = false;
+      this.clearErrorMessage();
+    },
+    'registerInput.lastName'() {
+      Vue.set(this.showErrors, 'emptyLastName', null);
       this.disabledRegister = false;
       this.clearErrorMessage();
     },
@@ -325,7 +352,8 @@ input {
   font-size: 12px;
 }
 .errors {
-  margin-left: -25%;
   text-align: start;
+  margin-left: 5px;
+  font-size: 85%;
 }
 </style>
