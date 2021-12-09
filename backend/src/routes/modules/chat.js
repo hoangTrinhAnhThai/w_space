@@ -1,9 +1,10 @@
 const express = require('express');
 const server = require('http').createServer(express);
-const URL = process.env.URL
+const server_host = process.env.HOST || '0.0.0.0'
+const server_port = 4000
 const io = require('socket.io')(server, {
   cors: {
-    origin: `${URL}`,
+    origin: `http://${server_host}`,
     methods: ['GET', 'POST'],
     allowedHeaders: ['my-custom-header'],
     credentials: true,
@@ -19,7 +20,7 @@ router.post('/', chatController.createChat);
 router.put('/:id', chatController.updateChat);
 router.delete('/:id', chatController.deleteChat);
 
-server.listen(4000);
+server.listen(server_port);
 
 io.on('connection', function (socket) {
   console.log('User connected');

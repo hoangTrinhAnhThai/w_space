@@ -12,7 +12,7 @@ import VueSocketIO from 'vue-socket.io';
 import vuetify from './plugins/vuetify';
 import VueJWT from 'vuejs-jwt';
 import '@mdi/font/css/materialdesignicons.css';
-const VUE_APP_API_SOKET = process.env.VUE_APP_API_SOKET
+const serverHost= process.env.VUE_APP_HOST || '0.0.0.0'
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
@@ -24,7 +24,7 @@ Vue.config.productionTip = false;
 Vue.use(
   new VueSocketIO({
     debug: true,
-    connection: `${VUE_APP_API_SOKET}:4000`,
+    connection: `http://${serverHost}:4000`,
   }),
 );
 // Vue.use(Vuetify)

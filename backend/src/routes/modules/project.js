@@ -4,10 +4,12 @@ const projectController = require('../../app/controllers/ProjectController');
 const taskController = require('../../app/controllers/TaskController');
 const commentController = require('../../app/controllers/CommentController');
 const server = require('http').createServer(express);
-const URL = process.env.URL
+const server_host = process.env.HOST || '0.0.0.0'
+const server_port = 5000
+
 const io = require('socket.io')(server, {
   cors: {
-    origin: `${URL}`,
+    origin: `${server_host}`,
     methods: ['GET', 'POST'],
     allowedHeaders: ['my-custom-header'],
     credentials: true,
@@ -38,7 +40,7 @@ router.put('/:id', projectController.editProject);
 router.delete('/:id', projectController.deleteProject);
 router.put('/:id/member/remove', projectController.removeMember);
 router.put('/:id/member/add', projectController.addMember);
-server.listen(5000);
+server.listen(server_port);
 io.on('connection', function (socket) {
   socket.on('save-comment', function (data) {
     io.emit('new-comment', { message: data });
