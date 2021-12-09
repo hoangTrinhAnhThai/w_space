@@ -5,12 +5,13 @@ const apiResponse = require('../../utils/apiResponse');
 const Logtime = require('../models/Logtime');
 const endOfDay = require('date-fns/endOfDay');
 const startOfDay = require('date-fns/startOfDay');
+const host = require('../../utils/decodeJWT');
+
 require('dotenv').config();
 
 class LogtimeController {
   showLogtime = [
     (req, res) => {
-
       LogTime.findById(req.params.id)
         .then((logtime) => {
           return apiResponse.successResponseWithData(
@@ -44,23 +45,28 @@ class LogtimeController {
   ];
   showAllLogtimeByDate = [
     (req, res) => {
-      LogTime.find({
-        createdAt: {
-          $gte: startOfDay(new Date(req.params.date)),
-          $lte: endOfDay(new Date(req.params.date)),
-        },
+      User.findById(host(req, res)).then((user) => {
+        LogTime.find(
+          {
+            $and: [{ createdBy: user }, {
+              createdAt: {
+                $gte: startOfDay(new Date(req.params.date)),
+                $lte: endOfDay(new Date(req.params.date)),
+              }
+            }]
+          })
+          .sort({ createdAt: -1 })
+          .then((logtimes) => {
+            return apiResponse.successResponseWithData(
+              res,
+              'show tasks success',
+              logtimes,
+            );
+          })
+          .catch((error) => {
+            return apiResponse.ErrorResponse(res, error);
+          });
       })
-        .sort({ createdAt: -1 })
-        .then((logtimes) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'show tasks success',
-            logtimes,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, error);
-        });
     },
   ];
   showAllLogtimeByTask = [
@@ -83,19 +89,21 @@ class LogtimeController {
   createLogtime = [
     (req, res) => {
       User.findById(host(req, res)).then((user) => {
-        const logtime = new Logtime();
+        let logtime = new Logtime();
         logtime.startTime = req.body.startTime;
         logtime.task = req.body.task;
         logtime.note = req.body.note;
         logtime.isPlaying = req.body.isPlaying;
         logtime.createdBy = user
-        LogTime.create(logtime).then((logtime) => {
+        LogTime.create(logtime ).then((logtime) => {
           return apiResponse.successResponseWithData(
             res,
             'Add logtime success',
             logtime,
           );
-        });
+        }).catch((error) => {
+          return apiResponse.ErrorResponse(res, error)
+        })
       })
     },
   ];

@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "bufferutil": "^4.0.5",
     "cors": "^2.8.5",
     "date-fns": "^2.26.0",
     "dotenv": "^10.0.0",
@@ -19,7 +20,9 @@
     "express-validator": "^6.13.0",
     "mongoose": "^6.0.12",
     "nodemon": "^2.0.15",
-    "socket.io": "^4.4.0"
+    "socket.io": "^4.4.0",
+    "utf-8-validate": "^5.0.7",
+    "ws": "^8.3.0"
   },
   "devDependencies": {
     "prettier": "2.4.1"

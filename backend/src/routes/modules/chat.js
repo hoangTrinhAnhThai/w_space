@@ -1,10 +1,11 @@
 const express = require('express');
 const server = require('http').createServer(express);
-const server_host = process.env.HOST || '0.0.0.0'
 const server_port = 4000
+require('dotenv').config();
+
 const io = require('socket.io')(server, {
   cors: {
-    origin: `http://${server_host}`,
+    origin: `${process.env.URL}`,
     methods: ['GET', 'POST'],
     allowedHeaders: ['my-custom-header'],
     credentials: true,
