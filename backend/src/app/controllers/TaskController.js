@@ -12,7 +12,7 @@ class TaskController {
   showAllTask = [
     (req, res) => {
       Task.find()
-        .populate('comments')
+        .populate('comments').populate('assigned')
         .then((task) => {
           return apiResponse.successResponseWithData(
             res,
@@ -28,7 +28,7 @@ class TaskController {
   showTask = [
     (req, res) => {
       Task.findById(req.params.id)
-        .populate('comments')
+        .populate('comments').populate('assigned')
         .then((task) => {
           return apiResponse.successResponseWithData(
             res,
@@ -66,7 +66,7 @@ class TaskController {
                   .populate('tasks')
                   .then((project) => {
                     if (project) {
-                      if (project.tasks.length > 0) {
+                      if (project.tasks.length > 1) {
                         for (let task of project.tasks) {
                           if (
                             JSON.stringify(task.status) ==

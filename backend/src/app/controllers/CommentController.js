@@ -26,7 +26,7 @@ class CommentController {
   ];
   getCommentByIdTask = [
     (req, res) => {
-      Comment.find({ room: req.params.id })
+      Comment.find({ task: req.params.id })
         .populate('createdBy')
         .sort({ createdAt: 1 })
         .then((comment) => {
