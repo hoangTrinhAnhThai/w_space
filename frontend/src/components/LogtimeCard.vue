@@ -56,7 +56,7 @@
           {{ timeReportIsNotPlaying }}
         </span>
         <span v-else>
-          <span>{{ hours >= 10 ? hour : `0${hours}` }}:</span>
+          <span>{{ hours >= 10 ? hours : `0${hours}` }}:</span>
           <span>{{ minutes >= 10 ? minutes : `0${minutes}` }}:</span>
           <span>{{ seconds >= 10 ? seconds : `0${seconds}` }}</span>
         </span>

@@ -85,7 +85,7 @@ export default {
     return {
       logtime: {},
       date:
-        sessionStorage.getItem('date') ||
+        sessionStorage.getItem('date') ? sessionStorage.getItem('date'):
         `${new Date().getFullYear()}-${
           new Date().getMonth() + 1
         }-${new Date().getDate()}`,

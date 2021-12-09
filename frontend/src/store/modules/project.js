@@ -1,11 +1,13 @@
 import http from '../../service/api.js';
+const VUE_APP_API_SOKET = process.env.VUE_APP_API_SOKET
+
 import {
   sort,
   sortLeaderProjects,
   sortMemberProjects,
 } from '../../utils/helper';
 import io from 'socket.io-client';
-const socket = io('http://localhost:5000', {
+const socket = io(`${VUE_APP_API_SOKET}:5000`, {
   transports: ['websocket', 'polling', 'flashsocket'],
 });
 const state = {
