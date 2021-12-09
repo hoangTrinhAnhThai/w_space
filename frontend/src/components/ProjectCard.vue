@@ -4,8 +4,9 @@
       card.name
     }}</v-card-title>
     <v-card-subtitle font-size="12">{{ card.description }}</v-card-subtitle>
-    <v-card-text
-      ><span v-if="card.dueDate">
+
+    <v-card-text>
+      <span v-if="card.dueDate">
         <span v-if="!deadline" style="color: red; font-size: 12px">
           <i class="bx bx-calendar"></i> {{ date }}, {{ month }} {{ year }}
         </span>
@@ -14,6 +15,12 @@
           {{ year }}</span
         >
       </span>
+      <v-avatar v-if="card.assigned" color="primary" size="24">
+        <span style="font-size: 10px">
+          {{ assignForTask.firstName.charAt(0)
+          }}{{ assignForTask.lastName.charAt(0) }}
+        </span>
+      </v-avatar>
     </v-card-text>
     <div class="menu">
       <v-menu transition="slide-y-transition" bottom>
@@ -39,11 +46,11 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import TaskDetail from '../components/modal/TaskDetail.vue';
-import helper from '../utils/data';
+import { mapActions, mapGetters } from "vuex";
+import TaskDetail from "../components/modal/TaskDetail.vue";
+import helper from "../utils/data";
 export default {
-  name: 'Cards',
+  name: "Cards",
   props: {
     card: {
       type: Object,
@@ -68,14 +75,35 @@ export default {
     month() {
       return helper.month[new Date(this.card.dueDate).getMonth()];
     },
+    ...mapGetters({
+      currentProject: "TASKS/currentProject",
+    }),
+    assignForTask() {
+      let assigned = {};
+      let list = [];
+      if (this.currentProject.members.length > 0) {
+        for (let member of this.currentProject.members) {
+          list.push(member);
+        }
+      }
+      list.push(this.currentProject.createdBy);
+      for (let member of list) {
+        if (member._id == this.card.assigned) {
+          assigned = member;
+          break;
+        }
+      }
+
+      return assigned;
+    },
   },
 
   methods: {
     ...mapActions({
-      deleteTaskAction: 'TASKS/deleteTask',
-      getLogtimes: 'TASKS/getLogtimes',
-      addCurrentTask: 'TASKS/addCurrentTask',
-      getCommentByIdTask: 'TASKS/getCommentByIdTask',
+      deleteTaskAction: "TASKS/deleteTask",
+      getLogtimes: "TASKS/getLogtimes",
+      addCurrentTask: "TASKS/addCurrentTask",
+      getCommentByIdTask: "TASKS/getCommentByIdTask",
     }),
     deleteTask() {
       this.deleteTaskAction({

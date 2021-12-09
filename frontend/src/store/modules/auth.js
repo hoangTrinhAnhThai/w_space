@@ -41,7 +41,7 @@ const getters = {
 const actions = {
   login({ commit }, params) {
     http
-      .post('auth/login', params)
+      .post('/auth/login', params)
       .then((response) => {
         commit('setUserInfo', response.data.data);
         localStorage.setItem('token', response.data.data.token);
@@ -56,7 +56,7 @@ const actions = {
   },
   register({ commit }, params) {
     http
-      .post('auth/register', params, 'Create a new account successfully!')
+      .post('/auth/register', params, 'Create a new account successfully!')
       .then(() => {
         commit('ERROR/clearErrorMessage', null, { root: true });
         router.push('/login');

@@ -48,7 +48,7 @@ const mutations = {
 const actions = {
   getAllLogtime({ commit }) {
     commit('setLogtimeArray', []);
-    http.get('logtime').then((result) => {
+    http.get('/logtime').then((result) => {
       commit('setLogtimeArray', result.data.data);
       for (let logtime of result.data.data) {
         if (logtime.isPlaying == true) {
@@ -59,7 +59,7 @@ const actions = {
   },
   getAllLogtimeByDate({ commit }, params) {
     commit('setLogtimeArray', []);
-    http.post(`logtime/${params}`).then((result) => {
+    http.post(`/logtime/${params}`).then((result) => {
       commit('setLogtimeArray', result.data.data);
       for (let logtime of result.data.data) {
         if (logtime.isPlaying == true) {
@@ -69,17 +69,17 @@ const actions = {
     });
   },
   deteleLogtime({ dispatch }, params) {
-    http.delete(`logtime/${params}`).then(() => {
+    http.delete(`/logtime/${params}`).then(() => {
       dispatch('getAllLogtime');
     });
   },
   createLogtime({ dispatch }, params) {
-    http.post('logtime', params).then(() => {
+    http.post('/logtime', params).then(() => {
       dispatch('getAllLogtime');
     });
   },
   updateLogtime({ dispatch }, params) {
-    http.put(`logtime/${params._id}`, params.logtime).then(() => {
+    http.put(`/logtime/${params._id}`, params.logtime).then(() => {
       dispatch('getAllLogtime');
     });
   },

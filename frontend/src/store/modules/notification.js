@@ -31,7 +31,7 @@ const mutations = {
 const actions = {
   getAllNotification({ commit }) {
     http
-      .get('notification')
+      .get('/notification')
       .then((result) => {
         commit('setNotifications', result.data.data);
       })
@@ -43,9 +43,8 @@ const actions = {
   },
   removeUnreadNotification({ commit, dispatch }, params) {
     http
-      .put(`notification/${params}`, null)
-      .then((result) => {
-        console.log(result);
+      .put(`/notification/${params}`, null)
+      .then(() => {
         dispatch('getAllNotification');
       })
       .catch((err) => {

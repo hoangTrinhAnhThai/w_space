@@ -1,7 +1,6 @@
 import http from '../../service/api.js';
 import io from 'socket.io-client';
-const serverHost= process.env.VUE_APP_HOST || '0.0.0.0'
-const socket = io(`http://${server_host}:4000`, {
+const socket = io(`${process.env.VUE_APP_SOCKET_URL}:4000`, {
   transports: ['websocket', 'polling', 'flashsocket'],
 });
 const state = {
@@ -44,12 +43,12 @@ const mutations = {
 };
 const actions = {
   getAllRooms({ commit }) {
-    http.get('room').then((response) => {
+    http.get('/room').then((response) => {
       commit('setRooms', response.data.data);
     });
   },
   getAllChatByIdRoom({ commit, dispatch }, params) {
-    http.get(`chat/${params}`).then((response) => {
+    http.get(`/chat/${params}`).then((response) => {
       commit('setChats', response.data.data);
     });
     socket.on(
@@ -66,7 +65,7 @@ const actions = {
     commit('setCurrentRoom', params);
   },
   sendMessage({ dispatch }, params) {
-    http.post(`chat/`, params.chat).then((response) => {
+    http.post(`/chat/`, params.chat).then((response) => {
       socket.emit('save-message', response.data.data);
       dispatch('getAllChatByIdRoom', params.idRoom);
     });

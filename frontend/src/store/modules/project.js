@@ -1,5 +1,4 @@
 import http from '../../service/api.js';
-const serverHost= process.env.VUE_APP_HOST || '0.0.0.0'
 
 import {
   sort,
@@ -7,7 +6,7 @@ import {
   sortMemberProjects,
 } from '../../utils/helper';
 import io from 'socket.io-client';
-const socket = io(`http://${serverHost}:5000`, {
+const socket = io(`${process.env.VUE_APP_SOCKET_URL}:5000`, {
   transports: ['websocket', 'polling', 'flashsocket'],
 });
 const state = {
@@ -141,7 +140,7 @@ const mutations = {
 const actions = {
   addCurrentProject({ commit }, project) {
     if (typeof project == typeof 'String') {
-      http.get(`project/${project}`).then((result) => {
+      http.get(`/project/${project}`).then((result) => {
         commit('setCurrentProject', result.data.data);
       });
     } else {
@@ -155,13 +154,13 @@ const actions = {
     commit('setProjectEdit', params);
   },
   getLogtimes({ commit }, idTask) {
-    http.get(`logtime/task/${idTask}`).then((result) => {
+    http.get(`/logtime/task/${idTask}`).then((result) => {
       commit('setLogtimes', result.data.data);
     });
   },
   getStatus({ commit }) {
     http
-      .get('status')
+      .get('/status')
       .then((result) => {
         commit('setStatus', result.data.data);
       })
@@ -172,14 +171,14 @@ const actions = {
       });
   },
   getTaskOfProject({ commit }, idProject) {
-    http.get(`project/${idProject}`).then((result) => {
+    http.get(`/project/${idProject}`).then((result) => {
       commit('setTasksArray', result.data.data.tasks);
       commit('setTaskAsStatus');
     });
   },
   getProject({ commit }) {
     http
-      .get('project')
+      .get('/project')
       .then((result) => {
         commit('setProjectsOfLeader', result.data.data);
         commit('setProjectOfMember', result.data.data);
@@ -192,7 +191,7 @@ const actions = {
   },
   addProject({ commit, dispatch }, params) {
     http
-      .post('project', params)
+      .post('/project', params)
       .then((result) => {
         dispatch('addProjectEdit', result.data.data);
         dispatch('getProject');
@@ -205,23 +204,23 @@ const actions = {
       });
   },
   addNewTask({ dispatch }, params) {
-    http.post(`project/${params.idProject}/task`, params.task).then(() => {
+    http.post(`/project/${params.idProject}/task`, params.task).then(() => {
       dispatch('getTaskOfProject', params.idProject);
     });
   },
   removeCard({ commit }, data) {
-    http.post('project/task', data).then(() => {
+    http.post('/project/task', data).then(() => {
       commit('logMess');
     });
   },
   deleteProject({ dispatch }, idProject) {
-    http.delete(`project/${idProject}`).then(() => {
+    http.delete(`/project/${idProject}`).then(() => {
       dispatch('getProject');
     });
   },
   editProject({ commit, dispatch }, params) {
     http
-      .put(`project/${params.idProject}`, params.project)
+      .put(`/project/${params.idProject}`, params.project)
       .then((result) => {
         commit('setProjectEdit', result.data.data);
         dispatch('getProject');
@@ -233,18 +232,18 @@ const actions = {
       });
   },
   deleteTask({ dispatch }, params) {
-    http.delete(`project/${params.idProject}/${params.idTask}`).then(() => {
+    http.delete(`/project/${params.idProject}/${params.idTask}`).then(() => {
       dispatch('getTaskOfProject', params.idProject);
     });
   },
   editTask({ dispatch }, params) {
-    http.put(`project/task/${params.idTask}`, params.task).then(() => {
+    http.put(`/project/task/${params.idTask}`, params.task).then(() => {
       dispatch('getTaskOfProject', params.idProject);
     });
   },
   removeMember({ commit, dispatch }, params) {
     http
-      .put(`project/${params.idProject}/member/remove`, params.project)
+      .put(`/project/${params.idProject}/member/remove`, params.project)
       .then((result) => {
         commit('setProjectEdit', result.data.data);
         dispatch('getProject');
@@ -257,7 +256,7 @@ const actions = {
   },
   addMember({ commit, dispatch }, params) {
     http
-      .put(`project/${params.idProject}/member/add`, params.project)
+      .put(`/project/${params.idProject}/member/add`, params.project)
       .then((result) => {
         commit('setProjectEdit', result.data.data);
         dispatch('getProject');
@@ -270,14 +269,14 @@ const actions = {
   },
   addComment({ dispatch }, params) {
     http
-      .post(`project/task/${params.idTask}/comment`, params.comment)
+      .post(`/project/task/${params.idTask}/comment`, params.comment)
       .then((result) => {
         socket.emit('save-comment', result.data.data);
         dispatch('getCommentByIdTask', params.idTask);
       });
   },
   getCommentByIdTask({ commit, dispatch }, params) {
-    http.get(`project/task/${params}/comment`).then((result) => {
+    http.get(`/project/task/${params}/comment`).then((result) => {
       commit('setComments', result.data.data);
     });
     socket.on(

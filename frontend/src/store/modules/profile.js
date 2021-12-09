@@ -23,7 +23,7 @@ const mutations = {
 const actions = {
   searchMember({ commit }, params) {
     http
-      .post('user', params)
+      .post('/user', params)
       .then((result) => {
         commit('setMemberInfor', result.data.data);
       })
