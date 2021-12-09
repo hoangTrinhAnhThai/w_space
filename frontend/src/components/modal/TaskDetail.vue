@@ -3,6 +3,7 @@
     ref="taskDetailModal"
     hide-footer
     :title="task.name"
+    
     class="task-detail"
     size="lg md"
   >
@@ -10,10 +11,11 @@
       <v-row>
         <v-col class="block" cols="8">
           <v-row>
-            <v-text-field v-model="task.name"></v-text-field>
+            <v-text-field :disabled="isEdit" v-model="task.name"></v-text-field>
           </v-row>
           <v-row align="center">
             <v-textarea
+            :disabled="isEdit"
               class="mx-2"
               v-model="task.description"
               label="Description"
@@ -33,7 +35,7 @@
             </v-col>
             <v-col cols="1" class="comment-btn">
               <v-btn class="cmt-btn" text style="border: none">
-                <v-icon @click="sendComment" color="blue darken-2">
+                <v-icon  @click="sendComment" color="blue darken-2">
                   mdi-message-text
                 </v-icon>
               </v-btn>
@@ -64,6 +66,7 @@
         <v-col class="block" cols="17">
           <v-row align="center">
             <v-select
+            :disabled="isEdit"
               v-model="task.assigned"
               :items="listMember"
               chips
@@ -76,6 +79,7 @@
           </v-row>
           <v-row align="center">
             <v-select
+            :disabled="isEdit"
               v-model="task.priority"
               chips
               label="Priority"
@@ -93,6 +97,7 @@
               </v-row>
               <v-row>
                 <DatePicker
+                :disabled="isEdit"
                   v-model="date"
                   :clearable="false"
                   class="datepicker"
@@ -154,6 +159,8 @@ export default {
       currentTask: 'TASKS/currentTask',
       validateText: 'VALIDATION/validateText',
       comments: 'TASKS/comments',
+            userInfo: 'AUTH/userInfo',
+
     }),
     listMember() {
       let list = [];
@@ -168,6 +175,13 @@ export default {
       }
       return list;
     },
+    isEdit() {
+      let isEdit = true
+      if(this.userInfo._id == this.currentProject.createdBy._id) {
+        isEdit = false
+      }
+      return isEdit
+    }
   },
   methods: {
     ...mapActions({
@@ -256,5 +270,8 @@ export default {
 }
 .v-avatar {
   background-color: green !important;
+}
+.theme--light.v-input--is-disabled {
+  color: rgb(206, 93, 93) !important;
 }
 </style>
