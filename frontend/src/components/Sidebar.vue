@@ -215,12 +215,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import AddNewProjectModal from "../components/modal/AddNewProject.vue";
-import AddMemberModal from "../components/modal/AddMember.vue";
+import { mapActions, mapGetters } from 'vuex';
+import AddNewProjectModal from '../components/modal/AddNewProject.vue';
+import AddMemberModal from '../components/modal/AddMember.vue';
 
 export default {
-  name: "Sidebar",
+  name: 'Sidebar',
   data: () => ({
     isShowProject: false,
     isShowChat: false,
@@ -233,26 +233,26 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projectsOfLeader: "TASKS/projectsOfLeader",
-      projectsOfMember: "TASKS/projectsOfMember",
-      rooms: "CHAT/rooms",
-      notifications: "NOTIFICATION/notifications",
-      userInfo: "AUTH/userInfo",
+      projectsOfLeader: 'TASKS/projectsOfLeader',
+      projectsOfMember: 'TASKS/projectsOfMember',
+      rooms: 'CHAT/rooms',
+      notifications: 'NOTIFICATION/notifications',
+      userInfo: 'AUTH/userInfo',
     }),
     items() {
       const items = [
         {
           id: 1,
-          name: "Project :",
+          name: 'Project :',
           children: this.projectsOfLeader.concat(this.projectsOfMember),
         },
         {
           id: 2,
-          name: "Logtime",
+          name: 'Logtime',
         },
         {
           id: 3,
-          name: "Chat :",
+          name: 'Chat :',
           children: this.rooms,
         },
       ];
@@ -269,15 +269,15 @@ export default {
       this.$refs.addMemberModal.show(project);
     },
     ...mapActions({
-      getTaskOfProjectAction: "TASKS/getTaskOfProject",
-      addCurrentProjectAction: "TASKS/addCurrentProject",
-      deleteProjectAction: "TASKS/deleteProject",
-      getProject: "TASKS/getProject",
-      addProjectEditAction: "TASKS/addProjectEdit",
-      getStatus: "TASKS/getStatus",
-      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
-      addCurrentRoom: "CHAT/addCurrentRoom",
-      removeUnreadNotification: "NOTIFICATION/removeUnreadNotification"
+      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
+      addCurrentProjectAction: 'TASKS/addCurrentProject',
+      deleteProjectAction: 'TASKS/deleteProject',
+      getProject: 'TASKS/getProject',
+      addProjectEditAction: 'TASKS/addProjectEdit',
+      getStatus: 'TASKS/getStatus',
+      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
+      addCurrentRoom: 'CHAT/addCurrentRoom',
+      removeUnreadNotification: 'NOTIFICATION/removeUnreadNotification',
     }),
     getTaskOfProject(project) {
       this.addCurrentProjectAction(project);
@@ -290,31 +290,29 @@ export default {
       this.messages = 0;
     },
     openDialog(item) {
-      if (item.id === 1 && typeof this.$route.params.id == "undefined") {
+      if (item.id === 1 && typeof this.$route.params.id == 'undefined') {
         return;
       } else if (
         item.id === 1 &&
-        typeof this.$route.params.id !== "undefined"
+        typeof this.$route.params.id !== 'undefined'
       ) {
         this.$router.push(`/roadmap/${this.projectsOfLeader[0]._id}`);
       } else if (item.id === 2) {
-        this.$router.push("/logtime");
-      } else if (item.id === 3 && typeof this.$route.params.id == "undefined") {
+        this.$router.push('/logtime');
+      } else if (item.id === 3 && typeof this.$route.params.id == 'undefined') {
         return;
       } else if (
         item.id === 3 &&
-        typeof this.$route.params.id !== "undefined"
+        typeof this.$route.params.id !== 'undefined'
       ) {
         this.$router.push(`/chatroom/${this.rooms[0]._id}`);
-      } else if(this.$route.params.id == item._id) {
-        return 
-      }
-      
-      else if (item.room && this.$route.params.id != item._id) {
+      } else if (this.$route.params.id == item._id) {
+        return;
+      } else if (item.room && this.$route.params.id != item._id) {
         this.$router.push(`/roadmap/${item._id}`);
       } else if (this.$route.params.id != item._id) {
         console.log('ssssssssssssssss');
-        this.removeUnreadNotification(item._id)
+        this.removeUnreadNotification(item._id);
         this.$router.push(`/chatroom/${item._id}`);
       } else {
         return;
@@ -323,20 +321,20 @@ export default {
   },
   created() {
     this.getProject();
-    if (this.$route.name.name === "Roadmap") {
+    if (this.$route.name.name === 'Roadmap') {
       this.getStatus();
       this.getTaskOfProject(this.$route.params.id);
-    } else if (this.$route.name.name === "ChatRoom") {
+    } else if (this.$route.name.name === 'ChatRoom') {
       this.addCurrentRoom(this.$route.params.id);
       this.getAllChatByIdRoom(this.$route.params.id);
     }
   },
   watch: {
     $route(to) {
-      if (to.name.name === "Roadmap") {
+      if (to.name.name === 'Roadmap') {
         this.getStatus();
         this.getTaskOfProject(to.params.id);
-      } else if (to.name.name === "ChatRoom") {
+      } else if (to.name.name === 'ChatRoom') {
         this.addCurrentRoom(to.params.id);
         this.getAllChatByIdRoom(to.params.id);
       }

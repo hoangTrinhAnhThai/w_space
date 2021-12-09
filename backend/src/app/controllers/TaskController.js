@@ -12,7 +12,8 @@ class TaskController {
   showAllTask = [
     (req, res) => {
       Task.find()
-        .populate('comments').populate('assigned')
+        .populate('comments')
+        .populate('assigned')
         .then((task) => {
           return apiResponse.successResponseWithData(
             res,
@@ -28,7 +29,8 @@ class TaskController {
   showTask = [
     (req, res) => {
       Task.findById(req.params.id)
-        .populate('comments').populate('assigned')
+        .populate('comments')
+        .populate('assigned')
         .then((task) => {
           return apiResponse.successResponseWithData(
             res,

@@ -11,10 +11,10 @@
             placeholder="Email"
           />
           <div class="errors">
-            <p v-show="showErrors.emptyEmail" class="error">
+            <p v-show="showErrors.emptyEmail" class="errors">
               Email is required
             </p>
-            <p v-show="showErrors.invalidEmail" class="error">
+            <p v-show="showErrors.invalidEmail" class="errors">
               Email is invalid
             </p>
           </div>
@@ -27,13 +27,13 @@
             placeholder="Password"
           />
           <div class="errors">
-            <p v-show="showErrors.emptyPassword" class="error">
+            <p v-show="showErrors.emptyPassword" class="errors">
               Password is required
             </p>
-            <p v-show="showErrors.passwordMinLength" class="error">
+            <p v-show="showErrors.passwordMinLength" class="errors">
               Password must have at least 6 letters
             </p>
-            <p v-show="showErrors.passwordMaxLength" class="error">
+            <p v-show="showErrors.passwordMaxLength" class="errors">
               Password must have at most 255 letters
             </p>
           </div>
@@ -204,7 +204,8 @@ input {
   margin: 10px 0 2px;
 }
 .errors {
-  margin-left: -25%;
   text-align: start;
+  margin-left: 5px;
+  font-size: 85%;
 }
 </style>

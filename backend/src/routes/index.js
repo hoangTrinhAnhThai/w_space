@@ -16,6 +16,6 @@ function route(app) {
   app.use('/chat', auth, chat);
   app.use('/room', auth, room);
   app.use('/status', status);
-  app.use('/notification',auth, notification);
+  app.use('/notification', auth, notification);
 }
 module.exports = route;

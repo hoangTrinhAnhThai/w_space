@@ -74,28 +74,25 @@ class NotificationController {
   updateNotification = [
     (req, res) => {
       User.findById(host(req, res)).then((user) => {
-        Notification.findOne({ room: req.params.id }).then(
-          (notification) => {
-            let listContent = notification.listContent;
-            for (let content of listContent) {
-              if (
-                JSON.stringify(user._id) ==
-                JSON.stringify(content.member._id)
-              ) {
-                content.unreadCount = 0;
-              }
+        Notification.findOne({ room: req.params.id }).then((notification) => {
+          let listContent = notification.listContent;
+          for (let content of listContent) {
+            if (
+              JSON.stringify(user._id) == JSON.stringify(content.member._id)
+            ) {
+              content.unreadCount = 0;
             }
-            Notification.findByIdAndUpdate(notification._id, {
-              listContent: listContent,
-            }).then((result) => {
-              return apiResponse.successResponseWithData(
-                res,
-                'Update chat successfully',
-                result,
-              );
-            });
-          },
-        );
+          }
+          Notification.findByIdAndUpdate(notification._id, {
+            listContent: listContent,
+          }).then((result) => {
+            return apiResponse.successResponseWithData(
+              res,
+              'Update chat successfully',
+              result,
+            );
+          });
+        });
       });
     },
   ];

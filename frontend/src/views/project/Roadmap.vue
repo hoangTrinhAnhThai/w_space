@@ -190,7 +190,6 @@ export default {
 <style lang="scss" scoped>
 @import '../../assets/style.scss';
 .status {
-  /* margin: 10px 20px 0; */
   margin: 10px;
   background-color: $color2;
   height: 100%;
@@ -199,6 +198,6 @@ export default {
 }
 
 .status:hover {
-  background-color: rgb(198, 217, 240);
+  background-color: rgb(246, 245, 245);
 }
 </style>

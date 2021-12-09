@@ -78,7 +78,7 @@ export default {
     },
     addProject() {
       if (!this.validateBeforeSubmit()) {
-        document.getElementById("content").focus();
+        document.getElementById('content').focus();
 
         return;
       } else {
@@ -97,7 +97,7 @@ export default {
     addProjectByKey(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-        document.getElementById("content").focus();
+          document.getElementById('content').focus();
 
           return;
         } else {

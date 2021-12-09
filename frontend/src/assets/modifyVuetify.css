@@ -44,10 +44,14 @@ textarea {
     top: -3px !important;
 }
 
-.error {
+.errors {
     color: red;
+    background-color: none !important;
     font-size: 13px;
     font-style: italic;
+}
+.v-application .errors {
+    background-color: none !important;
 }
 
 .theme--light.v-subheader {

@@ -106,7 +106,7 @@ export default {
     },
     searchMember() {
       if (!this.validateBeforeSubmit()) {
-        document.getElementById("content").focus();
+        document.getElementById('content').focus();
 
         return;
       } else {
@@ -116,7 +116,7 @@ export default {
     searchMemberByKeyUp(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-        document.getElementById("content").focus();
+          document.getElementById('content').focus();
 
           return;
         } else {

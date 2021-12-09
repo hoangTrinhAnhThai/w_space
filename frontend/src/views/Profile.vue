@@ -89,13 +89,13 @@
                   ></v-text-field>
                 </v-row>
                 <v-row>
-                  <p v-show="showErrors.emptyPassword" class="error">
+                  <p v-show="showErrors.emptyPassword" class="errors">
                     Old password is required
                   </p>
-                  <p v-show="showErrors.oldPasswordMinLength" class="error">
+                  <p v-show="showErrors.oldPasswordMinLength" class="errors">
                     Old password must have at least 6 letters
                   </p>
-                  <p v-show="showErrors.oldPasswordMaxLength" class="error">
+                  <p v-show="showErrors.oldPasswordMaxLength" class="errors">
                     Old password must have at most 255 letters
                   </p>
                 </v-row>
@@ -112,21 +112,21 @@
                   ></v-text-field>
                 </v-row>
                 <v-row>
-                  <p v-show="showErrors.emptyNewPassword" class="error">
+                  <p v-show="showErrors.emptyNewPassword" class="errors">
                     New password is required
                   </p>
-                  <p v-show="showErrors.newPasswordMinLength" class="error">
+                  <p v-show="showErrors.newPasswordMinLength" class="errors">
                     New password must have at least 6 letters
                   </p>
-                  <p v-show="showErrors.newPasswordMaxLength" class="error">
+                  <p v-show="showErrors.newPasswordMaxLength" class="errors">
                     New password must have at most 255 letters
                   </p>
-                  <p v-show="showErrors.cofirmationNotMatch" class="error">
+                  <p v-show="showErrors.cofirmationNotMatch" class="errors">
                     The Confirm Password confirmation dose not match
                   </p>
                   <p
                     v-show="showErrors.oldPassWordBeSameNewPassword"
-                    class="error"
+                    class="errors"
                   >
                     Your new password cannot be the same as your current
                     password
@@ -145,13 +145,19 @@
                   ></v-text-field>
                 </v-row>
                 <v-row>
-                  <p v-show="showErrors.emptyConfirmPassword" class="error">
+                  <p v-show="showErrors.emptyConfirmPassword" class="errors">
                     Confirm password is required
                   </p>
-                  <p v-show="showErrors.confirmPasswordMinLength" class="error">
+                  <p
+                    v-show="showErrors.confirmPasswordMinLength"
+                    class="errors"
+                  >
                     Confirm password must have at least 6 letters
                   </p>
-                  <p v-show="showErrors.confirmPasswordMaxLength" class="error">
+                  <p
+                    v-show="showErrors.confirmPasswordMaxLength"
+                    class="errors"
+                  >
                     Confirm password must have at most 255 letters
                   </p>
                 </v-row>

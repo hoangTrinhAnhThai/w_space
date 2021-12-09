@@ -139,9 +139,9 @@ export default {
 }
 
 .v-btn:not(.v-btn--round).v-size--default {
-  height: 100% !important;
+  /* height: 100% !important; */
   top: -10px;
-  padding: 13px 25px;
+  padding: 17px 25px;
   border: none;
 }
 

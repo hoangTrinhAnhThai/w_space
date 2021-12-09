@@ -15,22 +15,24 @@
           </v-btn>
         </v-btn-toggle>
       </v-col>
-      <v-col cols="4">
-        <v-btn-toggle class="date-week">
+      <v-col cols="1">
+        <v-btn-toggle class="date-week1">
           <v-btn> Day </v-btn>
           <v-btn> Week </v-btn>
         </v-btn-toggle>
-        <v-btn-toggle class="calendar">
-          <v-btn style="margin-left: 10px">
+      </v-col>
+      <v-col cols="2">
+        <div class="date-week2">
+          <v-btn text>
             <i class="bx bx-sync"></i>
           </v-btn>
-          <v-btn style="margin-left: 10px">
+          <v-btn text>
             <i class="bx bx-user"></i>
           </v-btn>
-          <v-btn style="margin-left: 10px">
+          <v-btn text>
             <i class="bx bx-edit"></i>
           </v-btn>
-        </v-btn-toggle>
+        </div>
       </v-col>
     </v-row>
     <v-row>
@@ -38,14 +40,18 @@
         <v-text-field label="Search"></v-text-field>
       </v-col>
       <v-col cols="1">
-        <v-btn style="width: 100%" elevation="2"
+        <v-btn style="height: 80%; width: 100%"
           ><i class="bx bx-filter-alt"></i
         ></v-btn>
       </v-col>
       <v-col cols="2">
         <v-btn
           elevation="2"
-          style="color: white !important; background-color: rgb(39, 102, 120)"
+          style="
+            height: 80%;
+            color: white !important;
+            background-color: rgb(39, 102, 120);
+          "
           @click="createLogtime"
           >Add new time entry</v-btn
         >
@@ -141,9 +147,6 @@ export default {
   width: 50px !important;
   height: 40px !important;
 }
-.v-btn {
-  height: 100%;
-}
 
 i {
   font-size: 15px;
@@ -152,9 +155,13 @@ i {
   opacity: 0;
   width: 40px;
   margin: 0;
-  height: 20px;
   padding: 0;
   position: absolute;
   right: 0;
+}
+
+.date-week2 .v-btn {
+  margin-left: 5px;
+  background-color: rgb(247, 247, 247);
 }
 </style>
