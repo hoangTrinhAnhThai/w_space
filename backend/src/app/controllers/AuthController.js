@@ -68,10 +68,13 @@ class AuthController {
                   if (isValid) {
                     const tokenCreated = jwt.sign(
                       {
-                        user: user,
+                        _id: user._id,
+                        email: user.email,
+                        firstName: user.firstName,
+                        lastName:user.lastName
                       },
                       process.env.TOKEN_SECRET,
-                      { expiresIn: process.env.JWT_TIMEOUT_DURATION },
+                      {  expiresIn: process.env.JWT_TIMEOUT_DURATION },
                     );
                     let userData = {
                       _id: user._id,
@@ -98,14 +101,14 @@ class AuthController {
                       },
                     );
                   } else {
-                    return apiResponse.unauthorizedResponse(
+                    return apiResponse.ErrorResponse(
                       res,
                       'Password wrong',
                     );
                   }
                 },
               );
-            } else return apiResponse.unauthorizedResponse(res, 'Email wrong');
+            } else return apiResponse.ErrorResponse(res, 'Email wrong');
           });
         }
       } catch (err) {

@@ -4,19 +4,18 @@ const cors = require('cors')
 const route = require('./src/routes/index.js')
 const db = require('./src/config/database')
 const app = express()
-const room = require('./src/routes/modules/room');
-const chat = require('./src/routes/modules/chat');
-
 require('dotenv').config()
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
-app.use(cors())
+const corsOptions ={
+  origin: process.env.URL, 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200
+}
+app.use(cors(corsOptions))
 route(app)
 db.connect()
-app.use('/rooms', express.static(path.join(__dirname, 'dist')));
-app.use('/api/room', room);
-app.use('/api/chat', chat);
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

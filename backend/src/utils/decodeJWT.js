@@ -13,7 +13,7 @@ const host = function (req, res) {
   } else {
     return apiResponse.unauthorizedResponse(res, 'Unauthorized');
   }
-  return decoded.user._id;
+  return decoded._id;
 };
 
 module.exports = host;

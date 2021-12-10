@@ -197,6 +197,7 @@ class ProjectController {
 
   showAllProjects = [
     (req, res) => {
+      console.log(host(req, res));
       User.findById(host(req, res)).then((user) => {
         Project.find({ $or: [{ createdBy: user }, { members: user }] })
           .sort({ createdAt: -1 })
