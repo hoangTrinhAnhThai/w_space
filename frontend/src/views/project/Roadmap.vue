@@ -6,11 +6,10 @@
           <v-col style="text-align: center">
             <span
               class="name-status"
-              :style="{ 'background-color': colors[index] }"
+              :style="{ 'color': colors[index], 'font-weight':'1000' }"
             >
-              {{ data.status.name }}
+              {{ data.status.name }}  {{ data.tasks.length }}
             </span>
-            <span>{{ data.tasks.length }}</span>
           </v-col>
         </v-row>
         <v-row>
@@ -198,6 +197,6 @@ export default {
 }
 
 .status:hover {
-  background-color: rgb(246, 245, 245);
+  background-color: rgb(211, 224, 210);
 }
 </style>

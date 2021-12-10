@@ -49,6 +49,7 @@ const actions = {
   getAllLogtime({ commit }) {
     commit('setLogtimeArray', []);
     http.get('/logtime').then((result) => {
+      console.log(result.data.data);
       commit('setLogtimeArray', result.data.data);
       for (let logtime of result.data.data) {
         if (logtime.isPlaying == true) {
@@ -61,6 +62,8 @@ const actions = {
     commit('setLogtimeArray', []);
     http.post(`/logtime/${params}`).then((result) => {
       commit('setLogtimeArray', result.data.data);
+    localStorage.setItem('logtimeList', JSON.stringify(result.data.data))
+
       for (let logtime of result.data.data) {
         if (logtime.isPlaying == true) {
           commit('setLogtimeIsPlaying', logtime);

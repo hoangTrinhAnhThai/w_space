@@ -18,8 +18,9 @@
           open-on-click
           return-object
         >
-          <template slot="label" slot-scope="{ item }">
+          <template v-bind:class="{ active: (Object.keys(item).length === 0) }" slot="label" slot-scope="{ item }">
             <div class="item">
+              {{ Object.keys(item).length === 0 }}
               <span style="color: white" @click="openDialog(item)">
                 <i
                   class="bx bxs-flag-alt"
@@ -91,12 +92,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import AddNewProjectModal from '../components/modal/AddNewProject.vue';
-import AddMemberModal from '../components/modal/AddMember.vue';
+import { mapActions, mapGetters } from "vuex";
+import AddNewProjectModal from "../components/modal/AddNewProject.vue";
+import AddMemberModal from "../components/modal/AddMember.vue";
 
 export default {
-  name: 'Sidebar',
+  name: "Sidebar",
   data: () => ({
     isShowProject: false,
     isShowChat: false,
@@ -109,27 +110,31 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projectsOfLeader: 'TASKS/projectsOfLeader',
-      projectsOfMember: 'TASKS/projectsOfMember',
-      rooms: 'CHAT/rooms',
-      notifications: 'NOTIFICATION/notifications',
-      userInfo: 'AUTH/userInfo',
+      projectsOfLeader: "TASKS/projectsOfLeader",
+      projectsOfMember: "TASKS/projectsOfMember",
+      rooms: "CHAT/rooms",
+      notifications: "NOTIFICATION/notifications",
+      userInfo: "AUTH/userInfo",
     }),
     items() {
       const items = [
         {
           id: 1,
-          name: 'Project :',
+          name: "Project :",
           children: this.projectsOfLeader.concat(this.projectsOfMember),
+          icon: "mdi-wallet-travel",
         },
         {
           id: 2,
-          name: 'Logtime',
+          name: "Logtime",
+          icon: "mdi-file-clock-outline",
+          children: [{}],
         },
         {
           id: 3,
-          name: 'Chat :',
+          name: "Chat :",
           children: this.rooms,
+          icon: "mdi-message-reply-text-outline",
         },
       ];
       return items;
@@ -145,15 +150,15 @@ export default {
       this.$refs.addMemberModal.show(project);
     },
     ...mapActions({
-      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
-      addCurrentProjectAction: 'TASKS/addCurrentProject',
-      deleteProjectAction: 'TASKS/deleteProject',
-      getProject: 'TASKS/getProject',
-      addProjectEditAction: 'TASKS/addProjectEdit',
-      getStatus: 'TASKS/getStatus',
-      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
-      addCurrentRoom: 'CHAT/addCurrentRoom',
-      removeUnreadNotification: 'NOTIFICATION/removeUnreadNotification',
+      getTaskOfProjectAction: "TASKS/getTaskOfProject",
+      addCurrentProjectAction: "TASKS/addCurrentProject",
+      deleteProjectAction: "TASKS/deleteProject",
+      getProject: "TASKS/getProject",
+      addProjectEditAction: "TASKS/addProjectEdit",
+      getStatus: "TASKS/getStatus",
+      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
+      addCurrentRoom: "CHAT/addCurrentRoom",
+      removeUnreadNotification: "NOTIFICATION/removeUnreadNotification",
     }),
     getTaskOfProject(project) {
       this.addCurrentProjectAction(project);
@@ -166,20 +171,20 @@ export default {
       this.messages = 0;
     },
     openDialog(item) {
-      if (item.id === 1 && typeof this.$route.params.id == 'undefined') {
+      if (item.id === 1 && typeof this.$route.params.id == "undefined") {
         return;
       } else if (
         item.id === 1 &&
-        typeof this.$route.params.id !== 'undefined'
+        typeof this.$route.params.id !== "undefined"
       ) {
         this.$router.push(`/roadmap/${this.projectsOfLeader[0]._id}`);
       } else if (item.id === 2) {
-        this.$router.push('/logtime');
-      } else if (item.id === 3 && typeof this.$route.params.id == 'undefined') {
+        this.$router.push("/logtime");
+      } else if (item.id === 3 && typeof this.$route.params.id == "undefined") {
         return;
       } else if (
         item.id === 3 &&
-        typeof this.$route.params.id !== 'undefined'
+        typeof this.$route.params.id !== "undefined"
       ) {
         this.$router.push(`/chatroom/${this.rooms[0]._id}`);
       } else if (this.$route.params.id == item._id) {
@@ -196,20 +201,20 @@ export default {
   },
   created() {
     this.getProject();
-    if (this.$route.name.name === 'Roadmap') {
+    if (this.$route.name.name === "Roadmap") {
       this.getStatus();
       this.getTaskOfProject(this.$route.params.id);
-    } else if (this.$route.name.name === 'ChatRoom') {
+    } else if (this.$route.name.name === "ChatRoom") {
       this.addCurrentRoom(this.$route.params.id);
       this.getAllChatByIdRoom(this.$route.params.id);
     }
   },
   watch: {
     $route(to) {
-      if (to.name.name === 'Roadmap') {
+      if (to.name.name === "Roadmap") {
         this.getStatus();
         this.getTaskOfProject(to.params.id);
-      } else if (to.name.name === 'ChatRoom') {
+      } else if (to.name.name === "ChatRoom") {
         this.addCurrentRoom(to.params.id);
         this.getAllChatByIdRoom(to.params.id);
       }
@@ -218,8 +223,13 @@ export default {
 };
 </script>
 <style>
-.item {
-  /* position: relative; */
+.active {
+  /* height: 0; */
+  display: none;
+background-color: red;
+}
+.mdi-menu-down::before {
+  color: white !important;
 }
 .function {
   position: absolute;

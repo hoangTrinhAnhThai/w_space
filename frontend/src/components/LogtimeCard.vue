@@ -7,7 +7,7 @@
           :items="tasks"
           item-text="taskName"
           item-value="taskId"
-          label="Your task"
+          label="Your task" 
         >
         </v-select>
       </v-col>

@@ -15,7 +15,11 @@
           {{ year }}</span
         >
       </span>
-      <v-avatar v-if="card.assigned" color="primary" size="24">
+      <v-avatar
+        v-if="card.assigned"
+        color="light-blue lighten-3"
+        size="24"
+      >
         <span style="font-size: 10px">
           {{ assignForTask.firstName.charAt(0)
           }}{{ assignForTask.lastName.charAt(0) }}

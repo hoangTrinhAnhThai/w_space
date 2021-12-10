@@ -62,6 +62,7 @@ const actions = {
         router.push('/login');
       })
       .catch((error) => {
+        console.log(error);
         commit('ERROR/setErrorMessage', error.response.data.message, {
           root: true,
         });

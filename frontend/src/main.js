@@ -17,7 +17,6 @@ Vue.use(IconsPlugin);
 Vue.use(BootstrapVueIcons);
 Vue.use(VueChatScroll);
 Vue.use(VueJWT);
-
 Vue.config.productionTip = false;
 
 new Vue({

@@ -89,6 +89,7 @@ export default {
         `${new Date().getFullYear()}-${
           new Date().getMonth() + 1
         }-${new Date().getDate()}`,
+        logtimeList: JSON.parse(localStorage.getItem('logtimeList'))
     };
   },
   computed: {
@@ -113,6 +114,7 @@ export default {
     }),
     createLogtime() {
       this.createLogtimeAction();
+      // this.logtimeList.unshift({createdAt: new Date(), _id: 1})
     },
   },
   components: {
@@ -128,6 +130,7 @@ export default {
       this.getAllLogtimeByDate(this.date);
     },
   },
+
 };
 </script>
 <style scoped>
