@@ -176,6 +176,9 @@ export default {
       updateLogtimeAction: 'LOGTIME/updateLogtime',
     }),
     startTime() {
+      this.hours = 0;
+      this.minutes = 0
+      this.seconds = 0
       this.updateLogtimeAction({
         logtime: {
           isPlaying: false,
@@ -200,6 +203,9 @@ export default {
       this.myInterval = setInterval(this.showTime, 1000);
     },
     stopTime() {
+      this.hours = 0;
+      this.minutes = 0
+      this.seconds = 0
       clearInterval(this.myInterval);
       this.updateLogtimeAction({
         logtime: {
@@ -213,7 +219,13 @@ export default {
     showTime() {
       var start = new Date(this.logtimeIsPlaying.startTime);
       var timeInMiliseconds = new Date() - start;
-      this.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60);
+      // if (this.logtime.timeInMiliseconds) {
+      //   totalSecond = this.logtime.timeInMiliseconds / 1000 / 60 / 60;
+      //   hour = Math.floor(totalSecond);
+      //   minute = Math.floor((totalSecond - hour) * 60);
+      //   second = Math.floor(((totalSecond - hour) * 60 - minute) * 60);
+      // }
+      this.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60)
       this.minutes = Math.floor(
         (timeInMiliseconds / 1000 / 60 / 60 - this.hours) * 60,
       );

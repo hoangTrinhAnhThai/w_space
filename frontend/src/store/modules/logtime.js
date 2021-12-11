@@ -43,6 +43,40 @@ const mutations = {
   setLogtimeIsPlaying(state, data) {
     state.logtimeIsPlaying = data;
   },
+  addLogtime(state, data) {
+    state.logtimeArray.unshift(data)
+    for (let logtime of state.logtimeArray) {
+      if (logtime.isPlaying == true) {
+        state.logtimeIsPlaying = logtime
+        break
+      }
+    }
+  },
+  updateLogtime(state, data) {
+    let list = state.logtimeArray
+    for(let i = 0; i < list.length; i++) {
+      if(list[i]._id === data._id) {
+        list.splice(i, 1, data)
+        break
+      }
+    }
+    state.logtimeArray = list
+    for (let logtime of list) {
+      if (logtime.isPlaying == true) {
+        state.logtimeIsPlaying = logtime
+        break
+      }
+    }
+  },
+  deleteLogtime(state, data) {
+    let list = state.logtimeArray
+    for(let i = 0; i < list.length; i++) {
+      if(list[i]._id === data) {
+        list.splice(i, 1)
+        break
+      }
+    }
+  }
 };
 
 const actions = {
@@ -62,8 +96,6 @@ const actions = {
     commit('setLogtimeArray', []);
     http.post(`/logtime/${params}`).then((result) => {
       commit('setLogtimeArray', result.data.data);
-    localStorage.setItem('logtimeList', JSON.stringify(result.data.data))
-
       for (let logtime of result.data.data) {
         if (logtime.isPlaying == true) {
           commit('setLogtimeIsPlaying', logtime);
@@ -71,19 +103,23 @@ const actions = {
       }
     });
   },
-  deteleLogtime({ dispatch }, params) {
+  deteleLogtime({ commit }, params) {
     http.delete(`/logtime/${params}`).then(() => {
-      dispatch('getAllLogtime');
+      commit('deleteLogtime', params)
     });
   },
-  createLogtime({ dispatch }, params) {
-    http.post('/logtime', params).then(() => {
-      dispatch('getAllLogtime');
+  createLogtime({ commit }, params) {
+    http.post('/logtime', params).then((result) => {
+      commit('addLogtime', result.data.data)
+      // dispatch('getAllLogtime');
     });
   },
-  updateLogtime({ dispatch }, params) {
-    http.put(`/logtime/${params._id}`, params.logtime).then(() => {
-      dispatch('getAllLogtime');
+  updateLogtime({ commit }, params) {
+    http.put(`/logtime/${params._id}`, params.logtime).then((result) => {
+      console.log(params);
+      console.log(result);
+      commit('updateLogtime', result.data.data)
+      // dispatch('getAllLogtime');
     });
   },
 };

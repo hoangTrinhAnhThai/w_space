@@ -6,7 +6,7 @@
           <v-col style="text-align: center">
             <span
               class="name-status"
-              :style="{ 'color': colors[index], 'font-weight':'1000' }"
+              :style="{ 'color': colors[index], 'font-weight':'800' }"
             >
               {{ data.status.name }}  {{ data.tasks.length }}
             </span>

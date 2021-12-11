@@ -18,9 +18,9 @@
           open-on-click
           return-object
         >
-          <template v-bind:class="{ active: (Object.keys(item).length === 0) }" slot="label" slot-scope="{ item }">
+          <template  slot="label" slot-scope="{ item }">
             <div class="item">
-              {{ Object.keys(item).length === 0 }}
+              <!-- {{ Object.keys(item).length === 0 }} -->
               <span style="color: white" @click="openDialog(item)">
                 <i
                   class="bx bxs-flag-alt"
@@ -122,19 +122,15 @@ export default {
           id: 1,
           name: "Project :",
           children: this.projectsOfLeader.concat(this.projectsOfMember),
-          icon: "mdi-wallet-travel",
         },
         {
           id: 2,
           name: "Logtime",
-          icon: "mdi-file-clock-outline",
-          children: [{}],
         },
         {
           id: 3,
           name: "Chat :",
           children: this.rooms,
-          icon: "mdi-message-reply-text-outline",
         },
       ];
       return items;

@@ -121,6 +121,7 @@ class LogtimeController {
         },
         { new: true, useFindAndModify: false },
       ).then((result) => {
+        console.log(result);
         return apiResponse.successResponseWithData(
           res,
           'Update logtime success',
