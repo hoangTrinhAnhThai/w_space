@@ -62,3 +62,15 @@ textarea {
     background-color: rgb(39, 102, 120) !important;
     color: white !important;
 }
+
+.mx-input:disabled, .mx-input.disabled {
+  color: rgb(75, 77, 75) !important;
+  background-color: #f3f3f3
+}
+.theme--light.v-input--is-disabled, .theme--light.v-input--is-disabled input, .theme--light.v-input--is-disabled textarea {
+    color: rgb(91, 92, 91) !important;
+}
+.v-chip--disabled {
+    color: rgb(91, 92, 91) !important;
+    opacity: 1 !important;
+}

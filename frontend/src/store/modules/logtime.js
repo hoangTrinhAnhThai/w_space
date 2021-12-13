@@ -83,7 +83,6 @@ const actions = {
   getAllLogtime({ commit }) {
     commit('setLogtimeArray', []);
     http.get('/logtime').then((result) => {
-      console.log(result.data.data);
       commit('setLogtimeArray', result.data.data);
       for (let logtime of result.data.data) {
         if (logtime.isPlaying == true) {
@@ -111,15 +110,11 @@ const actions = {
   createLogtime({ commit }, params) {
     http.post('/logtime', params).then((result) => {
       commit('addLogtime', result.data.data)
-      // dispatch('getAllLogtime');
     });
   },
   updateLogtime({ commit }, params) {
     http.put(`/logtime/${params._id}`, params.logtime).then((result) => {
-      console.log(params);
-      console.log(result);
       commit('updateLogtime', result.data.data)
-      // dispatch('getAllLogtime');
     });
   },
 };

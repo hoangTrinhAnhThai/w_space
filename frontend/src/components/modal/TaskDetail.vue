@@ -19,7 +19,7 @@
               class="mx-2"
               v-model="task.description"
               label="Description"
-              rows="4"
+              rows="2"
             ></v-textarea>
           </v-row>
           <v-row class="comment">
@@ -250,6 +250,9 @@ export default {
 .datepicker {
   width: 100% !important;
 }
+.datepicker:disabled {
+  background-color: red !important;
+}
 
 .v-list-item__content {
   margin-left: 20px !important;
@@ -273,5 +276,9 @@ export default {
 }
 .theme--light.v-input--is-disabled {
   color: rgb(206, 93, 93) !important;
+}
+.mx-input:disabled, .mx-input.disabled {
+  color: green !important;
+  background-color: #f3f3f3
 }
 </style>

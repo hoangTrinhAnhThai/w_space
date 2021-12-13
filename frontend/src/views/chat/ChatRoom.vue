@@ -39,69 +39,70 @@
         v-model="message"
         v-on:keyup="sendMessage"
       ></v-text-field>
-      <v-btn
-        class="save-btn"
-        @click="sendMessageByClick"
-        text
-        style="height: 100%"
-      >
-        SEND
-      </v-btn>
+      <div class="btn-container">
+        <v-btn
+          class="save-btn"
+          @click="sendMessageByClick"
+          text
+          style="height: 100%"
+        >
+          SEND
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
-  name: 'ChatRoom',
+  name: "ChatRoom",
   data() {
     return {
-      message: '',
+      message: "",
     };
   },
   computed: {
     ...mapGetters({
-      chats: 'CHAT/chats',
-      userInfo: 'AUTH/userInfo',
-      validateText: 'VALIDATION/validateText',
-      currentRoom: 'CHAT/currentRoom',
+      chats: "CHAT/chats",
+      userInfo: "AUTH/userInfo",
+      validateText: "VALIDATION/validateText",
+      currentRoom: "CHAT/currentRoom",
     }),
   },
   methods: {
     ...mapActions({
-      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
-      sendMessageAction: 'CHAT/sendMessage',
+      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
+      sendMessageAction: "CHAT/sendMessage",
     }),
     sendMessage(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-          document.getElementById('content').focus();
+          document.getElementById("content").focus();
           return;
         } else {
           this.sendMessageAction({
             idRoom: this.$route.params.id,
             chat: { room: this.$route.params.id, message: this.message },
           });
-          this.message = '';
-          document.getElementById('content').focus();
+          this.message = "";
+          document.getElementById("content").focus();
         }
       }
     },
     sendMessageByClick() {
       if (!this.validateBeforeSubmit()) {
-        document.getElementById('content').focus();
+        document.getElementById("content").focus();
         return;
       } else {
         this.sendMessageAction({
           idRoom: this.$route.params.id,
           chat: { room: this.$route.params.id, message: this.message },
         });
-        this.message = '';
-        document.getElementById('content').focus();
+        this.message = "";
+        document.getElementById("content").focus();
       }
     },
-    noop() {},
     validateBeforeSubmit() {
       let passedValidate = true;
       const errors = this.validateText(this.message);
@@ -117,19 +118,18 @@ export default {
 };
 </script>
 <style scoped>
-.v-main {
-  width: 100%;
-  min-width: 1000px;
-  min-height: 92vh;
-  height: 92vh;
-  white-space: nowrap;
-  overflow: scroll !important;
+.chat-room {
+  border: 1px solid rgb(238, 231, 231);
+  border-radius: 3px;
+  margin-bottom: 15px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
 .write-content {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  padding: 20px 30px;
+  padding: 5px 30px;
 }
 
 .theme--light.v-input {
@@ -139,10 +139,9 @@ export default {
 }
 
 .v-btn:not(.v-btn--round).v-size--default {
-  /* height: 100% !important; */
   top: -10px;
-  padding: 17px 25px;
   border: none;
+  height: 100%;
 }
 
 i:hover {
@@ -153,7 +152,7 @@ h1 {
 }
 </style>
 <style lang="scss" scoped>
-@import '../../assets/style.scss';
+@import "../../assets/style.scss";
 
 .chat-room {
   position: relative;
@@ -166,7 +165,7 @@ h1 {
   .layout-chat {
     overflow-y: scroll;
     padding-bottom: 20px;
-    height: calc(100vh - 220px);
+    height: calc(100vh - 230px);
     padding: 30px;
 
     .content {
@@ -225,8 +224,6 @@ h1 {
             }
           }
           p {
-            // background-color: $color;
-            // color: rgb(255, 255, 255);
             background-color: $color2;
             box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
             padding: 10px 25px;
@@ -239,12 +236,6 @@ h1 {
           }
         }
       }
-    }
-  }
-  .chat-card {
-    background-color: $color;
-    .btn {
-      background-color: $color;
     }
   }
   ::placeholder {

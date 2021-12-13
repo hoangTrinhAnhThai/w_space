@@ -75,26 +75,26 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import LogtimeCard from '../../components/LogtimeCard.vue';
-import data from '../../utils/data';
-import DatePicker from 'vue2-datepicker';
+import { mapActions, mapGetters } from "vuex";
+import LogtimeCard from "../../components/LogtimeCard.vue";
+import data from "../../utils/data";
+import DatePicker from "vue2-datepicker";
 export default {
-  name: 'Logtime',
+  name: "Logtime",
   data() {
     return {
       logtime: {},
-      date:
-        sessionStorage.getItem('date') ? sessionStorage.getItem('date'):
-        `${new Date().getFullYear()}-${
-          new Date().getMonth() + 1
-        }-${new Date().getDate()}`,
-        logtimeList: JSON.parse(localStorage.getItem('logtimeList'))
+      date: sessionStorage.getItem("date")
+        ? sessionStorage.getItem("date")
+        : `${new Date().getFullYear()}-${
+            new Date().getMonth() + 1
+          }-${new Date().getDate()}`,
+      logtimeList: JSON.parse(localStorage.getItem("logtimeList")),
     };
   },
   computed: {
     ...mapGetters({
-      logtimeArray: 'LOGTIME/logtimeArray',
+      logtimeArray: "LOGTIME/logtimeArray",
     }),
     dateWeek() {
       return data.weekday[new Date(this.date).getDay()];
@@ -108,13 +108,12 @@ export default {
   },
   methods: {
     ...mapActions({
-      getAllLogtimeAction: 'LOGTIME/getAllLogtime',
-      createLogtimeAction: 'LOGTIME/createLogtime',
-      getAllLogtimeByDate: 'LOGTIME/getAllLogtimeByDate',
+      getAllLogtimeAction: "LOGTIME/getAllLogtime",
+      createLogtimeAction: "LOGTIME/createLogtime",
+      getAllLogtimeByDate: "LOGTIME/getAllLogtimeByDate",
     }),
     createLogtime() {
       this.createLogtimeAction();
-      // this.logtimeList.unshift({createdAt: new Date(), _id: 1})
     },
   },
   components: {
@@ -126,11 +125,10 @@ export default {
   },
   watch: {
     date() {
-      sessionStorage.setItem('date', this.date);
+      sessionStorage.setItem("date", this.date);
       this.getAllLogtimeByDate(this.date);
     },
   },
-
 };
 </script>
 <style scoped>
@@ -142,10 +140,12 @@ export default {
   white-space: nowrap;
   overflow: scroll !important;
 }
+
 .row {
   width: 95%;
   margin: 0 auto;
 }
+
 .row1 .v-btn {
   width: 50px !important;
   height: 40px !important;
@@ -154,6 +154,7 @@ export default {
 i {
   font-size: 15px;
 }
+
 .datepicker {
   opacity: 0;
   width: 40px;

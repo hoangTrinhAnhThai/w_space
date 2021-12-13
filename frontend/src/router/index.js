@@ -5,6 +5,7 @@ import MainPage from '../views/MainPage.vue';
 import Profile from '../views/Profile.vue';
 import Calendar from '../views/logtime/Calendar.vue';
 import Roadmap from '../views/project/Roadmap.vue';
+import ProjectPage from '../views/project/ProjectPage.vue';
 import Login from '../views/Auth/Login.vue';
 import Signup from '../views/Auth/Register.vue';
 import ChatRoom from '../views/chat/ChatRoom.vue';
@@ -31,8 +32,8 @@ const routes = [
       },
       {
         path: '/roadmap',
-        name: Roadmap,
-        component: Roadmap,
+        name: ProjectPage,
+        component: ProjectPage,
       },
       {
         path: '/chatroom/:id',

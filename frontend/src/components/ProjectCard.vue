@@ -3,8 +3,7 @@
     <v-card-title style="color: rgb(39, 102, 120); font-size: 15px">{{
       card.name
     }}</v-card-title>
-    <v-card-subtitle font-size="12">{{ card.description }}</v-card-subtitle>
-
+    <v-card-subtitle class="description" font-size="12">{{ card.description }}</v-card-subtitle>
     <v-card-text>
       <span v-if="card.dueDate">
         <span v-if="!deadline" style="color: red; font-size: 12px">
@@ -15,11 +14,7 @@
           {{ year }}</span
         >
       </span>
-      <v-avatar
-        v-if="card.assigned"
-        color="light-blue lighten-3"
-        size="24"
-      >
+      <v-avatar v-if="card.assigned" color="light-blue lighten-3" size="24">
         <span style="font-size: 10px">
           {{ assignForTask.firstName.charAt(0)
           }}{{ assignForTask.lastName.charAt(0) }}
@@ -97,7 +92,6 @@ export default {
           break;
         }
       }
-
       return assigned;
     },
   },
@@ -132,17 +126,22 @@ export default {
 .v-card-subtitle {
   color: rgb(39, 102, 120) !important;
 }
-</style>
-
-<style lang="scss" scoped>
 .card {
   margin: 10px 0;
   border: none;
   position: relative;
-  .menu {
+  }
+.card .menu {
     position: absolute;
     right: 10px;
     top: 15px;
   }
-}
+.description {
+  display: flex;
+  flex-wrap: wrap;
+  word-break: inherit;
+  }
+  .theme--light.v-card>.v-card__subtitle, .theme--light.v-card>.v-card__text {
+    word-break: break-all;
+  }
 </style>

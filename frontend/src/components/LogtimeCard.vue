@@ -7,7 +7,7 @@
           :items="tasks"
           item-text="taskName"
           item-value="taskId"
-          label="Your task" 
+          label="Your task"
         >
         </v-select>
       </v-col>
@@ -74,9 +74,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
-  name: 'LogtimeCard',
+  name: "LogtimeCard",
   props: {
     logtime: {
       type: Object,
@@ -92,10 +92,10 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      projectsOfLeader: 'TASKS/projectsOfLeader',
-      projectsOfMember: 'TASKS/projectsOfMember',
-      logtimeArray: 'LOGTIME/logtimeArray',
-      logtimeIsPlaying: 'LOGTIME/logtimeIsPlaying',
+      projectsOfLeader: "TASKS/projectsOfLeader",
+      projectsOfMember: "TASKS/projectsOfMember",
+      logtimeArray: "LOGTIME/logtimeArray",
+      logtimeIsPlaying: "LOGTIME/logtimeIsPlaying",
     }),
     tasks() {
       let list = [];
@@ -171,14 +171,14 @@ export default {
   components: {},
   methods: {
     ...mapActions({
-      deteleLogtimeAction: 'LOGTIME/deteleLogtime',
-      createLogtimeAction: 'LOGTIME/createLogtime',
-      updateLogtimeAction: 'LOGTIME/updateLogtime',
+      deteleLogtimeAction: "LOGTIME/deteleLogtime",
+      createLogtimeAction: "LOGTIME/createLogtime",
+      updateLogtimeAction: "LOGTIME/updateLogtime",
     }),
     startTime() {
       this.hours = 0;
-      this.minutes = 0
-      this.seconds = 0
+      this.minutes = 0;
+      this.seconds = 0;
       this.updateLogtimeAction({
         logtime: {
           isPlaying: false,
@@ -204,8 +204,8 @@ export default {
     },
     stopTime() {
       this.hours = 0;
-      this.minutes = 0
-      this.seconds = 0
+      this.minutes = 0;
+      this.seconds = 0;
       clearInterval(this.myInterval);
       this.updateLogtimeAction({
         logtime: {
@@ -219,20 +219,14 @@ export default {
     showTime() {
       var start = new Date(this.logtimeIsPlaying.startTime);
       var timeInMiliseconds = new Date() - start;
-      // if (this.logtime.timeInMiliseconds) {
-      //   totalSecond = this.logtime.timeInMiliseconds / 1000 / 60 / 60;
-      //   hour = Math.floor(totalSecond);
-      //   minute = Math.floor((totalSecond - hour) * 60);
-      //   second = Math.floor(((totalSecond - hour) * 60 - minute) * 60);
-      // }
-      this.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60)
+      this.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60);
       this.minutes = Math.floor(
-        (timeInMiliseconds / 1000 / 60 / 60 - this.hours) * 60,
+        (timeInMiliseconds / 1000 / 60 / 60 - this.hours) * 60
       );
       this.seconds = Math.floor(
         ((timeInMiliseconds / 1000 / 60 / 60 - this.hours) * 60 -
           this.minutes) *
-          60,
+          60
       );
     },
     deteleLogtime() {
@@ -246,14 +240,7 @@ export default {
     },
   },
   watch: {
-    // dataTask: {
-    //   handler(value) {
-    //     this.seletedTask = value.opening[0].id;
-    //   },
-    //   deep: true,
-    // },
-
-    'logtime.task'() {
+    "logtime.task"() {
       this.updateLogtimeAction({
         logtime: this.logtime,
         _id: this.logtime._id,
@@ -276,7 +263,6 @@ export default {
   border: none;
   height: 40px;
 }
-
 #stop {
   border: none;
   font-size: 20px;
@@ -338,7 +324,6 @@ ul i {
 .functions {
   color: white;
 }
-
 .logtime-card:hover .functions i {
   border: 1px solid rgba(39, 102, 120, 0.3);
   padding: 5px;
@@ -348,7 +333,6 @@ ul i {
 .logtime-card:hover .functions {
   color: rgba(39, 102, 120, 0.7);
 }
-
 .functions i:hover {
   background-color: rgba(39, 102, 120, 0.4);
 }

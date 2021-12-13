@@ -16,12 +16,10 @@
           color="red lighten-5"
           activatable
           open-on-click
-          return-object
         >
-          <template  slot="label" slot-scope="{ item }">
+          <template slot="label" slot-scope="{ item }">
             <div class="item">
-              <!-- {{ Object.keys(item).length === 0 }} -->
-              <span style="color: white" @click="openDialog(item)">
+              <span style="color: white" @click="changeActive(item)">
                 <i
                   class="bx bxs-flag-alt"
                   v-if="
@@ -102,7 +100,7 @@ export default {
     isShowProject: false,
     isShowChat: false,
     drawer: true,
-    mini: false,
+    mini: true,
   }),
   components: {
     AddNewProjectModal,
@@ -120,16 +118,17 @@ export default {
       const items = [
         {
           id: 1,
-          name: "Project :",
+          name: "Project",
           children: this.projectsOfLeader.concat(this.projectsOfMember),
         },
         {
           id: 2,
           name: "Logtime",
+          children: [{}],
         },
         {
           id: 3,
-          name: "Chat :",
+          name: "Chat",
           children: this.rooms,
         },
       ];
@@ -166,14 +165,14 @@ export default {
     clearMessage() {
       this.messages = 0;
     },
-    openDialog(item) {
+    changeActive(item) {
       if (item.id === 1 && typeof this.$route.params.id == "undefined") {
         return;
       } else if (
         item.id === 1 &&
         typeof this.$route.params.id !== "undefined"
       ) {
-        this.$router.push(`/roadmap/${this.projectsOfLeader[0]._id}`);
+        this.$router.push(`/roadmap/`);
       } else if (item.id === 2) {
         this.$router.push("/logtime");
       } else if (item.id === 3 && typeof this.$route.params.id == "undefined") {
@@ -220,9 +219,8 @@ export default {
 </script>
 <style>
 .active {
-  /* height: 0; */
   display: none;
-background-color: red;
+  background-color: red;
 }
 .mdi-menu-down::before {
   color: white !important;
@@ -242,13 +240,11 @@ background-color: red;
 .item:hover .function {
   display: block;
 }
-
 .add-project {
   position: absolute;
   top: 0;
   right: 0;
 }
-
 .add-project {
   display: none;
 }
