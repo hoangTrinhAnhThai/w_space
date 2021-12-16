@@ -31,11 +31,8 @@ const mutations = {
     state.chats.push(data);
   },
   setCurrentRoom(state, data) {
-    for (let room of state.rooms) {
-      if (room._id == data) {
-        state.currentRoom = room;
-      }
-    }
+    state.currentRoom = data;
+
   },
   logMess() {
     console.log('aaa');
@@ -62,7 +59,10 @@ const actions = {
     );
   },
   addCurrentRoom({ commit }, params) {
-    commit('setCurrentRoom', params);
+    http.get(`/room/${params}`).then((result) => {
+      console.log(result.data.data);
+      commit('setCurrentRoom', result.data.data);
+    })
   },
   sendMessage({ dispatch }, params) {
     http.post(`/chat/`, params.chat).then((response) => {

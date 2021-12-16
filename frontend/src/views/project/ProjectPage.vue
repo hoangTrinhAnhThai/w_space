@@ -2,23 +2,21 @@
   <v-main>
     <v-container>
       <v-label>
-        <img
+          <img
           src="https://www.permacultureconsultants.com/wp-content/uploads/2020/01/service-permaculture-assesment-report.png"
           alt=""
         />
       </v-label>
       <v-item-group mandatory>
-        <v-container>
           <v-row>
             <h2>Leader</h2>
             <v-col v-for="(project, index) in projectsOfLeader" :key="index" cols="3" md="4">
-              <v-item v-slot="{ active, toggle }">
+              <v-item>
                 <v-card
-                  :color="active ? 'primary' : ''"
                   class="d-flex align-center"
                   height="100"
                   width="400px"
-                  @click="toggle"
+                  @click="handleClickProject(project._id)"
                 >
                 <v-card-title>{{project.name}}</v-card-title>
                 </v-card>
@@ -28,20 +26,18 @@
           <v-row style="margin-top: 50px">
             <h2>Group</h2>
             <v-col v-for="(project, index) in projectsOfMember" :key="index" cols="3" md="4">
-              <v-item v-slot="{ active, toggle }">
+              <v-item>
                 <v-card
-                  :color="active ? 'primary' : ''"
                   class="d-flex align-center"
                   height="100"
                   width="400px"
-                  @click="toggle"
+                  @click="handleClickProject(project._id)"
                 >
                 <v-card-title>{{project.name}}</v-card-title>
                 </v-card>
               </v-item>
             </v-col>
           </v-row>
-        </v-container>
       </v-item-group>
     </v-container>
   </v-main>
@@ -57,6 +53,12 @@ export default {
       projectsOfMember: "TASKS/projectsOfMember",
     }),
   },
+  methods: {
+    handleClickProject(idProject) {
+        this.$router.push(`/roadmap/${idProject}`);
+
+    }
+  }
 };
 </script>
 
@@ -72,11 +74,12 @@ export default {
 }
 .container {
   text-align: start;
-  /* width: 30%; */
   margin: 0 auto;
+  width: 80%;
 }
 img {
   width: 200px;
+  margin-bottom: 50px;
 }
 
 .label {

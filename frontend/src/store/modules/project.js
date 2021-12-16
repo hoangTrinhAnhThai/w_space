@@ -216,6 +216,8 @@ const actions = {
   deleteProject({ dispatch }, idProject) {
     http.delete(`/project/${idProject}`).then(() => {
       dispatch('getProject');
+      dispatch('CHAT/getAllRooms', null, {root: true,});
+
     });
   },
   editProject({ commit, dispatch }, params) {
@@ -224,6 +226,8 @@ const actions = {
       .then((result) => {
         commit('setProjectEdit', result.data.data);
         dispatch('getProject');
+      dispatch('CHAT/getAllRooms', null, {root: true,});
+
       })
       .catch((err) => {
         commit('ERROR/setErrorMessage', err.response.data.message, {

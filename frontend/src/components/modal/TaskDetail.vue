@@ -3,7 +3,6 @@
     ref="taskDetailModal"
     hide-footer
     :title="task.name"
-    
     class="task-detail"
     size="lg md"
   >
@@ -15,7 +14,7 @@
           </v-row>
           <v-row align="center">
             <v-textarea
-            :disabled="isEdit"
+              :disabled="isEdit"
               class="mx-2"
               v-model="task.description"
               label="Description"
@@ -35,7 +34,7 @@
             </v-col>
             <v-col cols="1" class="comment-btn">
               <v-btn class="cmt-btn" text style="border: none">
-                <v-icon  @click="sendComment" color="blue darken-2">
+                <v-icon @click="sendComment" color="blue darken-2">
                   mdi-message-text
                 </v-icon>
               </v-btn>
@@ -52,9 +51,10 @@
                   </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title
-                    v-html="comment.createdBy.firstName"
-                  ></v-list-item-title>
+                  <v-list-item-title>
+                    {{ comment.createdBy.firstName }}
+                    {{ comment.createdBy.lastName }}
+                  </v-list-item-title>
                   <v-list-item-subtitle
                     v-html="comment.content"
                   ></v-list-item-subtitle>
@@ -66,12 +66,12 @@
         <v-col class="block" cols="17">
           <v-row align="center">
             <v-select
-            :disabled="isEdit"
+              :disabled="isEdit"
               v-model="task.assigned"
               :items="listMember"
               chips
               label="Assigned"
-              item-text="email"
+              item-text="firstName"
               item-value="_id"
               clearable
               small-chips
@@ -79,7 +79,7 @@
           </v-row>
           <v-row align="center">
             <v-select
-            :disabled="isEdit"
+              :disabled="isEdit"
               v-model="task.priority"
               chips
               label="Priority"
@@ -97,7 +97,7 @@
               </v-row>
               <v-row>
                 <DatePicker
-                :disabled="isEdit"
+                  :disabled="isEdit"
                   v-model="date"
                   :clearable="false"
                   class="datepicker"
@@ -136,10 +136,10 @@
 </template>
 
 <script>
-import DatePicker from 'vue2-datepicker';
-import { mapActions, mapGetters } from 'vuex';
+import DatePicker from "vue2-datepicker";
+import { mapActions, mapGetters } from "vuex";
 export default {
-  name: 'task-detail',
+  name: "task-detail",
   props: {
     task: {
       type: Object,
@@ -148,19 +148,18 @@ export default {
   data() {
     return {
       date: this.task.dueDate ? new Date(this.task.dueDate) : new Date(),
-      priorities: ['high', 'normal', 'low'],
-      comment: '',
+      priorities: ["high", "normal", "low"],
+      comment: "",
     };
   },
   computed: {
     ...mapGetters({
-      logtimes: 'TASKS/logtimes',
-      currentProject: 'TASKS/currentProject',
-      currentTask: 'TASKS/currentTask',
-      validateText: 'VALIDATION/validateText',
-      comments: 'TASKS/comments',
-            userInfo: 'AUTH/userInfo',
-
+      logtimes: "TASKS/logtimes",
+      currentProject: "TASKS/currentProject",
+      currentTask: "TASKS/currentTask",
+      validateText: "VALIDATION/validateText",
+      comments: "TASKS/comments",
+      userInfo: "AUTH/userInfo",
     }),
     listMember() {
       let list = [];
@@ -176,17 +175,17 @@ export default {
       return list;
     },
     isEdit() {
-      let isEdit = true
-      if(this.userInfo._id == this.currentProject.createdBy._id) {
-        isEdit = false
+      let isEdit = true;
+      if (this.userInfo._id == this.currentProject.createdBy._id) {
+        isEdit = false;
       }
-      return isEdit
-    }
+      return isEdit;
+    },
   },
   methods: {
     ...mapActions({
-      editTaskAction: 'TASKS/editTask',
-      addCommentAction: 'TASKS/addComment',
+      editTaskAction: "TASKS/editTask",
+      addCommentAction: "TASKS/addComment",
     }),
     show() {
       this.$refs.taskDetailModal.show();
@@ -206,7 +205,7 @@ export default {
     sendCommentByKey(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-          document.getElementById('content').focus();
+          document.getElementById("content").focus();
           return;
         } else {
           this.addCommentAction({
@@ -214,13 +213,13 @@ export default {
             idProject: this.currentProject._id,
             comment: { content: this.comment },
           });
-          this.comment = '';
+          this.comment = "";
         }
       }
     },
     sendComment() {
       if (!this.validateBeforeSubmit()) {
-        document.getElementById('content').focus();
+        document.getElementById("content").focus();
         return;
       } else {
         this.addCommentAction({
@@ -228,7 +227,7 @@ export default {
           idProject: this.currentProject._id,
           comment: { content: this.comment },
         });
-        this.comment = '';
+        this.comment = "";
       }
     },
     validateBeforeSubmit() {
@@ -277,8 +276,9 @@ export default {
 .theme--light.v-input--is-disabled {
   color: rgb(206, 93, 93) !important;
 }
-.mx-input:disabled, .mx-input.disabled {
+.mx-input:disabled,
+.mx-input.disabled {
   color: green !important;
-  background-color: #f3f3f3
+  background-color: #f3f3f3;
 }
 </style>

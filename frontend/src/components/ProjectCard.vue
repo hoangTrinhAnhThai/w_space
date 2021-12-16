@@ -15,7 +15,7 @@
         >
       </span>
       <v-avatar v-if="card.assigned" color="light-blue lighten-3" size="24">
-        <span style="font-size: 10px">
+        <span v-if="assignForTask" style="font-size: 10px">
           {{ assignForTask.firstName.charAt(0)
           }}{{ assignForTask.lastName.charAt(0) }}
         </span>

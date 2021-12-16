@@ -22,6 +22,20 @@ const month = [
   'November',
   'December',
 ];
+const shortMonth = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+]
 const colors = [
   'rgb(0, 54, 56)',
   'rgb(142, 5, 194)',
@@ -32,4 +46,5 @@ export default {
   weekday,
   month,
   colors,
+  shortMonth
 };

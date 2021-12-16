@@ -7,25 +7,43 @@
     </v-row>
     <hr />
     <div class="layout-chat" v-chat-scroll>
+      <div class="notChat" v-if="chats.length <= 0">
+        <img
+          src="https://cdn.iconscout.com/icon/free/png-256/chat-2282632-1904876.png"
+          alt=""
+        />
+        <div class="group"></div>
+      </div>
       <div class="content" v-for="(chat, index) in chats" :key="index">
         <div class="right-chat-card" v-if="chat.createdBy._id == userInfo._id">
-          <div class="content-chat right">
-            <p>{{ chat.message }}</p>
+          <div class="content-chat">
+            <div style="margin-bottom: -7px">
+              <chat-card
+                class="right"
+                v-bind:chat="chat"
+                v-bind:color="'rgb(211, 224, 234)'"
+                v-bind:distance="'50px'"
+              />
+            </div>
             <v-avatar size="45" color="green" class="img">
               <span class="white--text">{{ chat.createdBy.avatar }}</span>
             </v-avatar>
           </div>
         </div>
         <div class="left-chat-card" v-else>
-          <div class="content-chat left">
+          <div class="content-chat">
             <div class="img">
               <v-avatar size="45" color="red">
                 <span class="white--text">{{ chat.createdBy.avatar }}</span>
               </v-avatar>
             </div>
-            <p>
-              {{ chat.message }}
-            </p>
+            <div style="margin-bottom: -3px">
+              <chat-card
+                class="left"
+                v-bind:chat="chat"
+                v-bind:distance="'-50px'"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -46,7 +64,7 @@
           text
           style="height: 100%"
         >
-          SEND
+          <i class="bx bx-send"></i>
         </v-btn>
       </div>
     </div>
@@ -55,6 +73,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import ChatCard from "../../components/ChatCard.vue";
 export default {
   name: "ChatRoom",
   data() {
@@ -68,12 +87,15 @@ export default {
       userInfo: "AUTH/userInfo",
       validateText: "VALIDATION/validateText",
       currentRoom: "CHAT/currentRoom",
+      currentProject: "TASKS/currentProject",
     }),
   },
   methods: {
     ...mapActions({
       getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
       sendMessageAction: "CHAT/sendMessage",
+      addCurrentRoom: "CHAT/addCurrentRoom",
+
     }),
     sendMessage(e) {
       if (e.keyCode === 13) {
@@ -113,7 +135,12 @@ export default {
     },
   },
   created() {
+    console.log(this.$route.params.id);
     this.getAllChatByIdRoom(this.$route.params.id);
+    this.addCurrentRoom(this.$route.params.id);
+  },
+  components: {
+    ChatCard,
   },
 };
 </script>
@@ -123,6 +150,7 @@ export default {
   border-radius: 3px;
   margin-bottom: 15px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  height: calc(100vh - 70px);
 }
 
 .write-content {
@@ -150,6 +178,15 @@ i:hover {
 h1 {
   margin: 0px 10px;
 }
+i {
+  font-size: 20px;
+}
+.notChat {
+  text-align: center;
+}
+.left {
+  background-color: red;
+}
 </style>
 <style lang="scss" scoped>
 @import "../../assets/style.scss";
@@ -165,9 +202,9 @@ h1 {
   .layout-chat {
     overflow-y: scroll;
     padding-bottom: 20px;
-    height: calc(100vh - 230px);
+    height: calc(100vh - 210px);
     padding: 30px;
-
+    margin-bottom: 10px;
     .content {
       overflow: auto;
       .right-chat-card {
@@ -191,15 +228,15 @@ h1 {
               border-radius: 50%;
             }
           }
-          p {
-            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-            padding: 10px 25px;
-            border-top-left-radius: 50px;
-            border-bottom-left-radius: 50px;
-            border-top-right-radius: 50px;
-            margin: 10px 0;
-            position: relative;
-            right: 50px;
+          .right {
+            // box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+            // padding: 10px 25px;
+            // border-top-left-radius: 50px;
+            // border-bottom-left-radius: 50px;
+            // border-top-right-radius: 50px;
+            // margin: 10px 0;
+            // position: relative;
+            // right: 50px;
           }
         }
       }
@@ -223,7 +260,7 @@ h1 {
               border-radius: 50%;
             }
           }
-          p {
+          .left {
             background-color: $color2;
             box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
             padding: 10px 25px;

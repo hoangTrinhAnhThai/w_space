@@ -14,7 +14,7 @@
           v-show="!mini"
           :items="items"
           color="red lighten-5"
-          activatable
+          activable
           open-on-click
         >
           <template slot="label" slot-scope="{ item }">
@@ -166,22 +166,15 @@ export default {
       this.messages = 0;
     },
     changeActive(item) {
-      if (item.id === 1 && typeof this.$route.params.id == "undefined") {
-        return;
-      } else if (
-        item.id === 1 &&
-        typeof this.$route.params.id !== "undefined"
+      if (
+        item.id === 1 
       ) {
         this.$router.push(`/roadmap/`);
       } else if (item.id === 2) {
         this.$router.push("/logtime");
-      } else if (item.id === 3 && typeof this.$route.params.id == "undefined") {
-        return;
-      } else if (
-        item.id === 3 &&
-        typeof this.$route.params.id !== "undefined"
+      } else if (item.id === 3 
       ) {
-        this.$router.push(`/chatroom/${this.rooms[0]._id}`);
+        this.$router.push(`/chatroom/`);
       } else if (this.$route.params.id == item._id) {
         return;
       } else if (item.room && this.$route.params.id != item._id) {
@@ -210,7 +203,6 @@ export default {
         this.getStatus();
         this.getTaskOfProject(to.params.id);
       } else if (to.name.name === "ChatRoom") {
-        this.addCurrentRoom(to.params.id);
         this.getAllChatByIdRoom(to.params.id);
       }
     },
@@ -257,5 +249,8 @@ export default {
 }
 .add-project:hover .v-btn {
   background-color: #407686;
+}
+.v-treeview-node__root:hover {
+  /* background-color: rgb(255,235,238); */
 }
 </style>

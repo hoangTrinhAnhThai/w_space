@@ -8,7 +8,9 @@ import Roadmap from '../views/project/Roadmap.vue';
 import ProjectPage from '../views/project/ProjectPage.vue';
 import Login from '../views/Auth/Login.vue';
 import Signup from '../views/Auth/Register.vue';
+import ChatPage from '../views/chat/ChatPage.vue';
 import ChatRoom from '../views/chat/ChatRoom.vue';
+
 
 Vue.use(VueRouter);
 const routes = [
@@ -31,7 +33,7 @@ const routes = [
         component: Roadmap,
       },
       {
-        path: '/roadmap',
+        path: '/',
         name: ProjectPage,
         component: ProjectPage,
       },
@@ -42,8 +44,8 @@ const routes = [
       },
       {
         path: '/chatroom/',
-        name: ChatRoom,
-        component: ChatRoom,
+        name: ChatPage,
+        component: ChatPage,
       },
       {
         path: '/profile',

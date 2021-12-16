@@ -48,4 +48,10 @@ export default {
     width: 100% !important;
   }
 }
+.main-container {
+  background-image: linear-gradient(
+    rgba(161, 161, 161, 0.2),
+    rgba(187, 180, 180, 0.2)
+  );
+}
 </style>
