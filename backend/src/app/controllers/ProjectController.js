@@ -20,43 +20,50 @@ class ProjectController {
               errors.array(),
             );
           } else {
-            let newProject = new Project();
-            newProject.name = req.body.name;
-            newProject.description = req.body.description;
-            newProject.createdBy = user;
-            Room.create({ name: req.body.name, createdBy: user }).then(
-              (room) => {
-                newProject.room = room;
-                Project.create(newProject)
-                  .then((project) => {
-                    Notification.create({
-                      room: room._id,
-                      project: project._id,
-                      listContent: {
-                        member: user,
-                        count: 0,
-                        unreadCount: 0,
-                        contents: { message: '', createdBy: null },
-                      },
-                    }).then((result) => {
-                      return apiResponse.successResponseWithData(
-                        res,
-                        'Add new project successfully',
-                        project,
-                      );
-                    });
-                  })
-                  .catch((err) => {
-                    return apiResponse.ErrorResponse(res, err);
-                  });
-              },
-            );
+            Project.findOne({ name: req.body.name }).then((project) => {
+              if (project) {
+                console.log(project);
+                return apiResponse.ErrorResponse(res, 'Project name already in use');
+              } else {
+                let newProject = new Project();
+                newProject.name = req.body.name;
+                newProject.description = req.body.description;
+                newProject.createdBy = user;
+                Room.create({ name: req.body.name, createdBy: user }).then(
+                  (room) => {
+                    newProject.room = room;
+                    Project.create(newProject)
+                      .then((project) => {
+                        Notification.create({
+                          room: room._id,
+                          project: project._id,
+                          listContent: {
+                            member: user,
+                            count: 0,
+                            unreadCount: 0,
+                            contents: { message: '', createdBy: null },
+                          },
+                        }).then((result) => {
+                          return apiResponse.successResponseWithData(
+                            res,
+                            'Add new project successfully',
+                            project,
+                          );
+                        });
+                      })
+                      .catch((err) => {
+                        return apiResponse.ErrorResponse(res, err);
+                      });
+                  },
+                );
+              }
+            });
           }
         } catch (error) {
           return apiResponse.ErrorResponse(res, error);
         }
-      });
-    },
+      })
+    }
   ];
   editProject = [
     (req, res) => {
@@ -72,11 +79,14 @@ class ProjectController {
               },
               { new: true },
             ).then((project) => {
-              return apiResponse.successResponseWithData(
-                res,
-                'Edit project successfully',
-                project,
-              );
+              Room.findByIdAndUpdate(project.room, {name: req.body.name}).then((room) => {
+                return apiResponse.successResponseWithData(
+                  res,
+                  'Edit project successfully',
+                  project,
+                );
+              })
+              
             });
           }
         });
@@ -104,7 +114,7 @@ class ProjectController {
                 if (
                   isExsitUser ||
                   JSON.stringify(user._id) ===
-                    JSON.stringify(project.createdBy._id)
+                  JSON.stringify(project.createdBy._id)
                 ) {
                   return apiResponse.ErrorResponse(res, 'The member joined');
                 } else {
@@ -189,8 +199,11 @@ class ProjectController {
   ];
   deleteProject = [
     (req, res) => {
-      Project.findByIdAndDelete(req.params.id).then(() => {
-        return apiResponse.successResponse(res, 'Delete project successfully');
+      Project.findByIdAndDelete(req.params.id).then((project) => {
+        Room.findByIdAndDelete(project.room).then((result) => {
+          return apiResponse.successResponse(res, 'Delete project successfully');
+
+        })
       });
     },
   ];

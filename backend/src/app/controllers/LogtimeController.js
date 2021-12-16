@@ -1,4 +1,3 @@
-const Task = require('../models/Task');
 const LogTime = require('../models/Logtime');
 const User = require('../models/User');
 const apiResponse = require('../../utils/apiResponse');
@@ -121,7 +120,6 @@ class LogtimeController {
         },
         { new: true, useFindAndModify: false },
       ).then((result) => {
-        console.log(result);
         return apiResponse.successResponseWithData(
           res,
           'Update logtime success',
