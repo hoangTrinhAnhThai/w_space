@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import MainPage from '../views/MainPage.vue';
+import HomePage from '../views/HomePage.vue';
+
 import Profile from '../views/Profile.vue';
 import Calendar from '../views/logtime/Calendar.vue';
 import Roadmap from '../views/project/Roadmap.vue';
@@ -65,6 +67,14 @@ const routes = [
     name: Login,
     component: Login,
   },
+  {
+    path: '/home',
+    name: HomePage,
+    component: HomePage,
+    meta: {
+      requiresAuth: true,
+    }
+  }
 ];
 
 const router = new VueRouter({

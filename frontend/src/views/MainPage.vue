@@ -43,10 +43,6 @@ export default {
   .content {
     width: 99% !important;
   }
-  .nav {
-    height: 70px;
-    width: 100% !important;
-  }
 }
 .main-container {
   background-image: linear-gradient(

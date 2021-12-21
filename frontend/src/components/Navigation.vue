@@ -1,45 +1,59 @@
 <template>
   <div class="nav">
-    <div class="content">
-      <div class="logo">W-space</div>
-      <div class="menu">
-        <ul>
-          <li><i class="bx bxs-cog"></i></li>
-          <li><i class="bx bx-question-mark"></i></li>
-          <li><i class="bx bxs-user-circle"></i></li>
-        </ul>
+    <v-app-bar>
+      <div class="logo">
+        <router-link tag="li" to="/">W-space</router-link>
       </div>
-    </div>
+
+      <v-spacer></v-spacer>
+      <v-btn text>
+        <v-icon>mdi-cog-outline</v-icon>
+      </v-btn>
+      <v-btn text>
+        <v-icon>mdi-help-circle</v-icon>
+      </v-btn>
+      <v-menu transition="slide-y-transition" bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn  text v-bind="attrs" v-on="on">
+            <v-icon>mdi-account-circle</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item>
+          <router-link tag="li" to="/profile"><i class='bx bx-user-circle'></i>Profile</router-link>            
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title><i class='bx bx-exit' ></i>Logout</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-app-bar>
   </div>
 </template>
 
 <script>
 export default {};
 </script>
-
-<style lang="scss" scoped>
-.nav {
-  border-bottom: 1px solid rgb(199, 199, 199);
-  .content {
-    width: 98%;
-    margin: 15px auto 0;
-    display: flex;
-    justify-content: space-between;
-    .logo {
-      font-size: 20px;
-      text-transform: uppercase;
-    }
-    ul {
-      list-style: none;
-      display: flex;
-      font-size: 20px;
-      li {
-        font-size: 25px;
-        i {
-          margin-left: 25px;
-        }
-      }
-    }
-  }
+<style scoped>
+.v-btn {
+  border: none;
+  color: rgb(105, 104, 104) !important;
+}
+.theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled):hover {
+  background-color: rgb(211, 224, 234);
+}
+.v-list {
+  padding: 0 !important;
+  cursor: pointer;
+}
+i {
+  font-size: 20px;
+  position: relative;
+  top: 2px;
+  margin-right: 15px;
+}
+li {
+  list-style: none;
+  cursor: pointer;
 }
 </style>
