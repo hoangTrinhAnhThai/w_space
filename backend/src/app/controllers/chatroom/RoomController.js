@@ -1,8 +1,8 @@
-const Room = require('../models/Room');
-const User = require('../models/User');
+const Room = require('../../models/Room')
+const User = require('../../models/User');
 
-const apiResponse = require('../../utils/apiResponse');
-const host = require('../../utils/decodeJWT');
+const apiResponse = require('../../../utils/apiResponse');
+const host = require('../../../utils/decodeJWT');
 
 require('dotenv').config();
 

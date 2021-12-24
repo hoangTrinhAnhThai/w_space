@@ -1,12 +1,11 @@
-const Task = require('../models/Task');
-const User = require('../models/User');
-const Project = require('../models/Project');
-const Status = require('../models/Status');
-const Logtime = require('../models/Logtime');
+const Task = require('../../models/Task');
+const Project = require('../../models/Project');
+const Status = require('../../models/Status');
+const Logtime = require('../../models/Logtime');
 const { validationResult } = require('express-validator');
-const apiResponse = require('../../utils/apiResponse');
+const apiResponse = require('../../../utils/apiResponse');
 require('dotenv').config();
-const { addANode, dropANode } = require('../../utils/movedCard');
+const { addANode, dropANode } = require('../../../utils/movedCard');
 
 class TaskController {
   showAllTask = [

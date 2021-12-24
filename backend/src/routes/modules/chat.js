@@ -13,7 +13,7 @@ const io = require('socket.io')(server, {
   allowEIO3: true,
 });
 const router = express.Router();
-const chatController = require('../../app/controllers/ChatController');
+const chatController = require('../../app/controllers/chatroom/ChatController');
 
 router.get('/', chatController.getAllChats);
 router.get('/:id', chatController.getSingleChatByRoomId);

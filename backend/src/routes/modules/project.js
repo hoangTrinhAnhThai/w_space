@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const projectController = require('../../app/controllers/ProjectController');
-const taskController = require('../../app/controllers/TaskController');
-const commentController = require('../../app/controllers/CommentController');
+const projectController = require('../../app/controllers/project/ProjectController');
+const taskController = require('../../app/controllers/project/TaskController');
+const commentController = require('../../app/controllers/project/CommentController');
+
 const server = require('http').createServer(express);
 const server_port = 5000;
 require('dotenv').config();

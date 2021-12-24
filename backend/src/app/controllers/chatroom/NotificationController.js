@@ -1,7 +1,7 @@
-const Notification = require('../models/Notification');
-const User = require('../models/User');
-const apiResponse = require('../../utils/apiResponse');
-const host = require('../../utils/decodeJWT');
+const Notification = require('../../models/Notification');
+const User = require('../../models/User');
+const apiResponse = require('../../../utils/apiResponse');
+const host = require('../../../utils/decodeJWT');
 
 require('dotenv').config();
 

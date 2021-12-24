@@ -1,6 +1,6 @@
 const app = require('express');
 const router = app.Router();
-const roomController = require('../../app/controllers/RoomController');
+const roomController = require('../../app/controllers/chatroom/RoomController');
 
 router.get('/', roomController.showAllRoom);
 router.get('/:id', roomController.showRoomById);

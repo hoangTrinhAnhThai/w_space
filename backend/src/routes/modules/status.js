@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const statusController = require('../../app/controllers/StatusController');
+const statusController = require('../../app/controllers/project/StatusController');
 const { statusValidation } = require('../../middleware/validation');
 
 // status

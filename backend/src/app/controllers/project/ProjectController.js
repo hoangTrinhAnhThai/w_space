@@ -1,10 +1,10 @@
-const Project = require('../models/Project');
-const Room = require('../models/Room');
-const Notification = require('../models/Notification');
+const Project = require('../../models/Project');
+const Room = require('../../models/Room');
+const Notification = require('../../models/Notification');
 const { validationResult } = require('express-validator');
-const apiResponse = require('../../utils/apiResponse');
-const User = require('../models/User');
-const host = require('../../utils/decodeJWT');
+const apiResponse = require('../../../utils/apiResponse');
+const User = require('../../models/User');
+const host = require('../../../utils/decodeJWT');
 require('dotenv').config();
 
 class ProjectController {

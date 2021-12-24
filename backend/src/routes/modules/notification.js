@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const notificationController = require('../../app/controllers/NotificationController');
+const notificationController = require('../../app/controllers/chatroom/NotificationController');
 
 router.get('/', notificationController.getAllNotifications);
 router.get('/:id', notificationController.getNotificationByRoomId);

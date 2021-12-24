@@ -1,9 +1,7 @@
-const Comment = require('../models/Comment');
-const Task = require('../models/Task');
-
-const User = require('../models/User');
-const apiResponse = require('../../utils/apiResponse');
-const host = require('../../utils/decodeJWT');
+const Comment = require('../../models/Comment');
+const User = require('../../models/User');
+const apiResponse = require('../../../utils/apiResponse');
+const host = require('../../../utils/decodeJWT');
 
 require('dotenv').config();
 
