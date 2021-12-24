@@ -1,72 +1,82 @@
 <template>
   <div class="chat-room">
-    <v-row>
-      <v-col cols="11"
-        ><h1>#{{ currentRoom.name }}</h1></v-col
-      >
-    </v-row>
-    <hr />
-    <div class="layout-chat" v-chat-scroll>
-      <div class="notChat" v-if="chats.length <= 0">
-        <img
-          src="https://cdn.iconscout.com/icon/free/png-256/chat-2282632-1904876.png"
-          alt=""
-        />
-        <div class="group"></div>
-      </div>
-      <div class="content" v-for="(chat, index) in chats" :key="index">
-        <div class="right-chat-card" v-if="chat.createdBy._id == userInfo._id">
-          <div class="content-chat">
-            <div style="margin-bottom: -7px">
-              <chat-card
-                class="right"
-                v-bind:chat="chat"
-                v-bind:color="'rgb(211, 224, 234)'"
-                v-bind:distance="'50px'"
-              />
-            </div>
-            <v-avatar size="45" color="green" class="img">
-              <span class="white--text">{{ chat.createdBy.avatar }}</span>
-            </v-avatar>
-          </div>
+    <div class="container1">
+      <v-app-bar class="bar1">
+        <v-toolbar-title>#{{ currentRoom.name }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn color="deep-purple lighten-5" icon @click.stop="mini = !mini">
+          <v-icon>mdi-account-group-outline</v-icon>
+        </v-btn>
+      </v-app-bar>
+      <div class="layout-chat" v-chat-scroll>
+        <div class="notChat" v-if="chats.length <= 0">
+          <img
+            src="https://cdn.iconscout.com/icon/free/png-256/chat-2282632-1904876.png"
+            alt=""
+          />
+          <div class="group"></div>
         </div>
-        <div class="left-chat-card" v-else>
-          <div class="content-chat">
-            <div class="img">
-              <v-avatar size="45" color="red">
+        <div class="content" v-for="(chat, index) in chats" :key="index">
+          <div
+            class="right-chat-card"
+            v-if="chat.createdBy._id == userInfo._id"
+          >
+            <div class="content-chat">
+              <div style="margin-bottom: -7px">
+                <chat-card
+                  class="right"
+                  v-bind:chat="chat"
+                  v-bind:color="'rgb(211, 224, 234)'"
+                  v-bind:distance="'50px'"
+                />
+              </div>
+              <v-avatar size="45" color="green" class="img">
                 <span class="white--text">{{ chat.createdBy.avatar }}</span>
               </v-avatar>
             </div>
-            <div style="margin-bottom: -3px">
-              <chat-card
-                class="left"
-                v-bind:chat="chat"
-                v-bind:distance="'-50px'"
-              />
+          </div>
+          <div class="left-chat-card" v-else>
+            <div class="content-chat">
+              <div class="img">
+                <v-avatar size="45" color="red">
+                  <span class="white--text">{{ chat.createdBy.avatar }}</span>
+                </v-avatar>
+              </div>
+              <div style="margin-bottom: -3px">
+                <chat-card
+                  class="left"
+                  v-bind:chat="chat"
+                  v-bind:color="'rgb(250,250,250)'"
+                  v-bind:distance="'-50px'"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="write-content">
-      <v-text-field
-        placeholder="Write message..."
-        outlined
-        dense
-        id="content"
-        v-model="message"
-        v-on:keyup="sendMessage"
-      ></v-text-field>
-      <div class="btn-container">
-        <v-btn
-          class="save-btn"
-          @click="sendMessageByClick"
-          text
-          style="height: 100%"
-        >
-          <i class="bx bx-send"></i>
-        </v-btn>
+      <div class="write-content">
+        <v-text-field
+          placeholder="Write message..."
+          outlined
+          dense
+          id="content"
+          v-model="message"
+          v-on:keyup="sendMessage"
+        ></v-text-field>
+        <div class="btn-container">
+          <v-btn
+            class="save-btn"
+            @click="sendMessageByClick"
+            text
+            style="height: 100%"
+          >
+            <i class="bx bx-send"></i>
+          </v-btn>
+        </div>
       </div>
+    </div>
+    <div class="container2">
+      
     </div>
   </div>
 </template>
@@ -95,7 +105,6 @@ export default {
       getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
       sendMessageAction: "CHAT/sendMessage",
       addCurrentRoom: "CHAT/addCurrentRoom",
-
     }),
     sendMessage(e) {
       if (e.keyCode === 13) {
@@ -135,7 +144,6 @@ export default {
     },
   },
   created() {
-    console.log(this.$route.params.id);
     this.getAllChatByIdRoom(this.$route.params.id);
     this.addCurrentRoom(this.$route.params.id);
   },
@@ -145,19 +153,29 @@ export default {
 };
 </script>
 <style scoped>
+.bar1 {
+  box-shadow: none !important;
+  background-color: rgb(237, 237, 237) !important;
+  border-bottom: 1px solid rgb(126, 68, 68);
+  box-shadow: inset 0px 7px 3px -3px rgb(0 0 0 / 20%) !important;
+}
+/* .v-sheet.v-app-bar.v-toolbar:not(.v-sheet--outlined) {
+
+  } */
+.v-icon {
+  color: rgb(68, 64, 64) !important;
+}
 .chat-room {
-  border: 1px solid rgb(238, 231, 231);
   border-radius: 3px;
   margin-bottom: 15px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  height: calc(100vh - 70px);
+  height: calc(100vh - 64px);
 }
 
 .write-content {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  padding: 5px 30px;
+  padding: 5px 30px 30px;
 }
 
 .theme--light.v-input {
@@ -227,16 +245,6 @@ i {
               height: 45px;
               border-radius: 50%;
             }
-          }
-          .right {
-            // box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-            // padding: 10px 25px;
-            // border-top-left-radius: 50px;
-            // border-bottom-left-radius: 50px;
-            // border-top-right-radius: 50px;
-            // margin: 10px 0;
-            // position: relative;
-            // right: 50px;
           }
         }
       }

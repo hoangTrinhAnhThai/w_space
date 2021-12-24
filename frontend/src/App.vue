@@ -18,6 +18,7 @@ export default {
 <style src="./assets/modifyVuetify.css"></style>
 <style scoped>
 .v-main {
-  overflow: hidden;
+  /* height: 100vh; */
+  /* overflow: hidden !important; */
 }
 </style>

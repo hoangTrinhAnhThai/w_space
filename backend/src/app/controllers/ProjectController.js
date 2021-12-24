@@ -22,7 +22,6 @@ class ProjectController {
           } else {
             Project.findOne({ name: req.body.name }).then((project) => {
               if (project) {
-                console.log(project);
                 return apiResponse.ErrorResponse(res, 'Project name already in use');
               } else {
                 let newProject = new Project();
@@ -210,7 +209,6 @@ class ProjectController {
 
   showAllProjects = [
     (req, res) => {
-      console.log(host(req, res));
       User.findById(host(req, res)).then((user) => {
         Project.find({ $or: [{ createdBy: user }, { members: user }] })
           .sort({ createdAt: -1 })

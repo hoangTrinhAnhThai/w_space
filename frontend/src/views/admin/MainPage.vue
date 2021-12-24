@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import Sidebar from '../components/Sidebar.vue';
-import Nav from '../components/Navigation.vue';
+import Sidebar from '../../components/admin/Sidebar.vue';
+import Nav from '../../components/Navigation.vue';
 import { mapActions } from 'vuex';
 export default {
   name: 'MainPage',
@@ -27,18 +27,14 @@ export default {
       getAllNotification: 'NOTIFICATION/getAllNotification',
     }),
   },
-  created() {
-    this.getUserByToken();
-    this.getProject();
-    this.getAllRooms();
-    this.getAllNotification();
-  },
 };
 </script>
 
 <style lang="scss" scoped>
 .main-page {
   display: flex;
+  height: 100vh;
+  text-overflow: none !important;
   .content {
     width: 99% !important;
   }

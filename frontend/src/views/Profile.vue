@@ -391,6 +391,7 @@ export default {
 .profile {
   width: 95%;
   margin: 20px auto;
+  height: 100vh;
 }
 
 .avatar .row {

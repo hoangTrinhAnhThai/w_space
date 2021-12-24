@@ -8,7 +8,7 @@
         />
       </v-label>
       <v-item-group mandatory>
-          <v-row>
+          <v-row v-if="projectsOfLeader.length >0">
             <h2>Leader</h2>
             <v-col v-for="(project, index) in projectsOfLeader" :key="index" cols="3" md="4">
               <v-item>
@@ -23,7 +23,7 @@
               </v-item>
             </v-col>
           </v-row>
-          <v-row style="margin-top: 50px">
+          <v-row v-if="projectsOfMember.length >0" style="margin-top: 50px">
             <h2>Group</h2>
             <v-col v-for="(project, index) in projectsOfMember" :key="index" cols="3" md="4">
               <v-item>

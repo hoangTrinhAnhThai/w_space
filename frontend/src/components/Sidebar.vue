@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       :mini-variant.sync="mini"
       permanent
       style="background-color: rgb(39, 102, 120) !important; color: white"
@@ -82,8 +82,123 @@
           </template>
         </v-treeview>
       </template>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
+    <v-navigation-drawer
+      :mini-variant.sync="mini"
+      permanent
+      style="background-color: rgb(39, 102, 120) !important"
+    >
+      <v-app-bar
+        style="
+          background-color: rgb(39, 102, 120) !important;
+          box-shadow: none !important;
+        "
+      >
+        <v-toolbar-title style="color: white">W-space</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn
+          style="margin-left: -10px"
+          color="deep-purple lighten-5"
+          icon
+          @click.stop="mini = !mini"
+        >
+          <v-icon v-if="mini">mdi-home</v-icon>
+          <v-icon v-if="!mini">mdi-chevron-left</v-icon>
+        </v-btn>
+      </v-app-bar>
+      <v-list>
+        <v-list-group no-action sub-group>
+          <template v-slot:activator class="header-project">
+            <v-list-item-content>
+              <v-list-item-title @click="handleClickProject"
+                >Project
+              </v-list-item-title>
+              <v-spacer></v-spacer> </v-list-item-content
+            ><v-list-item-icon>
+              <v-btn
+                class="add-project"
+                text
+                @click="showAddProjectModal({}, 'addProject')"
+              >
+                <i class="bx bx-plus"></i
+              ></v-btn>
+            </v-list-item-icon>
+          </template>
 
+          <v-list-item
+            v-for="project in projectsOfLeader"
+            :key="project._id"
+            link
+          >
+            <v-list-item-title @click="handleClickProjectItem(project)"
+              ><i class="bx bxs-flag-alt" />
+              {{ project.name }}</v-list-item-title
+            >
+            <v-list-item-icon>
+              <v-icon></v-icon>
+            </v-list-item-icon>
+          </v-list-item>
+          <v-list-item
+            v-for="project in projectsOfMember"
+            :key="project._id"
+            link
+          >
+            <v-list-item-title @click="handleClickProjectItem(project)"
+              ><i class="bx bxl-trello" /> {{ project.name }}</v-list-item-title
+            >
+            <v-list-item-icon>
+              <v-icon></v-icon>
+            </v-list-item-icon>
+          </v-list-item>
+        </v-list-group>
+        <v-list-group no-action sub-group>
+          <template v-slot:activator>
+            <v-list-item-content @click="handleClickLogtime">
+              <v-list-item-title>Logtime</v-list-item-title>
+            </v-list-item-content>
+          </template>
+        </v-list-group>
+        <v-list-group no-action sub-group>
+          <template v-slot:activator>
+            <v-list-item-content @click="handleClickChatRoom">
+              <v-list-item-title>Chatroom</v-list-item-title>
+            </v-list-item-content>
+          </template>
+
+          <v-list-item v-for="(room, index) in rooms" :key="index" link>
+            <v-list-item-title @click="handleClickChatRoomItem(room)">
+              <i class="bx bx-chat"></i>
+              {{ room.name }}
+              <span v-for="(notification, index) in notifications" :key="index"
+                ><v-badge
+                  v-if="
+                    notification.room == room._id &&
+                    notification.listContent[0].unreadCount < 5
+                  "
+                  color="red accent-1"
+                  :content="notification.listContent[0].unreadCount"
+                  :value="notification.listContent[0].unreadCount"
+                  style="font-weight: lighter; margin-left: 10px"
+                ></v-badge>
+                <v-badge
+                  v-else-if="
+                    notification.room == room._id &&
+                    notification.listContent[0].unreadCount >= 5
+                  "
+                  :content="'5+'"
+                  color="red accent-1"
+                  style="font-weight: lighter; margin-left: 10px"
+                >
+                </v-badge>
+              </span>
+            </v-list-item-title>
+            <v-list-item-icon>
+              <v-icon></v-icon>
+            </v-list-item-icon>
+          </v-list-item>
+        </v-list-group>
+      </v-list>
+    </v-navigation-drawer>
     <add-new-project-modal ref="newProjectModal"></add-new-project-modal>
     <add-member-modal ref="addMemberModal" />
   </div>
@@ -100,7 +215,7 @@ export default {
     isShowProject: false,
     isShowChat: false,
     drawer: true,
-    mini: true,
+    mini: false,
   }),
   components: {
     AddNewProjectModal,
@@ -114,26 +229,6 @@ export default {
       notifications: "NOTIFICATION/notifications",
       userInfo: "AUTH/userInfo",
     }),
-    items() {
-      const items = [
-        {
-          id: 1,
-          name: "Project",
-          children: this.projectsOfLeader.concat(this.projectsOfMember),
-        },
-        {
-          id: 2,
-          name: "Logtime",
-          children: [{}],
-        },
-        {
-          id: 3,
-          name: "Chat",
-          children: this.rooms,
-        },
-      ];
-      return items;
-    },
   },
   methods: {
     showAddProjectModal(project, typeOfModal) {
@@ -165,26 +260,21 @@ export default {
     clearMessage() {
       this.messages = 0;
     },
-    changeActive(item) {
-      if (
-        item.id === 1 
-      ) {
-        this.$router.push(`/roadmap/`);
-      } else if (item.id === 2) {
-        this.$router.push("/logtime");
-      } else if (item.id === 3 
-      ) {
-        this.$router.push(`/chatroom/`);
-      } else if (this.$route.params.id == item._id) {
-        return;
-      } else if (item.room && this.$route.params.id != item._id) {
-        this.$router.push(`/roadmap/${item._id}`);
-      } else if (this.$route.params.id != item._id) {
-        this.removeUnreadNotification(item._id);
-        this.$router.push(`/chatroom/${item._id}`);
-      } else {
-        return;
-      }
+    handleClickProject() {
+      this.$router.push(`/roadmap/`);
+    },
+    handleClickProjectItem(project) {
+      this.$router.push(`/roadmap/${project._id}`);
+    },
+    handleClickChatRoom() {
+      this.$router.push(`/chatroom/`);
+    },
+    handleClickChatRoomItem(room) {
+      this.removeUnreadNotification(room._id);
+      this.$router.push(`/chatroom/${room._id}`);
+    },
+    handleClickLogtime() {
+      this.$router.push(`/logtime/`);
     },
   },
   created() {
@@ -203,6 +293,7 @@ export default {
         this.getStatus();
         this.getTaskOfProject(to.params.id);
       } else if (to.name.name === "ChatRoom") {
+        this.addCurrentRoom(to.params.id);
         this.getAllChatByIdRoom(to.params.id);
       }
     },
@@ -210,13 +301,32 @@ export default {
 };
 </script>
 <style>
-.active {
-  display: none;
-  background-color: red;
+.v-application .primary--text {
+  color: white;
+}
+.v-application--is-ltr
+  .v-list-group--no-action.v-list-group--sub-group
+  > .v-list-group__items
+  > .v-list-item {
+  padding-left: 45px !important;
+  color: white !important;
+}
+.v-application--is-ltr .v-list-group--sub-group .v-list-group__header {
+  padding-left: 5px !important;
+  color: white !important;
 }
 .mdi-menu-down::before {
   color: white !important;
 }
+</style>
+<style scoped>
+.add-project i {
+  color: white;
+}
+.v-btn:not(.v-btn--round).v-size--default {
+  height: 100% !important;
+}
+
 .function {
   position: absolute;
   right: 5px;
@@ -250,7 +360,11 @@ export default {
 .add-project:hover .v-btn {
   background-color: #407686;
 }
-.v-treeview-node__root:hover {
-  /* background-color: rgb(255,235,238); */
+i {
+  margin-right: 5px;
+}
+.header-project:hover i {
+  display: block;
 }
 </style>
+

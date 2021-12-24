@@ -2,19 +2,21 @@
   <div class="nav">
     <v-app-bar>
       <div class="logo">
-        <router-link tag="li" to="/">W-space</router-link>
+        <router-link tag="li" to="/">
+        <img src="../assets/Logo.png" alt="">
+        W-space</router-link>
       </div>
 
       <v-spacer></v-spacer>
-      <v-btn text>
+      <v-btn icon text>
         <v-icon>mdi-cog-outline</v-icon>
       </v-btn>
-      <v-btn text>
+      <v-btn icon text>
         <v-icon>mdi-help-circle</v-icon>
       </v-btn>
       <v-menu transition="slide-y-transition" bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn  text v-bind="attrs" v-on="on">
+          <v-btn icon text v-bind="attrs" v-on="on">
             <v-icon>mdi-account-circle</v-icon>
           </v-btn>
         </template>
@@ -46,14 +48,15 @@ export default {};
   padding: 0 !important;
   cursor: pointer;
 }
-i {
-  font-size: 20px;
-  position: relative;
-  top: 2px;
-  margin-right: 15px;
-}
+
 li {
   list-style: none;
   cursor: pointer;
+}
+.v-nav {
+  background-color: red !important;
+}
+img {
+  width: 50px;
 }
 </style>
