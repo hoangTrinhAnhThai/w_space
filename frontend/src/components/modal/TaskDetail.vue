@@ -136,10 +136,10 @@
 </template>
 
 <script>
-import DatePicker from "vue2-datepicker";
-import { mapActions, mapGetters } from "vuex";
+import DatePicker from 'vue2-datepicker';
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "task-detail",
+  name: 'task-detail',
   props: {
     task: {
       type: Object,
@@ -148,18 +148,18 @@ export default {
   data() {
     return {
       date: this.task.dueDate ? new Date(this.task.dueDate) : new Date(),
-      priorities: ["high", "normal", "low"],
-      comment: "",
+      priorities: ['high', 'normal', 'low'],
+      comment: '',
     };
   },
   computed: {
     ...mapGetters({
-      logtimes: "TASKS/logtimes",
-      currentProject: "TASKS/currentProject",
-      currentTask: "TASKS/currentTask",
-      validateText: "VALIDATION/validateText",
-      comments: "TASKS/comments",
-      userInfo: "AUTH/userInfo",
+      logtimes: 'TASKS/logtimes',
+      currentProject: 'TASKS/currentProject',
+      currentTask: 'TASKS/currentTask',
+      validateText: 'VALIDATION/validateText',
+      comments: 'TASKS/comments',
+      userInfo: 'AUTH/userInfo',
     }),
     listMember() {
       let list = [];
@@ -184,8 +184,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      editTaskAction: "TASKS/editTask",
-      addCommentAction: "TASKS/addComment",
+      editTaskAction: 'TASKS/editTask',
+      addCommentAction: 'TASKS/addComment',
     }),
     show() {
       this.$refs.taskDetailModal.show();
@@ -205,7 +205,7 @@ export default {
     sendCommentByKey(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-          document.getElementById("content").focus();
+          document.getElementById('content').focus();
           return;
         } else {
           this.addCommentAction({
@@ -213,13 +213,13 @@ export default {
             idProject: this.currentProject._id,
             comment: { content: this.comment },
           });
-          this.comment = "";
+          this.comment = '';
         }
       }
     },
     sendComment() {
       if (!this.validateBeforeSubmit()) {
-        document.getElementById("content").focus();
+        document.getElementById('content').focus();
         return;
       } else {
         this.addCommentAction({
@@ -227,7 +227,7 @@ export default {
           idProject: this.currentProject._id,
           comment: { content: this.comment },
         });
-        this.comment = "";
+        this.comment = '';
       }
     },
     validateBeforeSubmit() {

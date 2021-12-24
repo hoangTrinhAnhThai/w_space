@@ -39,26 +39,26 @@
 </template>
 
 <script>
-import AddMember from "./AddMember.vue";
-import { mapActions, mapGetters } from "vuex";
-import Vue from "vue";
+import AddMember from './AddMember.vue';
+import { mapActions, mapGetters } from 'vuex';
+import Vue from 'vue';
 export default {
-  name: "AddNewProjectModal",
+  name: 'AddNewProjectModal',
   data() {
     return {
       project: {
-        name: "",
+        name: '',
       },
-      name: "",
+      name: '',
       showErrors: {},
-      typeOfModal: "",
+      typeOfModal: '',
     };
   },
   computed: {
     ...mapGetters({
-      validateText: "VALIDATION/validateText",
-      projectEdit: "TASKS/projectEdit",
-      errorMessage: "ERROR/errorMessage",
+      validateText: 'VALIDATION/validateText',
+      projectEdit: 'TASKS/projectEdit',
+      errorMessage: 'ERROR/errorMessage',
     }),
   },
   methods: {
@@ -71,9 +71,9 @@ export default {
       this.$refs.newProjectModal.hide();
     },
     ...mapActions({
-      addProjectAction: "TASKS/addProject",
-      editProjectAction: "TASKS/editProject",
-      clearErrorMessage: "ERROR/clearErrorMessage",
+      addProjectAction: 'TASKS/addProject',
+      editProjectAction: 'TASKS/editProject',
+      clearErrorMessage: 'ERROR/clearErrorMessage',
     }),
     editProject() {
       this.editProjectAction({
@@ -85,11 +85,11 @@ export default {
       this.clearErrorMessage();
 
       if (!this.validateBeforeSubmit()) {
-        document.getElementById("content").focus();
+        document.getElementById('content').focus();
 
         return;
       } else {
-        if (this.typeOfModal === "editProject") {
+        if (this.typeOfModal === 'editProject') {
           this.editProject();
           this.hide();
         } else {
@@ -97,7 +97,7 @@ export default {
           setTimeout(() => {
             if (!this.errorMessage) {
               this.$refs.addMemberModal.show(this.projectEdit);
-              this.name = "";
+              this.name = '';
             }
           }, 1000);
         }
@@ -108,11 +108,11 @@ export default {
 
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-          document.getElementById("content").focus();
+          document.getElementById('content').focus();
 
           return;
         } else {
-          if (this.typeOfModal === "editProject") {
+          if (this.typeOfModal === 'editProject') {
             this.editProject();
             this.hide();
           } else {
@@ -120,7 +120,7 @@ export default {
             setTimeout(() => {
               if (!this.errorMessage) {
                 this.$refs.addMemberModal.show(this.projectEdit);
-                this.name = "";
+                this.name = '';
               }
             }, 1000);
           }
@@ -133,8 +133,8 @@ export default {
       if (errors) {
         Vue.set(
           this.showErrors,
-          "emptyName",
-          this.showErrors && !!errors && errors.emptyName
+          'emptyName',
+          this.showErrors && !!errors && errors.emptyName,
         );
 
         passedValidate = false;
@@ -149,8 +149,8 @@ export default {
     AddMember,
   },
   watch: {
-    "project.name"() {
-      Vue.set(this.showErrors, "emptyName", null);
+    'project.name'() {
+      Vue.set(this.showErrors, 'emptyName', null);
       this.clearErrorMessage();
     },
   },

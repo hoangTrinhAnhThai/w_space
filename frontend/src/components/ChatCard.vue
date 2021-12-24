@@ -1,8 +1,6 @@
 <template>
-  <v-tooltip
-    bottom
-  >
-    <template v-slot:activator="{ on, attrs  }">
+  <v-tooltip bottom>
+    <template v-slot:activator="{ on, attrs }">
       <span v-on="on" v-bind="attrs"
         ><p v-bind:style="{ backgroundColor: color, right: distance }">
           {{ chat.message }}
@@ -14,9 +12,9 @@
 </template>
 
 <script>
-import helper from "../utils/data";
+import helper from '../utils/data';
 export default {
-  name: "ChatCard",
+  name: 'ChatCard',
   props: {
     chat: {
       type: Object,

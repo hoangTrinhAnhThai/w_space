@@ -44,39 +44,39 @@ const mutations = {
     state.logtimeIsPlaying = data;
   },
   addLogtime(state, data) {
-    state.logtimeArray.unshift(data)
+    state.logtimeArray.unshift(data);
     for (let logtime of state.logtimeArray) {
       if (logtime.isPlaying == true) {
-        state.logtimeIsPlaying = logtime
-        break
+        state.logtimeIsPlaying = logtime;
+        break;
       }
     }
   },
   updateLogtime(state, data) {
-    let list = state.logtimeArray
-    for(let i = 0; i < list.length; i++) {
-      if(list[i]._id === data._id) {
-        list.splice(i, 1, data)
-        break
+    let list = state.logtimeArray;
+    for (let i = 0; i < list.length; i++) {
+      if (list[i]._id === data._id) {
+        list.splice(i, 1, data);
+        break;
       }
     }
-    state.logtimeArray = list
+    state.logtimeArray = list;
     for (let logtime of list) {
       if (logtime.isPlaying == true) {
-        state.logtimeIsPlaying = logtime
-        break
+        state.logtimeIsPlaying = logtime;
+        break;
       }
     }
   },
   deleteLogtime(state, data) {
-    let list = state.logtimeArray
-    for(let i = 0; i < list.length; i++) {
-      if(list[i]._id === data) {
-        list.splice(i, 1)
-        break
+    let list = state.logtimeArray;
+    for (let i = 0; i < list.length; i++) {
+      if (list[i]._id === data) {
+        list.splice(i, 1);
+        break;
       }
     }
-  }
+  },
 };
 
 const actions = {
@@ -104,17 +104,17 @@ const actions = {
   },
   deteleLogtime({ commit }, params) {
     http.delete(`/logtime/${params}`).then(() => {
-      commit('deleteLogtime', params)
+      commit('deleteLogtime', params);
     });
   },
   createLogtime({ commit }, params) {
     http.post('/logtime', params).then((result) => {
-      commit('addLogtime', result.data.data)
+      commit('addLogtime', result.data.data);
     });
   },
   updateLogtime({ commit }, params) {
     http.put(`/logtime/${params._id}`, params.logtime).then((result) => {
-      commit('updateLogtime', result.data.data)
+      commit('updateLogtime', result.data.data);
     });
   },
 };

@@ -3,18 +3,18 @@
     <v-row class="roadmap">
       <v-row style="margin: 20px 0px">
         <h1>
-          <i class='bx bxl-trello'></i> 
-          {{currentProject.name}}
-          </h1>
+          <i class="bx bxl-trello"></i>
+          {{ currentProject.name }}
+        </h1>
       </v-row>
       <v-col class="status" v-for="(data, index) in dataTask" :key="index">
         <v-row>
           <v-col style="text-align: center">
             <span
               class="name-status"
-              :style="{ 'color': colors[index], 'font-weight':'800' }"
+              :style="{ color: colors[index], 'font-weight': '800' }"
             >
-              {{ data.status.name }}  {{ data.tasks.length }}
+              {{ data.status.name }} {{ data.tasks.length }}
             </span>
           </v-col>
         </v-row>

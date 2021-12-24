@@ -100,7 +100,7 @@
             <p v-show="showErrors.emptyPhoneNumber" class="errors">
               PhoneNumber is required
             </p>
-            <p v-show="errorMessage" class="errors"> {{errorMessage}}</p>
+            <p v-show="errorMessage" class="errors">{{ errorMessage }}</p>
           </div>
         </div>
         <div class="term">
@@ -143,7 +143,7 @@ export default {
   computed: {
     ...mapGetters({
       validateRegister: 'VALIDATION/validateRegister',
-      errorMessage: "ERROR/errorMessage",
+      errorMessage: 'ERROR/errorMessage',
     }),
   },
   methods: {

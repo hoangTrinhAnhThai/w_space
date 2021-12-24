@@ -3,7 +3,9 @@
     <v-card-title style="color: rgb(39, 102, 120); font-size: 15px">{{
       card.name
     }}</v-card-title>
-    <v-card-subtitle class="description" font-size="12">{{ card.description }}</v-card-subtitle>
+    <v-card-subtitle class="description" font-size="12">{{
+      card.description
+    }}</v-card-subtitle>
     <v-card-text>
       <span v-if="card.dueDate">
         <span v-if="!deadline" style="color: red; font-size: 12px">
@@ -45,11 +47,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import TaskDetail from "../components/modal/TaskDetail.vue";
-import helper from "../utils/data";
+import { mapActions, mapGetters } from 'vuex';
+import TaskDetail from '../components/modal/TaskDetail.vue';
+import helper from '../utils/data';
 export default {
-  name: "Cards",
+  name: 'Cards',
   props: {
     card: {
       type: Object,
@@ -75,7 +77,7 @@ export default {
       return helper.month[new Date(this.card.dueDate).getMonth()];
     },
     ...mapGetters({
-      currentProject: "TASKS/currentProject",
+      currentProject: 'TASKS/currentProject',
     }),
     assignForTask() {
       let assigned = {};
@@ -98,10 +100,10 @@ export default {
 
   methods: {
     ...mapActions({
-      deleteTaskAction: "TASKS/deleteTask",
-      getLogtimes: "TASKS/getLogtimes",
-      addCurrentTask: "TASKS/addCurrentTask",
-      getCommentByIdTask: "TASKS/getCommentByIdTask",
+      deleteTaskAction: 'TASKS/deleteTask',
+      getLogtimes: 'TASKS/getLogtimes',
+      addCurrentTask: 'TASKS/addCurrentTask',
+      getCommentByIdTask: 'TASKS/getCommentByIdTask',
     }),
     deleteTask() {
       this.deleteTaskAction({
@@ -130,18 +132,19 @@ export default {
   margin: 10px 0;
   border: none;
   position: relative;
-  }
+}
 .card .menu {
-    position: absolute;
-    right: 10px;
-    top: 15px;
-  }
+  position: absolute;
+  right: 10px;
+  top: 15px;
+}
 .description {
   display: flex;
   flex-wrap: wrap;
   word-break: inherit;
-  }
-  .theme--light.v-card>.v-card__subtitle, .theme--light.v-card>.v-card__text {
-    word-break: break-all;
-  }
+}
+.theme--light.v-card > .v-card__subtitle,
+.theme--light.v-card > .v-card__text {
+  word-break: break-all;
+}
 </style>

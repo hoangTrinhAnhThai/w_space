@@ -74,9 +74,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "LogtimeCard",
+  name: 'LogtimeCard',
   props: {
     logtime: {
       type: Object,
@@ -92,10 +92,10 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      projectsOfLeader: "TASKS/projectsOfLeader",
-      projectsOfMember: "TASKS/projectsOfMember",
-      logtimeArray: "LOGTIME/logtimeArray",
-      logtimeIsPlaying: "LOGTIME/logtimeIsPlaying",
+      projectsOfLeader: 'TASKS/projectsOfLeader',
+      projectsOfMember: 'TASKS/projectsOfMember',
+      logtimeArray: 'LOGTIME/logtimeArray',
+      logtimeIsPlaying: 'LOGTIME/logtimeIsPlaying',
     }),
     tasks() {
       let list = [];
@@ -171,9 +171,9 @@ export default {
   components: {},
   methods: {
     ...mapActions({
-      deteleLogtimeAction: "LOGTIME/deteleLogtime",
-      createLogtimeAction: "LOGTIME/createLogtime",
-      updateLogtimeAction: "LOGTIME/updateLogtime",
+      deteleLogtimeAction: 'LOGTIME/deteleLogtime',
+      createLogtimeAction: 'LOGTIME/createLogtime',
+      updateLogtimeAction: 'LOGTIME/updateLogtime',
     }),
     startTime() {
       this.hours = 0;
@@ -221,12 +221,12 @@ export default {
       var timeInMiliseconds = new Date() - start;
       this.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60);
       this.minutes = Math.floor(
-        (timeInMiliseconds / 1000 / 60 / 60 - this.hours) * 60
+        (timeInMiliseconds / 1000 / 60 / 60 - this.hours) * 60,
       );
       this.seconds = Math.floor(
         ((timeInMiliseconds / 1000 / 60 / 60 - this.hours) * 60 -
           this.minutes) *
-          60
+          60,
       );
     },
     deteleLogtime() {
@@ -240,7 +240,7 @@ export default {
     },
   },
   watch: {
-    "logtime.task"() {
+    'logtime.task'() {
       this.updateLogtimeAction({
         logtime: this.logtime,
         _id: this.logtime._id,

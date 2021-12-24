@@ -47,13 +47,13 @@
 
 <script>
 export default {
-  name: "HomePage",
+  name: 'HomePage',
   methods: {
     login() {
-      this.$router.push("/login");
+      this.$router.push('/login');
     },
     signup() {
-      this.$router.push("/signup");
+      this.$router.push('/signup');
     },
   },
 };
@@ -90,7 +90,7 @@ p {
         rgba(29, 28, 28, 0.6),
         rgba(36, 35, 35, 0.6)
       ),
-      url("https://shrm.pace.edu.vn/CMSFileManager/files/10/10f300de-0edc-449d-9959-0b4535664720.png");
+      url('https://shrm.pace.edu.vn/CMSFileManager/files/10/10f300de-0edc-449d-9959-0b4535664720.png');
     background-color: #232323;
     background-position: bottom center;
     background-size: cover;

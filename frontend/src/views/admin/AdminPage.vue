@@ -2,16 +2,14 @@
   <div class="dashboard">
     <box-chart />
     <bar-chart />
-    <p>
-      Đồ thị thống kê số lượng tài khoản người dùng đăng ký
-    </p>
+    <p>Đồ thị thống kê số lượng tài khoản người dùng đăng ký</p>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import BarChart from "../../components/admin/BarChart.vue";
-import BoxChart from "../../components/admin/ChartBox.vue";
+import { mapActions, mapGetters } from 'vuex';
+import BarChart from '../../components/admin/BarChart.vue';
+import BoxChart from '../../components/admin/ChartBox.vue';
 export default {
   components: {
     BarChart,
@@ -19,12 +17,12 @@ export default {
   },
   methods: {
     ...mapActions({
-      getStatistical: "ADMIN/getStatistical",
+      getStatistical: 'ADMIN/getStatistical',
     }),
   },
   computed: {
     ...mapGetters({
-      statistical: "ADMIN/statistical",
+      statistical: 'ADMIN/statistical',
     }),
   },
 };
@@ -39,6 +37,6 @@ p {
   margin-top: 15px;
 }
 .dashboard {
-    height: 95vh;
+  height: 95vh;
 }
 </style>

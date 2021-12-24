@@ -12,7 +12,7 @@
           <v-icon>mdi-account-group-outline</v-icon>
         </v-btn>
       </v-app-bar>
-      
+
       <div class="layout-chat" v-chat-scroll>
         <div class="notChat" v-if="chats.length <= 0">
           <img
@@ -81,106 +81,105 @@
       </div>
     </div>
     <v-navigation-drawer v-model="showGroup" absolute bottom right temporary>
-        <v-list nav dense>
-          <v-list-item-group
-            v-model="group"
-            active-class="deep-purple--text text--accent-4"
-          >
-            <v-list-item>
-              <v-list-item-title>Foo</v-list-item-title>
-            </v-list-item>
+      <v-list nav dense>
+        <v-list-item-group
+          v-model="group"
+          active-class="deep-purple--text text--accent-4"
+        >
+          <v-list-item>
+            <v-list-item-title>Foo</v-list-item-title>
+          </v-list-item>
 
-            <v-list-item>
-              <v-list-item-title>Bar</v-list-item-title>
-            </v-list-item>
+          <v-list-item>
+            <v-list-item-title>Bar</v-list-item-title>
+          </v-list-item>
 
-            <v-list-item>
-              <v-list-item-title>Fizz</v-list-item-title>
-            </v-list-item>
+          <v-list-item>
+            <v-list-item-title>Fizz</v-list-item-title>
+          </v-list-item>
 
-            <v-list-item>
-              <v-list-item-title>Buzz</v-list-item-title>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-navigation-drawer>
+          <v-list-item>
+            <v-list-item-title>Buzz</v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import ChatCard from "../../components/ChatCard.vue";
+import { mapActions, mapGetters } from 'vuex';
+import ChatCard from '../../components/ChatCard.vue';
 export default {
-  name: "ChatRoom",
+  name: 'ChatRoom',
   data() {
     return {
-      message: "",
+      message: '',
       showGroup: false,
       recent: [
         {
           active: true,
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          title: "Jason Oner",
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
+          title: 'Jason Oner',
         },
         {
           active: true,
-          avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-          title: "Mike Carlson",
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
+          title: 'Mike Carlson',
         },
         {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-          title: "Cindy Baker",
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
+          title: 'Cindy Baker',
         },
         {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-          title: "Ali Connors",
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
+          title: 'Ali Connors',
         },
       ],
     };
   },
   computed: {
     ...mapGetters({
-      chats: "CHAT/chats",
-      userInfo: "AUTH/userInfo",
-      validateText: "VALIDATION/validateText",
-      currentRoom: "CHAT/currentRoom",
-      currentProject: "TASKS/currentProject",
+      chats: 'CHAT/chats',
+      userInfo: 'AUTH/userInfo',
+      validateText: 'VALIDATION/validateText',
+      currentRoom: 'CHAT/currentRoom',
+      currentProject: 'TASKS/currentProject',
     }),
   },
   methods: {
     ...mapActions({
-      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
-      sendMessageAction: "CHAT/sendMessage",
-      addCurrentRoom: "CHAT/addCurrentRoom",
-      removeUnreadNotification: "NOTIFICATION/removeUnreadNotification",
-
+      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
+      sendMessageAction: 'CHAT/sendMessage',
+      addCurrentRoom: 'CHAT/addCurrentRoom',
+      removeUnreadNotification: 'NOTIFICATION/removeUnreadNotification',
     }),
     sendMessage(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-          document.getElementById("content").focus();
+          document.getElementById('content').focus();
           return;
         } else {
           this.sendMessageAction({
             idRoom: this.$route.params.id,
             chat: { room: this.$route.params.id, message: this.message },
           });
-          this.message = "";
-          document.getElementById("content").focus();
+          this.message = '';
+          document.getElementById('content').focus();
         }
       }
     },
     sendMessageByClick() {
       if (!this.validateBeforeSubmit()) {
-        document.getElementById("content").focus();
+        document.getElementById('content').focus();
         return;
       } else {
         this.sendMessageAction({
           idRoom: this.$route.params.id,
           chat: { room: this.$route.params.id, message: this.message },
         });
-        this.message = "";
-        document.getElementById("content").focus();
+        this.message = '';
+        document.getElementById('content').focus();
       }
     },
     validateBeforeSubmit() {
@@ -193,7 +192,7 @@ export default {
     },
     removeNotification() {
       this.removeUnreadNotification(this.currentRoom._id);
-    }
+    },
   },
   created() {
     this.getAllChatByIdRoom(this.$route.params.id);
@@ -203,10 +202,10 @@ export default {
     ChatCard,
   },
   watch: {
-    'message'() {
-      this.removeNotification()
-    }
-  }
+    message() {
+      this.removeNotification();
+    },
+  },
 };
 </script>
 <style scoped>
@@ -264,7 +263,7 @@ i {
 }
 </style>
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
+@import '../../assets/style.scss';
 
 .chat-room {
   position: relative;

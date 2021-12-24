@@ -1,7 +1,6 @@
 const { check } = require('express-validator');
 const User = require('../app/models/User');
 
-
 exports.registerValidation = () => {
   return [
     check('firstName').trim().notEmpty().withMessage('Firstname is required'),

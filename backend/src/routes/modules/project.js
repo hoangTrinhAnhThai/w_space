@@ -4,7 +4,7 @@ const projectController = require('../../app/controllers/ProjectController');
 const taskController = require('../../app/controllers/TaskController');
 const commentController = require('../../app/controllers/CommentController');
 const server = require('http').createServer(express);
-const server_port = 5000
+const server_port = 5000;
 require('dotenv').config();
 
 const io = require('socket.io')(server, {

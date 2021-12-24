@@ -57,14 +57,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import Vue from "vue";
+import { mapActions, mapGetters } from 'vuex';
+import Vue from 'vue';
 export default {
   data() {
     return {
       loginInput: {
-        email: "",
-        password: "",
+        email: '',
+        password: '',
       },
       showErrors: {},
       disabledLogin: false,
@@ -72,14 +72,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      validateLogin: "VALIDATION/validateLogin",
-      errorMessage: "ERROR/errorMessage",
+      validateLogin: 'VALIDATION/validateLogin',
+      errorMessage: 'ERROR/errorMessage',
     }),
   },
   methods: {
     ...mapActions({
-      clearErrorMessage: "ERROR/clearErrorMessage",
-      loginAction: "AUTH/login",
+      clearErrorMessage: 'ERROR/clearErrorMessage',
+      loginAction: 'AUTH/login',
     }),
     login() {
       if (!this.validateBeforeSubmit()) {
@@ -95,28 +95,28 @@ export default {
       if (errors) {
         Vue.set(
           this.showErrors,
-          "emptyEmail",
-          this.showErrors && !!errors && errors.emptyEmail
+          'emptyEmail',
+          this.showErrors && !!errors && errors.emptyEmail,
         );
         Vue.set(
           this.showErrors,
-          "invalidEmail",
-          this.showErrors && !!errors && errors.invalidEmail
+          'invalidEmail',
+          this.showErrors && !!errors && errors.invalidEmail,
         );
         Vue.set(
           this.showErrors,
-          "emptyPassword",
-          this.showErrors && !!errors && errors.emptyPassword
+          'emptyPassword',
+          this.showErrors && !!errors && errors.emptyPassword,
         );
         Vue.set(
           this.showErrors,
-          "passwordMinLength",
-          this.showErrors && !!errors && errors.passwordMinLength
+          'passwordMinLength',
+          this.showErrors && !!errors && errors.passwordMinLength,
         );
         Vue.set(
           this.showErrors,
-          "passwordMaxLength",
-          this.showErrors && !!errors.passwordMaxLength
+          'passwordMaxLength',
+          this.showErrors && !!errors.passwordMaxLength,
         );
 
         passedValidate = false;
@@ -125,16 +125,16 @@ export default {
     },
   },
   watch: {
-    "loginInput.email"() {
-      Vue.set(this.showErrors, "emptyEmail", null);
-      Vue.set(this.showErrors, "invalidEmail", null);
+    'loginInput.email'() {
+      Vue.set(this.showErrors, 'emptyEmail', null);
+      Vue.set(this.showErrors, 'invalidEmail', null);
       this.disabledLogin = false;
       this.clearErrorMessage();
     },
-    "loginInput.password"() {
-      Vue.set(this.showErrors, "emptyPassword", false);
-      Vue.set(this.showErrors, "passwordMinLength", false);
-      Vue.set(this.showErrors, "passwordMaxLength", false);
+    'loginInput.password'() {
+      Vue.set(this.showErrors, 'emptyPassword', false);
+      Vue.set(this.showErrors, 'passwordMinLength', false);
+      Vue.set(this.showErrors, 'passwordMaxLength', false);
       this.clearErrorMessage();
       this.disabledLogin = false;
     },
@@ -143,7 +143,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
+@import '../../assets/style.scss';
 .login {
   text-align: center;
   height: 100vh;
@@ -151,7 +151,7 @@ export default {
       rgba(29, 28, 28, 0.7),
       rgba(36, 35, 35, 0.7)
     ),
-    url("https://blisssaigon.com/wp-content/uploads/2019/10/iwood-R5v8Xtc0ecg-unsplash-1.jpg");
+    url('https://blisssaigon.com/wp-content/uploads/2019/10/iwood-R5v8Xtc0ecg-unsplash-1.jpg');
   background-size: cover;
   display: flex;
   justify-content: center;

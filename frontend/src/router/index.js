@@ -12,9 +12,8 @@ import Login from '../views/Auth/Login.vue';
 import Signup from '../views/Auth/Register.vue';
 import ChatPage from '../views/chat/ChatPage.vue';
 import ChatRoom from '../views/chat/ChatRoom.vue';
-import AdminMainPage from '../views/admin/MainPage.vue'
-import Admin from '../views/admin/AdminPage.vue'
-
+import AdminMainPage from '../views/admin/MainPage.vue';
+import Admin from '../views/admin/AdminPage.vue';
 
 Vue.use(VueRouter);
 const routes = [
@@ -56,7 +55,6 @@ const routes = [
         name: Profile,
         component: Profile,
       },
-
     ],
   },
   {
@@ -71,9 +69,8 @@ const routes = [
         path: '/admin',
         name: Admin,
         component: Admin,
-      }
-
-    ]
+      },
+    ],
   },
 
   {
@@ -90,8 +87,7 @@ const routes = [
     path: '/home',
     name: HomePage,
     component: HomePage,
-
-  }
+  },
 ];
 
 const router = new VueRouter({

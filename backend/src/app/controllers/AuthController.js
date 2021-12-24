@@ -71,10 +71,10 @@ class AuthController {
                         _id: user._id,
                         email: user.email,
                         firstName: user.firstName,
-                        lastName:user.lastName
+                        lastName: user.lastName,
                       },
                       process.env.TOKEN_SECRET,
-                      {  expiresIn: process.env.JWT_TIMEOUT_DURATION },
+                      { expiresIn: process.env.JWT_TIMEOUT_DURATION },
                     );
                     let userData = {
                       _id: user._id,
@@ -101,10 +101,7 @@ class AuthController {
                       },
                     );
                   } else {
-                    return apiResponse.ErrorResponse(
-                      res,
-                      'Password wrong',
-                    );
+                    return apiResponse.ErrorResponse(res, 'Password wrong');
                   }
                 },
               );

@@ -39,21 +39,23 @@ class LogtimeController {
           .catch((error) => {
             return apiResponse.ErrorResponse(res, 'error');
           });
-      })
+      });
     },
   ];
   showAllLogtimeByDate = [
     (req, res) => {
       User.findById(host(req, res)).then((user) => {
-        LogTime.find(
-          {
-            $and: [{ createdBy: user }, {
+        LogTime.find({
+          $and: [
+            { createdBy: user },
+            {
               createdAt: {
                 $gte: startOfDay(new Date(req.params.date)),
                 $lte: endOfDay(new Date(req.params.date)),
-              }
-            }]
-          })
+              },
+            },
+          ],
+        })
           .sort({ createdAt: -1 })
           .then((logtimes) => {
             return apiResponse.successResponseWithData(
@@ -65,7 +67,7 @@ class LogtimeController {
           .catch((error) => {
             return apiResponse.ErrorResponse(res, error);
           });
-      })
+      });
     },
   ];
   showAllLogtimeByTask = [
@@ -93,17 +95,19 @@ class LogtimeController {
         logtime.task = req.body.task;
         logtime.note = req.body.note;
         logtime.isPlaying = req.body.isPlaying;
-        logtime.createdBy = user
-        LogTime.create(logtime ).then((logtime) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'Add logtime success',
-            logtime,
-          );
-        }).catch((error) => {
-          return apiResponse.ErrorResponse(res, error)
-        })
-      })
+        logtime.createdBy = user;
+        LogTime.create(logtime)
+          .then((logtime) => {
+            return apiResponse.successResponseWithData(
+              res,
+              'Add logtime success',
+              logtime,
+            );
+          })
+          .catch((error) => {
+            return apiResponse.ErrorResponse(res, error);
+          });
+      });
     },
   ];
   updateLogtime = [

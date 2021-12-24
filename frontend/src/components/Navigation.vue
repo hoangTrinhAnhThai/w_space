@@ -3,8 +3,9 @@
     <v-app-bar>
       <div class="logo">
         <router-link tag="li" to="/">
-        <img src="../assets/Logo.png" alt="">
-        W-space</router-link>
+          <img src="../assets/Logo.png" alt="" />
+          W-space</router-link
+        >
       </div>
 
       <v-spacer></v-spacer>
@@ -22,10 +23,14 @@
         </template>
         <v-list>
           <v-list-item>
-          <router-link tag="li" to="/profile"><i class='bx bx-user-circle'></i>Profile</router-link>            
+            <router-link tag="li" to="/profile"
+              ><i class="bx bx-user-circle"></i>Profile</router-link
+            >
           </v-list-item>
           <v-list-item>
-            <v-list-item-title><i class='bx bx-exit' ></i>Logout</v-list-item-title>
+            <v-list-item-title
+              ><i class="bx bx-exit"></i>Logout</v-list-item-title
+            >
           </v-list-item>
         </v-list>
       </v-menu>

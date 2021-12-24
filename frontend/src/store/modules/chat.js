@@ -32,7 +32,6 @@ const mutations = {
   },
   setCurrentRoom(state, data) {
     state.currentRoom = data;
-
   },
   logMess() {
     console.log('aaa');
@@ -62,7 +61,7 @@ const actions = {
     http.get(`/room/${params}`).then((result) => {
       console.log(result.data.data);
       commit('setCurrentRoom', result.data.data);
-    })
+    });
   },
   sendMessage({ dispatch }, params) {
     http.post(`/chat/`, params.chat).then((response) => {

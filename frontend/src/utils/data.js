@@ -35,7 +35,7 @@ const shortMonth = [
   'Oct',
   'Nov',
   'Dec',
-]
+];
 const colors = [
   'rgb(0, 54, 56)',
   'rgb(142, 5, 194)',
@@ -46,5 +46,5 @@ export default {
   weekday,
   month,
   colors,
-  shortMonth
+  shortMonth,
 };

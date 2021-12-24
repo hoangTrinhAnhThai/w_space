@@ -22,7 +22,10 @@ class ProjectController {
           } else {
             Project.findOne({ name: req.body.name }).then((project) => {
               if (project) {
-                return apiResponse.ErrorResponse(res, 'Project name already in use');
+                return apiResponse.ErrorResponse(
+                  res,
+                  'Project name already in use',
+                );
               } else {
                 let newProject = new Project();
                 newProject.name = req.body.name;
@@ -61,8 +64,8 @@ class ProjectController {
         } catch (error) {
           return apiResponse.ErrorResponse(res, error);
         }
-      })
-    }
+      });
+    },
   ];
   editProject = [
     (req, res) => {
@@ -78,14 +81,15 @@ class ProjectController {
               },
               { new: true },
             ).then((project) => {
-              Room.findByIdAndUpdate(project.room, {name: req.body.name}).then((room) => {
+              Room.findByIdAndUpdate(project.room, {
+                name: req.body.name,
+              }).then((room) => {
                 return apiResponse.successResponseWithData(
                   res,
                   'Edit project successfully',
                   project,
                 );
-              })
-              
+              });
             });
           }
         });
@@ -113,7 +117,7 @@ class ProjectController {
                 if (
                   isExsitUser ||
                   JSON.stringify(user._id) ===
-                  JSON.stringify(project.createdBy._id)
+                    JSON.stringify(project.createdBy._id)
                 ) {
                   return apiResponse.ErrorResponse(res, 'The member joined');
                 } else {
@@ -200,9 +204,11 @@ class ProjectController {
     (req, res) => {
       Project.findByIdAndDelete(req.params.id).then((project) => {
         Room.findByIdAndDelete(project.room).then((result) => {
-          return apiResponse.successResponse(res, 'Delete project successfully');
-
-        })
+          return apiResponse.successResponse(
+            res,
+            'Delete project successfully',
+          );
+        });
       });
     },
   ];
