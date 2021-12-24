@@ -1,88 +1,5 @@
 <template>
   <div class="sidebar">
-    <!-- <v-navigation-drawer
-      :mini-variant.sync="mini"
-      permanent
-      style="background-color: rgb(39, 102, 120) !important; color: white"
-    >
-      <v-btn color="deep-purple lighten-5" icon @click.stop="mini = !mini">
-        <v-icon v-if="mini">mdi-home</v-icon>
-        <v-icon v-if="!mini">mdi-chevron-left</v-icon>
-      </v-btn>
-      <template>
-        <v-treeview
-          v-show="!mini"
-          :items="items"
-          color="red lighten-5"
-          activable
-          open-on-click
-        >
-          <template slot="label" slot-scope="{ item }">
-            <div class="item">
-              <span style="color: white" @click="changeActive(item)">
-                <i
-                  class="bx bxs-flag-alt"
-                  v-if="
-                    item.createdBy &&
-                    userInfo._id === item.createdBy._id &&
-                    item.room
-                  "
-                ></i>
-                <i
-                  class="bx bxl-trello"
-                  v-else-if="
-                    item.createdBy &&
-                    userInfo._id !== item.createdBy._id &&
-                    item.room
-                  "
-                ></i>
-                <i
-                  v-else-if="
-                    item.createdBy && userInfo._id !== item.createdBy._id
-                  "
-                  class="bx bx-chat"
-                ></i>
-                {{ item.name }}
-                <span
-                  v-for="(notification, index) in notifications"
-                  :key="index"
-                  ><v-badge
-                    v-if="notification.room == item._id"
-                    color="red accent-1"
-                    :content="notification.listContent[0].unreadCount"
-                    :value="notification.listContent[0].unreadCount"
-                    style="font-weight: lighter; margin-left: 10px"
-                  ></v-badge>
-                </span>
-              </span>
-              <div
-                class="function"
-                v-if="
-                  item.createdBy &&
-                  userInfo._id === item.createdBy._id &&
-                  item.room
-                "
-              >
-                <i
-                  @click="showAddProjectModal(item, 'editProject')"
-                  class="bx bx-edit-alt"
-                ></i>
-                <i
-                  @click="showAddMemberModal(item)"
-                  class="bx bx-user-plus"
-                ></i>
-                <i @click="deleteProject(item._id)" class="bx bx-trash"></i>
-              </div>
-              <div class="add-project" v-if="item.id == 1">
-                <v-btn text @click="showAddProjectModal({}, 'addProject')">
-                  <i class="bx bx-plus"></i
-                ></v-btn>
-              </div>
-            </div>
-          </template>
-        </v-treeview>
-      </template>
-    </v-navigation-drawer> -->
     <v-navigation-drawer
       :mini-variant.sync="mini"
       permanent
@@ -106,14 +23,15 @@
           <v-icon v-if="!mini">mdi-chevron-left</v-icon>
         </v-btn>
       </v-app-bar>
+      <v-divider></v-divider>
       <v-list>
-        <v-list-group no-action sub-group>
-          <template v-slot:activator class="header-project">
+        <v-list-group no-action class="header-project">
+          <template v-slot:activator>
             <v-list-item-content>
-              <v-list-item-title @click="handleClickProject"
-                >Project
-              </v-list-item-title>
-              <v-spacer></v-spacer> </v-list-item-content
+              <v-list-item-title @click="handleClickProject">
+                <i style="font-size: 20px" class="bx bxl-trello" />
+                Project
+              </v-list-item-title> </v-list-item-content
             ><v-list-item-icon>
               <v-btn
                 class="add-project"
@@ -124,18 +42,26 @@
               ></v-btn>
             </v-list-item-icon>
           </template>
-
           <v-list-item
             v-for="project in projectsOfLeader"
             :key="project._id"
             link
+            class="project-item"
           >
             <v-list-item-title @click="handleClickProjectItem(project)"
               ><i class="bx bxs-flag-alt" />
               {{ project.name }}</v-list-item-title
             >
-            <v-list-item-icon>
-              <v-icon></v-icon>
+            <v-list-item-icon class="project-function">
+              <i
+                @click="showAddProjectModal(project, 'editProject')"
+                class="bx bx-edit-alt"
+              ></i>
+              <i
+                @click="showAddMemberModal(project)"
+                class="bx bx-user-plus"
+              ></i>
+              <i @click="deleteProject(project._id)" class="bx bx-trash"></i>
             </v-list-item-icon>
           </v-list-item>
           <v-list-item
@@ -151,24 +77,31 @@
             </v-list-item-icon>
           </v-list-item>
         </v-list-group>
-        <v-list-group no-action sub-group>
+        <v-list-group no-action @click="handleClickLogtime">
           <template v-slot:activator>
-            <v-list-item-content @click="handleClickLogtime">
-              <v-list-item-title>Logtime</v-list-item-title>
+            <v-list-item-content>
+              <v-list-item-title
+                ><i class="bx bx-timer" style="font-size: 20px"></i
+                >Logtime</v-list-item-title
+              >
             </v-list-item-content>
           </template>
         </v-list-group>
-        <v-list-group no-action sub-group>
+        <v-list-group no-action>
           <template v-slot:activator>
             <v-list-item-content @click="handleClickChatRoom">
-              <v-list-item-title>Chatroom</v-list-item-title>
+              <v-list-item-title>
+                <i
+                  style="font-size: 20px"
+                  class="bx bx-message-rounded-dots"
+                ></i>
+                Chatroom</v-list-item-title
+              >
             </v-list-item-content>
           </template>
-
           <v-list-item v-for="(room, index) in rooms" :key="index" link>
             <v-list-item-title @click="handleClickChatRoomItem(room)">
-              <i class="bx bx-chat"></i>
-              {{ room.name }}
+              <i class="bx bx-conversation"></i>{{ room.name }}
               <span v-for="(notification, index) in notifications" :key="index"
                 ><v-badge
                   v-if="
@@ -192,9 +125,6 @@
                 </v-badge>
               </span>
             </v-list-item-title>
-            <v-list-item-icon>
-              <v-icon></v-icon>
-            </v-list-item-icon>
           </v-list-item>
         </v-list-group>
       </v-list>
@@ -215,7 +145,7 @@ export default {
     isShowProject: false,
     isShowChat: false,
     drawer: true,
-    mini: false,
+    mini: true,
   }),
   components: {
     AddNewProjectModal,
@@ -265,6 +195,7 @@ export default {
     },
     handleClickProjectItem(project) {
       this.$router.push(`/roadmap/${project._id}`);
+      this.mini = true;
     },
     handleClickChatRoom() {
       this.$router.push(`/chatroom/`);
@@ -272,9 +203,11 @@ export default {
     handleClickChatRoomItem(room) {
       this.removeUnreadNotification(room._id);
       this.$router.push(`/chatroom/${room._id}`);
+      this.mini = true;
     },
     handleClickLogtime() {
       this.$router.push(`/logtime/`);
+      this.mini = true;
     },
   },
   created() {
@@ -301,61 +234,61 @@ export default {
 };
 </script>
 <style>
-.v-application .primary--text {
-  color: white;
-}
-.v-application--is-ltr
-  .v-list-group--no-action.v-list-group--sub-group
-  > .v-list-group__items
-  > .v-list-item {
-  padding-left: 45px !important;
-  color: white !important;
-}
-.v-application--is-ltr .v-list-group--sub-group .v-list-group__header {
-  padding-left: 5px !important;
-  color: white !important;
-}
-.mdi-menu-down::before {
+.mdi-chevron-down::before {
   color: white !important;
 }
 </style>
 <style scoped>
-.add-project i {
+.v-list-item .v-list-item__title,
+.v-list-item .v-list-item__subtitle {
+  color: white !important;
+}
+.v-application--is-ltr
+  .v-list-group--no-action
+  > .v-list-group__items
+  > .v-list-item {
+  padding-left: 40px !important;
+}
+.theme--light.v-navigation-drawer .v-divider {
+  position: relative;
+  top: -16px;
+  color: wheat;
+}
+.icon-sub i {
   color: white;
+  font-size: 22px;
 }
-.v-btn:not(.v-btn--round).v-size--default {
-  height: 100% !important;
+i {
+  color: rgb(243, 240, 240);
 }
-
-.function {
-  position: absolute;
-  right: 5px;
-  top: 15px;
-  display: none;
-  color: white;
-  font-weight: 100;
-  font-size: 16px;
+.v-application--is-ltr
+  .v-list-group--no-action
+  > .v-list-group__items
+  > .v-list-item:hover {
+  background-color: rgb(110, 149, 160);
 }
-.function i {
-  margin: 0 2px;
+.v-list-item:hover {
+  background-color: rgb(110, 149, 160) !important;
 }
-.item:hover .function {
-  display: block;
+.project-function {
+  opacity: 0;
+}
+.v-application--is-ltr
+  .v-list-group--no-action
+  > .v-list-group__items
+  > .v-list-item:hover
+  .project-function {
+  opacity: 1;
 }
 .add-project {
   position: absolute;
-  top: 0;
-  right: 0;
-}
-.add-project {
-  display: none;
+  top: 0px;
+  right: 10;
+  opacity: 0;
 }
 .add-project .v-btn i {
   color: white;
   font-size: 20px;
-}
-.item:hover .add-project {
-  display: block;
 }
 .add-project:hover .v-btn {
   background-color: #407686;
@@ -363,8 +296,8 @@ export default {
 i {
   margin-right: 5px;
 }
-.header-project:hover i {
-  display: block;
+.header-project:hover .add-project {
+  opacity: 1;
 }
 </style>
 

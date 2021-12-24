@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "ProjectPage",
   computed: {
@@ -38,10 +38,14 @@ export default {
     }),
   },
   methods: {
+    ...mapActions({
+      removeUnreadNotification: "NOTIFICATION/removeUnreadNotification",
+    }), 
     handleClickRoom(idRoom) {
         this.$router.push(`/chatroom/${idRoom}`);
-
-    }
+        this.removeUnreadNotification(idRoom);
+    },
+    
   }
 };
 </script>

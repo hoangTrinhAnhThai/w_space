@@ -1,13 +1,18 @@
 <template>
   <div class="chat-room">
-    <div class="container1">
+    <div class="container-chat">
       <v-app-bar class="bar1">
         <v-toolbar-title>#{{ currentRoom.name }}</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn color="deep-purple lighten-5" icon @click.stop="mini = !mini">
+        <v-btn
+          color="deep-purple lighten-5"
+          icon
+          @click.stop="showGroup = !showGroup"
+        >
           <v-icon>mdi-account-group-outline</v-icon>
         </v-btn>
       </v-app-bar>
+      
       <div class="layout-chat" v-chat-scroll>
         <div class="notChat" v-if="chats.length <= 0">
           <img
@@ -75,9 +80,30 @@
         </div>
       </div>
     </div>
-    <div class="container2">
-      
-    </div>
+    <v-navigation-drawer v-model="showGroup" absolute bottom right temporary>
+        <v-list nav dense>
+          <v-list-item-group
+            v-model="group"
+            active-class="deep-purple--text text--accent-4"
+          >
+            <v-list-item>
+              <v-list-item-title>Foo</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-title>Bar</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-title>Fizz</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-title>Buzz</v-list-item-title>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-navigation-drawer>
   </div>
 </template>
 
@@ -89,6 +115,27 @@ export default {
   data() {
     return {
       message: "",
+      showGroup: false,
+      recent: [
+        {
+          active: true,
+          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+          title: "Jason Oner",
+        },
+        {
+          active: true,
+          avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
+          title: "Mike Carlson",
+        },
+        {
+          avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
+          title: "Cindy Baker",
+        },
+        {
+          avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+          title: "Ali Connors",
+        },
+      ],
     };
   },
   computed: {
@@ -105,6 +152,8 @@ export default {
       getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
       sendMessageAction: "CHAT/sendMessage",
       addCurrentRoom: "CHAT/addCurrentRoom",
+      removeUnreadNotification: "NOTIFICATION/removeUnreadNotification",
+
     }),
     sendMessage(e) {
       if (e.keyCode === 13) {
@@ -142,6 +191,9 @@ export default {
       }
       return passedValidate;
     },
+    removeNotification() {
+      this.removeUnreadNotification(this.currentRoom._id);
+    }
   },
   created() {
     this.getAllChatByIdRoom(this.$route.params.id);
@@ -150,6 +202,11 @@ export default {
   components: {
     ChatCard,
   },
+  watch: {
+    'message'() {
+      this.removeNotification()
+    }
+  }
 };
 </script>
 <style scoped>
@@ -159,9 +216,6 @@ export default {
   border-bottom: 1px solid rgb(126, 68, 68);
   box-shadow: inset 0px 7px 3px -3px rgb(0 0 0 / 20%) !important;
 }
-/* .v-sheet.v-app-bar.v-toolbar:not(.v-sheet--outlined) {
-
-  } */
 .v-icon {
   color: rgb(68, 64, 64) !important;
 }
@@ -169,8 +223,11 @@ export default {
   border-radius: 3px;
   margin-bottom: 15px;
   height: calc(100vh - 64px);
+  display: flex;
 }
-
+.container-chat {
+  width: 100%;
+}
 .write-content {
   display: flex;
   flex-direction: row;
