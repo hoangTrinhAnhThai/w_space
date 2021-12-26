@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const logtimeController = require('../../app/controllers/LogtimeController');
+const logtimeController = require('../../app/controllers/logtime/LogtimeController');
 
 router.get('/:id', logtimeController.showLogtime);
 router.get('/', logtimeController.showAllLogtime);

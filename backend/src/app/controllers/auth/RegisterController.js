@@ -24,20 +24,17 @@ class SignupController {
           user.lastName = req.body.lastName;
           user.email = req.body.email;
           user.password = await bcrypt.hash(req.body.password, salt);
-          user.avatar =
-            req.body.firstName.charAt(0) + req.body.lastName.charAt(0);
-          Role.findOne({ name: 'User' }).then((role) => {
-            user.role = role;
-            user.save(function (err) {
-              if (err) {
-                return apiResponse.ErrorResponse(res, err);
-              }
-              return apiResponse.successResponseWithData(
-                res,
-                'register success',
-                user,
-              );
-            });
+          const role = await Role.findOne({ name: 'User' })
+          user.role = role;
+          user.save(function (err) {
+            if (err) {
+              return apiResponse.ErrorResponse(res, err);
+            }
+            return apiResponse.successResponseWithData(
+              res,
+              'register success',
+              user,
+            );
           });
         }
       } catch (err) {

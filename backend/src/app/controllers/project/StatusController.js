@@ -20,14 +20,12 @@ class StatusController {
     },
   ];
   showStatus = [
-    (req, res) => {
-      Status.find().then((status) => {
-        if (status) {
-          return apiResponse.successResponseWithData(res, 'status', status);
-        } else {
-          return apiResponse.ErrorResponse(res, 'Not found project');
-        }
-      });
+    async (req, res) => {
+      const status = await  Status.find()
+      if(!status) {
+        return apiResponse.ErrorResponse(res, 'Not found status');
+      }
+      return apiResponse.successResponseWithData(res, 'status', status);
     },
   ];
   deleteStatus = [

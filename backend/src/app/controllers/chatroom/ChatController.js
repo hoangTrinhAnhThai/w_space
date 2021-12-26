@@ -7,111 +7,76 @@ const host = require('../../../utils/decodeJWT');
 require('dotenv').config();
 
 class ChatController {
-  getAllChats = [
-    (req, res) => {
-      Chat.find()
+  getAllChats =
+    async (req, res) => {
+      const chats = await Chat.find()
         .sort({ createdAt: 1 })
-        .then((chats) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'Get all chats successfully',
-            chats,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, error);
-        });
-    },
-  ];
-  getSingleChatByRoomId = [
-    (req, res) => {
-      Chat.find({ room: req.params.id })
+      return apiResponse.successResponseWithData(
+        res,
+        'Get all chats successfully',
+        chats,
+      );
+    }
+  getSingleChatByRoomId =
+    async (req, res) => {
+      const chat = await Chat.find({ room: req.params.id })
         .populate('createdBy')
         .sort({ createdAt: 1 })
-        .then((chat) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'Get chat successfully',
-            chat,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, error);
-        });
-    },
-  ];
+      return apiResponse.successResponseWithData(
+        res,
+        'Get chat successfully',
+        chat,
+      )
+    }
 
-  createChat = [
-    (req, res) => {
-      User.findById(host(req, res)).then((user) => {
-        let chat = new Chat(req.body);
-        chat.createdBy = user;
-        Chat.create(chat)
-          .then((chat) => {
-            Notification.findOne({ room: req.body.room }).then(
-              (notification) => {
-                let listContent = notification.listContent;
-                for (let content of listContent) {
-                  if (
-                    JSON.stringify(user._id) !=
-                    JSON.stringify(content.member._id)
-                  ) {
-                    content.count += 1;
-                    content.unreadCount += 1;
-                    content.contents.push({
-                      message: chat.message,
-                      createdBy: chat.createdBy,
-                    });
-                  }
-                }
-                Notification.findByIdAndUpdate(notification._id, {
-                  listContent: listContent,
-                }).then((result) => {
-                  return apiResponse.successResponseWithData(
-                    res,
-                    'Create chat successfully',
-                    chat,
-                  );
-                });
-              },
-            );
-          })
-          .catch((error) => {
-            return apiResponse.ErrorResponse(res, error);
+  createChat =
+    async (req, res) => {
+      const user = await  User.findById(host(req, res))
+      let chatParams = new Chat(req.body);
+      chatParams.createdBy = user
+      const chat = await Chat.create(chatParams)
+      const notification = await Notification.findOne({ room: req.body.room })
+      let listContent = notification.listContent;
+      for (let content of listContent) {
+        if (
+          JSON.stringify(user._id) !=
+          JSON.stringify(content.member._id)
+        ) {
+          content.count += 1;
+          content.unreadCount += 1;
+          content.contents.push({
+            message: chat.message,
+            createdBy: chat.createdBy,
           });
-      });
-    },
-  ];
-  updateChat = [
-    (req, res) => {
-      Chat.findByIdAndUpdate(req.params.id, req.body.chat)
-        .then((result) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'Update chat successfully',
-            result,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, error);
-        });
-    },
-  ];
+        }
+      }
+      await Notification.findByIdAndUpdate(notification._id, {
+        listContent: listContent,
+      })
+      return apiResponse.successResponseWithData(
+        res,
+        'Create chat successfully',
+        chat,
+      )
+    }
 
-  deleteChat = [
-    (req, res) => {
-      Chat.findByIdAndDelete(req.params.id)
-        .then((result) => {
-          return apiResponse.successResponseWithData(
-            res,
-            'Delete chat successfully',
-            result,
-          );
-        })
-        .catch((error) => {
-          return apiResponse.ErrorResponse(res, error);
-        });
-    },
-  ];
+  updateChat =
+    async (req, res) => {
+      const chat = await Chat.findByIdAndUpdate(req.params.id, req.body.chat)
+      return apiResponse.successResponseWithData(
+        res,
+        'Update chat successfully',
+        chat,
+      )
+    }
+
+  deleteChat =
+    async (req, res) => {
+      await Chat.findByIdAndDelete(req.params.id)
+      return apiResponse.successResponse(
+        res,
+        'Delete chat successfully'
+      )
+    }
 }
 module.exports = new ChatController();
