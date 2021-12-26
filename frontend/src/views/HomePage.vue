@@ -1,7 +1,7 @@
 <template>
   <div class="home-page">
     <v-app-bar class="nav">
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        <img src="../assets/Logo.png" alt="">
       <v-spacer></v-spacer>
       <v-btn text class="btn" @click="login"> Login </v-btn>
       <v-btn text class="save-btn" @click="signup"> Signup </v-btn>
@@ -77,6 +77,10 @@ p {
   box-shadow: none !important;
   background-color: none !important;
 }
+img {
+  width: 50px;
+}
+
 </style>
 
 <style lang="scss" scoped>

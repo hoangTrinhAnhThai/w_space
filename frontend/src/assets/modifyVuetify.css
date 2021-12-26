@@ -1,5 +1,5 @@
 html {
-    overflow: hidden !important;
+    /* overflow: hidden !important; */
 }
 .theme--light.v-application {
     font-weight: lighter;
@@ -19,12 +19,12 @@ textarea {
     padding: 0 !important;
 }
 
-/* .drop-preview {
+.drop-preview {
     background-color: rgb(211, 224, 234);
     border: 1px dashed rgb(22, 135, 167);
-} */
+}
 
-/* .ticket-ghost {
+.ticket-ghost {
     cursor: grabbing;
     transition: transform 0.18s ease;
     transform: rotateZ(5deg);
@@ -33,7 +33,7 @@ textarea {
 .ticket-ghost-drop {
     transition: transform 0.18s ease-in-out;
     transform: rotateZ(0deg);
-} */
+}
 
 .v-btn {
     color: rgb(39, 102, 120) !important;

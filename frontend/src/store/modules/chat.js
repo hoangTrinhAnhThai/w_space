@@ -59,7 +59,6 @@ const actions = {
   },
   addCurrentRoom({ commit }, params) {
     http.get(`/room/${params}`).then((result) => {
-      console.log(result.data.data);
       commit('setCurrentRoom', result.data.data);
     });
   },

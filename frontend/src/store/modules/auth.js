@@ -39,13 +39,12 @@ const getters = {
   },
 };
 const actions = {
-  login({ commit }, params) {
+  login({ commit, dispatch }, params) {
     http
       .post('/auth/login', params)
       .then((response) => {
-        commit('setUserInfo', response.data.data);
-        localStorage.setItem('token', response.data.data.token);
-        commit('ERROR/clearErrorMessage', null, { root: true });
+        localStorage.setItem('token', response.data.data);
+        dispatch('getUserByToken')
         router.go();
       })
       .catch((err) => {
@@ -62,7 +61,8 @@ const actions = {
         router.push('/login');
       })
       .catch((error) => {
-        commit('ERROR/setErrorMessage', error.response.data.message, {
+        console.log(error.response.data.data[0].msg);
+        commit('ERROR/setErrorMessage', error.response.data.data[0].msg, {
           root: true,
         });
       });
