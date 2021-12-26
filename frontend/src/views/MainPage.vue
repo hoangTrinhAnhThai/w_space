@@ -36,9 +36,9 @@ export default {
 };
 </script>
 <style>
-  html {
-    overflow:  hidden !important;
-  }
+html {
+  overflow: hidden !important;
+}
 </style>
 <style lang="scss" scoped>
 .main-page {

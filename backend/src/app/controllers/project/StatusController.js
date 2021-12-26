@@ -21,8 +21,8 @@ class StatusController {
   ];
   showStatus = [
     async (req, res) => {
-      const status = await  Status.find()
-      if(!status) {
+      const status = await Status.find();
+      if (!status) {
         return apiResponse.ErrorResponse(res, 'Not found status');
       }
       return apiResponse.successResponseWithData(res, 'status', status);

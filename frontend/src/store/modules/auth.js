@@ -44,7 +44,7 @@ const actions = {
       .post('/auth/login', params)
       .then((response) => {
         localStorage.setItem('token', response.data.data);
-        dispatch('getUserByToken')
+        dispatch('getUserByToken');
         router.go();
       })
       .catch((err) => {
