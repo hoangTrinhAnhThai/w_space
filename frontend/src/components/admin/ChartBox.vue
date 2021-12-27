@@ -2,33 +2,116 @@
   <div class="box-chart">
     <div class="container">
       <div class="content content1">
-        <p>Số lượng user trong ngày</p>
-        <h5>0</h5>
-
-        <span> more than yesterday </span>
+        <p>Number of registered users today</p>
+        <h5>{{ numberOfRegisteredUsersToday }}</h5>
+        <span> {{ compareUserDate }} </span>
       </div>
       <div class="content content2">
-        <p>Số lượng user trong tháng</p>
-        <h5>data</h5>
+        <p>Number of registered users this month</p>
+        <h5>{{ numberOfRegisteredUsersThisMonth }}</h5>
         <span> data more than last month </span>
       </div>
       <div class="content content3">
-        <p>Số lượng project trong ngày</p>
-        <h5>0</h5>
-
-        <span> more than yesterday </span>
+        <p>Number of registered projects today</p>
+        <h5>{{ numberOfRegisteredProjectsToday }}</h5>
+        <span>{{ compareProjectDate }}</span>
       </div>
       <div class="content content4">
-        <p>Số lượng project trong tháng</p>
-        <h5>data</h5>
-        <span> data more than last month </span>
+        <p>Number of registered projects this month</p>
+        <h5>{{ numberOfRegisteredProjectsThisMonth }}</h5>
+        <span> {{ compareProjectMonth }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapGetters } from 'vuex';
+export default {
+  name: 'ChartBox',
+  computed: {
+    ...mapGetters({
+      numberOfRegisteredUsersToday: 'ADMIN/numberOfRegisteredUsersToday',
+      numberOfRegisteredUsersYesterday:
+        'ADMIN/numberOfRegisteredUsersYesterday',
+      numberOfRegisteredProjectsToday: 'ADMIN/numberOfRegisteredProjectsToday',
+      numberOfRegisteredProjectsYesterday:
+        'ADMIN/numberOfRegisteredProjectsYesterday',
+      numberOfRegisteredUsersThisMonth:
+        'ADMIN/numberOfRegisteredUsersThisMonth',
+      numberOfRegisteredUsersLastMonth:
+        'ADMIN/numberOfRegisteredUsersLastMonth',
+      numberOfRegisteredProjectsThisMonth:
+        'ADMIN/numberOfRegisteredProjectsThisMonth',
+      numberOfRegisteredProjectsLastMonth:
+        'ADMIN/numberOfRegisteredProjectsLastMonth',
+    }),
+    compareUserDate() {
+      if (
+        this.numberOfRegisteredUsersToday >=
+        this.numberOfRegisteredUsersYesterday
+      ) {
+        return `more ${
+          this.numberOfRegisteredUsersToday -
+          this.numberOfRegisteredUsersYesterday
+        } users than yesterday`;
+      } else {
+        return `less ${
+          this.numberOfRegisteredUsersYesterday -
+          this.numberOfRegisteredUsersToday
+        } users than yesterday`;
+      }
+    },
+    compareUserMonth() {
+      if (
+        this.numberOfRegisteredUsersThisMonth >=
+        this.numberOfRegisteredUsersLastMonth
+      ) {
+        return `more ${
+          this.numberOfRegisteredUsersThisMonth -
+          this.numberOfRegisteredUsersLastMonth
+        } users than last month`;
+      } else {
+        return `less ${
+          this.numberOfRegisteredUsersLastMonth -
+          this.numberOfRegisteredUsersThisMonth
+        } users than last month`;
+      }
+    },
+    compareProjectDate() {
+      if (
+        this.numberOfRegisteredProjectsToday >=
+        this.numberOfRegisteredProjectsYesterday
+      ) {
+        return `more ${
+          this.numberOfRegisteredProjectsToday -
+          this.numberOfRegisteredProjectsYesterday
+        } projects than yesterday`;
+      } else {
+        return `less ${
+          this.numberOfRegisteredProjectsYesterday -
+          this.numberOfRegisteredProjectsToday
+        } projects than yesterday`;
+      }
+    },
+    compareProjectMonth() {
+      if (
+        this.numberOfRegisteredProjectsThisMonth >=
+        this.numberOfRegisteredProjectsLastMonth
+      ) {
+        return `more ${
+          this.numberOfRegisteredProjectsThisMonth -
+          this.numberOfRegisteredProjectsLastMonth
+        } projects than last month`;
+      } else {
+        return `less ${
+          this.numberOfRegisteredProjectsLastMonth -
+          this.numberOfRegisteredProjectsThisMonth
+        } projects than last month`;
+      }
+    },
+  },
+};
 </script>
 <style>
 p {

@@ -1,35 +1,35 @@
 <script>
 import { Bar } from 'vue-chartjs';
+import { mapGetters } from 'vuex';
+import helper from '../../utils/data';
 export default {
   extends: Bar,
+  computed: {
+    ...mapGetters({
+      userList: 'ADMIN/userListMonth',
+      projectList: 'ADMIN/projectList',
+    }),
+  },
+  data() {
+    return {
+      shortMonth: helper.shortMonth,
+    };
+  },
   mounted() {
     setTimeout(() => {
       this.renderChart(
         {
-          labels: [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December',
-          ],
+          labels: this.shortMonth,
           datasets: [
             {
               label: 'User',
               backgroundColor: '#f87979',
-              data: [5, 3, 12, 14, 18],
+              data: this.userList,
             },
             {
               label: 'Project',
               backgroundColor: '#8AF5FF',
-              data: ['ha', 'thai', 'admin', 'hello'],
+              data: this.projectList,
             },
           ],
         },
@@ -50,7 +50,7 @@ export default {
           },
         },
       );
-    }, 2000);
+    }, 500);
   },
 };
 </script>

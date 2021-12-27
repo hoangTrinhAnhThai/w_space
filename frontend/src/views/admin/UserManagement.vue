@@ -49,7 +49,9 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn text @click="close"> Cancel </v-btn>
-              <v-btn style="margin: 20px" class="save-btn" text @click="save"> Save </v-btn>
+              <v-btn style="margin: 20px" class="save-btn" text @click="save">
+                Save
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -82,7 +84,12 @@
     </template>
     <template v-slot:[`item.actions`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon v-if="item.isBlock" small class="mr-2" @click="block(item, false)">
+      <v-icon
+        v-if="item.isBlock"
+        small
+        class="mr-2"
+        @click="block(item, false)"
+      >
         mdi-lock-open-variant-outline
       </v-icon>
       <v-icon v-else small class="mr-2" @click="block(item, true)">
@@ -93,35 +100,35 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: "Email",
-        align: "start",
-        value: "email",
+        text: 'Email',
+        align: 'start',
+        value: 'email',
       },
-      { text: "First name", value: "firstName" },
-      { text: "Last Name", value: "lastName" },
-      { text: "Role", value: "role.name" },
-      { text: "Status", value: "isBlock" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: 'First name', value: 'firstName' },
+      { text: 'Last Name', value: 'lastName' },
+      { text: 'Role', value: 'role.name' },
+      { text: 'Status', value: 'isBlock' },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
     editedId: 0,
     editedItem: {
-      lastName: "",
-      firstName: "",
+      lastName: '',
+      firstName: '',
     },
   }),
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
     },
     ...mapGetters({
-      userList: "ADMIN/userList",
+      userList: 'ADMIN/userList',
     }),
   },
 
@@ -138,8 +145,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getAllUsers: "ADMIN/getAllUsers",
-      editUser: "USER/editUser",
+      getAllUsers: 'ADMIN/getAllUsers',
+      editUser: 'USER/editUser',
     }),
     editItem(item) {
       this.editedId = item._id;
@@ -147,7 +154,7 @@ export default {
       this.dialog = true;
     },
     block(item, isBlock) {
-        this.editUser({ id: item._id, user: {isBlock: isBlock} });
+      this.editUser({ id: item._id, user: { isBlock: isBlock } });
     },
     close() {
       this.dialog = false;
@@ -174,10 +181,11 @@ export default {
   margin: 50px auto;
 }
 .v-application .elevation-1 {
-    box-shadow: none !important;
-    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12)!important;
+  box-shadow: none !important;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12) !important;
 }
 .main-container[data-v-03d9b622] {
-    background-image: none;
+  background-image: none;
 }
 </style>

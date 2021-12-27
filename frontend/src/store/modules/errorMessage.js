@@ -2,7 +2,7 @@ import Vue from 'vue';
 
 const state = {
   errorMessage: '',
-  isLoading: false
+  isLoading: false,
 };
 
 const getters = {
@@ -10,8 +10,8 @@ const getters = {
     return state.errorMessage;
   },
   isLoading(state) {
-    return state.isLoading
-  }
+    return state.isLoading;
+  },
 };
 
 const mutations = {
@@ -26,16 +26,16 @@ const mutations = {
     });
   },
   setIsLoading(state, data) {
-    state.isLoading = data
-  }
+    state.isLoading = data;
+  },
 };
 const actions = {
   clearErrorMessage({ commit }) {
     commit('clearErrorMessage');
   },
-  addIsLoading({commit}, data) {
-    commit('setIsLoading', data)
-  }
+  addIsLoading({ commit }, data) {
+    commit('setIsLoading', data);
+  },
 };
 
 export default {

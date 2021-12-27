@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import BarChart from "../../components/admin/BarChart.vue";
-import BoxChart from "../../components/admin/ChartBox.vue";
+import { mapActions, mapGetters } from 'vuex';
+import BarChart from '../../components/admin/BarChart.vue';
+import BoxChart from '../../components/admin/ChartBox.vue';
 export default {
   components: {
     BarChart,
@@ -17,19 +17,19 @@ export default {
   },
   methods: {
     ...mapActions({
-      getStatistical: "ADMIN/getStatistical",
-      getAllUsers: "ADMIN/getAllUsers",
-      getAllProjects: 'ADMIN/getAllProjects'
+      getStatistical: 'ADMIN/getStatistical',
+      getAllUsers: 'ADMIN/getAllUsers',
+      getAllProjects: 'ADMIN/getAllProjects',
     }),
   },
   computed: {
     ...mapGetters({
-      statistical: "ADMIN/statistical",
+      statistical: 'ADMIN/statistical',
     }),
   },
   created() {
     this.getAllUsers();
-    this.getAllProjects()
+    this.getAllProjects();
   },
 };
 </script>

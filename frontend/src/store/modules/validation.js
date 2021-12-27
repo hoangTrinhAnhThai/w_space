@@ -116,58 +116,84 @@ const getters = {
     return (userInfo) => {
       const errors = {};
       if (!userInfo.lastName) {
-        errors.emptyLastName = true
+        errors.emptyLastName = true;
       }
       if (!userInfo.firstName) {
-        errors.emptyFirstName = true
+        errors.emptyFirstName = true;
       }
       // if (!userInfo.phoneNumber) {
       //     errors.emptyPhoneNumber = true
       // }
       if (Object.keys(errors).length) return errors;
-      return null
-    }
+      return null;
+    };
   },
   validationPassword() {
     return (password) => {
-        const errors = {};
-        if (!password.oldPassword) {
-            errors.emptyPassword = true
-        }
-        if (password.oldPassword && password.oldPassword.trim().length < MIN_LENGTH) {
-            errors.oldPasswordMinLength = true
-        }
-        if (password.oldPassword && password.oldPassword.trim().length > MAX_LENGTH) {
-            errors.oldPasswordMaxLength = true
-        }
-        if (!password.newPassword) {
-            errors.emptyNewPassword = true
-        }
-        if (password.newPassword && password.newPassword.trim().length < MIN_LENGTH) {
-            errors.newPasswordMinLength = true
-        }
-        if (password.newPassword && password.newPassword.trim().length > MAX_LENGTH) {
-            errors.newPasswordMaxLength = true
-        }
-        if (!password.confirmPassword) {
-            errors.emptyConfirmPassword = true
-        }
-        if (password.confirmPassword && password.confirmPassword.trim().length < MIN_LENGTH) {
-            errors.confirmPasswordMinLength = true
-        }
-        if (password.confirmPassword && password.confirmPassword.trim().length > MAX_LENGTH) {
-            errors.confirmPasswordMaxLength = true
-        }
-        if (password.oldPassword && password.newPassword && (password.oldPassword == password.newPassword)) {
-            errors.oldPassWordBeSameNewPassword = true
-        }
-        if (password.newPassword && password.confirmPassword && (password.newPassword !== password.confirmPassword)) {
-            errors.cofirmationNotMatch = true
-        }
-        if (Object.keys(errors).length) return errors;
-        return null
-    }
-}
+      const errors = {};
+      if (!password.oldPassword) {
+        errors.emptyPassword = true;
+      }
+      if (
+        password.oldPassword &&
+        password.oldPassword.trim().length < MIN_LENGTH
+      ) {
+        errors.oldPasswordMinLength = true;
+      }
+      if (
+        password.oldPassword &&
+        password.oldPassword.trim().length > MAX_LENGTH
+      ) {
+        errors.oldPasswordMaxLength = true;
+      }
+      if (!password.newPassword) {
+        errors.emptyNewPassword = true;
+      }
+      if (
+        password.newPassword &&
+        password.newPassword.trim().length < MIN_LENGTH
+      ) {
+        errors.newPasswordMinLength = true;
+      }
+      if (
+        password.newPassword &&
+        password.newPassword.trim().length > MAX_LENGTH
+      ) {
+        errors.newPasswordMaxLength = true;
+      }
+      if (!password.confirmPassword) {
+        errors.emptyConfirmPassword = true;
+      }
+      if (
+        password.confirmPassword &&
+        password.confirmPassword.trim().length < MIN_LENGTH
+      ) {
+        errors.confirmPasswordMinLength = true;
+      }
+      if (
+        password.confirmPassword &&
+        password.confirmPassword.trim().length > MAX_LENGTH
+      ) {
+        errors.confirmPasswordMaxLength = true;
+      }
+      if (
+        password.oldPassword &&
+        password.newPassword &&
+        password.oldPassword == password.newPassword
+      ) {
+        errors.oldPassWordBeSameNewPassword = true;
+      }
+      if (
+        password.newPassword &&
+        password.confirmPassword &&
+        password.newPassword !== password.confirmPassword
+      ) {
+        errors.cofirmationNotMatch = true;
+      }
+      if (Object.keys(errors).length) return errors;
+      return null;
+    };
+  },
 };
 
 export default {

@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <page-loader v-bind:isloaded="isLoading" />
     <v-main class="app">
       <router-view />
     </v-main>
@@ -7,18 +8,18 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import PageLoader from './components/PageLoader.vue';
 export default {
   name: 'App',
-
-  data: () => ({
-    //
-  }),
+  computed: {
+    ...mapGetters({
+      isLoading: 'ERROR/isLoading',
+    }),
+  },
+  components: {
+    PageLoader,
+  },
 };
 </script>
 <style src="./assets/modifyVuetify.css"></style>
-<style scoped>
-.v-main {
-  /* height: 100vh; */
-  /* overflow: hidden !important; */
-}
-</style>

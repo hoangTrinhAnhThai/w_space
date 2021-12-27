@@ -39,16 +39,16 @@ const mutations = {
 };
 const actions = {
   getAllRooms({ commit }) {
-    commit('ERROR/setIsLoading', true, { root: true })
+    commit('ERROR/setIsLoading', true, { root: true });
     http.get('/room').then((response) => {
       commit('setRooms', response.data.data);
-      commit('ERROR/setIsLoading', false, { root: true })
+      commit('ERROR/setIsLoading', false, { root: true });
     });
   },
   getAllChatByIdRoom({ commit, dispatch }, params) {
-    commit('ERROR/setIsLoading', true, { root: true })
+    commit('ERROR/setIsLoading', true, { root: true });
     http.get(`/chat/${params}`).then((response) => {
-      commit('ERROR/setIsLoading', false, { root: true })
+      commit('ERROR/setIsLoading', false, { root: true });
       commit('setChats', response.data.data);
     });
     socket.on(

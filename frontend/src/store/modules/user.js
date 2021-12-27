@@ -36,16 +36,16 @@ const actions = {
   removeMemberInfor({ commit }, params) {
     commit('setMemberInfor', params);
   },
-  editUser({ dispatch}, params) {
+  editUser({ dispatch }, params) {
     http.put(`/user/${params.id}`, params.user).then(() => {
-      dispatch('ADMIN/getAllUsers', null, {root: true})
-    })
+      dispatch('ADMIN/getAllUsers', null, { root: true });
+    });
   },
-  getUser({commit}, params) {
+  getUser({ commit }, params) {
     http.get(`/user/${params}`).then((response) => {
-      commit('setUserInfo', response.data.data)
-    })
-  }
+      commit('setUserInfo', response.data.data);
+    });
+  },
 };
 
 export default {

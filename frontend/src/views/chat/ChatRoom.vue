@@ -85,7 +85,10 @@
       <v-list nav dense>
         <template>
           <v-list-item>
-            <v-img v-if="currentRoom.createdBy.avatar" :src="currentRoom.createdBy.avatar"></v-img>
+            <v-img
+              v-if="currentRoom.createdBy.avatar"
+              :src="currentRoom.createdBy.avatar"
+            ></v-img>
             <v-avatar v-else color="green">
               <span class="text-h6"
                 >{{ currentRoom.createdBy.firstName.charAt(0)
@@ -94,9 +97,12 @@
             </v-avatar>
             <v-list-item-content style="margin-left: 15px">
               <v-list-item-title
-                >{{ currentRoom.createdBy.firstName }} {{ currentRoom.createdBy.lastName }}</v-list-item-title
+                >{{ currentRoom.createdBy.firstName }}
+                {{ currentRoom.createdBy.lastName }}</v-list-item-title
               >
-              <v-list-item-subtitle v-html="currentRoom.createdBy.email"></v-list-item-subtitle>
+              <v-list-item-subtitle
+                v-html="currentRoom.createdBy.email"
+              ></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -123,77 +129,77 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import ChatCard from "../../components/ChatCard.vue";
+import { mapActions, mapGetters } from 'vuex';
+import ChatCard from '../../components/ChatCard.vue';
 export default {
-  name: "ChatRoom",
+  name: 'ChatRoom',
   data() {
     return {
-      message: "",
+      message: '',
       showGroup: false,
       recent: [
         {
           active: true,
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          title: "Jason Oner",
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
+          title: 'Jason Oner',
         },
         {
           active: true,
-          avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-          title: "Mike Carlson",
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
+          title: 'Mike Carlson',
         },
         {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-          title: "Cindy Baker",
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
+          title: 'Cindy Baker',
         },
         {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-          title: "Ali Connors",
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
+          title: 'Ali Connors',
         },
       ],
     };
   },
   computed: {
     ...mapGetters({
-      chats: "CHAT/chats",
-      userInfo: "AUTH/userInfo",
-      validateText: "VALIDATION/validateText",
-      currentRoom: "CHAT/currentRoom",
+      chats: 'CHAT/chats',
+      userInfo: 'AUTH/userInfo',
+      validateText: 'VALIDATION/validateText',
+      currentRoom: 'CHAT/currentRoom',
     }),
   },
   methods: {
     ...mapActions({
-      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
-      sendMessageAction: "CHAT/sendMessage",
-      addCurrentRoom: "CHAT/addCurrentRoom",
-      removeUnreadNotification: "NOTIFICATION/removeUnreadNotification",
+      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
+      sendMessageAction: 'CHAT/sendMessage',
+      addCurrentRoom: 'CHAT/addCurrentRoom',
+      removeUnreadNotification: 'NOTIFICATION/removeUnreadNotification',
     }),
     sendMessage(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-          document.getElementById("content").focus();
+          document.getElementById('content').focus();
           return;
         } else {
           this.sendMessageAction({
             idRoom: this.$route.params.id,
             chat: { room: this.$route.params.id, message: this.message },
           });
-          this.message = "";
-          document.getElementById("content").focus();
+          this.message = '';
+          document.getElementById('content').focus();
         }
       }
     },
     sendMessageByClick() {
       if (!this.validateBeforeSubmit()) {
-        document.getElementById("content").focus();
+        document.getElementById('content').focus();
         return;
       } else {
         this.sendMessageAction({
           idRoom: this.$route.params.id,
           chat: { room: this.$route.params.id, message: this.message },
         });
-        this.message = "";
-        document.getElementById("content").focus();
+        this.message = '';
+        document.getElementById('content').focus();
       }
     },
     validateBeforeSubmit() {
@@ -276,7 +282,7 @@ i {
 }
 </style>
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
+@import '../../assets/style.scss';
 
 .chat-room {
   position: relative;

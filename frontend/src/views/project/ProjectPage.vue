@@ -58,19 +58,18 @@
 </template>
 
 <script>
-import AddNewProjectModal from "../../components/modal/AddNewProject.vue";
+import AddNewProjectModal from '../../components/modal/AddNewProject.vue';
 
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 export default {
-  name: "ProjectPage",
+  name: 'ProjectPage',
   computed: {
     ...mapGetters({
-      projectsOfLeader: "TASKS/projectsOfLeader",
-      projectsOfMember: "TASKS/projectsOfMember",
+      projectsOfLeader: 'TASKS/projectsOfLeader',
+      projectsOfMember: 'TASKS/projectsOfMember',
     }),
   },
   methods: {
-    
     handleClickProject(idProject) {
       this.$router.push(`/roadmap/${idProject}`);
     },

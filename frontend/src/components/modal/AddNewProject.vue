@@ -99,7 +99,7 @@ export default {
               this.$refs.addMemberModal.show(this.projectEdit);
               this.name = '';
             }
-          }, 1000);
+          }, 100);
         }
       }
     },

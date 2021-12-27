@@ -14,7 +14,9 @@ import ChatPage from '../views/chat/ChatPage.vue';
 import ChatRoom from '../views/chat/ChatRoom.vue';
 // import AdminMainPage from '../views/admin/MainPage.vue';
 import Admin from '../views/admin/AdminPage.vue';
-import { decodeToken } from '../utils/helper'
+import UserManagement from '../views/admin/UserManagement.vue';
+
+import { decodeToken } from '../utils/helper';
 Vue.use(VueRouter);
 const routes = [
   {
@@ -60,8 +62,16 @@ const routes = [
         name: Admin,
         component: Admin,
         meta: {
-          admin_system: true
-        }
+          admin_system: true,
+        },
+      },
+      {
+        path: '/usermanagement',
+        name: UserManagement,
+        component: UserManagement,
+        meta: {
+          admin_system: true,
+        },
       },
     ],
   },
@@ -88,37 +98,43 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  let token = localStorage.getItem('token')
-  let user = decodeToken()
+  let token = localStorage.getItem('token');
+  let user = decodeToken();
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!token) {
-      next('/login')
+      next('/login');
     }
     if (to.matched.some((record) => record.meta.admin_system)) {
       if (user.role != 'Admin') {
-        next('/roadmap')
+        next('/roadmap');
       }
     } else {
-      if (user.role == 'Admin') {
-        next('/admin')
+      if (
+        user.role == 'Admin' &&
+        to.matched.some((record) => record.name != 'Profile')
+      ) {
+        next('/admin');
+      } else if (
+        user.role == 'Admin' &&
+        to.matched.some((record) => record.name == 'Profile')
+      ) {
+        next('/profile');
       }
     }
-    next()
+    next();
   } else {
     if (!token) {
-      next()
+      next();
     } else {
       if (user.role != 'Admin') {
-        next('/roadmap')
-
+        next('/roadmap');
       } else {
-        next('/admin')
-
+        next('/admin');
       }
     }
-    next()
+    next();
   }
-})
+});
 
 // router.beforeEach((to, from, next) => {
 //   if (to.matched.some((record) => record.meta.requiresAuth)) {

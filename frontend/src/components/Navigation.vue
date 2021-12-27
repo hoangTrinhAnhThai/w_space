@@ -9,12 +9,6 @@
       </div>
 
       <v-spacer></v-spacer>
-      <!-- <v-btn icon text>
-        <v-icon>mdi-cog-outline</v-icon>
-      </v-btn>
-      <v-btn icon text>
-        <v-icon>mdi-help-circle</v-icon>
-      </v-btn> -->
       <v-menu offset-y transition="slide-y-transition" bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon text v-bind="attrs" v-on="on">
@@ -27,10 +21,8 @@
               ><i class="bx bx-user-circle"></i>Profile</router-link
             >
           </v-list-item>
-          <v-list-item>
-            <v-list-item-title
-              ><i class="bx bx-exit"></i>Logout</v-list-item-title
-            >
+          <v-list-item @click="logout">
+            <i class="bx bx-exit"></i>Logout
           </v-list-item>
         </v-list>
       </v-menu>
@@ -39,7 +31,17 @@
 </template>
 
 <script>
-export default {};
+import { mapActions } from 'vuex';
+export default {
+  methods: {
+    ...mapActions({
+      logoutAction: 'AUTH/logout',
+    }),
+    logout() {
+      this.logoutAction();
+    },
+  },
+};
 </script>
 <style scoped>
 .v-btn {
