@@ -7,6 +7,9 @@
           alt=""
         />
       </v-label>
+      <h5 @click="showAddProjectModal({}, 'addProject')">
+        <i class="bx bx-plus-circle"></i> Create new project
+      </h5>
       <v-item-group mandatory>
         <v-row v-if="projectsOfLeader.length > 0">
           <h2>Leader</h2>
@@ -50,28 +53,47 @@
         </v-row>
       </v-item-group>
     </v-container>
+    <add-new-project-modal ref="newProjectModal"></add-new-project-modal>
   </v-main>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import AddNewProjectModal from "../../components/modal/AddNewProject.vue";
+
+import { mapGetters } from "vuex";
 export default {
-  name: 'ProjectPage',
+  name: "ProjectPage",
   computed: {
     ...mapGetters({
-      projectsOfLeader: 'TASKS/projectsOfLeader',
-      projectsOfMember: 'TASKS/projectsOfMember',
+      projectsOfLeader: "TASKS/projectsOfLeader",
+      projectsOfMember: "TASKS/projectsOfMember",
     }),
   },
   methods: {
+    
     handleClickProject(idProject) {
       this.$router.push(`/roadmap/${idProject}`);
     },
+    showAddProjectModal(project, typeOfModal) {
+      this.$refs.newProjectModal.show(project, typeOfModal);
+    },
+  },
+  components: {
+    AddNewProjectModal,
   },
 };
 </script>
 
 <style scoped>
+h5 {
+  color: grey;
+  margin-bottom: 50px;
+  z-index: 1;
+  cursor: pointer;
+}
+.theme--light.v-label {
+  height: 150px;
+}
 .v-main {
   text-align: center;
   background-image: linear-gradient(

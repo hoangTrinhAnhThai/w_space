@@ -4,10 +4,14 @@
       <v-row>
         <v-col cols="3" class="avatar">
           <v-row center>
-            <v-avatar v-if="!avatar" color="red">
-              <span class="white--text text-h5">{{ userInfo.avatar }}</span>
+            <img v-if="avatar" :src="avatar" />
+            <img v-else-if="userInfo.avatar" :src="userInfo.avatar" alt="" />
+            <v-avatar v-else color="red">
+              <span class="white--text text-h5"
+                >{{ userInfo.firstName.charAt(0)
+                }}{{ userInfo.lastName.charAt(0) }}</span
+              >
             </v-avatar>
-            <img v-else :src="avatar" />
           </v-row>
           <v-row>
             <i class="bx bx-camera" v-on:click="handleClickInputFile"></i>
@@ -21,7 +25,7 @@
             />
           </v-row>
           <v-row v-if="avatar">
-            <v-btn class="save-btn"> Save </v-btn>
+            <v-btn class="save-btn" @click="saveAvt"> Save </v-btn>
           </v-row>
         </v-col>
         <v-col cols="9">
@@ -178,11 +182,11 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { mapActions, mapGetters } from 'vuex';
-import Vue from 'vue';
+import axios from "axios";
+import { mapActions, mapGetters } from "vuex";
+import Vue from "vue";
 export default {
-  name: 'user-account',
+  name: "user-account",
   data() {
     return {
       password: {
@@ -191,30 +195,39 @@ export default {
         newPassword: null,
       },
       isloaded: false,
-      avatar: '',
+      avatar: "",
       disabledChangeInfo: false,
       showErrors: {},
     };
   },
   computed: {
     ...mapGetters({
-      userInfo: 'AUTH/userInfo',
-      validationInformation: 'VALIDATION/validationInformation',
-      validationPassword: 'VALIDATION/validationPassword',
+      userInfo: "USER/userInfo",
+      userInfoAuth: "AUTH/userInfo",
+      validationInformation: "VALIDATION/validationInformation",
+      validationPassword: "VALIDATION/validationPassword",
     }),
   },
   methods: {
     ...mapActions({
-      changeAvatarAction: 'PROFILE/changeAvatar',
-      updateInfo: 'PROFILE/updateInfo',
-      updatePassword: 'PROFILE/updatePassword',
+      changeAvatarAction: "USER/changeAvatar",
+      editUser: "USER/editUser",
+      updatePassword: "USER/updatePassword",
+      addIsLoading: "ERROR/addIsLoading",
+      getUser: "USER/getUser",
     }),
     changeInf() {
       if (!this.validatedChangeInfoBeforeSubmit()) {
         this.disabledChangeInfo = true;
         return;
       } else {
-        this.updateInfo(this.userInfo.userDetail);
+        this.editUser({
+          id: this.userInfo._id,
+          user: {
+            lastName: this.userInfo.lastName,
+            firstName: this.userInfo.firstName,
+          },
+        });
       }
     },
     changePassword() {
@@ -231,50 +244,39 @@ export default {
     onFileChange(e) {
       this.isDisableButton = true;
       const formData = new FormData();
-      formData.append('file', e.target.files[0]);
-      formData.append('upload_preset', 'wfcqkljk');
+      formData.append("file", e.target.files[0]);
+      formData.append("upload_preset", "wfcqkljk");
+      this.addIsLoading(true);
       axios
         .post(
-          'https://api.cloudinary.com/v1_1/dj5xafymg/image/upload',
-          formData,
+          "https://api.cloudinary.com/v1_1/dj5xafymg/image/upload",
+          formData
         )
         .then((response) => {
           this.avatar = response.data.url;
           this.isDisableButton = false;
+          this.addIsLoading(false);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          this.addIsLoading(false);
         });
     },
-    changeAvt() {
-      this.isloaded = true;
-      const formData = new FormData();
-      formData.append('avatar', this.avatar);
-      this.changeAvatarAction(formData);
+    saveAvt() {
+      this.editUser({ id: this.userInfo._id, user: { avatar: this.avatar } });
     },
     validatedChangeInfoBeforeSubmit() {
       let passedValidate = true;
-      const errors = this.validationInformation(this.userInfo.userDetail);
+      const errors = this.validationInformation(this.userInfo);
       if (errors) {
         Vue.set(
           this.showErrors,
-          'emptyNameUserDetail',
-          this.showErrors && !!errors && errors.emptyNameUserDetail,
+          "emptyLastName",
+          this.showErrors && !!errors && errors.emptyLastName
         );
         Vue.set(
           this.showErrors,
-          'nameUserDetailMaxLength',
-          this.showErrors && !!errors && errors.nameUserDetailMaxLength,
-        );
-        Vue.set(
-          this.showErrors,
-          'emptyBirth',
-          this.showErrors && !!errors && errors.emptyBirth,
-        );
-        Vue.set(
-          this.showErrors,
-          'emptyPhoneNumber',
-          this.showErrors && !!errors && errors.emptyPhoneNumber,
+          "emptyFirstName",
+          this.showErrors && !!errors && errors.emptyFirstName
         );
         passedValidate = false;
       }
@@ -286,58 +288,58 @@ export default {
       if (errors) {
         Vue.set(
           this.showErrors,
-          'emptyPassword',
-          this.showErrors && !!errors && errors.emptyPassword,
+          "emptyPassword",
+          this.showErrors && !!errors && errors.emptyPassword
         );
         Vue.set(
           this.showErrors,
-          'oldPasswordMinLength',
-          this.showErrors && !!errors && errors.oldPasswordMinLength,
+          "oldPasswordMinLength",
+          this.showErrors && !!errors && errors.oldPasswordMinLength
         );
         Vue.set(
           this.showErrors,
-          'oldPasswordMaxLength',
-          this.showErrors && !!errors && errors.oldPasswordMaxLength,
+          "oldPasswordMaxLength",
+          this.showErrors && !!errors && errors.oldPasswordMaxLength
         );
         Vue.set(
           this.showErrors,
-          'emptyNewPassword',
-          this.showErrors && !!errors && errors.emptyNewPassword,
+          "emptyNewPassword",
+          this.showErrors && !!errors && errors.emptyNewPassword
         );
         Vue.set(
           this.showErrors,
-          'newPasswordMinLength',
-          this.showErrors && !!errors && errors.newPasswordMinLength,
+          "newPasswordMinLength",
+          this.showErrors && !!errors && errors.newPasswordMinLength
         );
         Vue.set(
           this.showErrors,
-          'newPasswordMaxLength',
-          this.showErrors && !!errors && errors.newPasswordMaxLength,
+          "newPasswordMaxLength",
+          this.showErrors && !!errors && errors.newPasswordMaxLength
         );
         Vue.set(
           this.showErrors,
-          'emptyConfirmPassword',
-          this.showErrors && !!errors && errors.emptyConfirmPassword,
+          "emptyConfirmPassword",
+          this.showErrors && !!errors && errors.emptyConfirmPassword
         );
         Vue.set(
           this.showErrors,
-          'confirmPasswordMinLength',
-          this.showErrors && !!errors && errors.confirmPasswordMinLength,
+          "confirmPasswordMinLength",
+          this.showErrors && !!errors && errors.confirmPasswordMinLength
         );
         Vue.set(
           this.showErrors,
-          'confirmPasswordMaxLength',
-          this.showErrors && !!errors && errors.confirmPasswordMaxLength,
+          "confirmPasswordMaxLength",
+          this.showErrors && !!errors && errors.confirmPasswordMaxLength
         );
         Vue.set(
           this.showErrors,
-          'oldPassWordBeSameNewPassword',
-          this.showErrors && !!errors && errors.oldPassWordBeSameNewPassword,
+          "oldPassWordBeSameNewPassword",
+          this.showErrors && !!errors && errors.oldPassWordBeSameNewPassword
         );
         Vue.set(
           this.showErrors,
-          'cofirmationNotMatch',
-          this.showErrors && !!errors && errors.cofirmationNotMatch,
+          "cofirmationNotMatch",
+          this.showErrors && !!errors && errors.cofirmationNotMatch
         );
         passedValidate = false;
       }
@@ -345,47 +347,50 @@ export default {
     },
   },
   watch: {
-    'userInfo.userDetail'() {
-      Vue.set(this.showErrors, 'emptyNameUserDetail', null);
+    "userInfo.userDetail"() {
+      Vue.set(this.showErrors, "emptyNameUserDetail", null);
       this.disabledChangeInfo = false;
     },
-    'userInfo.userDetail.nameUserDetail'() {
-      Vue.set(this.showErrors, 'emptyNameUserDetail', null);
-      Vue.set(this.showErrors, 'nameUserDetailMaxLength', null);
+    "userInfo.userDetail.nameUserDetail"() {
+      Vue.set(this.showErrors, "emptyNameUserDetail", null);
+      Vue.set(this.showErrors, "nameUserDetailMaxLength", null);
       this.disabledChangeInfo = false;
     },
-    'userInfo.userDetail.phoneNumber'() {
-      Vue.set(this.showErrors, 'emptyBirth', null);
+    "userInfo.userDetail.phoneNumber"() {
+      Vue.set(this.showErrors, "emptyBirth", null);
       this.disabledChangeInfo = false;
     },
-    'userInfo.userDetail.birth'() {
-      Vue.set(this.showErrors, 'emptyPhoneNumber', null);
+    "userInfo.userDetail.birth"() {
+      Vue.set(this.showErrors, "emptyPhoneNumber", null);
       this.disabledChangeInfo = false;
     },
-    'password.oldPassword'() {
-      Vue.set(this.showErrors, 'emptyPassword', null);
-      Vue.set(this.showErrors, 'oldPasswordMinLength', null);
-      Vue.set(this.showErrors, 'oldPasswordMaxLength', null);
-      Vue.set(this.showErrors, 'oldPassWordBeSameNewPassword', null);
-      Vue.set(this.showErrors, 'cofirmationNotMatch', null);
+    "password.oldPassword"() {
+      Vue.set(this.showErrors, "emptyPassword", null);
+      Vue.set(this.showErrors, "oldPasswordMinLength", null);
+      Vue.set(this.showErrors, "oldPasswordMaxLength", null);
+      Vue.set(this.showErrors, "oldPassWordBeSameNewPassword", null);
+      Vue.set(this.showErrors, "cofirmationNotMatch", null);
       this.disabledPassword = false;
     },
-    'password.newPassword'() {
-      Vue.set(this.showErrors, 'emptyNewPassword', null);
-      Vue.set(this.showErrors, 'newPasswordMinLength', null);
-      Vue.set(this.showErrors, 'newPasswordMaxLength', null);
-      Vue.set(this.showErrors, 'oldPassWordBeSameNewPassword', null);
-      Vue.set(this.showErrors, 'cofirmationNotMatch', null);
+    "password.newPassword"() {
+      Vue.set(this.showErrors, "emptyNewPassword", null);
+      Vue.set(this.showErrors, "newPasswordMinLength", null);
+      Vue.set(this.showErrors, "newPasswordMaxLength", null);
+      Vue.set(this.showErrors, "oldPassWordBeSameNewPassword", null);
+      Vue.set(this.showErrors, "cofirmationNotMatch", null);
       this.disabledPassword = false;
     },
-    'password.confirmPassword'() {
-      Vue.set(this.showErrors, 'emptyConfirmPassword', null);
-      Vue.set(this.showErrors, 'confirmPasswordMinLength', null);
-      Vue.set(this.showErrors, 'confirmPasswordMaxLength', null);
-      Vue.set(this.showErrors, 'oldPassWordBeSameNewPassword', null);
-      Vue.set(this.showErrors, 'cofirmationNotMatch', null);
+    "password.confirmPassword"() {
+      Vue.set(this.showErrors, "emptyConfirmPassword", null);
+      Vue.set(this.showErrors, "confirmPasswordMinLength", null);
+      Vue.set(this.showErrors, "confirmPasswordMaxLength", null);
+      Vue.set(this.showErrors, "oldPassWordBeSameNewPassword", null);
+      Vue.set(this.showErrors, "cofirmationNotMatch", null);
       this.disabledPassword = false;
     },
+  },
+  created() {
+    this.getUser(this.userInfoAuth._id);
   },
 };
 </script>
