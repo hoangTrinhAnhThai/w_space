@@ -81,6 +81,7 @@ const mutations = {
 
 const actions = {
   getAllLogtime({ commit }) {
+    commit('ERROR/setIsLoading', true, { root: true })
     commit('setLogtimeArray', []);
     http.get('/logtime').then((result) => {
       commit('setLogtimeArray', result.data.data);
@@ -89,9 +90,11 @@ const actions = {
           commit('setLogtimeIsPlaying', logtime);
         }
       }
+      commit('ERROR/setIsLoading', false, { root: true })
     });
   },
   getAllLogtimeByDate({ commit }, params) {
+    commit('ERROR/setIsLoading', true, { root: true })
     commit('setLogtimeArray', []);
     http.post(`/logtime/${params}`).then((result) => {
       commit('setLogtimeArray', result.data.data);
@@ -100,6 +103,7 @@ const actions = {
           commit('setLogtimeIsPlaying', logtime);
         }
       }
+      commit('ERROR/setIsLoading', false, { root: true })
     });
   },
   deteleLogtime({ commit }, params) {

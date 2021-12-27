@@ -171,76 +171,97 @@ const actions = {
       });
   },
   getTaskOfProject({ commit }, idProject) {
+    commit('ERROR/setIsLoading', true, { root: true })
     http.get(`/project/${idProject}`).then((result) => {
       commit('setTasksArray', result.data.data.tasks);
       commit('setTaskAsStatus');
+      commit('ERROR/setIsLoading', false, { root: true })
     });
   },
   getProject({ commit }) {
+    commit('ERROR/setIsLoading', true, { root: true })
     http
       .get('/project')
       .then((result) => {
         commit('setProjectsOfLeader', result.data.data);
         commit('setProjectOfMember', result.data.data);
+        commit('ERROR/setIsLoading', false, { root: true })
       })
       .catch((err) => {
+        commit('ERROR/setIsLoading', false, { root: true })
         commit('ERROR/setErrorMessage', err.response.data.message, {
           root: true,
         });
       });
   },
   addProject({ commit, dispatch }, params) {
+    commit('ERROR/setIsLoading', true, { root: true })
     http
       .post('/project', params)
       .then((result) => {
         dispatch('addProjectEdit', result.data.data);
         dispatch('getProject');
         dispatch('CHAT/getAllRooms', null, { root: true });
+        commit('ERROR/setIsLoading', false, { root: true })
       })
       .catch((err) => {
+        commit('ERROR/setIsLoading', false, { root: true })
         commit('ERROR/setErrorMessage', err.response.data.message, {
           root: true,
         });
       });
   },
-  addNewTask({ dispatch }, params) {
+  addNewTask({ commit, dispatch }, params) {
+    commit('ERROR/setIsLoading', true, { root: true })
     http.post(`/project/${params.idProject}/task`, params.task).then(() => {
       dispatch('getTaskOfProject', params.idProject);
+      commit('ERROR/setIsLoading', false, { root: true })
     });
   },
   removeCard({ commit }, data) {
+    commit('ERROR/setIsLoading', true, { root: true })
     http.post('/project/task', data).then(() => {
       commit('logMess');
+      commit('ERROR/setIsLoading', false, { root: true })
     });
   },
-  deleteProject({ dispatch }, idProject) {
+  deleteProject({ commit, dispatch }, idProject) {
+    commit('ERROR/setIsLoading', true, { root: true })
     http.delete(`/project/${idProject}`).then(() => {
       dispatch('getProject');
       dispatch('CHAT/getAllRooms', null, { root: true });
+      commit('ERROR/setIsLoading', false, { root: true })
     });
   },
   editProject({ commit, dispatch }, params) {
+    commit('ERROR/setIsLoading', true, { root: true })
     http
       .put(`/project/${params.idProject}`, params.project)
       .then((result) => {
         commit('setProjectEdit', result.data.data);
         dispatch('getProject');
         dispatch('CHAT/getAllRooms', null, { root: true });
+        commit('ERROR/setIsLoading', false, { root: true })
       })
       .catch((err) => {
+        commit('ERROR/setIsLoading', false, { root: true })
         commit('ERROR/setErrorMessage', err.response.data.message, {
           root: true,
         });
       });
   },
-  deleteTask({ dispatch }, params) {
+  deleteTask({ commit, dispatch }, params) {
+    commit('ERROR/setIsLoading', true, { root: true })
     http.delete(`/project/${params.idProject}/${params.idTask}`).then(() => {
       dispatch('getTaskOfProject', params.idProject);
+      commit('ERROR/setIsLoading', false, { root: true })
     });
   },
-  editTask({ dispatch }, params) {
+  editTask({ commit, dispatch }, params) {
+    commit('ERROR/setIsLoading', true, { root: true })
     http.put(`/project/task/${params.idTask}`, params.task).then(() => {
       dispatch('getTaskOfProject', params.idProject);
+      commit('ERROR/setIsLoading', false, { root: true })
     });
   },
   removeMember({ commit, dispatch }, params) {
@@ -278,8 +299,10 @@ const actions = {
       });
   },
   getCommentByIdTask({ commit, dispatch }, params) {
+    commit('ERROR/setIsLoading', true, { root: true })
     http.get(`/project/task/${params}/comment`).then((result) => {
       commit('setComments', result.data.data);
+      commit('ERROR/setIsLoading', false, { root: true })
     });
     socket.on(
       'new-comment',

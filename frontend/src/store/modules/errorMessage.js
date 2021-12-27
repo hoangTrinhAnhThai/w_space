@@ -2,12 +2,16 @@ import Vue from 'vue';
 
 const state = {
   errorMessage: '',
+  isLoading: false
 };
 
 const getters = {
   errorMessage(state) {
     return state.errorMessage;
   },
+  isLoading(state) {
+    return state.isLoading
+  }
 };
 
 const mutations = {
@@ -21,11 +25,17 @@ const mutations = {
       duration: 5000,
     });
   },
+  setIsLoading(state, data) {
+    state.isLoading = data
+  }
 };
 const actions = {
   clearErrorMessage({ commit }) {
     commit('clearErrorMessage');
   },
+  addIsLoading({commit}, data) {
+    commit('setIsLoading', data)
+  }
 };
 
 export default {
