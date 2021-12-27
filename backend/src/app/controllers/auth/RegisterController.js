@@ -24,7 +24,7 @@ class SignupController {
           user.lastName = req.body.lastName;
           user.email = req.body.email;
           user.password = await bcrypt.hash(req.body.password, salt);
-          const role = await Role.findOne({ name: 'User' });
+          const role = await Role.findOne({ name: 'Admin' });
           user.role = role;
           user.save(function (err) {
             if (err) {

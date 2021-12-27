@@ -9,6 +9,7 @@ const formatDataUser = function (data) {
     email: data.email,
     firstName: data.firstName,
     lastName: data.lastName,
+    role: data.role
   };
   return dataFormat;
 };
@@ -21,6 +22,7 @@ const mutations = {
   setUserInfo(state, userInfo) {
     state.userInfo = formatDataUser(userInfo);
   },
+
 };
 const getters = {
   userInfo(state) {
@@ -28,8 +30,8 @@ const getters = {
   },
   userRole() {
     if (state.userInfo) {
-      switch (state.userInfo.roles[0].name) {
-        case 'ROLE_AMIN':
+      switch (state.userInfo.role) {
+        case 'Admin':
           return 'Admin';
         default:
           return 'User';
@@ -61,7 +63,6 @@ const actions = {
         router.push('/login');
       })
       .catch((error) => {
-        console.log(error.response.data.data[0].msg);
         commit('ERROR/setErrorMessage', error.response.data.data[0].msg, {
           root: true,
         });

@@ -214,8 +214,7 @@ export default {
 }
 .chat-room {
   border-radius: 3px;
-  margin-bottom: 15px;
-  height: calc(100vh - 64px);
+  height: calc(100vh - 65px);
   display: flex;
 }
 .container-chat {
@@ -225,7 +224,7 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  padding: 5px 30px 30px;
+  padding: 5px 30px;
 }
 
 .theme--light.v-input {
@@ -269,10 +268,8 @@ i {
   }
   .layout-chat {
     overflow-y: scroll;
-    padding-bottom: 20px;
-    height: calc(100vh - 210px);
+    height: calc(100vh - 200px);
     padding: 30px;
-    margin-bottom: 10px;
     .content {
       overflow: auto;
       .right-chat-card {

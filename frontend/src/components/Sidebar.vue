@@ -24,8 +24,20 @@
         </v-btn>
       </v-app-bar>
       <v-divider></v-divider>
-      <v-list>
-        <v-list-group no-action class="header-project">
+      <v-list  v-if="userRole == 'Admin'">
+        <v-list-group  @click="handleClickDashboard">
+          <template v-slot:activator>
+            <v-list-item-content>
+              <v-list-item-title
+                ><i class="bx bxs-dashboard" style="font-size: 20px"></i
+                >Dashboard</v-list-item-title
+              >
+            </v-list-item-content>
+          </template>
+        </v-list-group>
+      </v-list>
+      <v-list v-else>
+        <v-list-group class="header-project">
           <template v-slot:activator>
             <v-list-item-content>
               <v-list-item-title @click="handleClickProject">
@@ -41,8 +53,7 @@
                 <i class="bx bx-plus"></i
               ></v-btn>
             </v-list-item-icon>
-          </template>
-          <v-list-item
+            <v-list-item
             v-for="project in projectsOfLeader"
             :key="project._id"
             link
@@ -76,8 +87,10 @@
               <v-icon></v-icon>
             </v-list-item-icon>
           </v-list-item>
+          </template>
+          
         </v-list-group>
-        <v-list-group no-action @click="handleClickLogtime">
+        <v-list-group  @click="handleClickLogtime">
           <template v-slot:activator>
             <v-list-item-content>
               <v-list-item-title
@@ -87,7 +100,7 @@
             </v-list-item-content>
           </template>
         </v-list-group>
-        <v-list-group no-action>
+        <v-list-group >
           <template v-slot:activator>
             <v-list-item-content @click="handleClickChatRoom">
               <v-list-item-title>
@@ -98,8 +111,7 @@
                 Chatroom</v-list-item-title
               >
             </v-list-item-content>
-          </template>
-          <v-list-item v-for="(room, index) in rooms" :key="index" link>
+            <v-list-item v-for="(room, index) in rooms" :key="index" link>
             <v-list-item-title @click="handleClickChatRoomItem(room)">
               <i class="bx bx-conversation"></i>{{ room.name }}
               <span v-for="(notification, index) in notifications" :key="index"
@@ -126,8 +138,10 @@
               </span>
             </v-list-item-title>
           </v-list-item>
+          </template>
         </v-list-group>
       </v-list>
+      
     </v-navigation-drawer>
     <add-new-project-modal ref="newProjectModal"></add-new-project-modal>
     <add-member-modal ref="addMemberModal" />
@@ -158,6 +172,7 @@ export default {
       rooms: 'CHAT/rooms',
       notifications: 'NOTIFICATION/notifications',
       userInfo: 'AUTH/userInfo',
+      userRole: 'AUTH/userRole'
     }),
   },
   methods: {
@@ -209,6 +224,10 @@ export default {
       this.$router.push(`/logtime/`);
       this.mini = true;
     },
+    handleClickDashboard() {
+      this.$router.push(`/admin/`);
+      this.mini = true;
+    }
   },
   created() {
     this.getProject();
@@ -236,6 +255,9 @@ export default {
 <style>
 .mdi-chevron-down::before {
   color: white !important;
+}
+.sidebar {
+  height: 100vh !important;
 }
 </style>
 <style scoped>

@@ -1,5 +1,6 @@
 html {
-    /* overflow: hidden !important; */
+    overflow: auto !important;
+    overflow-x: hidden !important;
 }
 .theme--light.v-application {
     font-weight: lighter;
@@ -78,4 +79,10 @@ textarea {
 
 .theme--light.v-btn-toggle:not(.v-btn-toggle--group) {
     background-color: rgb(237,237,237) !important;
+}
+
+.chartjs-render-monitor {
+    height: 60vh !important;
+    width: 95% !important;
+    margin: 0 auto !important;
 }

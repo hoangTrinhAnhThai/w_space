@@ -12,13 +12,13 @@ import Login from '../views/Auth/Login.vue';
 import Signup from '../views/Auth/Register.vue';
 import ChatPage from '../views/chat/ChatPage.vue';
 import ChatRoom from '../views/chat/ChatRoom.vue';
-import AdminMainPage from '../views/admin/MainPage.vue';
+// import AdminMainPage from '../views/admin/MainPage.vue';
 import Admin from '../views/admin/AdminPage.vue';
-
+import { decodeToken } from '../utils/helper'
 Vue.use(VueRouter);
 const routes = [
   {
-    path: '/',
+    path: '/mainpage',
     name: MainPage,
     component: MainPage,
     meta: {
@@ -55,24 +55,16 @@ const routes = [
         name: Profile,
         component: Profile,
       },
-    ],
-  },
-  {
-    path: '/admin',
-    name: Admin,
-    component: AdminMainPage,
-    meta: {
-      requiresAuth: true,
-    },
-    children: [
       {
         path: '/admin',
         name: Admin,
         component: Admin,
+        meta: {
+          admin_system: true
+        }
       },
     ],
   },
-
   {
     path: '/signup',
     name: Signup,
@@ -84,7 +76,7 @@ const routes = [
     component: Login,
   },
   {
-    path: '/home',
+    path: '/',
     name: HomePage,
     component: HomePage,
   },
@@ -96,20 +88,53 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  let token = localStorage.getItem('token')
+  let user = decodeToken()
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!localStorage.getItem('token')) {
-      next('/login');
-    } else {
-      next();
+    if (!token) {
+      next('/login')
     }
-    next();
+    if (to.matched.some((record) => record.meta.admin_system)) {
+      if (user.role != 'Admin') {
+        next('/roadmap')
+      }
+    } else {
+      if (user.role == 'Admin') {
+        next('/admin')
+      }
+    }
+    next()
   } else {
-    if (!localStorage.getItem('token')) {
-      next();
+    if (!token) {
+      next()
     } else {
-      next('/');
+      if (user.role != 'Admin') {
+        next('/roadmap')
+
+      } else {
+        next('/admin')
+
+      }
     }
-    next();
+    next()
   }
-});
+})
+
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some((record) => record.meta.requiresAuth)) {
+//     if (!localStorage.getItem('token')) {
+//       next('/home');
+//     } else {
+//       next();
+//     }
+//     next();
+//   } else {
+//     if (!localStorage.getItem('token')) {
+//       next();
+//     } else {
+//       next('/roadmap');
+//     }
+//     next();
+//   }
+// });
 export default router;

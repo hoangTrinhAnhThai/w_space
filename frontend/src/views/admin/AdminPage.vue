@@ -37,6 +37,8 @@ p {
   margin-top: 15px;
 }
 .dashboard {
-  height: 95vh;
+  height: calc(100vh - 65px);
+  // width: 95%;
+  padding: 50px 50px 0;
 }
 </style>

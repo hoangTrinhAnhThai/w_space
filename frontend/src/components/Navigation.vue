@@ -9,13 +9,13 @@
       </div>
 
       <v-spacer></v-spacer>
-      <v-btn icon text>
+      <!-- <v-btn icon text>
         <v-icon>mdi-cog-outline</v-icon>
       </v-btn>
       <v-btn icon text>
         <v-icon>mdi-help-circle</v-icon>
-      </v-btn>
-      <v-menu transition="slide-y-transition" bottom>
+      </v-btn> -->
+      <v-menu offset-y transition="slide-y-transition" bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon text v-bind="attrs" v-on="on">
             <v-icon>mdi-account-circle</v-icon>
