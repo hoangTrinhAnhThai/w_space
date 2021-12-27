@@ -5,7 +5,6 @@ const Logtime = require('../../models/Logtime');
 const endOfDay = require('date-fns/endOfDay');
 const startOfDay = require('date-fns/startOfDay');
 const host = require('../../../utils/decodeJWT');
-
 require('dotenv').config();
 
 class LogtimeController {

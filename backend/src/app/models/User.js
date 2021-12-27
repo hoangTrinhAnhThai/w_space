@@ -16,6 +16,9 @@ const User = new Schema(
     avatar: {
       type: String,
     },
+    isBlock: {
+      type: Boolean,
+    },
   },
   {
     timestamps: true,

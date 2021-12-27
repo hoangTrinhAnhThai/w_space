@@ -21,8 +21,7 @@ class LoginController {
           );
         }
         const user = await User.findOne({ email });
-        const role = await Role.findById(user.role)
-
+        const role = await Role.findById(user.role);
         if (!user) {
           return apiResponse.ErrorResponse(res, 'Email wrong');
         }
@@ -36,18 +35,20 @@ class LoginController {
               email: user.email,
               firstName: user.firstName,
               lastName: user.lastName,
-              role: role.name
+              role: role.name,
             },
             process.env.TOKEN_SECRET,
             { expiresIn: process.env.JWT_TIMEOUT_DURATION },
           );
-          User.findByIdAndUpdate(user._id, { token: tokenCreated }).populate('role').then(() => {
-            return apiResponse.successResponseWithData(
-              res,
-              'Login success',
-              tokenCreated,
-            );
-          });
+          User.findByIdAndUpdate(user._id, { token: tokenCreated })
+            .populate('role')
+            .then(() => {
+              return apiResponse.successResponseWithData(
+                res,
+                'Login success',
+                tokenCreated,
+              );
+            });
         });
       } catch (err) {
         return apiResponse.ErrorResponse(res, err);

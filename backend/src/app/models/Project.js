@@ -21,6 +21,9 @@ const Project = new Schema(
         ref: 'User',
       },
     ],
+    isDelete: {
+      type: Boolean,
+    },
     room: {
       type: Schema.Types.ObjectId,
       ref: 'Room',

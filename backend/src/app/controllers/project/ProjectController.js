@@ -30,6 +30,7 @@ class ProjectController {
           name,
           createdBy: user,
           room: room,
+          isDelete: false,
         });
         await Notification.create({
           room: room._id,
@@ -159,7 +160,9 @@ class ProjectController {
   deleteProject = async (req, res) => {
     const user = await User.findById(host(req, res));
     if (user) {
-      const project = await Project.findByIdAndDelete(req.params.id);
+      const project = await Project.findByIdAndUpdate(req.params.id, {
+        isDelete: true,
+      });
       const room = await Room.findByIdAndDelete(project.room);
       return apiResponse.successResponse(res, 'Delete project successfully');
     }
@@ -168,7 +171,9 @@ class ProjectController {
   showAllProjects = async (req, res) => {
     const user = await User.findById(host(req, res));
     const project = await Project.find({
-      $or: [{ createdBy: user }, { members: user }],
+      $and: [
+        { $or: [{ createdBy: user }, { members: user }], isDelete: false },
+      ],
     })
       .sort({ createdAt: -1 })
       .populate('tasks')

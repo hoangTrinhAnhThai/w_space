@@ -1,21 +1,24 @@
 const Room = require('../../models/Room');
 const User = require('../../models/User');
-
 const apiResponse = require('../../../utils/apiResponse');
 const host = require('../../../utils/decodeJWT');
-
 require('dotenv').config();
 
 class RoomController {
   showRoomById = async (req, res) => {
-    const room = await Room.findById(req.params.id);
+    const room = await Room.findById(req.params.id)
+      .populate('members')
+      .populate('createdBy');
     return apiResponse.successResponseWithData(res, 'show room success', room);
   };
   showAllRoom = async (req, res) => {
     const user = await User.findById(host(req, res));
     const rooms = await Room.find({
       $or: [{ createdBy: user }, { members: user }],
-    }).sort({ createdAt: -1 });
+    })
+      .sort({ createdAt: -1 })
+      .populate('members')
+      .populate('createdBy');
     return apiResponse.successResponseWithData(res, 'show room success', rooms);
   };
   createRoom = async (req, res) => {

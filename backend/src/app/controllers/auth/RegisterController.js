@@ -3,7 +3,6 @@ const Role = require('../../models/Role');
 const { validationResult } = require('express-validator');
 const apiResponse = require('../../../utils/apiResponse');
 const bcrypt = require('bcrypt');
-
 require('dotenv').config();
 
 class SignupController {
@@ -24,7 +23,9 @@ class SignupController {
           user.lastName = req.body.lastName;
           user.email = req.body.email;
           user.password = await bcrypt.hash(req.body.password, salt);
-          const role = await Role.findOne({ name: 'Admin' });
+          user.avatar = '';
+          user.isBlock = false;
+          const role = await Role.findOne({ name: 'User' });
           user.role = role;
           user.save(function (err) {
             if (err) {
