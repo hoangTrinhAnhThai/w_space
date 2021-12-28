@@ -21,10 +21,11 @@ class LoginController {
           );
         }
         const user = await User.findOne({ email });
-        const role = await Role.findById(user.role);
         if (!user) {
           return apiResponse.ErrorResponse(res, 'Email wrong');
         }
+        const role = await Role.findById(user.role);
+
         bcrypt.compare(password, user.password, (error, isValid) => {
           if (!isValid) {
             return apiResponse.ErrorResponse(res, 'Password wrong');

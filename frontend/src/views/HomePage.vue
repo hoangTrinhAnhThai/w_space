@@ -1,13 +1,8 @@
 <template>
   <div class="home-page">
-    <v-app-bar class="nav">
-      <img src="../assets/Logo.png" alt="" />
-      <v-spacer></v-spacer>
-      <v-btn text class="btn" @click="login"> Login </v-btn>
-      <v-btn text class="save-btn" @click="signup"> Signup </v-btn>
-    </v-app-bar>
     <div class="main-page">
       <div class="container1">
+        <navigation class="nav" />
         <h1>TEAM work</h1>
       </div>
       <div class="container2">
@@ -20,7 +15,7 @@
           atque corporis quam?
         </p>
       </div>
-      <div class="container4">
+      <div class="container3">
         <div class="content">
           <div class="content-left">
             <h1>
@@ -46,24 +41,16 @@
 </template>
 
 <script>
+import Navigation from "../components/Navigation.vue";
 export default {
-  name: 'HomePage',
-  methods: {
-    login() {
-      this.$router.push('/login');
-    },
-    signup() {
-      this.$router.push('/signup');
-    },
+  name: "HomePage",
+  components: {
+    Navigation,
   },
 };
 </script>
 
 <style scoped>
-.v-btn {
-  border: none;
-  height: 50px !important;
-}
 .container {
   margin: 0 !important;
   padding: 0 !important;
@@ -80,6 +67,9 @@ p {
 img {
   width: 50px;
 }
+.nav {
+  /* position: fixed; */
+}
 </style>
 
 <style lang="scss" scoped>
@@ -93,7 +83,7 @@ img {
         rgba(29, 28, 28, 0.6),
         rgba(36, 35, 35, 0.6)
       ),
-      url('https://shrm.pace.edu.vn/CMSFileManager/files/10/10f300de-0edc-449d-9959-0b4535664720.png');
+      url("https://shrm.pace.edu.vn/CMSFileManager/files/10/10f300de-0edc-449d-9959-0b4535664720.png");
     background-color: #232323;
     background-position: bottom center;
     background-size: cover;
@@ -116,16 +106,6 @@ img {
     }
   }
   .container3 {
-    width: 90%;
-    margin: 30px auto;
-    .list {
-      padding: 0;
-      list-style: none;
-      display: flex;
-      justify-content: space-around;
-    }
-  }
-  .container4 {
     background-color: rgb(199, 211, 247);
     margin-bottom: 200px;
     margin-top: 50px;
@@ -153,11 +133,6 @@ img {
           rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
       }
     }
-  }
-  .footer {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
   }
 }
 </style>

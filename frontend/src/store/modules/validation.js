@@ -47,9 +47,6 @@ const getters = {
       if (!registerInput.lastName) {
         errors.emptyLastName = true;
       }
-      if (!registerInput.phoneNumber) {
-        errors.emptyPhoneNumber = true;
-      }
       if (!registerInput.password) {
         errors.emptyPassword = true;
       }
@@ -121,9 +118,6 @@ const getters = {
       if (!userInfo.firstName) {
         errors.emptyFirstName = true;
       }
-      // if (!userInfo.phoneNumber) {
-      //     errors.emptyPhoneNumber = true
-      // }
       if (Object.keys(errors).length) return errors;
       return null;
     };

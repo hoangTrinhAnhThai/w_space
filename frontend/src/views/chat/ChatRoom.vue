@@ -12,7 +12,6 @@
           <v-icon>mdi-account-group-outline</v-icon>
         </v-btn>
       </v-app-bar>
-
       <div class="layout-chat" v-chat-scroll>
         <div class="notChat" v-if="chats.length <= 0">
           <img
@@ -35,18 +34,34 @@
                   v-bind:distance="'50px'"
                 />
               </div>
-              <v-avatar size="45" color="green" class="img">
-                <span class="white--text">{{ chat.createdBy.avatar }}</span>
+              <img
+                class="image img"
+                v-if="chat.createdBy.avatar"
+                :src="chat.createdBy.avatar"
+                alt=""
+              />
+              <v-avatar v-else size="45" color="green" class="img">
+                <span class="white--text"
+                  >{{ chat.createdBy.firstName.charAt(0)
+                  }}{{ chat.createdBy.lastName.charAt(0) }}</span
+                >
               </v-avatar>
             </div>
           </div>
           <div class="left-chat-card" v-else>
             <div class="content-chat">
-              <div class="img">
-                <v-avatar size="45" color="red">
-                  <span class="white--text">{{ chat.createdBy.avatar }}</span>
-                </v-avatar>
-              </div>
+              <img
+                class="image img"
+                v-if="chat.createdBy.avatar"
+                :src="chat.createdBy.avatar"
+                alt=""
+              />
+              <v-avatar v-else size="45" color="red" class="img">
+                <span class="white--text"
+                  >{{ chat.createdBy.firstName.charAt(0)
+                  }}{{ chat.createdBy.lastName.charAt(0) }}</span
+                >
+              </v-avatar>
               <div style="margin-bottom: -3px">
                 <chat-card
                   class="left"
@@ -67,7 +82,28 @@
           id="content"
           v-model="message"
           v-on:keyup="sendMessage"
-        ></v-text-field>
+        >
+          <v-icon
+            @click="toogleDialogEmoji"
+            slot="append"
+            style="
+              background-color: rgb(255, 200, 61);
+              border-radius: 50%;
+              padding: -2px;
+            "
+            color="rgb(255,200,61)"
+          >
+            mdi-emoticon-excited-outline
+          </v-icon>
+        </v-text-field>
+        <VEmojiPicker
+          v-show="showDialog"
+          :style="{ width: '440px', height: '200' }"
+          labelSearch="Search"
+          lang="pt-BR"
+          @select="onSelectEmoji"
+          class="emoji"
+        />
         <div class="btn-container">
           <v-btn
             class="save-btn"
@@ -85,10 +121,11 @@
       <v-list nav dense>
         <template>
           <v-list-item>
-            <v-img
+            <img
+              class="image"
               v-if="currentRoom.createdBy.avatar"
               :src="currentRoom.createdBy.avatar"
-            ></v-img>
+            />
             <v-avatar v-else color="green">
               <span class="text-h6"
                 >{{ currentRoom.createdBy.firstName.charAt(0)
@@ -106,20 +143,22 @@
             </v-list-item-content>
           </v-list-item>
         </template>
-        <template v-for="item in currentRoom.members">
-          <v-list-item :key="item._id">
-            <v-img v-if="item.avatar" :src="item.avatar"></v-img>
+        <template v-for="member in currentRoom.members">
+          <v-list-item :key="member._id">
+            <v-img v-if="member.avatar" :src="member.avatar"></v-img>
             <v-avatar v-else color="green">
               <span class="text-h6"
-                >{{ item.firstName.charAt(0)
-                }}{{ item.lastName.charAt(0) }}</span
+                >{{ member.firstName.charAt(0)
+                }}{{ member.lastName.charAt(0) }}</span
               >
             </v-avatar>
             <v-list-item-content style="margin-left: 15px">
               <v-list-item-title
-                >{{ item.firstName }} {{ item.lastName }}</v-list-item-title
+                >{{ member.firstName }} {{ member.lastName }}</v-list-item-title
               >
-              <v-list-item-subtitle v-html="item.email"></v-list-item-subtitle>
+              <v-list-item-subtitle
+                v-html="member.email"
+              ></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -129,77 +168,60 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import ChatCard from '../../components/ChatCard.vue';
+import { mapActions, mapGetters } from "vuex";
+import ChatCard from "../../components/ChatCard.vue";
+import { VEmojiPicker } from "v-emoji-picker";
 export default {
-  name: 'ChatRoom',
+  name: "ChatRoom",
   data() {
     return {
-      message: '',
+      message: "",
       showGroup: false,
-      recent: [
-        {
-          active: true,
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          title: 'Jason Oner',
-        },
-        {
-          active: true,
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-          title: 'Mike Carlson',
-        },
-        {
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-          title: 'Cindy Baker',
-        },
-        {
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-          title: 'Ali Connors',
-        },
-      ],
+      showDialog: false,
     };
   },
   computed: {
     ...mapGetters({
-      chats: 'CHAT/chats',
-      userInfo: 'AUTH/userInfo',
-      validateText: 'VALIDATION/validateText',
-      currentRoom: 'CHAT/currentRoom',
+      chats: "CHAT/chats",
+      userInfo: "AUTH/userInfo",
+      validateText: "VALIDATION/validateText",
+      currentRoom: "CHAT/currentRoom",
     }),
   },
   methods: {
     ...mapActions({
-      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
-      sendMessageAction: 'CHAT/sendMessage',
-      addCurrentRoom: 'CHAT/addCurrentRoom',
-      removeUnreadNotification: 'NOTIFICATION/removeUnreadNotification',
+      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
+      sendMessageAction: "CHAT/sendMessage",
+      addCurrentRoom: "CHAT/addCurrentRoom",
+      removeUnreadNotification: "NOTIFICATION/removeUnreadNotification",
     }),
     sendMessage(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-          document.getElementById('content').focus();
+          document.getElementById("content").focus();
           return;
         } else {
           this.sendMessageAction({
             idRoom: this.$route.params.id,
             chat: { room: this.$route.params.id, message: this.message },
           });
-          this.message = '';
-          document.getElementById('content').focus();
+          this.message = "";
+          document.getElementById("content").focus();
+          // console.log(this.message);
         }
       }
     },
     sendMessageByClick() {
       if (!this.validateBeforeSubmit()) {
-        document.getElementById('content').focus();
+        document.getElementById("content").focus();
         return;
       } else {
         this.sendMessageAction({
           idRoom: this.$route.params.id,
           chat: { room: this.$route.params.id, message: this.message },
         });
-        this.message = '';
-        document.getElementById('content').focus();
+        this.message = "";
+        document.getElementById("content").focus();
       }
     },
     validateBeforeSubmit() {
@@ -213,6 +235,12 @@ export default {
     removeNotification() {
       this.removeUnreadNotification(this.currentRoom._id);
     },
+    toogleDialogEmoji() {
+      this.showDialog = !this.showDialog;
+    },
+    onSelectEmoji(emoji) {
+      this.message += emoji.data;
+    },
   },
   created() {
     this.getAllChatByIdRoom(this.$route.params.id);
@@ -220,10 +248,12 @@ export default {
   },
   components: {
     ChatCard,
+    VEmojiPicker,
   },
   watch: {
     message() {
       this.removeNotification();
+      this.showDialog = false;
     },
   },
 };
@@ -233,7 +263,8 @@ export default {
   box-shadow: none !important;
   background-color: rgb(237, 237, 237) !important;
   border-bottom: 1px solid rgb(126, 68, 68);
-  box-shadow: inset 0px 7px 3px -3px rgb(0 0 0 / 20%) !important;
+  /* box-shadow: inset 0px 7px 3px -3px rgb(0 0 0 / 20%) !important; */
+  padding: 0px 20px;
 }
 .v-icon {
   color: rgb(68, 64, 64) !important;
@@ -251,6 +282,7 @@ export default {
   flex-direction: row;
   flex-wrap: nowrap;
   padding: 5px 30px;
+  position: relative;
 }
 
 .theme--light.v-input {
@@ -280,9 +312,19 @@ i {
 .left {
   background-color: red;
 }
+.image {
+  height: 45px !important;
+  width: 45px !important;
+  border-radius: 50%;
+}
+.emoji {
+  position: absolute;
+  right: 105px;
+  bottom: 60px;
+}
 </style>
 <style lang="scss" scoped>
-@import '../../assets/style.scss';
+@import "../../assets/style.scss";
 
 .chat-room {
   position: relative;

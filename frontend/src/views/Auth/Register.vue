@@ -1,4 +1,6 @@
 <template>
+ <v-main>
+    <navigation/>
   <div class="register">
     <div class="container">
       <h4>Create an Account</h4>
@@ -89,27 +91,6 @@
             </p>
           </div>
         </div>
-        <div class="form-group">
-          <input
-            v-model="registerInput.phoneNumber"
-            class="form-control"
-            type="text"
-            placeholder="Phone number"
-          />
-          <div class="errors">
-            <p v-show="showErrors.emptyPhoneNumber" class="errors">
-              PhoneNumber is required
-            </p>
-            <p v-show="errorMessage" class="errors">{{ errorMessage }}</p>
-          </div>
-        </div>
-        <div class="term">
-          <input class="radio" type="radio" name="" id="" />
-          <span
-            >By signing up, I agree to W-space
-            <router-link to="#">Terms Of Service</router-link></span
-          >
-        </div>
         <div class="signup">
           <button :disabled="disabledRegister" type="submit">Continue</button>
         </div>
@@ -120,9 +101,12 @@
       </form>
     </div>
   </div>
+ </v-main>
 </template>
 
 <script>
+import Navigation from "../../components/Navigation.vue";
+
 import { mapActions, mapGetters } from 'vuex';
 import Vue from 'vue';
 export default {
@@ -134,7 +118,6 @@ export default {
         email: '',
         firstName: '',
         lastName: '',
-        phoneNumber: '',
       },
       disabledRegister: false,
       showErrors: {},
@@ -182,11 +165,6 @@ export default {
           this.showErrors,
           'emptyLastName',
           this.showErrors && !!errors && errors.emptyLastName,
-        );
-        Vue.set(
-          this.showErrors,
-          'emptyPhoneNumber',
-          this.showErrors && !!errors && errors.emptyPhoneNumber,
         );
         Vue.set(
           this.showErrors,
@@ -259,13 +237,14 @@ export default {
       Vue.set(this.showErrors, 'emptyLastName', null);
       this.disabledRegister = false;
       this.clearErrorMessage();
-    },
-    'registerInput.phoneNumber'() {
-      Vue.set(this.showErrors, 'emptyPhoneNumber', null);
-      this.disabledRegister = false;
-      this.clearErrorMessage();
-    },
+    }
   },
+  created() {
+    this.clearErrorMessage()
+  },
+  components: {
+    Navigation
+  }
 };
 </script>
 
@@ -273,10 +252,10 @@ export default {
 @import '../../assets/style.scss';
 .register {
   background-image: linear-gradient(
-      rgba(29, 28, 28, 0.7),
-      rgba(36, 35, 35, 0.7)
+      rgba(29, 28, 28, 0.6),
+        rgba(36, 35, 35, 0.6)
     ),
-    url('https://blisssaigon.com/wp-content/uploads/2019/10/iwood-R5v8Xtc0ecg-unsplash-1.jpg');
+    url("https://shrm.pace.edu.vn/CMSFileManager/files/10/10f300de-0edc-449d-9959-0b4535664720.png");
   background-size: cover;
   height: 100vh;
   display: flex;
