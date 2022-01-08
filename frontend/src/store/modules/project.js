@@ -219,10 +219,8 @@ const actions = {
     });
   },
   removeCard({ commit }, data) {
-    commit('ERROR/setIsLoading', true, { root: true });
     http.post('/project/task', data).then(() => {
       commit('logMess');
-      commit('ERROR/setIsLoading', false, { root: true });
     });
   },
   deleteProject({ commit, dispatch }, idProject) {

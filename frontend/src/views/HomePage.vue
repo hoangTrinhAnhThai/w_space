@@ -67,9 +67,6 @@ p {
 img {
   width: 50px;
 }
-.nav {
-  /* position: fixed; */
-}
 </style>
 
 <style lang="scss" scoped>

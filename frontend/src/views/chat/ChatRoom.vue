@@ -75,27 +75,45 @@
         </div>
       </div>
       <div class="write-content">
-        <v-text-field
-          placeholder="Write message..."
-          outlined
-          dense
-          id="content"
-          v-model="message"
-          v-on:keyup="sendMessage"
-        >
-          <v-icon
-            @click="toogleDialogEmoji"
-            slot="append"
-            style="
-              background-color: rgb(255, 200, 61);
-              border-radius: 50%;
-              padding: -2px;
-            "
-            color="rgb(255,200,61)"
+        <v-file-input
+          hide-input
+          small-chips
+          v-model="files"
+          class="file-input"
+        ></v-file-input>
+        <div class="content-message" style="width: 90%">
+          <div class="list-file">
+            <v-chip
+              v-if="files.name"
+              pill
+              class="ma-2"
+              close
+              @click:close="removeFile()"
+              >{{ files.name }}</v-chip
+            >
+          </div>
+          <v-text-field
+            dense
+            placeholder="Write message..."
+            id="content"
+            v-model="message"
+            v-on:keyup="sendMessage"
           >
-            mdi-emoticon-excited-outline
-          </v-icon>
-        </v-text-field>
+            <v-icon
+              @click="toogleDialogEmoji"
+              slot="append"
+              style="
+                background-color: rgb(255, 200, 61);
+                border-radius: 50%;
+                padding: -2px;
+              "
+              color="rgb(255,200,61)"
+            >
+              mdi-emoticon-excited-outline
+            </v-icon>
+          </v-text-field>
+        </div>
+
         <VEmojiPicker
           v-show="showDialog"
           :style="{ width: '440px', height: '200' }"
@@ -114,12 +132,21 @@
             <i class="bx bx-send"></i>
           </v-btn>
         </div>
+        <button @click="downloadFile">download</button>
       </div>
     </div>
-    <v-navigation-drawer v-model="showGroup" absolute bottom right temporary>
-      <h4 style="padding: 15px">Members</h4>
+    <v-navigation-drawer
+      permanent
+      bottom
+      right
+      v-show="showGroup"
+      style="width: 350px"
+    >
+      <h4 style="padding: 15px 15px 3px">Members</h4>
+      <v-divider></v-divider>
+
       <v-list nav dense>
-        <template>
+        <template v-if="currentRoom.createdBy">
           <v-list-item>
             <img
               class="image"
@@ -178,6 +205,7 @@ export default {
       message: "",
       showGroup: false,
       showDialog: false,
+      files: [],
     };
   },
   computed: {
@@ -194,6 +222,7 @@ export default {
       sendMessageAction: "CHAT/sendMessage",
       addCurrentRoom: "CHAT/addCurrentRoom",
       removeUnreadNotification: "NOTIFICATION/removeUnreadNotification",
+      downloadFileAction: 'CHAT/downloadFile'
     }),
     sendMessage(e) {
       if (e.keyCode === 13) {
@@ -207,7 +236,6 @@ export default {
           });
           this.message = "";
           document.getElementById("content").focus();
-          // console.log(this.message);
         }
       }
     },
@@ -241,6 +269,19 @@ export default {
     onSelectEmoji(emoji) {
       this.message += emoji.data;
     },
+    onFileChange() {
+      // this.isDisableButton = true;
+      // const formData = new FormData();
+      // formData.append('file', e.target.files[0]);
+      console.log(this.files);
+    },
+    removeFile() {
+      // this.files.splice(index, 1);
+      this.files = [];
+    },
+    downloadFile() {
+      this.downloadFileAction()
+    }
   },
   created() {
     this.getAllChatByIdRoom(this.$route.params.id);
@@ -255,6 +296,9 @@ export default {
       this.removeNotification();
       this.showDialog = false;
     },
+    files() {
+      console.log(this.files);
+    },
   },
 };
 </script>
@@ -263,7 +307,6 @@ export default {
   box-shadow: none !important;
   background-color: rgb(237, 237, 237) !important;
   border-bottom: 1px solid rgb(126, 68, 68);
-  /* box-shadow: inset 0px 7px 3px -3px rgb(0 0 0 / 20%) !important; */
   padding: 0px 20px;
 }
 .v-icon {
@@ -281,20 +324,36 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  padding: 5px 30px;
+  padding: 5px 30px 20px;
   position: relative;
 }
-
 .theme--light.v-input {
-  width: 85%;
+  width: 100%;
   border-radius: none !important;
-  margin-right: 10px;
 }
 
 .v-btn:not(.v-btn--round).v-size--default {
-  top: -10px;
-  border: none;
-  height: 100%;
+  height: 45px !important;
+}
+.btn-container {
+  align-self: flex-end;
+}
+.list-file {
+  height: 40px !important;
+}
+.v-application .ma-2 {
+  margin: 0 !important;
+}
+.file-input {
+  padding: 0;
+  position: absolute;
+  align-self: flex-end;
+}
+
+.content-message {
+  width: 90%;
+  margin: 0 auto;
+  align-self: flex-end;
 }
 
 i:hover {
@@ -308,9 +367,6 @@ i {
 }
 .notChat {
   text-align: center;
-}
-.left {
-  background-color: red;
 }
 .image {
   height: 45px !important;
@@ -336,7 +392,7 @@ i {
   }
   .layout-chat {
     overflow-y: scroll;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 230px);
     padding: 30px;
     .content {
       overflow: auto;

@@ -72,7 +72,9 @@ export default {
     },
   },
   created() {
+    if(this.userInfoAuth) {
     this.getUser(this.userInfoAuth._id);
+    }
     window.addEventListener("scroll", this.updateScroll);
   },
 };

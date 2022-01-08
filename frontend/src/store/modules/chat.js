@@ -72,6 +72,20 @@ const actions = {
       dispatch('getAllChatByIdRoom', params.idRoom);
     });
   },
+  downloadFile() {
+    http
+      .post(`/chat/download/${'125193523_2840428239522755_9205251965893454183_n.jpg'}`,)
+      .then(response => {
+        // console.log(response.data)
+        var headers = response.headers;
+        let blob = new Blob([response.data], { type: headers['content-type'] }),
+          url = window.URL.createObjectURL(blob)
+
+        window.open(url) // Mostly the same, I was just experimenting with different approaches, tried link.click, iframe and other solutions
+        // console.log(blob);
+
+      })
+  }
 };
 
 export default {
