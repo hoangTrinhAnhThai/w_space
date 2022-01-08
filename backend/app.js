@@ -1,10 +1,18 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 const path = require('path')
 const cors = require('cors')
 const route = require('./src/routes/index.js')
 const db = require('./src/config/database')
 const app = express()
 require('dotenv').config()
+
+const methodOverride = require('method-override')
+
+db.connect()
+
+app.use(bodyParser.json())
+app.use(methodOverride('_method'))
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
@@ -15,8 +23,6 @@ const corsOptions ={
 }
 app.use(cors(corsOptions))
 route(app)
-db.connect()
-
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;

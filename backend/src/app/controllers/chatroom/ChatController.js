@@ -66,5 +66,9 @@ class ChatController {
     await Chat.findByIdAndDelete(req.params.id);
     return apiResponse.successResponse(res, 'Delete chat successfully');
   };
+
+  // uploadFile = async (req, res) => {
+  //   await 
+  // }
 }
 module.exports = new ChatController();
