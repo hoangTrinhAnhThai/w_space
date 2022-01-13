@@ -1,7 +1,6 @@
 const express = require('express');
 const server = require('http').createServer(express);
 const server_port = 4000;
-// const {upload} = require('../../config/database')
 require('dotenv').config();
 const mongoose = require('mongoose');
 const multer = require('multer');
@@ -11,10 +10,9 @@ const url = process.env.MONGODB_URI;
 const crypto = require('crypto');
 const path = require('path');
 
-
 const conn = mongoose.createConnection(url);
 let gfs;
-let fileOriginalName
+let fileOriginalName, name
 conn.once('open', () => {
   gfs = Grid(conn.db, mongoose.mongo);
   gfs.collection('uploads');
@@ -29,8 +27,9 @@ const storage = new GridFsStorage({
         if (err) return reject(err);
         filename = file.originalname;
         // let name = buf.toString('hex') + path.extname(file.originalname);
+        name = `${filename}-${buf.toString('hex')}`;
         const fileInfo = {
-          filename: filename,
+          filename: name,
           bucketName: 'uploads'
         };
         resolve(fileInfo);
@@ -52,32 +51,33 @@ const io = require('socket.io')(server, {
 const router = express.Router();
 const chatController = require('../../app/controllers/chatroom/ChatController');
 
-router.post('/upload', upload.single('file'), (req, res) => {
-  console.log(fileOriginalName);
-  gfs.files.findOne({ filename: fileOriginalName }, (err, file) => {
+router.post('/upload/:id', upload.single('file'), (req, res) => {
+  console.log(req.params.id);
+  gfs.files.findOne({ filename: name }, (err, file) => {
     if (!file || file.length === 0) return res.status(404).json({ err: 'No file exists' });
-    return res.json(file);
+
+    return res.status(200).json(file.filename)
+
   });
 })
 router.get('/upload/', (req, res) => {
-  gfs.files.findOne({ _id: '61d71836e24b380afd0d9e8c', root: 'uploads' }, (err, file) => {
-    console.log(file);
-    if (!file || file.length === 0) return res.status(404).json({ err: 'No file exists' });
-    return res.json(file);
-  });
+  // gfs.files.findOne({ _id: '61d71836e24b380afd0d9e8c', root: 'uploads' }, (err, file) => {
+  //   console.log(file);
+  //   if (!file || file.length === 0) return res.status(404).json({ err: 'No file exists' });
+  //   return res.json(file);
+  // });
   // gfs.files.findOne({ filename: 'SHAREVIEW_KeHoachTrienKhai_DATN.pdf' }, (err, file) => {
   //   console.log(file);
   //   if (!file || file.length === 0) return res.status(404).json({ err: 'No file exists' });
   //   return res.json(file);
   // });
-  // gfs.files.find().toArray((err, files) => {
-  //   if (!files || files.length === 0) return res.status(404).json({ err: 'No files exist' });
-  //   return res.json(files);
-  // });
+  gfs.files.find().toArray((err, files) => {
+    if (!files || files.length === 0) return res.status(404).json({ err: 'No files exist' });
+    return res.json(files);
+  });
 })
 
 router.post('/download/:name', (req, res) => {
-  console.log(req.params.name);
   gfs.files.findOne({
     filename: req.params.name
   }, function (err, file) {
@@ -87,18 +87,19 @@ router.post('/download/:name', (req, res) => {
     else if (!file) {
       return res.status(404).send('Error on the database looking for the file.');
     }
-
-    res.set('Content-Type', file.contentType);
+    res.set('Content-Type', "text/json");
     res.set('Content-Disposition', 'attachment; filename="' + file.filename + '"');
-console.log('ok');
     var readstream = gfs.createReadStream({
       filename: req.params.name
     });
-
-    readstream.on("error", function (err) {
-      res.end();
+    const chunks = [];
+    readstream.on("data", function (chunk) {
+      chunks.push(chunk);
     });
-    readstream.pipe(res);
+
+    readstream.on("end", function () {
+      res.send({ name: file.filename, type: file.contentType, data: Buffer.concat(chunks).toString('base64') });
+    });
   });
 })
 

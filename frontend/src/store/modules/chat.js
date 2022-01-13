@@ -3,10 +3,38 @@ import io from 'socket.io-client';
 const socket = io(`${process.env.VUE_APP_SOCKET_URL}:4000`, {
   transports: ['websocket', 'polling', 'flashsocket'],
 });
+
+
+function pdfBlobConversion(b64Data, contentType) {
+  contentType = contentType || '';
+  var sliceSize = 512;
+  b64Data = b64Data.replace(/^[^,]+,/, '');
+  b64Data = b64Data.replace(/\s/g, '');
+  var byteCharacters = window.atob(b64Data);
+  var byteArrays = [];
+
+  for ( var offset = 0; offset < byteCharacters.length; offset = offset + sliceSize ) {
+    var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    var byteNumbers = new Array(slice.length);
+    for (var i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    var byteArray = new Uint8Array(byteNumbers);
+
+    byteArrays.push(byteArray);
+  }
+
+  var blob = new Blob(byteArrays, { type: contentType });
+  return blob;
+}
+
 const state = {
   rooms: [],
   chats: [],
   currentRoom: {},
+  file: null
 };
 
 const getters = {
@@ -19,6 +47,9 @@ const getters = {
   currentRoom(state) {
     return state.currentRoom;
   },
+  file(state) {
+    return state.file
+  }
 };
 const mutations = {
   setRooms(state, data) {
@@ -36,6 +67,9 @@ const mutations = {
   logMess() {
     console.log('aaa');
   },
+  setFile(state, data) {
+    state.file = data
+  }
 };
 const actions = {
   getAllRooms({ commit }) {
@@ -72,20 +106,26 @@ const actions = {
       dispatch('getAllChatByIdRoom', params.idRoom);
     });
   },
+  uploadFile({ dispatch }, params) {
+    http.post(`/chat/upload/${params.idRoom}`, params.file).then((response) => {
+      console.log(response.data);
+      socket.emit('save-message', response.data);
+      dispatch('getAllChatByIdRoom', params.idRoom);
+    });
+  },
+
   downloadFile() {
     http
-      .post(`/chat/download/${'125193523_2840428239522755_9205251965893454183_n.jpg'}`,)
+      .post(`/chat/download/${'Chú ý.txt-1da7e336ef4eb63eb5e1a1b42dbfdb94'}`,)
       .then(response => {
-        // console.log(response.data)
-        var headers = response.headers;
-        let blob = new Blob([response.data], { type: headers['content-type'] }),
-          url = window.URL.createObjectURL(blob)
-
-        window.open(url) // Mostly the same, I was just experimenting with different approaches, tried link.click, iframe and other solutions
-        // console.log(blob);
+        console.log(response.data)
+        let link = document.createElement('a')
+        link.href = window.URL.createObjectURL(pdfBlobConversion(response.data.data, response.data.type))
+        link.download = `aaa`
+        link.click()
 
       })
-  }
+  },
 };
 
 export default {

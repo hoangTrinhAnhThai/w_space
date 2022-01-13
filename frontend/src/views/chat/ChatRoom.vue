@@ -113,6 +113,7 @@
             </v-icon>
           </v-text-field>
         </div>
+        <!-- <img :src="convert(file)" alt="" /> -->
 
         <VEmojiPicker
           v-show="showDialog"
@@ -205,7 +206,7 @@ export default {
       message: "",
       showGroup: false,
       showDialog: false,
-      files: [],
+      files: {},
     };
   },
   computed: {
@@ -222,14 +223,24 @@ export default {
       sendMessageAction: "CHAT/sendMessage",
       addCurrentRoom: "CHAT/addCurrentRoom",
       removeUnreadNotification: "NOTIFICATION/removeUnreadNotification",
-      downloadFileAction: 'CHAT/downloadFile'
+      downloadFileAction: "CHAT/downloadFile",
+      uploadFile: "CHAT/uploadFile",
     }),
     sendMessage(e) {
       if (e.keyCode === 13) {
-        if (!this.validateBeforeSubmit()) {
+        if (!this.validateBeforeSubmit() && !this.files.name) {
           document.getElementById("content").focus();
           return;
         } else {
+          if (this.files.name) {
+            const formData = new FormData();
+            formData.append("file", this.files);
+            this.uploadFile({
+              idRoom: this.$route.params.id,
+              file: formData ,
+            });
+            console.log(formData);
+          }
           this.sendMessageAction({
             idRoom: this.$route.params.id,
             chat: { room: this.$route.params.id, message: this.message },
@@ -269,19 +280,17 @@ export default {
     onSelectEmoji(emoji) {
       this.message += emoji.data;
     },
-    onFileChange() {
-      // this.isDisableButton = true;
-      // const formData = new FormData();
-      // formData.append('file', e.target.files[0]);
-      console.log(this.files);
-    },
+    // onFileChange(e) {
+    //   const formData = new FormData();
+    //   formData.append('file', e.target.files[0]);
+    //   console.log(this.files);
+    // },
     removeFile() {
-      // this.files.splice(index, 1);
-      this.files = [];
+      this.files = {};
     },
     downloadFile() {
-      this.downloadFileAction()
-    }
+      this.downloadFileAction();
+    },
   },
   created() {
     this.getAllChatByIdRoom(this.$route.params.id);
