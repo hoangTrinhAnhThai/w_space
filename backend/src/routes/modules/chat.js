@@ -8,11 +8,18 @@ const { GridFsStorage } = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 const url = process.env.MONGODB_URI;
 const crypto = require('crypto');
-const path = require('path');
+const router = express.Router();
+const chatController = require('../../app/controllers/chatroom/ChatController');
+const Chat = require('../../app/models/Chat');
+const Notification = require('../../app/models/Notification');
+const User = require('../../app/models/User');
+const apiResponse = require('../../utils/apiResponse');
+const host = require('../../utils/decodeJWT');
 
 const conn = mongoose.createConnection(url);
+
 let gfs;
-let fileOriginalName, name
+let filename, name
 conn.once('open', () => {
   gfs = Grid(conn.db, mongoose.mongo);
   gfs.collection('uploads');
@@ -21,7 +28,6 @@ conn.once('open', () => {
 const storage = new GridFsStorage({
   url: url,
   file: (req, file) => {
-    fileOriginalName = file.originalname
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {
         if (err) return reject(err);
@@ -48,18 +54,39 @@ const io = require('socket.io')(server, {
   },
   allowEIO3: true,
 });
-const router = express.Router();
-const chatController = require('../../app/controllers/chatroom/ChatController');
 
-router.post('/upload/:id', upload.single('file'), (req, res) => {
+router.post('/upload/:id', upload.single('file'), async (req, res) => {
   console.log(req.params.id);
-  gfs.files.findOne({ filename: name }, (err, file) => {
-    if (!file || file.length === 0) return res.status(404).json({ err: 'No file exists' });
-
-    return res.status(200).json(file.filename)
-
+  const file = await gfs.files.findOne({ filename: name });
+  const user = await User.findById(host(req, res));
+  let chatParams = new Chat();
+  chatParams.createdBy = user;
+  chatParams.isFile = true
+  chatParams.message = file.filename
+  chatParams.room = req.params.id
+  const chat = await Chat.create(chatParams);
+  const notification = await Notification.findOne({ room: req.params.id });
+  let listContent = notification.listContent;
+  for (let content of listContent) {
+    if (JSON.stringify(user._id) != JSON.stringify(content.member._id)) {
+      content.count += 1;
+      content.unreadCount += 1;
+      content.contents.push({
+        message: chat.message,
+        createdBy: chat.createdBy,
+      });
+    }
+  }
+  await Notification.findByIdAndUpdate(notification._id, {
+    listContent: listContent,
   });
+  return apiResponse.successResponseWithData(
+    res,
+    'Create chat successfully',
+    chat,
+  );
 })
+// router.post('/upload/:id', chatController.uploadFile)
 router.get('/upload/', (req, res) => {
   // gfs.files.findOne({ _id: '61d71836e24b380afd0d9e8c', root: 'uploads' }, (err, file) => {
   //   console.log(file);
@@ -88,7 +115,7 @@ router.post('/download/:name', (req, res) => {
       return res.status(404).send('Error on the database looking for the file.');
     }
     res.set('Content-Type', "text/json");
-    res.set('Content-Disposition', 'attachment; filename="' + file.filename + '"');
+    // res.set('Content-Disposition', 'attachment; filename="' + file.filename + '"');
     var readstream = gfs.createReadStream({
       filename: req.params.name
     });

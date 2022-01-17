@@ -3,7 +3,6 @@ const Notification = require('../../models/Notification');
 const User = require('../../models/User');
 const apiResponse = require('../../../utils/apiResponse');
 const host = require('../../../utils/decodeJWT');
-
 require('dotenv').config();
 
 class ChatController {
@@ -66,9 +65,7 @@ class ChatController {
     await Chat.findByIdAndDelete(req.params.id);
     return apiResponse.successResponse(res, 'Delete chat successfully');
   };
-  uploadFile = async (req, res) => {
-    
-  }
-
 }
 module.exports = new ChatController();
+
+
