@@ -1,9 +1,14 @@
 <template>
   <v-tooltip bottom>
     <template v-slot:activator="{ on, attrs }">
-      <span v-on="on" v-bind="attrs"
+      <span v-on="on" v-bind="attrs" @click="downloadFile(chat.message)"
         ><p v-bind:style="{ backgroundColor: color, right: distance }">
-          {{ chat.message }}
+          <span >
+            <v-icon v-if="chat.isFile" style="top: -4px"
+              >mdi-file-document-outline</v-icon
+            >
+          </span>
+          <span>{{ message }}</span>
         </p></span
       >
     </template>
@@ -12,9 +17,10 @@
 </template>
 
 <script>
-import helper from '../utils/data';
+import { mapActions } from "vuex";
+import helper from "../utils/data";
 export default {
-  name: 'ChatCard',
+  name: "ChatCard",
   props: {
     chat: {
       type: Object,
@@ -42,6 +48,25 @@ export default {
     minute() {
       return new Date(this.chat.createdAt).getMinutes();
     },
+    message() {
+      if (this.chat.isFile) {
+        let arr = this.chat.message.split("-");
+        arr.pop();
+        return arr.join("-");
+      } else {
+        return this.chat.message;
+      }
+    },
+  },
+  methods: {
+    ...mapActions({
+      downloadFileAction: "CHAT/downloadFile",
+    }),
+    downloadFile(nameFile) {
+      if(nameFile) {
+      this.downloadFileAction(nameFile);
+      } else return 
+    },
   },
 };
 </script>
@@ -52,6 +77,7 @@ p {
   padding: 10px 25px;
   position: relative;
   border-radius: 5px;
+  cursor: pointer;
 }
 .tooltip {
   position: relative;

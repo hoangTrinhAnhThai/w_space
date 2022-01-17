@@ -133,7 +133,6 @@
             <i class="bx bx-send"></i>
           </v-btn>
         </div>
-        <button @click="downloadFile">download</button>
       </div>
     </div>
     <v-navigation-drawer
@@ -223,7 +222,6 @@ export default {
       sendMessageAction: "CHAT/sendMessage",
       addCurrentRoom: "CHAT/addCurrentRoom",
       removeUnreadNotification: "NOTIFICATION/removeUnreadNotification",
-      downloadFileAction: "CHAT/downloadFile",
       uploadFile: "CHAT/uploadFile",
     }),
     sendMessage(e) {
@@ -239,14 +237,17 @@ export default {
               idRoom: this.$route.params.id,
               file: formData ,
             });
-            console.log(formData);
+            this.removeFile()
           }
-          this.sendMessageAction({
+          if(this.validateBeforeSubmit()) {
+            this.sendMessageAction({
             idRoom: this.$route.params.id,
             chat: { room: this.$route.params.id, message: this.message },
           });
           this.message = "";
           document.getElementById("content").focus();
+          }
+          
         }
       }
     },
@@ -280,17 +281,10 @@ export default {
     onSelectEmoji(emoji) {
       this.message += emoji.data;
     },
-    // onFileChange(e) {
-    //   const formData = new FormData();
-    //   formData.append('file', e.target.files[0]);
-    //   console.log(this.files);
-    // },
     removeFile() {
       this.files = {};
     },
-    downloadFile() {
-      this.downloadFileAction();
-    },
+    
   },
   created() {
     this.getAllChatByIdRoom(this.$route.params.id);

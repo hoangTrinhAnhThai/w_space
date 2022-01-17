@@ -65,7 +65,6 @@ const mutations = {
     state.currentRoom = data;
   },
   logMess() {
-    console.log('aaa');
   },
   setFile(state, data) {
     state.file = data
@@ -102,26 +101,29 @@ const actions = {
   },
   sendMessage({ dispatch }, params) {
     http.post(`/chat/`, params.chat).then((response) => {
+      console.log(response.data.data);
       socket.emit('save-message', response.data.data);
       dispatch('getAllChatByIdRoom', params.idRoom);
     });
   },
   uploadFile({ dispatch }, params) {
     http.post(`/chat/upload/${params.idRoom}`, params.file).then((response) => {
-      console.log(response.data);
-      socket.emit('save-message', response.data);
+      console.log(response.data.data);
+      socket.emit('save-message', response.data.data);
       dispatch('getAllChatByIdRoom', params.idRoom);
     });
   },
 
-  downloadFile() {
+  downloadFile({commit}, params) {
     http
-      .post(`/chat/download/${'Chú ý.txt-1da7e336ef4eb63eb5e1a1b42dbfdb94'}`,)
+      .post(`/chat/download/${params}`,)
       .then(response => {
-        console.log(response.data)
+        commit('logMess')
         let link = document.createElement('a')
         link.href = window.URL.createObjectURL(pdfBlobConversion(response.data.data, response.data.type))
-        link.download = `aaa`
+        let arr = params.split("-");
+        arr.pop();
+        link.download = arr.join('-')
         link.click()
 
       })
