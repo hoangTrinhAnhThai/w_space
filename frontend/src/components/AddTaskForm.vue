@@ -1,4 +1,4 @@
-<template @blur="closeAddtaskForm">
+<template>
   <v-card>
     <v-text-field
       class="mx-4"
@@ -25,6 +25,7 @@ export default {
     statusId: Number,
     isChecklist: Boolean,
     idTask: String,
+    isChecklistItem: Boolean,
   },
   data() {
     return {
@@ -62,6 +63,8 @@ export default {
             idTask: this.idTask,
             idProject: this.currentProject._id,
           });
+        } else if (this.isChecklistItem) {
+          console.log('a');
         } else {
           // setTimeout(() => (this.loading = false), 2000);
           this.addNewTaskAction({

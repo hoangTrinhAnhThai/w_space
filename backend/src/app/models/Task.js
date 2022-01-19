@@ -30,8 +30,13 @@ const Task = new Schema(
     checklist: [
       {
         name: { type: String },
-        items: [{ name: { type: String }, isDone: { type: Boolean } }],
-      },
+        items: [
+          {
+            name: { type: String },
+            isDone: { type: Boolean }
+          }
+        ]
+      }
     ],
     createdBy: {
       type: Schema.Types.ObjectId,
