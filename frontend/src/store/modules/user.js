@@ -38,7 +38,7 @@ const actions = {
   },
   editUser({ dispatch }, params) {
     http.put(`/user/${params.id}`, params.user).then(() => {
-      dispatch('ADMIN/getAllUsers', null, { root: true });
+      dispatch('getUser', params.id);
     });
   },
   getUser({ commit }, params) {

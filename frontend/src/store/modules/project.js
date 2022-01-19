@@ -248,6 +248,15 @@ const actions = {
         });
       });
   },
+  addChecklist({ dispatch }, params) {
+    console.log(params.name);
+    http
+      .put(`/project/task/checklist/${params.idTask}`, params.name)
+      .then((result) => {
+        console.log(result.data.data);
+        dispatch('getTaskOfProject', params.idProject);
+      });
+  },
   deleteTask({ commit, dispatch }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
     http.delete(`/project/${params.idProject}/${params.idTask}`).then(() => {

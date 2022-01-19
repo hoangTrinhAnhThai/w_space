@@ -1,111 +1,111 @@
 <template>
- <v-main>
-    <navigation/>
-  <div class="register">
-    <div class="container">
-      <h4>Create an Account</h4>
-      <form @submit.prevent="register">
-        <div class="form-group email">
-          <input
-            v-model="registerInput.email"
-            class="form-control"
-            type="text"
-            placeholder="Email"
-          />
-          <div class="errors">
-            <p v-show="showErrors.emptyEmail" class="errors">
-              Email is required
-            </p>
-            <p v-show="showErrors.invalidEmail" class="errors">
-              Email is invalid
-            </p>
+  <v-main>
+    <navigation />
+    <div class="register">
+      <div class="container">
+        <h4>Create an Account</h4>
+        <form @submit.prevent="register">
+          <div class="form-group email">
+            <input
+              v-model="registerInput.email"
+              class="form-control"
+              type="text"
+              placeholder="Email"
+            />
+            <div class="errors">
+              <p v-show="showErrors.emptyEmail" class="errors">
+                Email is required
+              </p>
+              <p v-show="showErrors.invalidEmail" class="errors">
+                Email is invalid
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <input
-            v-model="registerInput.firstName"
-            class="form-control"
-            type="text"
-            placeholder="First name"
-          />
-          <div class="errors">
-            <p v-show="showErrors.emptyFirstName" class="errors">
-              FirstName is required
-            </p>
+          <div class="form-group">
+            <input
+              v-model="registerInput.firstName"
+              class="form-control"
+              type="text"
+              placeholder="First name"
+            />
+            <div class="errors">
+              <p v-show="showErrors.emptyFirstName" class="errors">
+                FirstName is required
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <input
-            v-model="registerInput.lastName"
-            class="form-control"
-            type="text"
-            placeholder="Last name"
-          />
-          <div class="errors">
-            <p v-show="showErrors.emptyLastName" class="errors">
-              LastName is required
-            </p>
+          <div class="form-group">
+            <input
+              v-model="registerInput.lastName"
+              class="form-control"
+              type="text"
+              placeholder="Last name"
+            />
+            <div class="errors">
+              <p v-show="showErrors.emptyLastName" class="errors">
+                LastName is required
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <input
-            v-model="registerInput.password"
-            class="form-control"
-            type="password"
-            placeholder="Password"
-          />
-          <div class="errors">
-            <p v-show="showErrors.emptyPassword" class="errors">
-              Password is required
-            </p>
-            <p v-show="showErrors.passwordMinLength" class="errors">
-              Password must have at least 6 letters
-            </p>
-            <p v-show="showErrors.passwordMaxLength" class="errors">
-              Password must have at most 255 letters
-            </p>
+          <div class="form-group">
+            <input
+              v-model="registerInput.password"
+              class="form-control"
+              type="password"
+              placeholder="Password"
+            />
+            <div class="errors">
+              <p v-show="showErrors.emptyPassword" class="errors">
+                Password is required
+              </p>
+              <p v-show="showErrors.passwordMinLength" class="errors">
+                Password must have at least 6 letters
+              </p>
+              <p v-show="showErrors.passwordMaxLength" class="errors">
+                Password must have at most 255 letters
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <input
-            v-model="registerInput.confirmPassword"
-            class="form-control"
-            type="password"
-            placeholder="Confirm password"
-          />
-          <div class="errors">
-            <p v-show="showErrors.emptyConfirmPassword" class="errors">
-              Confirm Password is required
-            </p>
-            <p v-show="showErrors.confirmPasswordMinLength" class="errors">
-              Confirm Password must have at least 6 letters
-            </p>
-            <p v-show="showErrors.confirmPasswordMaxLength" class="errors">
-              Confirm Password must have at most 255 letters
-            </p>
-            <p
-              v-show="showErrors.confirmPasswordNotSamePassword"
-              class="errors"
-            >
-              The Confirm Password confirmation dose not match
-            </p>
+          <div class="form-group">
+            <input
+              v-model="registerInput.confirmPassword"
+              class="form-control"
+              type="password"
+              placeholder="Confirm password"
+            />
+            <div class="errors">
+              <p v-show="showErrors.emptyConfirmPassword" class="errors">
+                Confirm Password is required
+              </p>
+              <p v-show="showErrors.confirmPasswordMinLength" class="errors">
+                Confirm Password must have at least 6 letters
+              </p>
+              <p v-show="showErrors.confirmPasswordMaxLength" class="errors">
+                Confirm Password must have at most 255 letters
+              </p>
+              <p
+                v-show="showErrors.confirmPasswordNotSamePassword"
+                class="errors"
+              >
+                The Confirm Password confirmation dose not match
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="signup">
-          <button :disabled="disabledRegister" type="submit">Continue</button>
-        </div>
-        <div class="signin">
-          <span>Already have an account? </span>
-          <span><router-link to="/login">Sign in</router-link></span>
-        </div>
-      </form>
+          <div class="signup">
+            <button :disabled="disabledRegister" type="submit">Continue</button>
+          </div>
+          <div class="signin">
+            <span>Already have an account? </span>
+            <span><router-link to="/login">Sign in</router-link></span>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
- </v-main>
+  </v-main>
 </template>
 
 <script>
-import Navigation from "../../components/Navigation.vue";
+import Navigation from '../../components/Navigation.vue';
 
 import { mapActions, mapGetters } from 'vuex';
 import Vue from 'vue';
@@ -237,14 +237,14 @@ export default {
       Vue.set(this.showErrors, 'emptyLastName', null);
       this.disabledRegister = false;
       this.clearErrorMessage();
-    }
+    },
   },
   created() {
-    this.clearErrorMessage()
+    this.clearErrorMessage();
   },
   components: {
-    Navigation
-  }
+    Navigation,
+  },
 };
 </script>
 
@@ -253,9 +253,9 @@ export default {
 .register {
   background-image: linear-gradient(
       rgba(29, 28, 28, 0.6),
-        rgba(36, 35, 35, 0.6)
+      rgba(36, 35, 35, 0.6)
     ),
-    url("https://shrm.pace.edu.vn/CMSFileManager/files/10/10f300de-0edc-449d-9959-0b4535664720.png");
+    url('https://shrm.pace.edu.vn/CMSFileManager/files/10/10f300de-0edc-449d-9959-0b4535664720.png');
   background-size: cover;
   height: 100vh;
   display: flex;

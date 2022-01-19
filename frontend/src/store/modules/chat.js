@@ -4,7 +4,6 @@ const socket = io(`${process.env.VUE_APP_SOCKET_URL}:4000`, {
   transports: ['websocket', 'polling', 'flashsocket'],
 });
 
-
 function pdfBlobConversion(b64Data, contentType) {
   contentType = contentType || '';
   var sliceSize = 512;
@@ -13,7 +12,11 @@ function pdfBlobConversion(b64Data, contentType) {
   var byteCharacters = window.atob(b64Data);
   var byteArrays = [];
 
-  for ( var offset = 0; offset < byteCharacters.length; offset = offset + sliceSize ) {
+  for (
+    var offset = 0;
+    offset < byteCharacters.length;
+    offset = offset + sliceSize
+  ) {
     var slice = byteCharacters.slice(offset, offset + sliceSize);
 
     var byteNumbers = new Array(slice.length);
@@ -34,7 +37,7 @@ const state = {
   rooms: [],
   chats: [],
   currentRoom: {},
-  file: null
+  file: null,
 };
 
 const getters = {
@@ -48,8 +51,8 @@ const getters = {
     return state.currentRoom;
   },
   file(state) {
-    return state.file
-  }
+    return state.file;
+  },
 };
 const mutations = {
   setRooms(state, data) {
@@ -64,11 +67,10 @@ const mutations = {
   setCurrentRoom(state, data) {
     state.currentRoom = data;
   },
-  logMess() {
-  },
+  logMess() {},
   setFile(state, data) {
-    state.file = data
-  }
+    state.file = data;
+  },
 };
 const actions = {
   getAllRooms({ commit }) {
@@ -114,19 +116,18 @@ const actions = {
     });
   },
 
-  downloadFile({commit}, params) {
-    http
-      .post(`/chat/download/${params}`,)
-      .then(response => {
-        commit('logMess')
-        let link = document.createElement('a')
-        link.href = window.URL.createObjectURL(pdfBlobConversion(response.data.data, response.data.type))
-        let arr = params.split("-");
-        arr.pop();
-        link.download = arr.join('-')
-        link.click()
-
-      })
+  downloadFile({ commit }, params) {
+    http.post(`/chat/download/${params}`).then((response) => {
+      commit('logMess');
+      let link = document.createElement('a');
+      link.href = window.URL.createObjectURL(
+        pdfBlobConversion(response.data.data, response.data.type),
+      );
+      let arr = params.split('-');
+      arr.pop();
+      link.download = arr.join('-');
+      link.click();
+    });
   },
 };
 

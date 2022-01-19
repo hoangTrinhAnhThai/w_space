@@ -12,15 +12,20 @@
           <v-col style="text-align: center">
             <span
               class="name-status"
-              :style="{ color: colors[index], 'font-weight': '800' }"
+              :style="{ color: colors[index], 'font-weight': '900' }"
             >
               {{ data.status.name }} {{ data.tasks.length }}
             </span>
           </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="currentProject.createdBy._id == userInfo._id">
           <div class="addTask" style="margin: 5px" v-if="index == 0">
-            <v-btn text @click="isShowAddTask = false" v-show="isShowAddTask">
+            <v-btn
+              class="add-btn"
+              text
+              @click="isShowAddTask = false"
+              v-show="isShowAddTask"
+            >
               + Add issue ....
             </v-btn>
 
@@ -31,7 +36,7 @@
             </div>
           </div>
         </v-row>
-        <v-row>
+        <v-row class="task">
           <Container
             class="container-card"
             group-name="trello"
@@ -87,6 +92,7 @@ export default {
     ...mapGetters({
       dataTask: 'TASKS/taskOfProject',
       currentProject: 'TASKS/currentProject',
+      userInfo: 'AUTH/userInfo',
     }),
   },
   methods: {
@@ -167,7 +173,7 @@ export default {
   min-width: 1000px;
   height: 92vh;
   white-space: nowrap;
-  overflow: scroll !important;
+  overflow-y: scroll !important;
 }
 
 .roadmap {
@@ -179,6 +185,8 @@ export default {
   margin-right: 5px;
   padding: 2px 3px;
   border-radius: 5px;
+  font-weight: 700;
+  font-size: 18px;
 }
 .smooth-dnd-draggable-wrapper {
   overflow: inherit !important;
@@ -190,19 +198,43 @@ export default {
   border: none;
   font-size: 10px;
 }
+.add-btn:hover {
+  background-color: rgb(21, 17, 30);
+  color: white !important;
+}
 </style>
 
 <style lang="scss" scoped>
 @import '../../assets/style.scss';
 .status {
   margin: 10px;
-  background-color: $color2;
+  background-color: #fff;
   height: 100%;
   padding: 20px 10px 50px;
   border-radius: 5px;
 }
+.task {
+  height: calc(100vh - 380px);
+  overflow-y: auto;
+  overflow-x: hidden !important;
+}
 
-.status:hover {
-  background-color: rgb(211, 224, 210);
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(202, 198, 198);
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(202, 198, 198);
 }
 </style>

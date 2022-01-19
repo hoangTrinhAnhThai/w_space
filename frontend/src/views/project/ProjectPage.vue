@@ -95,11 +95,6 @@ h5 {
 }
 .v-main {
   text-align: center;
-  background-image: linear-gradient(
-    rgba(161, 161, 161, 0.2),
-    rgba(187, 180, 180, 0.2)
-  );
-  background-size: cover;
   height: 100vh;
 }
 .container {

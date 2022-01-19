@@ -50,7 +50,7 @@
           style="
             height: 80%;
             color: white !important;
-            background-color: rgb(39, 102, 120);
+            background-color: rgb(21, 17, 30);
           "
           @click="createLogtime"
           >Add new time entry</v-btn
@@ -167,5 +167,9 @@ i {
 .date-week2 .v-btn {
   margin-left: 5px;
   background-color: rgb(247, 247, 247);
+}
+
+.theme--light.v-btn-toggle:not(.v-btn-toggle--group) {
+  background-color: rgb(247, 248, 251) !important;
 }
 </style>

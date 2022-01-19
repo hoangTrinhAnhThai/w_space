@@ -1,7 +1,7 @@
 <template>
   <div class="logtime-card">
     <v-row>
-      <v-col cols="3">
+      <v-col cols="3" style="position: relative; top: -10px">
         <v-select
           v-model="logtime.task"
           :items="tasks"
@@ -276,10 +276,10 @@ export default {
   color: white;
 }
 .logtime-card:hover #play i {
-  color: rgb(39, 102, 120);
+  color: rgb(21, 17, 30);
 }
 #play:hover {
-  background-color: rgba(39, 102, 120, 0.9);
+  background-color: rgba(21, 17, 30, 0.9);
 }
 #play:hover i {
   color: white !important;
@@ -331,7 +331,7 @@ ul i {
   margin-left: 5px;
 }
 .logtime-card:hover .functions {
-  color: rgba(39, 102, 120, 0.7);
+  color: rgba(21, 17, 30, 1);
 }
 .functions i:hover {
   background-color: rgba(39, 102, 120, 0.4);

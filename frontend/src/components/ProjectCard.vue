@@ -1,9 +1,10 @@
 <template>
   <v-card elevation="2" @click="showTaskDetailModal">
-    <v-card-title style="color: rgb(39, 102, 120); font-size: 15px">{{
-      card.name
-    }}</v-card-title>
-    <v-card-subtitle class="description" font-size="12">{{
+    <v-card-title
+      style="color: rgb(21, 17, 30); font-size: 15px; font-weight: 800"
+      >{{ card.name }}</v-card-title
+    >
+    <v-card-subtitle class="description" style="font-size: 12px">{{
       card.description
     }}</v-card-subtitle>
     <v-card-text>
@@ -16,12 +17,28 @@
           {{ year }}</span
         >
       </span>
-      <v-avatar v-if="card.assigned" color="light-blue lighten-3" size="24">
-        <span v-if="assignForTask" style="font-size: 10px">
-          {{ assignForTask.firstName.charAt(0)
-          }}{{ assignForTask.lastName.charAt(0) }}
+      <div class="right-option">
+        <span class="priority" v-if="card.priority">
+          <v-icon
+            v-if="card.priority == 'high'"
+            style="color: rgb(233, 92, 92)"
+          >
+            mdi-alert-outline</v-icon
+          >
+          <v-icon v-if="card.priority == 'normal'" style="color: orange">
+            mdi-alert-outline</v-icon
+          >
+          <v-icon v-if="card.priority == 'low'" style="color: green">
+            mdi-alert-outline</v-icon
+          >
         </span>
-      </v-avatar>
+        <v-avatar v-if="card.assigned" color="light-blue lighten-3" size="24">
+          <span v-if="assignForTask" style="font-size: 10px">
+            {{ assignForTask.firstName.charAt(0)
+            }}{{ assignForTask.lastName.charAt(0) }}
+          </span>
+        </v-avatar>
+      </div>
     </v-card-text>
     <div class="menu">
       <v-menu transition="slide-y-transition" bottom>
@@ -126,12 +143,17 @@ export default {
 <style scoped>
 .v-card-title,
 .v-card-subtitle {
-  color: rgb(39, 102, 120) !important;
+  color: rgb(21, 17, 30) !important;
 }
 .card {
   margin: 10px 0;
   border: none;
   position: relative;
+  background-color: rgb(244, 245, 254) !important;
+}
+
+.card:hover {
+  background-color: rgb(231, 233, 248) !important;
 }
 .card .menu {
   position: absolute;
@@ -146,5 +168,13 @@ export default {
 .theme--light.v-card > .v-card__subtitle,
 .theme--light.v-card > .v-card__text {
   word-break: break-all;
+}
+.right-option {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+}
+.priority {
+  margin-right: 5px;
 }
 </style>

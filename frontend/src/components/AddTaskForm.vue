@@ -1,4 +1,4 @@
-<template>
+<template @blur="closeAddtaskForm">
   <v-card>
     <v-text-field
       class="mx-4"
@@ -12,14 +12,7 @@
       <v-btn color="blue-grey lighten-2" text @click="closeAddtaskForm">
         Cancel
       </v-btn>
-      <v-btn
-        class="save-btn"
-        color="rgb(39, 102, 120)"
-        text
-        @click="addtaskForm"
-      >
-        Add
-      </v-btn>
+      <v-btn class="save-btn" text @click="addtaskForm"> Add </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -30,6 +23,8 @@ export default {
   name: 'AddTaskForm',
   props: {
     statusId: Number,
+    isChecklist: Boolean,
+    idTask: String,
   },
   data() {
     return {
@@ -52,6 +47,7 @@ export default {
   methods: {
     ...mapActions({
       addNewTaskAction: 'TASKS/addNewTask',
+      addChecklistAction: 'TASKS/addChecklist',
     }),
     addtaskForm() {
       this.loading = true;
@@ -59,11 +55,21 @@ export default {
         document.getElementById('content').focus();
         return;
       } else {
-        setTimeout(() => (this.loading = false), 2000);
-        this.addNewTaskAction({
-          task: this.newTask,
-          idProject: this.currentProject._id,
-        });
+        if (this.isChecklist) {
+          console.log(this.newTask.name);
+          this.addChecklistAction({
+            name: { name: this.newTask.name },
+            idTask: this.idTask,
+            idProject: this.currentProject._id,
+          });
+        } else {
+          // setTimeout(() => (this.loading = false), 2000);
+          this.addNewTaskAction({
+            task: this.newTask,
+            idProject: this.currentProject._id,
+          });
+        }
+
         this.$emit('closeAddtaskForm');
         this.newTask.name = '';
       }

@@ -3,7 +3,7 @@
     <template v-slot:activator="{ on, attrs }">
       <span v-on="on" v-bind="attrs" @click="downloadFile(chat.message)"
         ><p v-bind:style="{ backgroundColor: color, right: distance }">
-          <span >
+          <span>
             <v-icon v-if="chat.isFile" style="top: -4px"
               >mdi-file-document-outline</v-icon
             >
@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import helper from "../utils/data";
+import { mapActions } from 'vuex';
+import helper from '../utils/data';
 export default {
-  name: "ChatCard",
+  name: 'ChatCard',
   props: {
     chat: {
       type: Object,
@@ -50,9 +50,9 @@ export default {
     },
     message() {
       if (this.chat.isFile) {
-        let arr = this.chat.message.split("-");
+        let arr = this.chat.message.split('-');
         arr.pop();
-        return arr.join("-");
+        return arr.join('-');
       } else {
         return this.chat.message;
       }
@@ -60,24 +60,25 @@ export default {
   },
   methods: {
     ...mapActions({
-      downloadFileAction: "CHAT/downloadFile",
+      downloadFileAction: 'CHAT/downloadFile',
     }),
     downloadFile(nameFile) {
-      if(nameFile) {
-      this.downloadFileAction(nameFile);
-      } else return 
+      if (nameFile) {
+        this.downloadFileAction(nameFile);
+      } else return;
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 p {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   padding: 10px 25px;
   position: relative;
   border-radius: 5px;
   cursor: pointer;
+  border: 1px solid rgba(182, 178, 178, 0.2);
 }
 .tooltip {
   position: relative;

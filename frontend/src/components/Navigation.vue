@@ -10,7 +10,12 @@
     <v-menu v-if="userInfo" offset-y transition="slide-y-transition" bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-btn icon text v-bind="attrs" v-on="on">
-          <img class="avt" v-if="userInfo.avatar" :src="userInfo.avatar" alt="" />
+          <img
+            class="avt"
+            v-if="userInfo.avatar"
+            :src="userInfo.avatar"
+            alt=""
+          />
           <v-avatar v-else color="red" class="avt">
             <span class="white--text"
               >{{ userInfo.firstName.charAt(0)
@@ -38,9 +43,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "Navigation",
+  name: 'Navigation',
   data() {
     return {
       scrollPosition: false,
@@ -48,34 +53,33 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInfo: "USER/userInfo",
+      userInfo: 'USER/userInfo',
       userInfoAuth: 'AUTH/userInfo',
-
     }),
   },
   methods: {
     ...mapActions({
-      logoutAction: "AUTH/logout",
-      getUser: "USER/getUser",
+      logoutAction: 'AUTH/logout',
+      getUser: 'USER/getUser',
     }),
     logout() {
       this.logoutAction();
     },
     login() {
-      this.$router.push("/login");
+      this.$router.push('/login');
     },
     signup() {
-      this.$router.push("/signup");
+      this.$router.push('/signup');
     },
     updateScroll() {
       this.scrollPosition = window.scrollY;
     },
   },
   created() {
-    if(this.userInfoAuth) {
-    this.getUser(this.userInfoAuth._id);
+    if (this.userInfoAuth) {
+      this.getUser(this.userInfoAuth._id);
     }
-    window.addEventListener("scroll", this.updateScroll);
+    window.addEventListener('scroll', this.updateScroll);
   },
 };
 </script>
@@ -90,11 +94,11 @@ export default {
 }
 .change_color {
   background-color: white !important;
-  color: rgb(39, 102, 120) !important;
+  color: rgb(21, 17, 30) !important;
   border-bottom: 1px solid rgb(201, 197, 197);
 }
 .change_color .login-btn {
-  color: rgb(39, 102, 120) !important;
+  color: rgb(21, 17, 30) !important;
 }
 .v-btn {
   border: none;
@@ -123,5 +127,12 @@ img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+}
+
+.logo {
+  color: #000;
+  font-weight: 900;
+  font-size: 20px;
+  text-transform: uppercase;
 }
 </style>

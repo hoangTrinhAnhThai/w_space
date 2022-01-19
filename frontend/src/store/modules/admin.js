@@ -150,6 +150,11 @@ const actions = {
         });
       });
   },
+  editUser({ dispatch }, params) {
+    http.put(`/user/${params.id}`, params.user).then(() => {
+      dispatch('getAllUsers');
+    });
+  },
 };
 
 export default {

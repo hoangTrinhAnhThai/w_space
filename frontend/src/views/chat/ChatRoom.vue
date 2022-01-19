@@ -80,6 +80,7 @@
           small-chips
           v-model="files"
           class="file-input"
+          style="width: 10%"
         ></v-file-input>
         <div class="content-message" style="width: 90%">
           <div class="list-file">
@@ -172,7 +173,7 @@
         </template>
         <template v-for="member in currentRoom.members">
           <v-list-item :key="member._id">
-            <v-img v-if="member.avatar" :src="member.avatar"></v-img>
+            <img class="image" v-if="member.avatar" :src="member.avatar" />
             <v-avatar v-else color="green">
               <span class="text-h6"
                 >{{ member.firstName.charAt(0)
@@ -195,14 +196,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import ChatCard from "../../components/ChatCard.vue";
-import { VEmojiPicker } from "v-emoji-picker";
+import { mapActions, mapGetters } from 'vuex';
+import ChatCard from '../../components/ChatCard.vue';
+import { VEmojiPicker } from 'v-emoji-picker';
 export default {
-  name: "ChatRoom",
+  name: 'ChatRoom',
   data() {
     return {
-      message: "",
+      message: '',
       showGroup: false,
       showDialog: false,
       files: {},
@@ -210,58 +211,68 @@ export default {
   },
   computed: {
     ...mapGetters({
-      chats: "CHAT/chats",
-      userInfo: "AUTH/userInfo",
-      validateText: "VALIDATION/validateText",
-      currentRoom: "CHAT/currentRoom",
+      chats: 'CHAT/chats',
+      userInfo: 'AUTH/userInfo',
+      validateText: 'VALIDATION/validateText',
+      currentRoom: 'CHAT/currentRoom',
     }),
   },
   methods: {
     ...mapActions({
-      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
-      sendMessageAction: "CHAT/sendMessage",
-      addCurrentRoom: "CHAT/addCurrentRoom",
-      removeUnreadNotification: "NOTIFICATION/removeUnreadNotification",
-      uploadFile: "CHAT/uploadFile",
+      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
+      sendMessageAction: 'CHAT/sendMessage',
+      addCurrentRoom: 'CHAT/addCurrentRoom',
+      removeUnreadNotification: 'NOTIFICATION/removeUnreadNotification',
+      uploadFile: 'CHAT/uploadFile',
     }),
     sendMessage(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit() && !this.files.name) {
-          document.getElementById("content").focus();
+          document.getElementById('content').focus();
           return;
         } else {
           if (this.files.name) {
             const formData = new FormData();
-            formData.append("file", this.files);
+            formData.append('file', this.files);
             this.uploadFile({
               idRoom: this.$route.params.id,
-              file: formData ,
+              file: formData,
             });
-            this.removeFile()
+            this.removeFile();
           }
-          if(this.validateBeforeSubmit()) {
+          if (this.validateBeforeSubmit()) {
             this.sendMessageAction({
-            idRoom: this.$route.params.id,
-            chat: { room: this.$route.params.id, message: this.message },
-          });
-          this.message = "";
-          document.getElementById("content").focus();
+              idRoom: this.$route.params.id,
+              chat: { room: this.$route.params.id, message: this.message },
+            });
+            this.message = '';
+            document.getElementById('content').focus();
           }
-          
         }
       }
     },
     sendMessageByClick() {
-      if (!this.validateBeforeSubmit()) {
-        document.getElementById("content").focus();
+      if (!this.validateBeforeSubmit() && !this.files.name) {
+        document.getElementById('content').focus();
         return;
       } else {
-        this.sendMessageAction({
-          idRoom: this.$route.params.id,
-          chat: { room: this.$route.params.id, message: this.message },
-        });
-        this.message = "";
-        document.getElementById("content").focus();
+        if (this.files.name) {
+          const formData = new FormData();
+          formData.append('file', this.files);
+          this.uploadFile({
+            idRoom: this.$route.params.id,
+            file: formData,
+          });
+          this.removeFile();
+        }
+        if (this.validateBeforeSubmit()) {
+          this.sendMessageAction({
+            idRoom: this.$route.params.id,
+            chat: { room: this.$route.params.id, message: this.message },
+          });
+          this.message = '';
+          document.getElementById('content').focus();
+        }
       }
     },
     validateBeforeSubmit() {
@@ -284,7 +295,6 @@ export default {
     removeFile() {
       this.files = {};
     },
-    
   },
   created() {
     this.getAllChatByIdRoom(this.$route.params.id);
@@ -306,17 +316,29 @@ export default {
 };
 </script>
 <style scoped>
+h4 {
+  font-weight: 500;
+}
+.v-list .v-list-item:hover {
+  background-color: rgb(247, 248, 251);
+  border-radius: 5px;
+}
+.v-list .v-list-item:hover,
+.v-list .v-list-item:hover .mdi-chevron-down::before {
+  color: rgb(21, 17, 30) !important;
+}
 .bar1 {
   box-shadow: none !important;
-  background-color: rgb(237, 237, 237) !important;
+  background-color: rgb(247, 248, 251) !important;
   border-bottom: 1px solid rgb(126, 68, 68);
   padding: 0px 20px;
+  font-weight: 900;
 }
 .v-icon {
   color: rgb(68, 64, 64) !important;
 }
 .chat-room {
-  border-radius: 3px;
+  border-radius: 5px;
   height: calc(100vh - 65px);
   display: flex;
 }
@@ -383,12 +405,13 @@ i {
 }
 </style>
 <style lang="scss" scoped>
-@import "../../assets/style.scss";
+@import '../../assets/style.scss';
 
 .chat-room {
   position: relative;
   min-width: 500px;
   overflow-wrap: anywhere;
+  width: 100%;
   .container-chat {
     min-width: 500px;
     position: relative;

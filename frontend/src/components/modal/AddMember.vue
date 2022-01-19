@@ -4,6 +4,7 @@
     hide-header-close
     hide-footer
     title="Add members"
+    style="font-family: 'Poppins', sans-serif !important"
   >
     <v-row>
       <v-col cols="10">

@@ -41,9 +41,9 @@
 </template>
 
 <script>
-import Navigation from "../components/Navigation.vue";
+import Navigation from '../components/Navigation.vue';
 export default {
-  name: "HomePage",
+  name: 'HomePage',
   components: {
     Navigation,
   },
@@ -54,7 +54,8 @@ export default {
 .container {
   margin: 0 !important;
   padding: 0 !important;
-  background-color: rgb(243, 235, 255);
+  /* background-color: rgb(243, 235, 255); */
+  background-color: rgb(244, 245, 254);
   width: 100% !important;
 }
 p {
@@ -80,7 +81,7 @@ img {
         rgba(29, 28, 28, 0.6),
         rgba(36, 35, 35, 0.6)
       ),
-      url("https://shrm.pace.edu.vn/CMSFileManager/files/10/10f300de-0edc-449d-9959-0b4535664720.png");
+      url('https://shrm.pace.edu.vn/CMSFileManager/files/10/10f300de-0edc-449d-9959-0b4535664720.png');
     background-color: #232323;
     background-position: bottom center;
     background-size: cover;
@@ -103,7 +104,7 @@ img {
     }
   }
   .container3 {
-    background-color: rgb(199, 211, 247);
+    background-color: rgb(244, 245, 254);
     margin-bottom: 200px;
     margin-top: 50px;
     .content {

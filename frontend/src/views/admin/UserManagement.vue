@@ -7,7 +7,9 @@
   >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>User accounts</v-toolbar-title>
+        <v-toolbar-title style="font-weight: 900"
+          >User accounts</v-toolbar-title
+        >
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
@@ -75,7 +77,7 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.isBlock`]="{ item }">
-      <v-icon small v-if="item.isBlock" class="mr-2"
+      <v-icon small v-if="item.isBlock" class="mr-2" color="#EF5350"
         >mdi-checkbox-blank-circle</v-icon
       >
       <v-icon small v-else class="mr-2" color="green">
@@ -83,18 +85,20 @@
       </v-icon>
     </template>
     <template v-slot:[`item.actions`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon
-        v-if="item.isBlock"
-        small
-        class="mr-2"
-        @click="block(item, false)"
-      >
-        mdi-lock-open-variant-outline
-      </v-icon>
-      <v-icon v-else small class="mr-2" @click="block(item, true)">
-        mdi-lock-outline
-      </v-icon>
+      <span v-if="userInfo._id != item._id">
+        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+        <v-icon
+          v-if="item.isBlock"
+          small
+          class="mr-2"
+          @click="block(item, false)"
+        >
+          mdi-lock-open-variant-outline
+        </v-icon>
+        <v-icon v-else small class="mr-2" @click="block(item, true)">
+          mdi-lock-outline
+        </v-icon>
+      </span>
     </template>
   </v-data-table>
 </template>
@@ -129,6 +133,7 @@ export default {
     },
     ...mapGetters({
       userList: 'ADMIN/userList',
+      userInfo: 'USER/userInfo',
     }),
   },
 
@@ -146,7 +151,7 @@ export default {
   methods: {
     ...mapActions({
       getAllUsers: 'ADMIN/getAllUsers',
-      editUser: 'USER/editUser',
+      editUser: 'ADMIN/editUser',
     }),
     editItem(item) {
       this.editedId = item._id;

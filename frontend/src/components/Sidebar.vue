@@ -3,23 +3,25 @@
     <v-navigation-drawer
       :mini-variant.sync="mini"
       permanent
-      style="background-color: rgb(39, 102, 120) !important"
+      style="background-color: rgb(255, 255, 255) !important"
     >
       <v-app-bar
         style="
-          background-color: rgb(39, 102, 120) !important;
+          background-color: rgb(255, 255, 255) !important;
           box-shadow: none !important;
         "
       >
-        <v-toolbar-title style="color: white">W-space</v-toolbar-title>
+        <v-toolbar-title style="color: rgb(103, 102, 105)"
+          >W-space</v-toolbar-title
+        >
         <v-spacer></v-spacer>
         <v-btn
-          style="margin-left: -10px"
-          color="deep-purple lighten-5"
+          class="mini"
+          style="margin-left: -13px"
           icon
           @click.stop="mini = !mini"
         >
-          <v-icon v-if="mini">mdi-home</v-icon>
+          <v-icon style="margin: 0" v-if="mini">mdi-home</v-icon>
           <v-icon v-if="!mini">mdi-chevron-left</v-icon>
         </v-btn>
       </v-app-bar>
@@ -48,7 +50,7 @@
       </v-list>
       <v-list v-else>
         <v-list-group no-action class="header-project">
-          <template v-slot:activator>
+          <template v-slot:activator class="header-projects">
             <v-list-item-content>
               <v-list-item-title @click="handleClickProject">
                 <i style="font-size: 20px" class="bx bxl-trello" />
@@ -103,8 +105,8 @@
           <template v-slot:activator>
             <v-list-item-content>
               <v-list-item-title
-                ><i class="bx bx-timer" style="font-size: 20px"></i
-                >Logtime</v-list-item-title
+                ><i class="bx bx-timer" style="font-size: 20px"></i>
+                Logtime</v-list-item-title
               >
             </v-list-item-content>
           </template>
@@ -270,52 +272,61 @@ export default {
 </script>
 <style>
 .mdi-chevron-down::before {
+  color: rgb(103, 102, 105) !important;
+}
+
+.sidebar {
+  height: calc(100vh - 50px) !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 500;
+  letter-spacing: 2px !important;
+  margin: 0 5px;
+}
+
+.v-list .v-list-item {
+  letter-spacing: 1px !important;
+}
+
+.v-list .v-list-item:hover {
+  background-color: rgb(21, 17, 30);
+  border-radius: 5px;
+}
+
+.v-list .v-list-item:hover,
+.v-list .v-list-item:hover .mdi-chevron-down::before {
   color: white !important;
 }
-.sidebar {
-  height: 100vh !important;
+
+.v-navigation-drawer__border {
+  position: absolute;
+  right: -1px !important;
 }
 </style>
 <style scoped>
 .v-list-item .v-list-item__title,
 .v-list-item .v-list-item__subtitle {
-  color: white !important;
+  color: rgb(103, 102, 105) !important;
 }
 
-/* .v-application--is-ltr
-  .v-list-group--no-action
-  > .v-list-group__items
-  > .v-list-item {
-  padding-left: 40px !important;
-} */
 .theme--light.v-navigation-drawer .v-divider {
   position: relative;
   top: -16px;
   color: wheat;
 }
-.icon-sub i {
-  color: white;
-  font-size: 22px;
-}
-i {
-  color: rgb(243, 240, 240);
-}
-.v-application--is-ltr
-  .v-list-group--no-action
-  > .v-list-group__items
-  > .v-list-item:hover {
-  background-color: rgb(110, 149, 160);
-}
-.list-item {
-  padding-left: 25px;
-}
-.list-item:hover,
-.v-list-item:hover {
-  background-color: rgb(110, 149, 160) !important;
-}
+
 .project-function {
   opacity: 0;
+  margin-right: 5px !important;
 }
+
+.project-function i {
+  margin-left: 3px;
+}
+
+.project-function .bx:hover {
+  color: rgb(103, 102, 105) !important;
+}
+
 .project-item:hover .project-function,
 .v-application--is-ltr
   .v-list-group--no-action
@@ -324,31 +335,66 @@ i {
   .project-function {
   opacity: 1;
 }
+
 .add-project {
   position: absolute;
   top: 0px;
-  right: 10;
+  right: 50px;
   opacity: 0;
 }
+
 .add-project .v-btn i {
   color: white;
   font-size: 20px;
 }
-.add-project:hover .v-btn {
-  background-color: #407686;
-}
+
 i {
   margin-right: 5px;
 }
+
 .header-project:hover .add-project {
   opacity: 1;
+  color: white !important;
+  border: none;
 }
+
+.v-list-item:hover .v-list-item__subtitle,
+.v-list-item:hover .v-list-item__title,
+.v-list-item:hover i,
+.v-list-item:hover .v-icon {
+  color: white !important;
+}
+
 .bx-conversation,
 .bxs-flag-alt,
 .trello1 {
   padding-left: 20px;
 }
+
 .v-application .pl-10 {
   padding: 0 !important;
+}
+
+.v-navigation-drawer__border {
+  position: relative;
+  right: -5px !important;
+}
+
+i {
+  position: relative;
+  color: rgb(21, 17, 30);
+  top: 3px;
+}
+
+.mini:hover {
+  background-color: rgb(21, 17, 30);
+}
+
+.mini:hover i {
+  color: white !important;
+}
+
+.mini i {
+  color: rgb(21, 17, 30) !important;
 }
 </style>

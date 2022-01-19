@@ -52,17 +52,13 @@ export default {
 <style scoped>
 .v-main {
   text-align: center;
-  background-image: linear-gradient(
-    rgba(161, 161, 161, 0.2),
-    rgba(187, 180, 180, 0.2)
-  );
-  background-size: cover;
   height: 100vh;
+  width: 100%;
 }
 .container {
-  text-align: start;
-  margin: 0 auto;
   width: 80%;
+  text-align: start;
+  margin: 50px auto;
 }
 img {
   width: 200px;
