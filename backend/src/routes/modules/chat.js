@@ -19,7 +19,7 @@ const host = require('../../utils/decodeJWT');
 const conn = mongoose.createConnection(url);
 
 let gfs;
-let filename, name
+let filename, name;
 conn.once('open', () => {
   gfs = Grid(conn.db, mongoose.mongo);
   gfs.collection('uploads');
@@ -36,12 +36,12 @@ const storage = new GridFsStorage({
         name = `${filename}-${buf.toString('hex')}`;
         const fileInfo = {
           filename: name,
-          bucketName: 'uploads'
+          bucketName: 'uploads',
         };
         resolve(fileInfo);
       });
     });
-  }
+  },
 });
 const upload = multer({ storage });
 
@@ -61,9 +61,9 @@ router.post('/upload/:id', upload.single('file'), async (req, res) => {
   const user = await User.findById(host(req, res));
   let chatParams = new Chat();
   chatParams.createdBy = user;
-  chatParams.isFile = true
-  chatParams.message = file.filename
-  chatParams.room = req.params.id
+  chatParams.isFile = true;
+  chatParams.message = file.filename;
+  chatParams.room = req.params.id;
   const chat = await Chat.create(chatParams);
   const notification = await Notification.findOne({ room: req.params.id });
   let listContent = notification.listContent;
@@ -85,7 +85,7 @@ router.post('/upload/:id', upload.single('file'), async (req, res) => {
     'Create chat successfully',
     chat,
   );
-})
+});
 // router.post('/upload/:id', chatController.uploadFile)
 router.get('/upload/', (req, res) => {
   // gfs.files.findOne({ _id: '61d71836e24b380afd0d9e8c', root: 'uploads' }, (err, file) => {
@@ -99,37 +99,45 @@ router.get('/upload/', (req, res) => {
   //   return res.json(file);
   // });
   gfs.files.find().toArray((err, files) => {
-    if (!files || files.length === 0) return res.status(404).json({ err: 'No files exist' });
+    if (!files || files.length === 0)
+      return res.status(404).json({ err: 'No files exist' });
     return res.json(files);
   });
-})
+});
 
 router.post('/download/:name', (req, res) => {
-  gfs.files.findOne({
-    filename: req.params.name
-  }, function (err, file) {
-    if (err) {
-      return res.status(400).send(err);
-    }
-    else if (!file) {
-      return res.status(404).send('Error on the database looking for the file.');
-    }
-    res.set('Content-Type', "text/json");
-    // res.set('Content-Disposition', 'attachment; filename="' + file.filename + '"');
-    var readstream = gfs.createReadStream({
-      filename: req.params.name
-    });
-    const chunks = [];
-    readstream.on("data", function (chunk) {
-      chunks.push(chunk);
-    });
+  gfs.files.findOne(
+    {
+      filename: req.params.name,
+    },
+    function (err, file) {
+      if (err) {
+        return res.status(400).send(err);
+      } else if (!file) {
+        return res
+          .status(404)
+          .send('Error on the database looking for the file.');
+      }
+      res.set('Content-Type', 'text/json');
+      // res.set('Content-Disposition', 'attachment; filename="' + file.filename + '"');
+      var readstream = gfs.createReadStream({
+        filename: req.params.name,
+      });
+      const chunks = [];
+      readstream.on('data', function (chunk) {
+        chunks.push(chunk);
+      });
 
-    readstream.on("end", function () {
-      res.send({ name: file.filename, type: file.contentType, data: Buffer.concat(chunks).toString('base64') });
-    });
-  });
-})
-
+      readstream.on('end', function () {
+        res.send({
+          name: file.filename,
+          type: file.contentType,
+          data: Buffer.concat(chunks).toString('base64'),
+        });
+      });
+    },
+  );
+});
 
 router.get('/', chatController.getAllChats);
 router.get('/:id', chatController.getSingleChatByRoomId);

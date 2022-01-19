@@ -76,18 +76,10 @@ class LogtimeController {
     );
   };
   updateLogtime = async (req, res) => {
-    const logtime = await LogTime.findByIdAndUpdate(
-      req.params.id,
-      {
-        task: req.body.task,
-        note: req.body.note,
-        stopTime: req.body.stopTime,
-        startTime: req.body.startTime,
-        isPlaying: req.body.isPlaying,
-        timeInMiliseconds: req.body.timeInMiliseconds,
-      },
-      { new: true, useFindAndModify: false },
-    );
+    const logtime = await LogTime.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      useFindAndModify: false,
+    });
     return apiResponse.successResponseWithData(
       res,
       'Update logtime success',

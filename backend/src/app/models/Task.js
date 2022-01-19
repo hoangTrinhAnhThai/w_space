@@ -27,6 +27,12 @@ const Task = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    checklist: [
+      {
+        name: { type: String },
+        items: [{ name: { type: String }, isDone: { type: Boolean } }],
+      },
+    ],
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',

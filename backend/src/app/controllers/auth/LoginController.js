@@ -25,32 +25,30 @@ class LoginController {
           return apiResponse.ErrorResponse(res, 'Email wrong');
         }
         const role = await Role.findById(user.role);
-
-        bcrypt.compare(password, user.password, (error, isValid) => {
-          if (!isValid) {
-            return apiResponse.ErrorResponse(res, 'Password wrong');
-          }
-          const tokenCreated = jwt.sign(
-            {
-              _id: user._id,
-              email: user.email,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              role: role.name,
-            },
-            process.env.TOKEN_SECRET,
-            { expiresIn: process.env.JWT_TIMEOUT_DURATION },
-          );
-          User.findByIdAndUpdate(user._id, { token: tokenCreated })
-            .populate('role')
-            .then(() => {
-              return apiResponse.successResponseWithData(
-                res,
-                'Login success',
-                tokenCreated,
-              );
-            });
-        });
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) {
+          return apiResponse.ErrorResponse(res, 'Password wrong');
+        }
+        const tokenCreated = await jwt.sign(
+          {
+            _id: user._id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: role.name,
+          },
+          process.env.TOKEN_SECRET,
+          { expiresIn: process.env.JWT_TIMEOUT_DURATION },
+        );
+        const userFound = await User.findOne({ _id: user._id, isBlock: false });
+        if (!userFound) {
+          return apiResponse.ErrorResponse(res, 'Not found user');
+        }
+        return apiResponse.successResponseWithData(
+          res,
+          'Login success',
+          tokenCreated,
+        );
       } catch (err) {
         return apiResponse.ErrorResponse(res, err);
       }

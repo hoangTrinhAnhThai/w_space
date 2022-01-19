@@ -18,7 +18,8 @@ class TaskController {
   showTask = async (req, res) => {
     const task = Task.findById(req.params.id)
       .populate('comments')
-      .populate('assigned');
+      .populate('assigned')
+      .populate('status');
     if (!task) {
       return apiResponse.ErrorResponse(res, error);
     }
@@ -43,6 +44,7 @@ class TaskController {
         taskParams.dueDate = req.body.dueDate;
         taskParams.priority = req.body.priority;
         taskParams.moved.before = null;
+        taskParams.checklist = [];
         const docTask = await Task.create(taskParams);
         const project = await Project.findById(req.params.id).populate('tasks');
         if (!project) {
@@ -98,13 +100,32 @@ class TaskController {
       } else {
         const taskUpdate = await Task.findByIdAndUpdate(
           req.params.id,
-          {
-            name: req.body.name,
-            description: req.body.description,
-            dueDate: req.body.dueDate,
-            priority: req.body.priority,
-            assigned: req.body.assigned,
-          },
+          req.body,
+          { new: true },
+        );
+        return apiResponse.successResponseWithData(
+          res,
+          'Edit task successfully',
+          taskUpdate,
+        );
+      }
+    } catch (error) {
+      return apiResponse.ErrorResponse(res, error);
+    }
+  };
+  addChecklistTask = async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return apiResponse.validationErrorWithData(
+          res,
+          'Validation Error',
+          errors.array(),
+        );
+      } else {
+        const taskUpdate = await Task.findByIdAndUpdate(
+          req.params.id,
+          { $push: { checklist: { name: req.body.name, items: [] } } },
           { new: true },
         );
         return apiResponse.successResponseWithData(

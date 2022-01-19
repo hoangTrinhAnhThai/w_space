@@ -13,8 +13,8 @@ const Chat = new Schema(
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-    }, 
-    isFile: { type: Boolean}
+    },
+    isFile: { type: Boolean },
   },
   {
     timestamps: true,

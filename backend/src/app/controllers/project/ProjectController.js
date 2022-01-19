@@ -188,7 +188,8 @@ class ProjectController {
     const project = await Project.findById(req.params.id)
       .populate('tasks')
       .populate('members')
-      .populate('createdBy');
+      .populate('createdBy')
+      .populate('status');
     if (!project) {
       return apiResponse.ErrorResponse(res, error);
     }
