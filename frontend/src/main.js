@@ -11,7 +11,9 @@ import 'vue2-datepicker/index.css';
 import vuetify from './plugins/vuetify';
 import VueJWT from 'vuejs-jwt';
 import '@mdi/font/css/materialdesignicons.css';
+import excel from 'vue-excel-export';
 
+Vue.use(excel);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(BootstrapVueIcons);

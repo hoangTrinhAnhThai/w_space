@@ -248,13 +248,18 @@ const actions = {
         });
       });
   },
-  addChecklist({ dispatch }, params) {
+  addChecklist({ commit, dispatch }, params) {
     console.log(params.name);
     http
       .put(`/project/task/checklist/${params.idTask}`, params.name)
       .then((result) => {
         console.log(result.data.data);
         dispatch('getTaskOfProject', params.idProject);
+      })
+      .catch((err) => {
+        commit('ERROR/setErrorMessage', err.response.data.message, {
+          root: true,
+        });
       });
   },
   deleteTask({ commit, dispatch }, params) {

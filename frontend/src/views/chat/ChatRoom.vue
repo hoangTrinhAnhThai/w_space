@@ -36,7 +36,10 @@
               </div>
               <img
                 class="image img"
-                v-if="chat.createdBy.avatar"
+                v-if="
+                  chat.createdBy.avatar &&
+                  chat.createdBy._id == chats[index + 1].createdBy._id
+                "
                 :src="chat.createdBy.avatar"
                 alt=""
               />

@@ -8,6 +8,7 @@
       rows="1"
       id="content"
     ></v-text-field>
+    <span class="errors" v-if="errorMessage"> {{ errorMessage }} <br /> </span>
     <v-card-actions>
       <v-btn color="blue-grey lighten-2" text @click="closeAddtaskForm">
         Cancel
@@ -23,9 +24,8 @@ export default {
   name: 'AddTaskForm',
   props: {
     statusId: Number,
-    isChecklist: Boolean,
+    modalType: String,
     idTask: String,
-    isChecklistItem: Boolean,
   },
   data() {
     return {
@@ -35,7 +35,6 @@ export default {
         dueDate: '',
         member: [],
       },
-      errorMessage: '',
       loading: false,
     };
   },
@@ -43,6 +42,7 @@ export default {
     ...mapGetters({
       currentProject: 'TASKS/currentProject',
       validateText: 'VALIDATION/validateText',
+      errorMessage: 'ERROR/errorMessage',
     }),
   },
   methods: {
@@ -56,14 +56,15 @@ export default {
         document.getElementById('content').focus();
         return;
       } else {
-        if (this.isChecklist) {
+        console.log(this.modalType, this.idTask);
+        if (this.modalType == 'addChecklist') {
           console.log(this.newTask.name);
           this.addChecklistAction({
             name: { name: this.newTask.name },
             idTask: this.idTask,
             idProject: this.currentProject._id,
           });
-        } else if (this.isChecklistItem) {
+        } else if (this.modalType == 'addChecklistItem') {
           console.log('a');
         } else {
           // setTimeout(() => (this.loading = false), 2000);

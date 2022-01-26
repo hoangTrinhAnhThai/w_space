@@ -73,7 +73,7 @@
                   <add-checklist
                     class="add-checklist"
                     v-on:closeAddtaskForm="closeAddtaskForm"
-                    v-bind:isChecklist="true"
+                    v-bind:isChecklistItem="true"
                     v-bind:idTask="task._id"
                     v-show="isShowChecklistItem"
                   />
@@ -167,10 +167,10 @@
               text
               >Checklist</v-btn
             >
-            <add-checklist
+            <AddChecklist
               class="add-checklist"
               v-on:closeAddtaskForm="closeAddtaskForm"
-              v-bind:isChecklist="true"
+              v-bind:modalType="'addChecklist'"
               v-bind:idTask="task._id"
               v-show="isShowChecklist"
             />

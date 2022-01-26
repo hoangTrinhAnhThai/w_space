@@ -56,6 +56,24 @@
           >Add new time entry</v-btn
         >
       </v-col>
+      <v-col @click="fetchData">
+        <export-excel
+          :data="logtimeArray"
+          :before-generate="startDownload"
+          :before-finish="finishDownload"
+          :name="`${dateName}.xls`"
+        >
+          <v-btn
+            elevation="2"
+            style="
+              height: 45px;
+              color: white !important;
+              background-color: rgb(21, 17, 30);
+            "
+            >Download Data</v-btn
+          >
+        </export-excel>
+      </v-col>
     </v-row>
     <v-row>
       <v-card>
@@ -105,6 +123,16 @@ export default {
     month() {
       return data.month[new Date(this.date).getMonth()];
     },
+    dateName() {
+      if (sessionStorage.getItem('date')) {
+        let date = new Date(sessionStorage.getItem('date'));
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+      } else {
+        return `${new Date().getFullYear()}-${
+          new Date().getMonth() + 1
+        }-${new Date().getDate()}`;
+      }
+    },
   },
   methods: {
     ...mapActions({
@@ -114,6 +142,15 @@ export default {
     }),
     createLogtime() {
       this.createLogtimeAction();
+    },
+    startDownload() {
+      alert('show loading');
+    },
+    finishDownload() {
+      alert('hide loading');
+    },
+    async fetchData() {
+      this.getAllLogtimeByDate(this.date);
     },
   },
   components: {
