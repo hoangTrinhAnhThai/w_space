@@ -20,7 +20,7 @@
           />
           <div class="group"></div>
         </div>
-        <div class="content" v-for="(chat, index) in chats" :key="index">
+        <div v-else class="content" v-for="(chat, index) in chats" :key="index">
           <div
             class="right-chat-card"
             v-if="chat.createdBy._id == userInfo._id"
@@ -37,8 +37,7 @@
               <img
                 class="image img"
                 v-if="
-                  chat.createdBy.avatar &&
-                  chat.createdBy._id == chats[index + 1].createdBy._id
+                  chat.createdBy.avatar
                 "
                 :src="chat.createdBy.avatar"
                 alt=""

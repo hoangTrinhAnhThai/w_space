@@ -63,7 +63,7 @@ export default {
       downloadFileAction: 'CHAT/downloadFile',
     }),
     downloadFile(nameFile) {
-      if (nameFile) {
+      if (this.chat.isFile) {
         this.downloadFileAction(nameFile);
       } else return;
     },
