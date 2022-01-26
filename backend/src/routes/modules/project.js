@@ -27,8 +27,16 @@ router.get('/tasks/', taskValidation(), taskController.showAllTask);
 router.get('/task/:id', taskValidation(), taskController.showTask);
 router.post('/:id/task', taskValidation(), taskController.createTask);
 router.put('/task/:id', taskValidation(), taskController.editTask);
-router.put('/task/checklist/:id', taskValidation(), taskController.addChecklistTask);
-router.put('/task/checklistItem/:id/', taskValidation(), taskController.addChecklistTask);
+router.put(
+  '/task/checklist/:id',
+  taskValidation(),
+  taskController.addChecklistTask,
+);
+router.put(
+  '/task/checklistItem/:id/',
+  taskValidation(),
+  taskController.addChecklistTask,
+);
 
 router.delete('/:idProject/:idTask', taskController.deleteTask);
 router.post('/task', taskController.moveCard);

@@ -1,4 +1,5 @@
 const Task = require('../../models/Task');
+const Checklist = require('../../models/Task');
 const Project = require('../../models/Project');
 const Status = require('../../models/Status');
 const Logtime = require('../../models/Logtime');
@@ -18,7 +19,8 @@ class TaskController {
   showTask = async (req, res) => {
     const task = Task.findById(req.params.id)
       .populate('comments')
-      .populate('assigned').populate('status');
+      .populate('assigned')
+      .populate('status');
     if (!task) {
       return apiResponse.ErrorResponse(res, error);
     }
@@ -43,7 +45,7 @@ class TaskController {
         taskParams.dueDate = req.body.dueDate;
         taskParams.priority = req.body.priority;
         taskParams.moved.before = null;
-        taskParams.checklist = []
+        taskParams.checklist = [];
         const docTask = await Task.create(taskParams);
         const project = await Project.findById(req.params.id).populate('tasks');
         if (!project) {
@@ -122,9 +124,14 @@ class TaskController {
           errors.array(),
         );
       } else {
+        const checklist = await Checklist.create({
+          task: req.params.id,
+          name: req.body.name,
+        });
+
         const taskUpdate = await Task.findByIdAndUpdate(
           req.params.id,
-          {$push: { checklist: {name: req.body.name, items: []} }},
+          { $push: { checklist: checklist } },
           { new: true },
         );
         return apiResponse.successResponseWithData(
@@ -149,7 +156,7 @@ class TaskController {
       } else {
         const taskUpdate = await Task.findByIdAndUpdate(
           req.params.id,
-          {$push: { checklist: {name: req.body.name, items: []} }},
+          { $push: { checklist: { name: req.body.name, items: [] } } },
           { new: true },
         );
         return apiResponse.successResponseWithData(

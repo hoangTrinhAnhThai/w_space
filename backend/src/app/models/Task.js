@@ -29,14 +29,9 @@ const Task = new Schema(
     },
     checklist: [
       {
-        name: { type: String },
-        items: [
-          {
-            name: { type: String },
-            isDone: { type: Boolean }
-          }
-        ]
-      }
+        type: Schema.Types.ObjectId,
+        ref: 'Checklist',
+      },
     ],
     createdBy: {
       type: Schema.Types.ObjectId,
