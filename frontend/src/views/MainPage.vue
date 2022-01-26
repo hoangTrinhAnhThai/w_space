@@ -20,8 +20,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getProject: 'TASKS/getProject',
-      getStatus: 'TASKS/getStatus',
+      getProject: 'PROJECT/getProject',
+      getStatus: 'PROJECT/getStatus',
       getAllRooms: 'CHAT/getAllRooms',
       getUserByToken: 'AUTH/getUserByToken',
       getAllNotification: 'NOTIFICATION/getAllNotification',

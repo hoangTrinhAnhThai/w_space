@@ -170,14 +170,7 @@ const actions = {
         });
       });
   },
-  getTaskOfProject({ commit }, idProject) {
-    commit('ERROR/setIsLoading', true, { root: true });
-    http.get(`/project/${idProject}`).then((result) => {
-      commit('setTasksArray', result.data.data.tasks);
-      commit('setTaskAsStatus');
-      commit('ERROR/setIsLoading', false, { root: true });
-    });
-  },
+
   getProject({ commit }) {
     commit('ERROR/setIsLoading', true, { root: true });
     http
@@ -211,18 +204,7 @@ const actions = {
         });
       });
   },
-  addNewTask({ commit, dispatch }, params) {
-    commit('ERROR/setIsLoading', true, { root: true });
-    http.post(`/project/${params.idProject}/task`, params.task).then(() => {
-      dispatch('getTaskOfProject', params.idProject);
-      commit('ERROR/setIsLoading', false, { root: true });
-    });
-  },
-  removeCard({ commit }, data) {
-    http.post('/project/task', data).then(() => {
-      commit('logMess');
-    });
-  },
+
   deleteProject({ commit, dispatch }, idProject) {
     commit('ERROR/setIsLoading', true, { root: true });
     http.delete(`/project/${idProject}`).then(() => {
@@ -248,34 +230,7 @@ const actions = {
         });
       });
   },
-  addChecklist({ commit, dispatch }, params) {
-    console.log(params.name);
-    http
-      .put(`/project/task/checklist/${params.idTask}`, params.name)
-      .then((result) => {
-        console.log(result.data.data);
-        dispatch('getTaskOfProject', params.idProject);
-      })
-      .catch((err) => {
-        commit('ERROR/setErrorMessage', err.response.data.message, {
-          root: true,
-        });
-      });
-  },
-  deleteTask({ commit, dispatch }, params) {
-    commit('ERROR/setIsLoading', true, { root: true });
-    http.delete(`/project/${params.idProject}/${params.idTask}`).then(() => {
-      dispatch('getTaskOfProject', params.idProject);
-      commit('ERROR/setIsLoading', false, { root: true });
-    });
-  },
-  editTask({ commit, dispatch }, params) {
-    commit('ERROR/setIsLoading', true, { root: true });
-    http.put(`/project/task/${params.idTask}`, params.task).then(() => {
-      dispatch('getTaskOfProject', params.idProject);
-      commit('ERROR/setIsLoading', false, { root: true });
-    });
-  },
+
   removeMember({ commit, dispatch }, params) {
     http
       .put(`/project/${params.idProject}/member/remove`, params.project)
@@ -302,14 +257,7 @@ const actions = {
         });
       });
   },
-  addComment({ dispatch }, params) {
-    http
-      .post(`/project/task/${params.idTask}/comment`, params.comment)
-      .then((result) => {
-        socket.emit('save-comment', result.data.data);
-        dispatch('getCommentByIdTask', params.idTask);
-      });
-  },
+
   getCommentByIdTask({ commit, dispatch }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
     http.get(`/project/task/${params}/comment`).then((result) => {

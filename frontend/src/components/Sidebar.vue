@@ -180,8 +180,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projectsOfLeader: 'TASKS/projectsOfLeader',
-      projectsOfMember: 'TASKS/projectsOfMember',
+      projectsOfLeader: 'PROJECT/projectsOfLeader',
+      projectsOfMember: 'PROJECT/projectsOfMember',
       rooms: 'CHAT/rooms',
       notifications: 'NOTIFICATION/notifications',
       userInfo: 'AUTH/userInfo',
@@ -198,12 +198,12 @@ export default {
       this.$refs.addMemberModal.show(project);
     },
     ...mapActions({
-      getTaskOfProjectAction: 'TASKS/getTaskOfProject',
-      addCurrentProjectAction: 'TASKS/addCurrentProject',
-      deleteProjectAction: 'TASKS/deleteProject',
-      getProject: 'TASKS/getProject',
-      addProjectEditAction: 'TASKS/addProjectEdit',
-      getStatus: 'TASKS/getStatus',
+      getTaskOfProjectAction: 'TASK/getTasks',
+      addCurrentProjectAction: 'PROJECT/addCurrentProject',
+      deleteProjectAction: 'PROJECT/deleteProject',
+      getProject: 'PROJECT/getProject',
+      addProjectEditAction: 'PROJECT/addProjectEdit',
+      getStatus: 'TASK/getStatus',
       getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
       addCurrentRoom: 'CHAT/addCurrentRoom',
       removeUnreadNotification: 'NOTIFICATION/removeUnreadNotification',

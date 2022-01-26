@@ -65,8 +65,8 @@ export default {
   name: 'ProjectPage',
   computed: {
     ...mapGetters({
-      projectsOfLeader: 'TASKS/projectsOfLeader',
-      projectsOfMember: 'TASKS/projectsOfMember',
+      projectsOfLeader: 'PROJECT/projectsOfLeader',
+      projectsOfMember: 'PROJECT/projectsOfMember',
     }),
   },
   methods: {

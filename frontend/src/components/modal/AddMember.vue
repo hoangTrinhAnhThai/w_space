@@ -84,15 +84,15 @@ export default {
       validateEmail: 'VALIDATION/validateEmail',
       memberInfor: 'USER/memberInfor',
       errorMessage: 'ERROR/errorMessage',
-      projectEdit: 'TASKS/projectEdit',
+      projectEdit: 'PROJECT/projectEdit',
     }),
   },
   methods: {
     ...mapActions({
       searchMemberAction: 'USER/searchMember',
       clearErrorMessage: 'ERROR/clearErrorMessage',
-      addMemberAction: 'TASKS/addMember',
-      removeMemberAction: 'TASKS/removeMember',
+      addMemberAction: 'PROJECT/addMember',
+      removeMemberAction: 'PROJECT/removeMember',
       removeMemberInforAction: 'USER/removeMemberInfor',
     }),
     show(project) {

@@ -241,11 +241,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      logtimes: 'TASKS/logtimes',
-      currentProject: 'TASKS/currentProject',
-      currentTask: 'TASKS/currentTask',
+      logtimes: 'PROJECT/logtimes',
+      currentProject: 'PROJECT/currentProject',
+      currentTask: 'PROJECT/currentTask',
       validateText: 'VALIDATION/validateText',
-      comments: 'TASKS/comments',
+      comments: 'TASK/comments',
       userInfo: 'AUTH/userInfo',
     }),
     listMember() {
@@ -271,8 +271,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      editTaskAction: 'TASKS/editTask',
-      addCommentAction: 'TASKS/addComment',
+      editTaskAction: 'TASK/editTask',
+      addCommentAction: 'TASK/addComment',
     }),
     show() {
       this.$refs.taskDetailModal.show();

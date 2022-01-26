@@ -3,7 +3,8 @@ import Vuex from 'vuex';
 import Auth from './modules/auth.js';
 import Validation from './modules/validation';
 import ErrorMessage from './modules/errorMessage';
-import Task from './modules/project';
+import Task from './modules/task';
+import Project from './modules/project';
 import Logtime from './modules/logtime';
 import User from './modules/user';
 import Chat from './modules/chat';
@@ -18,11 +19,13 @@ export default new Vuex.Store({
     AUTH: Auth,
     VALIDATION: Validation,
     ERROR: ErrorMessage,
-    TASKS: Task,
+    TASK: Task,
+    PROJECT: Project,
     LOGTIME: Logtime,
     USER: User,
     CHAT: Chat,
     ADMIN: Admin,
     NOTIFICATION: Notification,
+
   },
 });

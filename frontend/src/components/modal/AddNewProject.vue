@@ -57,7 +57,7 @@ export default {
   computed: {
     ...mapGetters({
       validateText: 'VALIDATION/validateText',
-      projectEdit: 'TASKS/projectEdit',
+      projectEdit: 'PROJECT/projectEdit',
       errorMessage: 'ERROR/errorMessage',
     }),
   },
@@ -71,8 +71,8 @@ export default {
       this.$refs.newProjectModal.hide();
     },
     ...mapActions({
-      addProjectAction: 'TASKS/addProject',
-      editProjectAction: 'TASKS/editProject',
+      addProjectAction: 'PROJECT/addProject',
+      editProjectAction: 'PROJECT/editProject',
       clearErrorMessage: 'ERROR/clearErrorMessage',
     }),
     editProject() {

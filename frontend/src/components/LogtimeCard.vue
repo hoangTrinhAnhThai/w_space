@@ -92,8 +92,8 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      projectsOfLeader: 'TASKS/projectsOfLeader',
-      projectsOfMember: 'TASKS/projectsOfMember',
+      projectsOfLeader: 'PROJECT/projectsOfLeader',
+      projectsOfMember: 'PROJECT/projectsOfMember',
       logtimeArray: 'LOGTIME/logtimeArray',
       logtimeIsPlaying: 'LOGTIME/logtimeIsPlaying',
     }),

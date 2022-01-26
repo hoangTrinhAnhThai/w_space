@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <v-row class="roadmap">
+    <v-row class="roadmap" v-if="currentProject">
       <v-row style="margin: 20px 0px">
         <h1>
           <i class="bx bxl-trello"></i>
@@ -90,14 +90,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      dataTask: 'TASKS/taskOfProject',
-      currentProject: 'TASKS/currentProject',
+      currentProject: 'PROJECT/currentProject',
+      dataTask: 'TASK/tasksArray',
       userInfo: 'AUTH/userInfo',
     }),
   },
   methods: {
     ...mapActions({
-      removeCard: 'TASKS/removeCard',
+      removeCard: 'TASK/removeCard',
     }),
     handleDragStart(lane, dragResult) {
       const { payload, isSource } = dragResult;

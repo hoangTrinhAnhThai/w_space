@@ -40,15 +40,15 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentProject: 'TASKS/currentProject',
+      currentProject: 'PROJECT/currentProject',
       validateText: 'VALIDATION/validateText',
       errorMessage: 'ERROR/errorMessage',
     }),
   },
   methods: {
     ...mapActions({
-      addNewTaskAction: 'TASKS/addNewTask',
-      addChecklistAction: 'TASKS/addChecklist',
+      addNewTaskAction: 'TASK/addNewTask',
+      addChecklistAction: 'TASK/addChecklist',
     }),
     addtaskForm() {
       this.loading = true;

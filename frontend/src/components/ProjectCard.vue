@@ -94,7 +94,9 @@ export default {
       return helper.month[new Date(this.card.dueDate).getMonth()];
     },
     ...mapGetters({
-      currentProject: 'TASKS/currentProject',
+      currentProject: 'PROJECT/currentProject',
+      currentTask: 'TASK/currentTask'
+      
     }),
     assignForTask() {
       let assigned = {};
@@ -106,7 +108,7 @@ export default {
       }
       list.push(this.currentProject.createdBy);
       for (let member of list) {
-        if (member._id == this.card.assigned) {
+        if (member._id == this.card.assigned._id) {
           assigned = member;
           break;
         }
@@ -117,10 +119,10 @@ export default {
 
   methods: {
     ...mapActions({
-      deleteTaskAction: 'TASKS/deleteTask',
-      getLogtimes: 'TASKS/getLogtimes',
-      addCurrentTask: 'TASKS/addCurrentTask',
-      getCommentByIdTask: 'TASKS/getCommentByIdTask',
+      deleteTaskAction: 'TASK/deleteTask',
+      getLogtimes: 'PROJECT/getLogtimes',
+      addCurrentTask: 'PROJECT/addCurrentTask',
+      getCommentByIdTask: 'PROJECT/getCommentByIdTask',
     }),
     deleteTask() {
       this.deleteTaskAction({
