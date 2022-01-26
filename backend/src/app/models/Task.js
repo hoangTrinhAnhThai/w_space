@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 const Task = new Schema(
   {
+    project: {
+      type: Schema.Types.ObjectId,
+      ref: 'Project',
+    },
     name: { type: String, maxlength: 255 },
     description: { type: String, maxlength: 600 },
     moved: {

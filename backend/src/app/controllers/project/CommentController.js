@@ -14,6 +14,7 @@ class CommentController {
     );
   };
   getCommentByIdTask = async (req, res) => {
+    console.log(req.params.id );
     const comment = await Comment.find({ task: req.params.id })
       .populate('createdBy')
       .sort({ createdAt: 1 });

@@ -10,7 +10,7 @@ const { addANode, dropANode } = require('../../../utils/movedCard');
 
 class TaskController {
   showAllTask = async (req, res) => {
-    const tasks = Task.find().populate('comments').populate('assigned');
+    const tasks = await Task.find({ project: req.params.idProject }).populate('comments').populate('assigned').sort({ status: -1 });
     if (!tasks) {
       return apiResponse.ErrorResponse(res, error);
     }
@@ -38,7 +38,9 @@ class TaskController {
         );
       } else {
         const status = await Status.findOne({ name: 'Open' });
+        const projectFound = await Project.findById(req.params.id)
         let taskParams = new Task();
+        taskParams.project = projectFound
         taskParams.name = req.body.name;
         taskParams.description = req.body.description;
         taskParams.status = status;
@@ -47,15 +49,14 @@ class TaskController {
         taskParams.moved.before = null;
         taskParams.checklist = [];
         const docTask = await Task.create(taskParams);
-        const project = await Project.findById(req.params.id).populate('tasks');
-        if (!project) {
-          return apiResponse.ErrorResponse(res, 'Not found project');
-        }
-        if (project.tasks.length > 0) {
-          for (let task of project.tasks) {
+        console.log(docTask);
+        const arrayTask = await Task.find({ project: req.params.id })
+
+        if (arrayTask.length > 0) {
+          for (let task of arrayTask) {
             if (
               JSON.stringify(task.status) == JSON.stringify(status._id) &&
-              task.moved.before == null
+              task.moved.before == null && JSON.stringify(docTask._id) != JSON.stringify(task._id)
             ) {
               await Task.findByIdAndUpdate(task._id, {
                 'moved.before': docTask._id,
@@ -63,24 +64,14 @@ class TaskController {
               await Task.findByIdAndUpdate(docTask._id, {
                 'moved.after': task._id,
               });
-              await Project.findByIdAndUpdate(
-                req.params.id,
-                { $push: { tasks: docTask._id } },
-                { new: true, useFindAndModify: false },
-              );
               return apiResponse.successResponse(res, 'Add task success');
-              break;
             }
           }
+          return apiResponse.successResponse(res, 'Add task success');
         } else {
           await Task.findByIdAndUpdate(docTask._id, {
             'moved.after': null,
           });
-          await Project.findByIdAndUpdate(
-            req.params.id,
-            { $push: { tasks: docTask._id } },
-            { new: true, useFindAndModify: false },
-          );
           return apiResponse.successResponse(res, 'Add task success');
         }
       }

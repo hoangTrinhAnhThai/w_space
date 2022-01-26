@@ -7,6 +7,8 @@ const room = require('./modules/room');
 const notification = require('./modules/notification');
 const status = require('./modules/status');
 const admin = require('./modules/admin');
+const task = require('./modules/task');
+
 
 const auth = require('../middleware/jwt');
 
@@ -18,6 +20,7 @@ function route(app) {
   app.use('/chat', auth, chat);
   app.use('/room', auth, room);
   app.use('/status', status);
+  app.use('/task', task);
   app.use('/admin', admin);
   app.use('/notification', auth, notification);
 }

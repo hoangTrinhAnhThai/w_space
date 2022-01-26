@@ -23,7 +23,7 @@ const {
 } = require('../../middleware/validation');
 
 // task
-router.get('/tasks/', taskValidation(), taskController.showAllTask);
+router.get('tasksOfProject/:id/', taskController.showAllTask);
 router.get('/task/:id', taskValidation(), taskController.showTask);
 router.post('/:id/task', taskValidation(), taskController.createTask);
 router.put('/task/:id', taskValidation(), taskController.editTask);
