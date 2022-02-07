@@ -170,7 +170,6 @@
             <AddChecklist
               class="add-checklist"
               v-on:closeAddtaskForm="closeAddtaskForm"
-              v-bind:modalType="'addChecklist'"
               v-bind:idTask="task._id"
               v-show="isShowChecklist"
             />
@@ -222,7 +221,7 @@
 <script>
 import DatePicker from 'vue2-datepicker';
 import { mapActions, mapGetters } from 'vuex';
-import AddChecklist from '../AddTaskForm.vue';
+import AddChecklist from './AddNewChecklist.vue';
 export default {
   name: 'task-detail',
   props: {

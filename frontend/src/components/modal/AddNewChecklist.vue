@@ -2,7 +2,7 @@
   <v-card>
     <v-text-field
       class="mx-4"
-      v-model.trim="newTask.name"
+      v-model.trim="checklistName"
       label="Name"
       v-on:keyup="addtaskFormByKey"
       rows="1"
@@ -19,68 +19,67 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "AddTaskForm",
+  name: 'AddTaskForm',
+  props: {
+    idTask: String,
+  },
   data() {
     return {
-      newTask: {
-        name: "",
-        priority: "",
-        dueDate: "",
-        member: [],
-      },
       loading: false,
+      checklistName: ''
     };
   },
   computed: {
     ...mapGetters({
-      currentProject: "PROJECT/currentProject",
-      validateText: "VALIDATION/validateText",
-      errorMessage: "ERROR/errorMessage",
+      currentProject: 'PROJECT/currentProject',
+      validateText: 'VALIDATION/validateText',
+      errorMessage: 'ERROR/errorMessage',
     }),
   },
   methods: {
     ...mapActions({
-      addNewTaskAction: "TASK/addNewTask",
+      addChecklistAction: 'TASK/addChecklist',
     }),
     addtaskForm() {
       this.loading = true;
       if (!this.validateBeforeSubmit()) {
-        document.getElementById("content").focus();
+        document.getElementById('content').focus();
         return;
       } else {
-        // setTimeout(() => (this.loading = false), 2000);
-        this.addNewTaskAction({
-          task: this.newTask,
-          idProject: this.currentProject._id,
-        });
-        this.$emit("closeAddtaskForm");
-        this.newTask.name = "";
+          this.addChecklistAction({
+            name: { name: this.checklistName },
+            idTask: this.idTask,
+            idProject: this.currentProject._id,
+          });
+        this.$emit('closeAddtaskForm');
+        this.checklistName = '';
       }
     },
     addtaskFormByKey(e) {
+        console.log(e);
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-          document.getElementById("content").focus();
+          document.getElementById('content').focus();
           return;
         } else {
-          setTimeout(() => (this.loading = false), 2000);
-          this.addNewTaskAction({
-            task: this.newTask,
+          this.addChecklistAction({
+            name: { name: this.checklistName },
+            idTask: this.idTask,
             idProject: this.currentProject._id,
           });
-          this.$emit("closeAddtaskForm");
-          this.newTask.name = "";
+          this.$emit('closeAddtaskForm');
+          this.newTask.name = '';
         }
       }
     },
     closeAddtaskForm() {
-      this.$emit("closeAddtaskForm");
+      this.$emit('closeAddtaskForm');
     },
     validateBeforeSubmit() {
       let passedValidate = true;
-      const errors = this.validateText(this.newTask.name);
+      const errors = this.validateText(this.checklistName);
       if (errors) {
         passedValidate = false;
       }
@@ -88,7 +87,7 @@ export default {
     },
   },
   watch: {
-    "newTask.name"() {
+    'checklistName'() {
       this.loading = false;
     },
   },

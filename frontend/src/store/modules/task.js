@@ -77,10 +77,8 @@ const actions = {
       });
   },
   getTasks({ commit }, idProject) {
-    console.log(idProject);
     commit('ERROR/setIsLoading', true, { root: true });
     http.get(`/task/${idProject}`).then((result) => {
-      console.log(result.data.data);
       commit('setTasksArray', result.data.data);
       commit('ERROR/setIsLoading', false, { root: true });
     });
@@ -99,7 +97,7 @@ const actions = {
   },
 
   addChecklist({ commit, dispatch }, params) {
-    console.log(params.name);
+    console.log(params);
     http
       .put(`/project/task/checklist/${params.idTask}`, params.name)
       .then((result) => {

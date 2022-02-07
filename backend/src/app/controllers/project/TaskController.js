@@ -1,5 +1,5 @@
 const Task = require('../../models/Task');
-const Checklist = require('../../models/Task');
+const Checklist = require('../../models/Checklist');
 const Project = require('../../models/Project');
 const Status = require('../../models/Status');
 const Logtime = require('../../models/Logtime');
@@ -10,7 +10,7 @@ const { addANode, dropANode } = require('../../../utils/movedCard');
 
 class TaskController {
   showAllTask = async (req, res) => {
-    const tasks = await Task.find({ project: req.params.idProject }).populate('comments').populate('assigned').sort({ status: -1 });
+    const tasks = await Task.find({ project: req.params.idProject }).populate('comments').populate('assigned').populate('checklist').sort({ status: -1 });
     if (!tasks) {
       return apiResponse.ErrorResponse(res, error);
     }
@@ -49,7 +49,6 @@ class TaskController {
         taskParams.moved.before = null;
         taskParams.checklist = [];
         const docTask = await Task.create(taskParams);
-        console.log(docTask);
         const arrayTask = await Task.find({ project: req.params.id })
 
         if (arrayTask.length > 0) {
