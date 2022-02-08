@@ -10,9 +10,9 @@ const Checklist = new Schema(
     name: { type: String },
     items: [
       {
-        name: { type: String },
-        isDone: { type: Boolean },
-      },
+        type: Schema.Types.ObjectId,
+        ref: 'ChecklistItem'
+      }
     ],
   },
   {

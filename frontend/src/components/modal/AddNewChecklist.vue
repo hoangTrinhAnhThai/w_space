@@ -21,7 +21,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: 'AddTaskForm',
+  name: 'AddNewChecklist',
   props: {
     idTask: String,
   },
@@ -70,7 +70,7 @@ export default {
             idProject: this.currentProject._id,
           });
           this.$emit('closeAddtaskForm');
-          this.newTask.name = '';
+          this.checklistName = '';
         }
       }
     },

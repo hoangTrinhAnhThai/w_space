@@ -3,6 +3,7 @@ const Checklist = require('../../models/Checklist');
 const Project = require('../../models/Project');
 const Status = require('../../models/Status');
 const Logtime = require('../../models/Logtime');
+const Comment = require('../../models/Comment');
 const { validationResult } = require('express-validator');
 const apiResponse = require('../../../utils/apiResponse');
 require('dotenv').config();
@@ -10,7 +11,7 @@ const { addANode, dropANode } = require('../../../utils/movedCard');
 
 class TaskController {
   showAllTask = async (req, res) => {
-    const tasks = await Task.find({ project: req.params.idProject }).populate('comments').populate('assigned').populate('checklist').sort({ status: -1 });
+    const tasks = await Task.find({ project: req.params.id }).populate('comments').populate('assigned').populate('checklist').sort({ status: -1 });
     if (!tasks) {
       return apiResponse.ErrorResponse(res, error);
     }

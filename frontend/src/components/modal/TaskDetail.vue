@@ -30,7 +30,7 @@
               rows="1"
             ></v-textarea>
           </v-row>
-          <div>
+          <div v-if="task.checklist.length > 0">
             <label for="">
               <v-icon> mdi-checkbox-multiple-marked-outline</v-icon>
               Checklist
@@ -39,18 +39,27 @@
               <v-list
                 subheader
                 flat
-                v-for="(checklist, index) in task.checklist"
+                v-for="(checklist, index) in checklists"
                 :key="index"
               >
-                <v-subheader>
+                <v-app-bar class="checklist-header">
+                  <v-subheader>
+                    <v-icon style="font-size: 15px; margin-right: 5px"
+                      >mdi-format-list-checkbox
+                    </v-icon>
+                    {{ checklist.name }}</v-subheader
+                  >
+                  <v-spacer></v-spacer>
                   <i
-                    class="bx bxs-circle"
-                    style="position: relative; top: 2px; margin-right: 5px"
+                    class="bx bx-trash"
+                    @click="deleteChecklist(checklist._id)"
                   ></i>
-                  {{ checklist.name }}</v-subheader
-                >
-                <v-list-item-group multiple>
-                  <v-list-item v-for="(item, index) in 2" :key="index">
+                </v-app-bar>
+                <v-list-item-group multiple class="checklist-sub">
+                  <v-list-item
+                    v-for="(item, index) in checklist.items"
+                    :key="index"
+                  >
                     <template v-slot:default="{ active }">
                       <v-list-item-action>
                         <v-checkbox
@@ -60,23 +69,48 @@
                       </v-list-item-action>
 
                       <v-list-item-content>
-                        <v-list-item-title>{{ item }}</v-list-item-title>
+                        <v-list-item-title>{{ item.name }}</v-list-item-title>
                       </v-list-item-content>
                     </template>
                   </v-list-item>
                   <v-btn
-                    @click="isShowChecklistItem = true"
-                    style="position: relative; width: 20%; margin: 0 15px"
+                    @click="showChecklistItem(index)"
+                    v-if="!(isShowChecklistItem == `${index}`)"
+                    style="
+                      font-size: 10px !important;
+                      height: 32px !important;
+                      margin-left: 15px !important;
+                    "
                     text
+                    class="mx-2"
                     >Add item</v-btn
                   >
-                  <add-checklist
-                    class="add-checklist"
-                    v-on:closeAddtaskForm="closeAddtaskForm"
-                    v-bind:isChecklistItem="true"
-                    v-bind:idTask="task._id"
-                    v-show="isShowChecklistItem"
-                  />
+                  <div
+                    class="add-item"
+                    v-if="isShowChecklistItem == `${index}`"
+                  >
+                    <v-text-field
+                      outlined
+                      id="content-checklist"
+                      :disabled="isEdit"
+                      v-model="itemName"
+                    ></v-text-field>
+                    <v-btn
+                      style="
+                        font-size: 10px !important;
+                        height: 32px !important;
+                        margin-right: 10px;
+                      "
+                      text
+                      @click="addChecklistItem(checklist._id)"
+                      >Add</v-btn
+                    >
+                    <i
+                      class="bx bx-x"
+                      style="font-size: 20px; position: relative; top: 5px"
+                      @click="isShowChecklistItem = null"
+                    ></i>
+                  </div>
                 </v-list-item-group>
               </v-list>
             </v-row>
@@ -219,11 +253,11 @@
 </template>
 
 <script>
-import DatePicker from 'vue2-datepicker';
-import { mapActions, mapGetters } from 'vuex';
-import AddChecklist from './AddNewChecklist.vue';
+import DatePicker from "vue2-datepicker";
+import { mapActions, mapGetters } from "vuex";
+import AddChecklist from "./AddNewChecklist.vue";
 export default {
-  name: 'task-detail',
+  name: "task-detail",
   props: {
     task: {
       type: Object,
@@ -232,20 +266,22 @@ export default {
   data() {
     return {
       date: this.task.dueDate ? new Date(this.task.dueDate) : new Date(),
-      priorities: ['high', 'normal', 'low'],
-      comment: '',
+      priorities: ["high", "normal", "low"],
+      comment: "",
       isShowChecklist: false,
-      isShowChecklistItem: false,
+      isShowChecklistItem: null,
+      itemName: "",
     };
   },
   computed: {
     ...mapGetters({
-      logtimes: 'PROJECT/logtimes',
-      currentProject: 'PROJECT/currentProject',
-      currentTask: 'PROJECT/currentTask',
-      validateText: 'VALIDATION/validateText',
-      comments: 'TASK/comments',
-      userInfo: 'AUTH/userInfo',
+      logtimes: "PROJECT/logtimes",
+      currentProject: "PROJECT/currentProject",
+      currentTask: "PROJECT/currentTask",
+      validateText: "VALIDATION/validateText",
+      comments: "TASK/comments",
+      checklists: "TASK/checklist",
+      userInfo: "AUTH/userInfo",
     }),
     listMember() {
       let list = [];
@@ -270,8 +306,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      editTaskAction: 'TASK/editTask',
-      addCommentAction: 'TASK/addComment',
+      editTaskAction: "TASK/editTask",
+      addCommentAction: "TASK/addComment",
+      addChecklistItemAction: "TASK/addChecklistItem",
+      deleteChecklistAction: "TASK/deleteChecklist",
     }),
     show() {
       this.$refs.taskDetailModal.show();
@@ -281,7 +319,6 @@ export default {
     },
     closeAddtaskForm() {
       this.isShowChecklist = false;
-      this.isShowChecklistItem = false;
     },
     changeTaskDetail() {
       this.task.dueDate = this.date;
@@ -294,8 +331,8 @@ export default {
     },
     sendCommentByKey(e) {
       if (e.keyCode === 13) {
-        if (!this.validateBeforeSubmit()) {
-          document.getElementById('content').focus();
+        if (!this.validateBeforeSubmit(this.comment)) {
+          document.getElementById("content").focus();
           return;
         } else {
           this.addCommentAction({
@@ -303,13 +340,13 @@ export default {
             idProject: this.currentProject._id,
             comment: { content: this.comment },
           });
-          this.comment = '';
+          this.comment = "";
         }
       }
     },
     sendComment() {
-      if (!this.validateBeforeSubmit()) {
-        document.getElementById('content').focus();
+      if (!this.validateBeforeSubmit(this.comment)) {
+        document.getElementById("content").focus();
         return;
       } else {
         this.addCommentAction({
@@ -317,16 +354,49 @@ export default {
           idProject: this.currentProject._id,
           comment: { content: this.comment },
         });
-        this.comment = '';
+        this.comment = "";
       }
     },
-    validateBeforeSubmit() {
+    validateBeforeSubmit(text) {
       let passedValidate = true;
-      const errors = this.validateText(this.comment);
+      const errors = this.validateText(text);
       if (errors) {
         passedValidate = false;
       }
       return passedValidate;
+    },
+    showChecklistItem(index) {
+      this.isShowChecklistItem = index;
+    },
+    addChecklistItem(id) {
+      if (!this.validateBeforeSubmit(this.itemName)) {
+        document.getElementById("content-checklist").focus();
+        return;
+      } else {
+        this.addChecklistItemAction({
+          idChecklist: id,
+          idTask: this.task._id,
+          name: { name: this.itemName },
+        });
+        this.itemName = "";
+      }
+    },
+    deleteChecklist(idChecklist) {
+      this.deleteChecklistAction({
+        idChecklist: idChecklist,
+        idTask: this.task._id,
+      });
+    },
+    // deleteChecklistItem(idChecklistItem) {
+    //   this.deleteChecklistItemAction({
+    //     idChecklistItem: idChecklist,
+    //     idTask: this.task._id,
+    //   });
+    // },
+  },
+  watch: {
+    isShowChecklistItem() {
+      this.itemName = "";
     },
   },
   components: {
@@ -407,5 +477,34 @@ label {
   width: 100%;
   margin: 0 auto;
   background-color: rgb(243, 243, 243) !important;
+}
+.add-item {
+  margin-left: 20px;
+}
+.v-sheet.v-toolbar:not(.v-sheet--outlined) {
+  box-shadow: none !important;
+  background-color: white !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.checklist-header i {
+  cursor: pointer;
+}
+</style>
+<style>
+.checklist-sub .v-icon.v-icon {
+  font-size: 15px !important;
+}
+
+.v-text-field--filled > .v-input__control > .v-input__slot,
+.v-text-field--full-width > .v-input__control > .v-input__slot,
+.v-text-field--outlined > .v-input__control > .v-input__slot {
+  height: 30px !important;
+  min-height: 30px !important;
+}
+.checklist-header .v-toolbar__content,
+.v-toolbar__extension {
+  padding: 0 !important;
+  margin: 0 !important;
 }
 </style>

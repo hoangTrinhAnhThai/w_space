@@ -12,6 +12,7 @@ const state = {
   statusArray: [],
   currentTask: {},
   comments: [],
+  checklist: []
 };
 
 const getters = {
@@ -27,6 +28,9 @@ const getters = {
   comments(state) {
     return state.comments;
   },
+  checklist(state) {
+    return state.checklist
+  }
 };
 
 const mutations = {
@@ -58,6 +62,9 @@ const mutations = {
   setComments(state, data) {
     state.comments = data;
   },
+  setChecklist(state, data) {
+    state.checklist = data;
+  },
 };
 const actions = {
   addCurrentTask({ commit }, params) {
@@ -78,48 +85,34 @@ const actions = {
   },
   getTasks({ commit }, idProject) {
     commit('ERROR/setIsLoading', true, { root: true });
-    http.get(`/task/${idProject}`).then((result) => {
+    http.get(`/task/tasksOfProject/${idProject}`).then((result) => {
       commit('setTasksArray', result.data.data);
       commit('ERROR/setIsLoading', false, { root: true });
     });
   },
   addNewTask({ commit, dispatch }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
-    http.post(`/project/${params.idProject}/task`, params.task).then(() => {
+    http.post(`/task/${params.idProject}`, params.task).then(() => {
       dispatch('getTasks', params.idProject);
       commit('ERROR/setIsLoading', false, { root: true });
     });
   },
   removeCard({ commit }, data) {
-    http.post('/project/task', data).then(() => {
+    http.put('/task', data).then(() => {
       commit('logMess');
     });
   },
 
-  addChecklist({ commit, dispatch }, params) {
-    console.log(params);
-    http
-      .put(`/project/task/checklist/${params.idTask}`, params.name)
-      .then((result) => {
-        console.log(result.data.data);
-        dispatch('getTasks', params.idProject);
-      })
-      .catch((err) => {
-        commit('ERROR/setErrorMessage', err.response.data.message, {
-          root: true,
-        });
-      });
-  },
   deleteTask({ commit, dispatch }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
-    http.delete(`/project/${params.idProject}/${params.idTask}`).then(() => {
+    http.delete(`/${params.idProject}/${params.idTask}`).then(() => {
       dispatch('getTasks', params.idProject);
       commit('ERROR/setIsLoading', false, { root: true });
     });
   },
   editTask({ commit, dispatch }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
-    http.put(`/project/task/${params.idTask}`, params.task).then(() => {
+    http.put(`/task/${params.idTask}`, params.task).then(() => {
       dispatch('getTasks', params.idProject);
       commit('ERROR/setIsLoading', false, { root: true });
     });
@@ -127,7 +120,7 @@ const actions = {
 
   addComment({ dispatch }, params) {
     http
-      .post(`/project/task/${params.idTask}/comment`, params.comment)
+      .post(`/task/comment/${params.idTask}`, params.comment)
       .then((result) => {
         socket.emit('save-comment', result.data.data);
         dispatch('getCommentByIdTask', params.idTask);
@@ -135,7 +128,7 @@ const actions = {
   },
   getCommentByIdTask({ commit, dispatch }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
-    http.get(`/project/task/${params}/comment`).then((result) => {
+    http.get(`/task/comment/${params}`).then((result) => {
       commit('setComments', result.data.data);
       commit('ERROR/setIsLoading', false, { root: true });
     });
@@ -148,6 +141,61 @@ const actions = {
       }.bind(this),
     );
   },
+  getChecklistByIdTask({ commit }, params) {
+    commit('ERROR/setIsLoading', true, { root: true });
+    http.get(`/task/checklist/${params}`).then((result) => {
+      commit('setChecklist', result.data.data);
+      commit('ERROR/setIsLoading', false, { root: true });
+    });
+  },
+  addChecklist({ commit, dispatch }, params) {
+    console.log(params);
+    http
+      .post(`/task/checklist/${params.idTask}`, params.name)
+      .then((result) => {
+        console.log(result.data.data);
+        dispatch('getChecklistByIdTask', params.idTask);
+      })
+      .catch((err) => {
+        commit('ERROR/setErrorMessage', err.response.data.message, {
+          root: true,
+        });
+      });
+  },
+  addChecklistItem({ commit, dispatch }, params) {
+    http
+      .post(`/task/checklistItem/${params.idChecklist}`, params.name)
+      .then(() => {
+        dispatch('getChecklistByIdTask', params.idTask);
+      })
+      .catch((err) => {
+        commit('ERROR/setErrorMessage', err.response.data.message, {
+          root: true,
+        });
+      });
+  },
+  deleteChecklist({ commit, dispatch }, params) {
+    http.delete(`/task/checklist/${params.idChecklist}`)
+      .then(() => {
+        dispatch('getChecklistByIdTask', params.idTask);
+      })
+      .catch((err) => {
+        commit('ERROR/setErrorMessage', err.response.data.message, {
+          root: true,
+        });
+      });
+  },
+  deleteChecklistItem({ commit, dispatch }, params) {
+    http.delete(`/task/checklistItem/${params.idChecklistItem}`)
+      .then(() => {
+        dispatch('getChecklistByIdTask', params.idTask);
+      })
+      .catch((err) => {
+        commit('ERROR/setErrorMessage', err.response.data.message, {
+          root: true,
+        });
+      });
+  }
 };
 
 export default {

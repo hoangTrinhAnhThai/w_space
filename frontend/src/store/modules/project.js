@@ -5,10 +5,6 @@ import {
   sortLeaderProjects,
   sortMemberProjects,
 } from '../../utils/helper';
-import io from 'socket.io-client';
-const socket = io(`${process.env.VUE_APP_SOCKET_URL}:5000`, {
-  transports: ['websocket', 'polling', 'flashsocket'],
-});
 const state = {
   tasksArray: [],
   taskOfProject: [],
@@ -19,7 +15,6 @@ const state = {
   logtimes: '',
   projectEdit: '',
   currentTask: {},
-  comments: [],
 };
 
 const getters = {
@@ -49,9 +44,6 @@ const getters = {
   },
   currentTask(state) {
     return state.currentTask;
-  },
-  comments(state) {
-    return state.comments;
   },
 };
 
@@ -133,9 +125,6 @@ const mutations = {
   setLogtimes(state, data) {
     state.logtimes = data;
   },
-  setComments(state, data) {
-    state.comments = data;
-  },
 };
 const actions = {
   addCurrentProject({ commit }, project) {
@@ -146,9 +135,6 @@ const actions = {
     } else {
       commit('setCurrentProject', project);
     }
-  },
-  addCurrentTask({ commit }, params) {
-    commit('setCurrentTask', params);
   },
   addProjectEdit({ commit }, params) {
     commit('setProjectEdit', params);
@@ -256,22 +242,6 @@ const actions = {
           root: true,
         });
       });
-  },
-
-  getCommentByIdTask({ commit, dispatch }, params) {
-    commit('ERROR/setIsLoading', true, { root: true });
-    http.get(`/project/task/${params}/comment`).then((result) => {
-      commit('setComments', result.data.data);
-      commit('ERROR/setIsLoading', false, { root: true });
-    });
-    socket.on(
-      'new-comment',
-      function (data) {
-        if (data.message.task === params.idTask) {
-          dispatch('getCommentByIdTask', params.idTask);
-        }
-      }.bind(this),
-    );
   },
 };
 

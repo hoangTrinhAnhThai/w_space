@@ -121,8 +121,9 @@ export default {
     ...mapActions({
       deleteTaskAction: 'TASK/deleteTask',
       getLogtimes: 'PROJECT/getLogtimes',
-      addCurrentTask: 'PROJECT/addCurrentTask',
-      getCommentByIdTask: 'PROJECT/getCommentByIdTask',
+      addCurrentTask: 'TASK/addCurrentTask',
+      getCommentByIdTask: 'TASK/getCommentByIdTask',
+      getChecklistByIdTask: 'TASK/getChecklistByIdTask'
     }),
     deleteTask() {
       this.deleteTaskAction({
@@ -134,6 +135,7 @@ export default {
       this.getCommentByIdTask(this.card._id);
       this.addCurrentTask(this.card);
       this.getLogtimes(this.card._id);
+      this.getChecklistByIdTask(this.card._id)
       this.$refs.taskDetailModal.show();
     },
   },
