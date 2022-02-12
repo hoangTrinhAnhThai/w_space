@@ -136,10 +136,10 @@
                       notification.room == room._id &&
                       notification.listContent[0].unreadCount < 5
                     "
-                    color="red accent-1"
+                    color="red lighten-1"
                     :content="notification.listContent[0].unreadCount"
                     :value="notification.listContent[0].unreadCount"
-                    style="font-weight: lighter; margin-left: 10px"
+                    style="font-weight: lighter; margin-left: 10px; top: 20px; height: 20px"
                   ></v-badge>
                   <v-badge
                     v-else-if="
@@ -147,8 +147,8 @@
                       notification.listContent[0].unreadCount >= 5
                     "
                     :content="'5+'"
-                    color="red accent-1"
-                    style="font-weight: lighter; margin-left: 10px"
+                    color="red lighten-1"
+                    style="font-weight: lighter; margin-left: 10px;  top: 20px; height: 20px"
                   >
                   </v-badge>
                 </span>

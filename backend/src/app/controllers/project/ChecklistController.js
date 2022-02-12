@@ -67,6 +67,31 @@ class ChecklistController {
             return apiResponse.ErrorResponse(res, error);
         }
     };
+    editChecklistItem = async (req, res) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return apiResponse.validationErrorWithData(
+                    res,
+                    'Validation Error',
+                    errors.array(),
+                );
+            } else {
+                const checklistItemUpdate = await ChecklistItem.findByIdAndUpdate(
+                    req.params.idItem,
+                    req.body,
+                    { new: true },
+                );
+                return apiResponse.successResponseWithData(
+                    res,
+                    'Edit task successfully',
+                    checklistItemUpdate,
+                );
+            }
+        } catch (error) {
+            return apiResponse.ErrorResponse(res, error);
+        }
+    };
     addChecklistChecklist = async (req, res) => {
         try {
             const errors = validationResult(req);

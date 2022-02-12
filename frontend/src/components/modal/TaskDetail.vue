@@ -60,16 +60,16 @@
                     v-for="(item, index) in checklist.items"
                     :key="index"
                   >
-                    <template v-slot:default="{ active }">
+                    <template>
                       <v-list-item-action>
-                        <v-checkbox
-                          :input-value="active"
-                          color="primary"
-                        ></v-checkbox>
+                        <input type="checkbox" 
+                          id="checkbox" 
+                          @change="check(item)" v-model="item.isDone"
+                        >
                       </v-list-item-action>
 
                       <v-list-item-content>
-                        <v-list-item-title>{{ item.name }}</v-list-item-title>
+                        <v-list-item-title :class="{ active: item.isDone }">{{ item.name }} {{item.isDone}}</v-list-item-title>
                       </v-list-item-content>
                     </template>
                   </v-list-item>
@@ -310,6 +310,7 @@ export default {
       addCommentAction: "TASK/addComment",
       addChecklistItemAction: "TASK/addChecklistItem",
       deleteChecklistAction: "TASK/deleteChecklist",
+      editChecklistItemAction: 'TASK/editChecklistItem'
     }),
     show() {
       this.$refs.taskDetailModal.show();
@@ -393,6 +394,9 @@ export default {
     //     idTask: this.task._id,
     //   });
     // },
+    check(item) {
+      this.editChecklistItemAction({idChecklistItem: item._id, idTask: this.task._id, isDone: {isDone: item.isDone } })
+    }
   },
   watch: {
     isShowChecklistItem() {
@@ -506,5 +510,9 @@ label {
 .v-toolbar__extension {
   padding: 0 !important;
   margin: 0 !important;
+}
+
+.active {
+  text-decoration: line-through;
 }
 </style>

@@ -28,17 +28,18 @@ router.get('/tasksOfProject/:id/', taskController.showAllTask);
 router.get('/comment/:id', commentController.getCommentByIdTask);
 router.get('/checklist/:idTask', checklistController.showAllChecklistByTask);
 
-router.post('/:id/', taskValidation(), taskController.createTask);
 router.post('/checklist/:id', taskController.addChecklistTask);
-// router.post('/checklistItem/:idChecklist', taskController.showAllTask);
 router.post('/comment/:id', commentController.createComment);
-
 router.post('/checklistItem/:id/', checklistController.createChecklistItem);
+router.post('/:id/', taskValidation(), taskController.createTask);
+
+router.put('/checklistItem/:idItem/', checklistController.editChecklistItem);
 router.put('/:id', taskValidation(), taskController.editTask);
 router.put('/', taskController.moveCard);
 
+
 router.delete('/checklist/:idChecklist', checklistController.deleteChecklist);
-router.delete('/checklistItem/:idChecklist', checklistController.deleteChecklist);
+router.delete('/checklistItem/:idChecklistItem', checklistController.deleteChecklist);
 router.delete('/:idProject/:idTask', taskController.deleteTask);
 
 server.listen(server_port);

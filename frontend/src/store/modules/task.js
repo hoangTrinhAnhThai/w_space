@@ -8,6 +8,7 @@ const socket = io(`${process.env.VUE_APP_SOCKET_URL}:5000`, {
   transports: ['websocket', 'polling', 'flashsocket'],
 });
 const state = {
+  taskList: [],
   tasksArray: [],
   statusArray: [],
   currentTask: {},
@@ -16,6 +17,9 @@ const state = {
 };
 
 const getters = {
+  taskList(state) {
+    return state.taskList
+  },
   tasksArray(state) {
     return state.tasksArray;
   },
@@ -37,14 +41,16 @@ const mutations = {
   setCurrentTask(state, data) {
     state.currentTask = data;
   },
-
+  setTasks(state, data) {
+    state.taskList = data
+  },
   setTasksArray(state, data) {
     state.tasksArray = [];
     for (let statusItem of state.statusArray) {
       let statusList = { status: {}, tasks: [] };
       statusList.status = statusItem;
       for (let task of data) {
-        if (task.status === statusItem._id) {
+        if (task.status._id === statusItem._id) {
           statusList.tasks.push(task);
         }
       }
@@ -65,6 +71,23 @@ const mutations = {
   setChecklist(state, data) {
     state.checklist = data;
   },
+  setChecklistItemEdit(state, data) {
+    console.log(data.isDone);
+    let list = state.checklist
+    for (let checklist of list) {
+      if (checklist.task == data.idTask) {
+        for (let item of checklist.items) {
+          if (item._id == data.idChecklistItem) {
+            item.isDone = data.isDone.isDone
+            break
+          }
+        }
+        break
+      }
+    }
+    console.log(list);
+    state.checklist = list
+  }
 };
 const actions = {
   addCurrentTask({ commit }, params) {
@@ -87,6 +110,7 @@ const actions = {
     commit('ERROR/setIsLoading', true, { root: true });
     http.get(`/task/tasksOfProject/${idProject}`).then((result) => {
       commit('setTasksArray', result.data.data);
+      commit('setTasks', result.data.data);
       commit('ERROR/setIsLoading', false, { root: true });
     });
   },
@@ -149,7 +173,6 @@ const actions = {
     });
   },
   addChecklist({ commit, dispatch }, params) {
-    console.log(params);
     http
       .post(`/task/checklist/${params.idTask}`, params.name)
       .then((result) => {
@@ -167,6 +190,20 @@ const actions = {
       .post(`/task/checklistItem/${params.idChecklist}`, params.name)
       .then(() => {
         dispatch('getChecklistByIdTask', params.idTask);
+      })
+      .catch((err) => {
+        commit('ERROR/setErrorMessage', err.response.data.message, {
+          root: true,
+        });
+      });
+  },
+  editChecklistItem({ commit }, params) {
+    // console.log(params.isDone.isDone);
+    // commit('setChecklistItemEdit', params)
+    http
+      .put(`/task/checklistItem/${params.idChecklistItem}`, params.isDone)
+      .then(() => {
+        // dispatch('getChecklistByIdTask', params.idTask);
       })
       .catch((err) => {
         commit('ERROR/setErrorMessage', err.response.data.message, {

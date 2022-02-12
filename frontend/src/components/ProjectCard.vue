@@ -59,7 +59,7 @@
         </v-list>
       </v-menu>
     </div>
-    <task-detail :task="card" ref="taskDetailModal"></task-detail>
+    <task-detail :task="card" ref="taskDetailModal"></task-detail>  
   </v-card>
 </template>
 
