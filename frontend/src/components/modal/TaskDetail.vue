@@ -5,6 +5,7 @@
     :title="task.name"
     class="task-detail"
     size="lg md"
+    scrollable
   >
     <v-form ref="form" lazy-validation>
       <v-row>
@@ -500,9 +501,9 @@ label {
   font-size: 15px !important;
 }
 
-.v-text-field--filled > .v-input__control > .v-input__slot,
-.v-text-field--full-width > .v-input__control > .v-input__slot,
-.v-text-field--outlined > .v-input__control > .v-input__slot {
+.checklist .v-text-field--filled > .v-input__control > .v-input__slot,
+.checklist .v-text-field--full-width > .v-input__control > .v-input__slot,
+.checklist .v-text-field--outlined > .v-input__control > .v-input__slot {
   height: 30px !important;
   min-height: 30px !important;
 }

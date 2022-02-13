@@ -1,7 +1,7 @@
 const Comment = require('../../models/Comment');
 const User = require('../../models/User');
 const apiResponse = require('../../../utils/apiResponse');
-const host = require('../../../utils/decodeJWT');
+ 
 require('dotenv').config();
 
 class CommentController {

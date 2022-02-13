@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="userList" class="elevation-1">
+  <v-data-table :headers="headers" :items="userList" :items-per-page="10" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title style="font-weight: 900"
@@ -133,12 +133,6 @@ export default {
   },
 
   watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
   },
   created() {
     this.getAllUsers();
@@ -171,6 +165,12 @@ export default {
       }
       this.close();
     },
+    closeDelete() {
+
+    },
+    deleteItemConfirm() {
+
+    }
   },
 };
 </script>

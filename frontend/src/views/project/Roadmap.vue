@@ -219,22 +219,5 @@ export default {
   overflow-x: hidden !important;
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-}
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 5px;
-}
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: rgb(202, 198, 198);
-  border-radius: 5px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: rgb(202, 198, 198);
-}
 </style>

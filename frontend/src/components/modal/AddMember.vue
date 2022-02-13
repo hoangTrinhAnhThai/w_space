@@ -108,7 +108,6 @@ export default {
     searchMember() {
       if (!this.validateBeforeSubmit()) {
         document.getElementById('content').focus();
-
         return;
       } else {
         this.searchMemberAction({ email: this.email });

@@ -7,23 +7,98 @@
           {{ currentProject.name }}
         </h1>
       </v-row>
-      <v-data-table :headers="headers" :items="dataTask" class="elevation-1">
-        <template v-slot:[`item.status.name`]="{ item }">
-          <div style="color: white ; font-weight: 500; padding: 2px 5px">
-            <span style="padding: 2px 5px; border-radius: 5px"
-              :class="{ open: item.status.name == 'Open', inProgress: item.status.name == 'In progress', resolved: item.status.name == 'Resolved',  closed: item.status.name == 'Closed'}"
-              >{{ item.status.name }}</span
-            >
-          </div>
+      <v-card-title>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+        :search="search"
+        :headers="headers"
+        :items="dataTask"
+        class="elevation-1"
+        :items-per-page="10"
+      >
+        <template v-slot:[`header.name`]="{ header }">
+          <v-icon>mdi-text-box-outline</v-icon>{{ header.text }}
         </template>
-        <template v-slot:[`item.dueDate`]="{ item }">
-          <div style="color: red; font-weight: 500">
-            <span
-              :class="{ active: new Date(item.dueDate).getTime() > new Date() }"
-              >{{ item.dueDate }}</span
-            >
-          </div>
+        <template v-slot:[`header.description`]="{ header }">
+          <v-icon>mdi-format-letter-case-upper</v-icon>{{ header.text }}
         </template>
+        <template v-slot:[`header.status.name`]="{ header }">
+          <v-icon>mdi-adjust</v-icon>{{ header.text }}
+        </template>
+        <template v-slot:[`header.priority`]="{ header }">
+          <v-icon>mdi-fire</v-icon>{{ header.text }}
+        </template>
+        <template v-slot:[`header.dueDate`]="{ header }">
+          <v-icon>mdi-calendar-clock-outline</v-icon>{{ header.text }}
+        </template>
+        <template v-slot:[`header.createdAt`]="{ header }">
+          <v-icon>mdi-clock-time-three-outline</v-icon>{{ header.text }}
+        </template>
+        <template v-slot:item="{ item }">
+          <tr>
+            <td>
+              <table-cell class="name-cell" :item="item" />
+            </td>
+            <td>{{ item.description }}</td>
+            <td class="text">
+              <div style="color: white; font-weight: 300; padding: 2px 5px">
+                <span
+                  style="padding: 2px 5px; border-radius: 5px"
+                  :class="{
+                    open: item.status.name == 'Open',
+                    inProgress: item.status.name == 'In progress',
+                    resolved: item.status.name == 'Resolved',
+                    closed: item.status.name == 'Closed',
+                  }"
+                  >{{ item.status.name }}</span
+                >
+              </div>
+            </td>
+            <td class="text">
+              <span v-if="item.assigned"
+                >{{ item.assigned.firstName }}
+                {{ item.assigned.lastName }}</span
+              >
+            </td>
+            <td class="text">
+              <div style="font-weight: 500">
+                <span
+                  style="padding: 2px 5px; border-radius: 5px"
+                  :class="{
+                    high: item.priority == 'high',
+                    normal: item.priority == 'normal',
+                    low: item.priority == 'low',
+                  }"
+                  >{{ item.priority
+                  }}<v-icon
+                    style="color: #ef6c00 !important"
+                    v-if="item.priority"
+                    >mdi-fire</v-icon
+                  ></span
+                >
+              </div>
+            </td>
+            <td class="text">
+              <div style="color: red; font-weight: 500">
+                <span
+                  :class="{
+                    dueDate: new Date(item.dueDate).getTime() > new Date(),
+                  }"
+                  ><date-table-cell :dueDate="item.dueDate"
+                /></span>
+              </div>
+            </td>
+            <td class="text"><date-table-cell :dueDate="item.dueDate" /></td>
+          </tr>
+        </template>
+       
       </v-data-table>
     </v-row>
   </v-main>
@@ -31,36 +106,52 @@
 
 <script>
 import { mapGetters } from "vuex";
+import TableCell from "../../components/table/NameTableCell.vue";
+import DateTableCell from "../../components/table/DateTableCell.vue";
+
 export default {
   name: "Roadmap",
   data() {
     return {
       dialog: false,
       dialogDelete: false,
+      search: "",
       headers: [
-        { text: "Task", value: "name" },
+        {
+          text: "Task",
+          value: "name",
+          width: "250px",
+        },
         {
           text: "Description",
           value: "description",
+          width: "250px",
         },
-
         {
           text: "Status",
-          value: "status.name", align: 'center'
+          value: "status.name",
+          align: "center",
+        },
+        {
+          text: "Assigned",
+          value: "assigned",
+          align: "center",
         },
         {
           text: "Priority",
-          value: "priority",align: 'center'
+          value: "priority",
+          align: "center",
         },
         {
           text: "Due date",
           value: "dueDate",
+          align: "center",
         },
         {
           text: "CreatedAt",
           value: "createdAt",
+          align: "center",
         },
-        
       ],
     };
   },
@@ -76,15 +167,21 @@ export default {
       else return "green";
     },
   },
+  components: {
+    TableCell,
+    DateTableCell,
+  },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+ .text {
+   text-align: center;
+ }
 .task {
   height: calc(100vh - 65px);
-
 }
-.active {
+.dueDate {
   color: green;
 }
 
@@ -103,7 +200,32 @@ export default {
   background-color: rgba(120, 29, 66);
 }
 .closed {
-background-color: rgba(243, 139, 160);
+  background-color: rgba(243, 139, 160);
 }
+
+.low {
+  background-color: #cfd8dc;
+}
+.normal {
+  background-color: #ffe0b2;
+}
+
+.high {
+  background-color: #ffa726;
+}
+
+.v-icon {
+  font-size: 17px !important;
+  top: -1px;
+  margin-right: 5px;
+}
+</style>
+<style>
+#open-task-table-cell {
+  opacity: 0;
+}
+ tr:hover #open-task-table-cell {
+   opacity: 1;
+  }
 </style>
 

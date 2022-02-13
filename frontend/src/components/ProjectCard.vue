@@ -82,7 +82,7 @@ export default {
   },
   computed: {
     deadline() {
-      return new Date(this.card.dueDate) >= new Date();
+      return new Date(this.card.dueDate) > new Date();
     },
     date() {
       return new Date(this.card.dueDate).getDate();
