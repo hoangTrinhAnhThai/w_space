@@ -210,7 +210,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      changeAvatarAction: 'USER/changeAvatar',
       editUser: 'USER/editUser',
       updatePassword: 'USER/updatePassword',
       addIsLoading: 'ERROR/addIsLoading',

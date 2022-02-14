@@ -411,6 +411,9 @@ export default {
 };
 </script>
 <style scoped>
+.active {
+  text-decoration: line-through;
+}
 .v-list .v-list-item:hover {
   background-color: rgb(255, 255, 255) !important;
   border-radius: 5px;
@@ -513,7 +516,5 @@ label {
   margin: 0 !important;
 }
 
-.active {
-  text-decoration: line-through;
-}
+
 </style>

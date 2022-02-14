@@ -25,6 +25,7 @@ export default {
       getAllRooms: 'CHAT/getAllRooms',
       getUserByToken: 'AUTH/getUserByToken',
       getAllNotification: 'NOTIFICATION/getAllNotification',
+      getBackground: 'PROJECT/getBackground'
     }),
   },
   created() {
@@ -32,6 +33,7 @@ export default {
     this.getProject();
     this.getAllRooms();
     this.getAllNotification();
+    this.getBackground()
   },
 };
 </script>

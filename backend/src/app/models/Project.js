@@ -28,6 +28,10 @@ const Project = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Room',
     },
+    background: {
+      type: Schema.Types.ObjectId,
+      ref: 'Background',
+    }
   },
   {
     timestamps: true,

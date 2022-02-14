@@ -15,6 +15,7 @@ const state = {
   logtimes: '',
   projectEdit: '',
   currentTask: {},
+  backgrounds: []
 };
 
 const getters = {
@@ -45,6 +46,9 @@ const getters = {
   currentTask(state) {
     return state.currentTask;
   },
+  backgrounds(state) {
+    return state.backgrounds
+  }
 };
 
 const formatDataProject = function (data) {
@@ -125,6 +129,9 @@ const mutations = {
   setLogtimes(state, data) {
     state.logtimes = data;
   },
+  setBackgroundList(state, data) {
+    state.backgrounds = data
+  }
 };
 const actions = {
   addCurrentProject({ commit }, project) {
@@ -243,6 +250,23 @@ const actions = {
         });
       });
   },
+  getBackground({ commit }) {
+    http.get(`/bg/`)
+      .then((result) => {
+        commit('setBackgroundList', result.data.data)
+      })
+  },
+  setBackground({ commit, dispatch }, params) {
+    commit('ERROR/setIsLoading', true, { root: true });
+    http.put(`/bg/${params.idProject}/${params.idBg}`)
+      .then((result) => {
+        commit('setBackgroundList', result.data.data)
+        dispatch('getBackground')
+        dispatch('addCurrentProject', params.idProject)
+        commit('ERROR/setIsLoading', false, { root: true });
+
+      })
+  }
 };
 
 export default {
