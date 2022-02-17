@@ -6,7 +6,7 @@ const checklistController = require('../../app/controllers/project/checklistCont
 const commentController = require('../../app/controllers/project/CommentController');
 
 const server = require('http').createServer(express);
-const server_port = 5000;
+const server_port = 8000;
 require('dotenv').config();
 
 const io = require('socket.io')(server, {

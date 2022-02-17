@@ -31,7 +31,7 @@
               rows="1"
             ></v-textarea>
           </v-row>
-          <div v-if="task.checklist.length > 0">
+          <div v-if="checklists.length > 0">
             <label for="">
               <v-icon> mdi-checkbox-multiple-marked-outline</v-icon>
               Checklist
@@ -51,6 +51,7 @@
                     {{ checklist.name }}</v-subheader
                   >
                   <v-spacer></v-spacer>
+                  <i class='bx bx-edit-alt'></i>
                   <i
                     class="bx bx-trash"
                     @click="deleteChecklist(checklist._id)"
@@ -382,6 +383,7 @@ export default {
         });
         this.itemName = "";
       }
+
     },
     deleteChecklist(idChecklist) {
       this.deleteChecklistAction({
@@ -497,6 +499,13 @@ label {
 }
 .checklist-header i {
   cursor: pointer;
+}
+.checklist-header .bx-trash, .checklist-header  .bx-edit-alt {
+  opacity: 0;
+  margin: 0 5px;
+}
+.checklist-header:hover  .bx-trash, .checklist-header:hover .bx-edit-alt{
+opacity: 1;
 }
 </style>
 <style>

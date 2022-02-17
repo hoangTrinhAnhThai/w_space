@@ -4,7 +4,7 @@ import {
   sort,
 } from '../../utils/helper';
 import io from 'socket.io-client';
-const socket = io(`${process.env.VUE_APP_SOCKET_URL}:5000`, {
+const socket = io(`${process.env.VUE_APP_SOCKET_URL}:8000`, {
   transports: ['websocket', 'polling', 'flashsocket'],
 });
 const state = {

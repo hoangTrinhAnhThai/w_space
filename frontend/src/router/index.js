@@ -6,8 +6,8 @@ import HomePage from '../views/HomePage.vue';
 
 import Profile from '../views/Profile.vue';
 import Calendar from '../views/logtime/Calendar.vue';
-import Roadmap from '../views/project/Roadmap.vue';
-// import Roadmap from '../views/project/TaskViewForRoadmap.vue';
+// import Roadmap from '../views/project/Roadmap.vue';
+import Roadmap from '../views/project/TaskViewForRoadmap.vue';
 
 import ProjectPage from '../views/project/ProjectPage.vue';
 import Login from '../views/Auth/Login.vue';

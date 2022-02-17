@@ -32,12 +32,15 @@
             mdi-alert-outline</v-icon
           >
         </span>
-        <v-avatar v-if="card.assigned" color="light-blue lighten-3" size="24">
-          <span v-if="assignForTask" style="font-size: 10px">
-            {{ assignForTask.firstName.charAt(0)
-            }}{{ assignForTask.lastName.charAt(0) }}
-          </span>
-        </v-avatar>
+        <span class="assigned" v-if="card.assigned">
+          <img v-if="card.assigned.avatar" :src="card.assigned.avatar" alt="" />
+          <v-avatar v-else color="light-blue lighten-3" size="24">
+            <span v-if="card.assigned" style="font-size: 10px">
+              {{ card.assigned.firstName.charAt(0)
+              }}{{ card.assigned.lastName.charAt(0) }}
+            </span>
+          </v-avatar>
+        </span>
       </div>
     </v-card-text>
     <div class="menu">
@@ -59,16 +62,16 @@
         </v-list>
       </v-menu>
     </div>
-    <task-detail :task="card" ref="taskDetailModal"></task-detail>  
+    <task-detail :task="card" ref="taskDetailModal"></task-detail>
   </v-card>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import TaskDetail from '../components/modal/TaskDetail.vue';
-import helper from '../utils/data';
+import { mapActions, mapGetters } from "vuex";
+import TaskDetail from "../components/modal/TaskDetail.vue";
+import helper from "../utils/data";
 export default {
-  name: 'Cards',
+  name: "Cards",
   props: {
     card: {
       type: Object,
@@ -94,36 +97,18 @@ export default {
       return helper.month[new Date(this.card.dueDate).getMonth()];
     },
     ...mapGetters({
-      currentProject: 'PROJECT/currentProject',
-      currentTask: 'TASK/currentTask'
-      
+      currentProject: "PROJECT/currentProject",
+      currentTask: "TASK/currentTask",
     }),
-    assignForTask() {
-      let assigned = {};
-      let list = [];
-      if (this.currentProject.members.length > 0) {
-        for (let member of this.currentProject.members) {
-          list.push(member);
-        }
-      }
-      list.push(this.currentProject.createdBy);
-      for (let member of list) {
-        if (member._id == this.card.assigned._id) {
-          assigned = member;
-          break;
-        }
-      }
-      return assigned;
-    },
   },
 
   methods: {
     ...mapActions({
-      deleteTaskAction: 'TASK/deleteTask',
-      getLogtimes: 'PROJECT/getLogtimes',
-      addCurrentTask: 'TASK/addCurrentTask',
-      getCommentByIdTask: 'TASK/getCommentByIdTask',
-      getChecklistByIdTask: 'TASK/getChecklistByIdTask'
+      deleteTaskAction: "TASK/deleteTask",
+      getLogtimes: "PROJECT/getLogtimes",
+      addCurrentTask: "TASK/addCurrentTask",
+      getCommentByIdTask: "TASK/getCommentByIdTask",
+      getChecklistByIdTask: "TASK/getChecklistByIdTask",
     }),
     deleteTask() {
       this.deleteTaskAction({
@@ -135,7 +120,7 @@ export default {
       this.getCommentByIdTask(this.card._id);
       this.addCurrentTask(this.card);
       this.getLogtimes(this.card._id);
-      this.getChecklistByIdTask(this.card._id)
+      this.getChecklistByIdTask(this.card._id);
       this.$refs.taskDetailModal.show();
     },
   },
@@ -180,5 +165,11 @@ export default {
 }
 .priority {
   margin-right: 5px;
+}
+
+.assigned img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
 }
 </style>

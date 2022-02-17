@@ -1,6 +1,6 @@
 import http from '../../service/api.js';
 import io from 'socket.io-client';
-const socket = io(`${process.env.VUE_APP_SOCKET_URL}:4000`, {
+const socket = io(`${process.env.VUE_APP_SOCKET_URL}:7000`, {
   transports: ['websocket', 'polling', 'flashsocket'],
 });
 

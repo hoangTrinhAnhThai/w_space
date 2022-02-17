@@ -1,6 +1,6 @@
 const express = require('express');
 const server = require('http').createServer(express);
-const server_port = 4000;
+const server_port = 7000;
 require('dotenv').config();
 const mongoose = require('mongoose');
 const multer = require('multer');

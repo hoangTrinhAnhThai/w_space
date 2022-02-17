@@ -98,9 +98,18 @@
             <td class="text"><date-table-cell :dueDate="item.dueDate" /></td>
           </tr>
         </template>
-       
       </v-data-table>
     </v-row>
+    <div style="width: 80%; margin: 0 auto">
+      <vue-horizontal-list :items="items" :options="options">
+        <template v-slot:default="{item}">
+          <div class="item">
+            <h5>{{item.title}}</h5>
+            <p>{{item.content}}</p>
+          </div>
+        </template>
+      </vue-horizontal-list>
+    </div>
   </v-main>
 </template>
 
@@ -108,6 +117,7 @@
 import { mapGetters } from "vuex";
 import TableCell from "../../components/table/NameTableCell.vue";
 import DateTableCell from "../../components/table/DateTableCell.vue";
+import VueHorizontalList from 'vue-horizontal-list';
 
 export default {
   name: "Roadmap",
@@ -153,6 +163,28 @@ export default {
           align: "center",
         },
       ],
+      options: {
+          responsive: [
+            {end: 576, size: 1}, 
+            {start: 576, end: 768, size: 2},
+            {start: 768, end: 992, size: 3},
+            {size: 4}
+          ],
+          list: {
+            // 1200 because @media (min-width: 1200px) and therefore I want to switch to windowed mode
+            windowed: 1200,
+            
+            // Because: #app {padding: 80px 24px;}
+            padding: 24
+          }
+        },  
+        items: [
+          {title: 'Item 0', content: 'Content item with description'},
+          {title: 'Item 0', content: 'Content item with description'},
+          {title: 'Item 0', content: 'Content item with description'},
+          {title: 'Item 0', content: 'Content item with description'},
+          {title: 'Item 0', content: 'Content item with description'},
+        ]
     };
   },
   computed: {
@@ -170,14 +202,21 @@ export default {
   components: {
     TableCell,
     DateTableCell,
+    VueHorizontalList
   },
 };
 </script>
 
 <style lang="scss" scoped>
- .text {
-   text-align: center;
- }
+@media (min-width: 1200px) {
+    #app {
+      padding-left: 80px;
+      padding-right: 80px;
+    }
+  }
+.text {
+  text-align: center;
+}
 .task {
   height: calc(100vh - 65px);
 }
@@ -224,8 +263,39 @@ export default {
 #open-task-table-cell {
   opacity: 0;
 }
- tr:hover #open-task-table-cell {
-   opacity: 1;
-  }
+tr:hover #open-task-table-cell {
+  opacity: 1;
+}
 </style>
+<style>
+.v-dialog {
+  margin: 0 !important;
+}
+.v-dialog__content {
+  position: fixed !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  height: 400px !important;
+  justify-content: end;
+}
 
+.v-dialog__content {
+    align-items: end !important;
+    display: flex;
+    /* height: 100%; */
+    justify-content: end !important;
+    pointer-events: none;
+    position: fixed;
+    bottom: 0 !important;
+    transition: 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), z-index 1ms;
+    width: 100%;
+    z-index: 6;
+    outline: none;
+    position: fixed !important;
+    bottom: 0 !important;
+    top: calc(100vh - 400px) !important
+}
+.v-overlay__scrim {
+  /* background-color: white !important; */
+}
+</style>
