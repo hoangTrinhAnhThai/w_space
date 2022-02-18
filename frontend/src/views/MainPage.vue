@@ -21,7 +21,6 @@ export default {
   methods: {
     ...mapActions({
       getProject: 'PROJECT/getProject',
-      getStatus: 'PROJECT/getStatus',
       getAllRooms: 'CHAT/getAllRooms',
       getUserByToken: 'AUTH/getUserByToken',
       getAllNotification: 'NOTIFICATION/getAllNotification',

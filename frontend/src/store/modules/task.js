@@ -13,7 +13,8 @@ const state = {
   statusArray: [],
   currentTask: {},
   comments: [],
-  checklist: []
+  checklist: [],
+  allChecklist: [],
 };
 
 const getters = {
@@ -34,6 +35,9 @@ const getters = {
   },
   checklist(state) {
     return state.checklist
+  },
+  allChecklist(state) {
+    return state.allChecklist
   }
 };
 
@@ -68,11 +72,13 @@ const mutations = {
   setComments(state, data) {
     state.comments = data;
   },
+  setAllChecklist(state, data) {
+    state.allChecklist = data;
+  },
   setChecklist(state, data) {
     state.checklist = data;
   },
   setChecklistItemEdit(state, data) {
-    console.log(data.isDone);
     let list = state.checklist
     for (let checklist of list) {
       if (checklist.task == data.idTask) {
@@ -85,7 +91,6 @@ const mutations = {
         break
       }
     }
-    console.log(list);
     state.checklist = list
   }
 };
@@ -129,7 +134,7 @@ const actions = {
 
   deleteTask({ commit, dispatch }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
-    http.delete(`/${params.idProject}/${params.idTask}`).then(() => {
+    http.delete(`/task/${params.idProject}/${params.idTask}`).then(() => {
       dispatch('getTasks', params.idProject);
       commit('ERROR/setIsLoading', false, { root: true });
     });
@@ -165,6 +170,14 @@ const actions = {
       }.bind(this),
     );
   },
+  getAllChecklist({ commit }) {
+    commit('ERROR/setIsLoading', true, { root: true });
+    http.get(`/task/checklists/`).then((result) => {
+      console.log(result.data.data);
+      commit('setAllChecklist', result.data.data);
+      commit('ERROR/setIsLoading', false, { root: true });
+    });
+  },
   getChecklistByIdTask({ commit }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
     http.get(`/task/checklist/${params}`).then((result) => {
@@ -178,6 +191,7 @@ const actions = {
       .then((result) => {
         console.log(result.data.data);
         dispatch('getChecklistByIdTask', params.idTask);
+        dispatch('getAllChecklist');
       })
       .catch((err) => {
         commit('ERROR/setErrorMessage', err.response.data.message, {
@@ -190,6 +204,7 @@ const actions = {
       .post(`/task/checklistItem/${params.idChecklist}`, params.name)
       .then(() => {
         dispatch('getChecklistByIdTask', params.idTask);
+        dispatch('getAllChecklist');
       })
       .catch((err) => {
         commit('ERROR/setErrorMessage', err.response.data.message, {
@@ -197,13 +212,12 @@ const actions = {
         });
       });
   },
-  editChecklistItem({ commit }, params) {
-    // console.log(params.isDone.isDone);
-    // commit('setChecklistItemEdit', params)
+  editChecklistItem({ commit, dispatch }, params) {
     http
       .put(`/task/checklistItem/${params.idChecklistItem}`, params.isDone)
       .then(() => {
-        // dispatch('getChecklistByIdTask', params.idTask);
+        dispatch('getChecklistByIdTask', params.idTask);
+        dispatch('getAllChecklist');
       })
       .catch((err) => {
         commit('ERROR/setErrorMessage', err.response.data.message, {

@@ -5,6 +5,7 @@ const state = {
   timeStop: '',
   logtimeArray: [],
   logtimeIsPlaying: {},
+  logtimeArrayByTask: []
 };
 
 const getters = {
@@ -23,6 +24,9 @@ const getters = {
   logtimeIsPlaying(state) {
     return state.logtimeIsPlaying;
   },
+  logtimeArrayByTask(state) {
+    return state.logtimeArrayByTask
+  }
 };
 const mutations = {
   logMess() {
@@ -40,6 +44,9 @@ const mutations = {
   setLogtimeArray(state, data) {
     state.logtimeArray = data;
   },
+  setLogtimeArrayByTask(state, data) {
+    state.logtimeArrayByTask = data
+  }, 
   setLogtimeIsPlaying(state, data) {
     state.logtimeIsPlaying = data;
   },
@@ -103,6 +110,14 @@ const actions = {
           commit('setLogtimeIsPlaying', logtime);
         }
       }
+      commit('ERROR/setIsLoading', false, { root: true });
+    });
+  },
+  getAllLogtimeByTask({ commit }, params) {
+    commit('ERROR/setIsLoading', true, { root: true });
+    commit('setLogtimeArrayByTask', []);
+    http.get(`/logtime/task/${params}`).then((result) => {
+      commit('setLogtimeArrayByTask', result.data.data);
       commit('ERROR/setIsLoading', false, { root: true });
     });
   },

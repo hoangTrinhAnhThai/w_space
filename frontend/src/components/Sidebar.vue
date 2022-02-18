@@ -198,20 +198,13 @@ export default {
       this.$refs.addMemberModal.show(project);
     },
     ...mapActions({
-      getTaskOfProjectAction: 'TASK/getTasks',
-      addCurrentProjectAction: 'PROJECT/addCurrentProject',
       deleteProjectAction: 'PROJECT/deleteProject',
-      getProject: 'PROJECT/getProject',
+      // getProject: 'PROJECT/getProject',
       addProjectEditAction: 'PROJECT/addProjectEdit',
-      getStatus: 'TASK/getStatus',
       getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
       addCurrentRoom: 'CHAT/addCurrentRoom',
       removeUnreadNotification: 'NOTIFICATION/removeUnreadNotification',
     }),
-    getTaskOfProject(project) {
-      this.addCurrentProjectAction(project);
-      this.getTaskOfProjectAction(project);
-    },
     deleteProject(idProject) {
       this.deleteProjectAction(idProject);
     },
@@ -245,29 +238,8 @@ export default {
       this.$router.push(`/usermanagement/`);
       this.mini = true;
     },
-    handleClickProjectManagement() {},
   },
-  created() {
-    this.getProject();
-    if (this.$route.name.name === 'Roadmap') {
-      this.getStatus();
-      this.getTaskOfProject(this.$route.params.id);
-    } else if (this.$route.name.name === 'ChatRoom') {
-      this.addCurrentRoom(this.$route.params.id);
-      this.getAllChatByIdRoom(this.$route.params.id);
-    }
-  },
-  watch: {
-    $route(to) {
-      if (to.name.name === 'Roadmap') {
-        this.getStatus();
-        this.getTaskOfProject(to.params.id);
-      } else if (to.name.name === 'ChatRoom') {
-        this.addCurrentRoom(to.params.id);
-        this.getAllChatByIdRoom(to.params.id);
-      }
-    },
-  },
+  
 };
 </script>
 <style>

@@ -51,7 +51,7 @@
                     {{ checklist.name }}</v-subheader
                   >
                   <v-spacer></v-spacer>
-                  <i class='bx bx-edit-alt'></i>
+                  <i class="bx bx-edit-alt"></i>
                   <i
                     class="bx bx-trash"
                     @click="deleteChecklist(checklist._id)"
@@ -64,14 +64,18 @@
                   >
                     <template>
                       <v-list-item-action>
-                        <input type="checkbox" 
-                          id="checkbox" 
-                          @change="check(item)" v-model="item.isDone"
-                        >
+                        <input
+                          type="checkbox"
+                          id="checkbox"
+                          @change="check(item)"
+                          v-model="item.isDone"
+                        />
                       </v-list-item-action>
 
                       <v-list-item-content>
-                        <v-list-item-title :class="{ active: item.isDone }">{{ item.name }} {{item.isDone}}</v-list-item-title>
+                        <v-list-item-title :class="{ active: item.isDone }">{{
+                          item.name
+                        }}</v-list-item-title>
                       </v-list-item-content>
                     </template>
                   </v-list-item>
@@ -224,6 +228,20 @@
             </v-col>
             <div class="due-date"></div>
           </v-row>
+          <v-row>
+            <v-data-table
+              :headers="headers"
+              :items="logtimes"
+              hide-default-header
+              hide-default-footer
+              class="elevation-1"
+            >
+              <template v-slot:item="{ item }">
+                <td>{{ item.createdBy.firstName }}</td>
+                <td>{{ item.timeInMiliseconds}}</td>
+              </template>
+            </v-data-table>
+          </v-row>
         </v-col>
       </v-row>
       <v-divider></v-divider>
@@ -273,11 +291,21 @@ export default {
       isShowChecklist: false,
       isShowChecklistItem: null,
       itemName: "",
+      headers: [
+        {
+          text: "Name",
+          value: "createdBy",
+        },
+        {
+          text: "End time",
+          value: "timeInMiliseconds",
+        },
+      ],
     };
   },
   computed: {
     ...mapGetters({
-      logtimes: "PROJECT/logtimes",
+      logtimes: "LOGTIME/logtimeArrayByTask",
       currentProject: "PROJECT/currentProject",
       currentTask: "PROJECT/currentTask",
       validateText: "VALIDATION/validateText",
@@ -312,7 +340,7 @@ export default {
       addCommentAction: "TASK/addComment",
       addChecklistItemAction: "TASK/addChecklistItem",
       deleteChecklistAction: "TASK/deleteChecklist",
-      editChecklistItemAction: 'TASK/editChecklistItem'
+      editChecklistItemAction: "TASK/editChecklistItem",
     }),
     show() {
       this.$refs.taskDetailModal.show();
@@ -383,7 +411,6 @@ export default {
         });
         this.itemName = "";
       }
-
     },
     deleteChecklist(idChecklist) {
       this.deleteChecklistAction({
@@ -398,8 +425,12 @@ export default {
     //   });
     // },
     check(item) {
-      this.editChecklistItemAction({idChecklistItem: item._id, idTask: this.task._id, isDone: {isDone: item.isDone } })
-    }
+      this.editChecklistItemAction({
+        idChecklistItem: item._id,
+        idTask: this.task._id,
+        isDone: { isDone: item.isDone },
+      });
+    },
   },
   watch: {
     isShowChecklistItem() {
@@ -500,12 +531,14 @@ label {
 .checklist-header i {
   cursor: pointer;
 }
-.checklist-header .bx-trash, .checklist-header  .bx-edit-alt {
+.checklist-header .bx-trash,
+.checklist-header .bx-edit-alt {
   opacity: 0;
   margin: 0 5px;
 }
-.checklist-header:hover  .bx-trash, .checklist-header:hover .bx-edit-alt{
-opacity: 1;
+.checklist-header:hover .bx-trash,
+.checklist-header:hover .bx-edit-alt {
+  opacity: 1;
 }
 </style>
 <style>
@@ -524,6 +557,4 @@ opacity: 1;
   padding: 0 !important;
   margin: 0 !important;
 }
-
-
 </style>

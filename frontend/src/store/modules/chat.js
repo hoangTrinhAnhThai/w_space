@@ -103,14 +103,12 @@ const actions = {
   },
   sendMessage({ dispatch }, params) {
     http.post(`/chat/`, params.chat).then((response) => {
-      console.log(response.data.data);
       socket.emit('save-message', response.data.data);
       dispatch('getAllChatByIdRoom', params.idRoom);
     });
   },
   uploadFile({ dispatch }, params) {
     http.post(`/chat/upload/${params.idRoom}`, params.file).then((response) => {
-      console.log(response.data.data);
       socket.emit('save-message', response.data.data);
       dispatch('getAllChatByIdRoom', params.idRoom);
     });

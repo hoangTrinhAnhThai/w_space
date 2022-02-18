@@ -1,21 +1,24 @@
 <template>
   <v-card elevation="2" @click="showTaskDetailModal">
-    <v-card-title
-      style="color: rgb(21, 17, 30); font-size: 15px; font-weight: 800"
-      >{{ card.name }}</v-card-title
-    >
-    <v-card-subtitle class="description" style="font-size: 12px">{{
+    <v-card-title class="title">{{ card.name }}</v-card-title>
+    <v-card-subtitle class="description">{{
       card.description
     }}</v-card-subtitle>
-    <v-card-text>
-      <span v-if="card.dueDate">
-        <span v-if="!deadline" style="color: red; font-size: 12px">
+    <v-card-text class="card-content">
+      <div v-if="card.dueDate" class="due-date">
+        <span
+          v-bind:class="{
+            due: !deadline && card.status.name != 'Closed',
+            'not-due': deadline && card.status.name != 'Closed',
+          }"
+        >
           <i class="bx bx-calendar"></i> {{ date }}, {{ month }} {{ year }}
         </span>
-        <span v-else style="color: green; font-size: 12px"
-          ><i class="bx bx-calendar"></i> {{ date }}, {{ month }}
-          {{ year }}</span
-        >
+      </div>
+      <span v-if="checklistTotal" class="checkbox">
+        <v-icon>mdi-checkbox-marked-outline</v-icon>{{ checklistDone }}/{{
+          checklistTotal
+        }}
       </span>
       <div class="right-option">
         <span class="priority" v-if="card.priority">
@@ -99,13 +102,33 @@ export default {
     ...mapGetters({
       currentProject: "PROJECT/currentProject",
       currentTask: "TASK/currentTask",
+      checklists: "TASK/allChecklist",
     }),
+    checklistTotal() {
+      let initialValue = 0;
+      for (let checklist of this.checklists) {
+        if (checklist.items && checklist.task == this.card._id)
+          initialValue += checklist.items.length;
+      }
+      return initialValue;
+    },
+    checklistDone() {
+      let done = 0;
+      for (let checklist of this.checklists) {
+        if (checklist.items && checklist.task == this.card._id) {
+          for (let item of checklist.items) {
+            if (item.isDone) done++;
+          }
+        }
+      }
+      return done;
+    },
   },
 
   methods: {
     ...mapActions({
       deleteTaskAction: "TASK/deleteTask",
-      getLogtimes: "PROJECT/getLogtimes",
+      getLogtimes: "LOGTIME/getAllLogtimeByTask",
       addCurrentTask: "TASK/addCurrentTask",
       getCommentByIdTask: "TASK/getCommentByIdTask",
       getChecklistByIdTask: "TASK/getChecklistByIdTask",
@@ -129,7 +152,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .v-card-title,
 .v-card-subtitle {
   color: rgb(21, 17, 30) !important;
@@ -139,37 +162,62 @@ export default {
   border: none;
   position: relative;
   background-color: rgb(244, 245, 254) !important;
+  .menu {
+    position: absolute;
+    right: 10px;
+    top: 15px;
+  }
+  .title {
+    color: rgb(58, 57, 61);
+    font-size: 16px !important;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif !important;
+  }
+  .description {
+    display: flex;
+    flex-wrap: wrap;
+    word-break: inherit;
+    font-size: 12px;
+  }
+  .card-content {
+    display: flex;
+    justify-content: space-between;
+    .checkbox {
+      margin-top: 0px;
+      .v-icon {
+        font-size: 15px;
+        margin-bottom: 3px;
+        margin-right: 4px;
+      }
+    }
+    .assigned {
+      img {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+      }
+    }
+    .due-date {
+      .due {
+        color: red;
+        font-size: 12px;
+      }
+      .not-due {
+        color: green;
+      }
+    }
+    .right-option {
+      position: relative;
+      top: -5px
+    }
+  }
 }
 
 .card:hover {
   background-color: rgb(231, 233, 248) !important;
 }
-.card .menu {
-  position: absolute;
-  right: 10px;
-  top: 15px;
-}
-.description {
-  display: flex;
-  flex-wrap: wrap;
-  word-break: inherit;
-}
 .theme--light.v-card > .v-card__subtitle,
 .theme--light.v-card > .v-card__text {
   word-break: break-all;
-}
-.right-option {
-  position: absolute;
-  right: 15px;
-  bottom: 15px;
-}
-.priority {
-  margin-right: 5px;
-}
-
-.assigned img {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
 }
 </style>
