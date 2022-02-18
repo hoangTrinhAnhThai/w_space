@@ -5,6 +5,13 @@ const apiResponse = require('../../../utils/apiResponse');
 require('dotenv').config();
 
 class ChecklistController {
+    showAllChecklist = async (req, res) => {
+        const checklist = await Checklist.find().populate('items').sort({ status: -1 });
+        if (!checklist) {
+            return apiResponse.ErrorResponse(res, error);
+        }
+        return apiResponse.successResponseWithData(res, 'show checklist success', checklist);
+    };
     showAllChecklistByTask = async (req, res) => {
         const checklist = await Checklist.find({ task: req.params.idTask }).populate('items').sort({ status: -1 });
         if (!checklist) {
@@ -13,7 +20,7 @@ class ChecklistController {
         return apiResponse.successResponseWithData(res, 'show checklist success', checklist);
     };
     showChecklist = async (req, res) => {
-        const checklist = Checklist.findById(req.params.id)
+        const checklist = await Checklist.findById(req.params.id)
         if (!checklist) {
             return apiResponse.ErrorResponse(res, error);
         }
@@ -21,7 +28,6 @@ class ChecklistController {
     };
 
     createChecklistItem = async (req, res) => {
-        console.log(req.params.id, req.body.name);
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {

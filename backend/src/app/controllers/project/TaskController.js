@@ -51,7 +51,7 @@ class TaskController {
         taskParams.checklist = [];
         const docTask = await Task.create(taskParams);
         const arrayTask = await Task.find({ project: req.params.id })
-
+        await Project.findByIdAndUpdate(req.params.id, {$push: {tasks: docTask}})
         if (arrayTask.length > 0) {
           for (let task of arrayTask) {
             if (
@@ -163,11 +163,8 @@ class TaskController {
   deleteTask = async (req, res) => {
     const idProject = req.params.idProject;
     const idTask = req.params.idTask;
-    const project = await Project.findById(idProject).populate('tasks');
-    if (!project) {
-      return apiResponse.ErrorResponse(res, 'Cannot find project');
-    }
-    dropANode(project.tasks, idTask);
+    const tasks = await Task.find({project: idProject})
+    dropANode(tasks, idTask);
     const logtimes = await Logtime.find({ task: idTask });
     if (logtimes.length > 0) {
       for (let logtime of logtimes) {

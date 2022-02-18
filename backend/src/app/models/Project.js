@@ -31,7 +31,7 @@ const Project = new Schema(
     background: {
       type: Schema.Types.ObjectId,
       ref: 'Background',
-    }
+    },
   },
   {
     timestamps: true,

@@ -56,7 +56,6 @@ const io = require('socket.io')(server, {
 });
 
 router.post('/upload/:id', upload.single('file'), async (req, res) => {
-  console.log(req.params.id);
   const file = await gfs.files.findOne({ filename: name });
   const user = await User.findById(host(req, res));
   let chatParams = new Chat();
@@ -86,18 +85,7 @@ router.post('/upload/:id', upload.single('file'), async (req, res) => {
     chat,
   );
 });
-// router.post('/upload/:id', chatController.uploadFile)
 router.get('/upload/', (req, res) => {
-  // gfs.files.findOne({ _id: '61d71836e24b380afd0d9e8c', root: 'uploads' }, (err, file) => {
-  //   console.log(file);
-  //   if (!file || file.length === 0) return res.status(404).json({ err: 'No file exists' });
-  //   return res.json(file);
-  // });
-  // gfs.files.findOne({ filename: 'SHAREVIEW_KeHoachTrienKhai_DATN.pdf' }, (err, file) => {
-  //   console.log(file);
-  //   if (!file || file.length === 0) return res.status(404).json({ err: 'No file exists' });
-  //   return res.json(file);
-  // });
   gfs.files.find().toArray((err, files) => {
     if (!files || files.length === 0)
       return res.status(404).json({ err: 'No files exist' });

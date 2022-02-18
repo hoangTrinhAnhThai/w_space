@@ -23,10 +23,11 @@ const {
 } = require('../../middleware/validation');
 
 // router.get('/:idProject', taskController.showAllTask);
-router.get('/:id', taskValidation(), taskController.showTask);
 router.get('/tasksOfProject/:id/', taskController.showAllTask);
 router.get('/comment/:id', commentController.getCommentByIdTask);
 router.get('/checklist/:idTask', checklistController.showAllChecklistByTask);
+router.get('/checklists', checklistController.showAllChecklist);
+router.get('/:id', taskValidation(), taskController.showTask);
 
 router.post('/checklist/:id', taskController.addChecklistTask);
 router.post('/comment/:id', commentController.createComment);
