@@ -43,7 +43,6 @@ export default {
       addChecklistAction: 'TASK/addChecklist',
     }),
     addtaskForm() {
-      this.loading = true;
       if (!this.validateBeforeSubmit()) {
         document.getElementById('content').focus();
         return;

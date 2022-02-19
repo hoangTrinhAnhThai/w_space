@@ -6,12 +6,7 @@
     }}</v-card-subtitle>
     <v-card-text class="card-content">
       <div v-if="card.dueDate" class="due-date">
-        <span
-          v-bind:class="{
-            due: !deadline && card.status.name != 'Closed',
-            'not-due': deadline && card.status.name != 'Closed',
-          }"
-        >
+        <span v-bind:style="{ color: deadline }">
           <i class="bx bx-calendar"></i> {{ date }}, {{ month }} {{ year }}
         </span>
       </div>
@@ -22,27 +17,59 @@
       </span>
       <div class="right-option">
         <span class="priority" v-if="card.priority">
-          <v-icon
-            v-if="card.priority == 'high'"
-            style="color: rgb(233, 92, 92)"
-          >
-            mdi-alert-outline</v-icon
-          >
-          <v-icon v-if="card.priority == 'normal'" style="color: orange">
-            mdi-alert-outline</v-icon
-          >
-          <v-icon v-if="card.priority == 'low'" style="color: green">
-            mdi-alert-outline</v-icon
-          >
+          <v-tooltip bottom >
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+              v-bind="attrs"
+                v-on="on"
+                v-if="card.priority == 'high'"
+                style="color: rgb(233, 92, 92)"
+              >
+                mdi-alert-outline</v-icon
+              >
+              <v-icon v-bind="attrs"
+                v-on="on" v-if="card.priority == 'normal'" style="color: orange">
+                mdi-alert-outline</v-icon
+              >
+              <v-icon v-bind="attrs"
+                v-on="on" v-if="card.priority == 'low'" style="color: green">
+                mdi-alert-outline</v-icon
+              >
+            </template>
+
+            <span>{{ card.priority }}</span>
+          </v-tooltip>
         </span>
+
         <span class="assigned" v-if="card.assigned">
-          <img v-if="card.assigned.avatar" :src="card.assigned.avatar" alt="" />
-          <v-avatar v-else color="light-blue lighten-3" size="24">
-            <span v-if="card.assigned" style="font-size: 10px">
-              {{ card.assigned.firstName.charAt(0)
-              }}{{ card.assigned.lastName.charAt(0) }}
-            </span>
-          </v-avatar>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <img
+                v-bind="attrs"
+                v-on="on"
+                v-if="card.assigned.avatar"
+                :src="card.assigned.avatar"
+                alt=""
+              />
+              <v-avatar
+                v-bind="attrs"
+                v-on="on"
+                v-if="
+                  !card.assigned.avatar &&
+                  card.assigned.firstName &&
+                  card.assigned.lastName
+                "
+                color="light-blue lighten-3"
+                size="24"
+              >
+                <span style="font-size: 10px">
+                  {{ card.assigned.firstName.charAt(0)
+                  }}{{ card.assigned.lastName.charAt(0) }}
+                </span>
+              </v-avatar>
+            </template>
+            <span>{{ card.assigned.firstName }} {{card.assigned.lastName}}</span>
+          </v-tooltip>
         </span>
       </div>
     </v-card-text>
@@ -71,8 +98,8 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import TaskDetail from "../components/modal/TaskDetail.vue";
-import helper from "../utils/data";
+import TaskDetail from "./TaskDetail.vue";
+import helper from "../../utils/data";
 export default {
   name: "Cards",
   props: {
@@ -88,7 +115,19 @@ export default {
   },
   computed: {
     deadline() {
-      return new Date(this.card.dueDate) > new Date();
+      if (
+        new Date(this.card.dueDate) >= new Date() &&
+        this.card.status.name !== "Closed"
+      ) {
+        return "green";
+      }
+      if (
+        new Date(this.card.dueDate) < new Date() &&
+        this.card.status.name !== "Closed"
+      ) {
+        return "red";
+      }
+      return "grey";
     },
     date() {
       return new Date(this.card.dueDate).getDate();
@@ -208,7 +247,7 @@ export default {
     }
     .right-option {
       position: relative;
-      top: -5px
+      top: -5px;
     }
   }
 }

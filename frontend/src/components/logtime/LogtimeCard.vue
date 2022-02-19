@@ -16,7 +16,7 @@
           <li>
             <i class="bx bx-trash" @click="deteleLogtime"></i>
           </li>
-          <li><i class="bx bx-calendar"></i></li>
+          <!-- <li><i class="bx bx-calendar"></i></li> -->
         </ul>
       </v-col>
       <v-col cols="2" class="description" tabindex="0">

@@ -199,7 +199,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import ChatCard from '../../components/ChatCard.vue';
+import ChatCard from '../../components/chat/ChatCard.vue';
 import { VEmojiPicker } from 'v-emoji-picker';
 export default {
   name: 'ChatRoom',

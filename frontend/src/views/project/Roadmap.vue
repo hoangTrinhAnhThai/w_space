@@ -73,8 +73,8 @@
 </template>
 
 <script>
-import Card from "../../components/ProjectCard.vue";
-import AddTaskForm from "../../components/AddTaskForm.vue";
+import Card from "../../components/project/ProjectCard.vue";
+import AddTaskForm from "../../components/project/AddTaskForm.vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { mapActions, mapGetters } from "vuex";
 import colors from "../../utils/data";

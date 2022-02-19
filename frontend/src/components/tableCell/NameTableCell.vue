@@ -12,7 +12,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import TaskDetail from "../modal/TaskDetail.vue";
+import TaskDetail from "../project/TaskDetail.vue";
 
 export default {
   props: {

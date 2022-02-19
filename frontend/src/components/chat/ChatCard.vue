@@ -18,7 +18,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import helper from '../utils/data';
+import helper from '../../utils/data';
 export default {
   name: 'ChatCard',
   props: {

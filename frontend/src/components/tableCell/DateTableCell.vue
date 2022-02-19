@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dueDate">
+  <div v-if="date">
     {{getTime }}
   </div>
 </template>
@@ -8,15 +8,15 @@
 import helper from "../../utils/data";
 export default {
   props: {
-    dueDate: {
+    date: {
       type: String,
     },
   },
   computed: {
     getTime() {
-      let year = new Date(this.dueDate).getFullYear();
-      let month = helper.month[new Date(this.dueDate).getMonth()];
-      let day = new Date(this.dueDate).getDate();
+      let year = new Date(this.date).getFullYear();
+      let month = helper.month[new Date(this.date).getMonth()];
+      let day = new Date(this.date).getDate();
       return `${day} ${month}, ${year}`;
     },
   },

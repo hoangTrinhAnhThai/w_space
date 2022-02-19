@@ -243,7 +243,7 @@ export default {
 };
 </script>
 <style>
-.mdi-chevron-down::before {
+.sidebar .mdi-chevron-down::before {
   color: rgb(103, 102, 105) !important;
 }
 
@@ -255,21 +255,21 @@ export default {
   margin: 0 5px;
 }
 
-.v-list .v-list-item {
+.sidebar .v-list .v-list-item {
   letter-spacing: 1px !important;
 }
 
-.v-list .v-list-item:hover {
+.sidebar .v-list .v-list-item:hover {
   background-color: rgb(21, 17, 30);
   border-radius: 5px;
 }
 
-.v-list .v-list-item:hover,
-.v-list .v-list-item:hover .mdi-chevron-down::before {
+.sidebar .v-list .v-list-item:hover,
+.sidebar .v-list .v-list-item:hover .mdi-chevron-down::before {
   color: white !important;
 }
 
-.v-navigation-drawer__border {
+.sidebar .v-navigation-drawer__border {
   position: absolute;
   right: -1px !important;
 }

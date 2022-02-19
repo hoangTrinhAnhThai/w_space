@@ -55,11 +55,8 @@
                 >
               </div>
             </td>
-            <td class="text">
-              <span v-if="item.assigned"
-                >{{ item.assigned.firstName }}
-                {{ item.assigned.lastName }}</span
-              >
+            <td class="text" style="text-align: left">
+              <Avatar v-if="item.assigned" :user="item.assigned"/>
             </td>
             <td class="text">
               <div style="font-weight: 500">
@@ -85,11 +82,11 @@
                   :class="{
                     dueDate: new Date(item.dueDate).getTime() > new Date(),
                   }"
-                  ><date-table-cell :dueDate="item.dueDate"
+                  ><date-table-cell :date="item.dueDate"
                 /></span>
               </div>
             </td>
-            <td class="text"><date-table-cell :dueDate="item.dueDate" /></td>
+            <td class="text"><date-table-cell :date="item.dueDate" /></td>
           </tr>
         </template>
       </v-data-table>
@@ -99,8 +96,9 @@
 
 <script>
 import { mapGetters } from "vuex";
-import TableCell from "../../components/table/NameTableCell.vue";
-import DateTableCell from "../../components/table/DateTableCell.vue";
+import TableCell from "../../components/tableCell/NameTableCell.vue";
+import DateTableCell from "../../components/tableCell/DateTableCell.vue";
+import Avatar from '../../components/Avatar.vue'
 
 export default {
   name: "Roadmap",
@@ -127,7 +125,7 @@ export default {
         },
         {
           text: "Assigned",
-          value: "assigned",
+          value: "assigned.firstName",
           align: "center",
         },
         {
@@ -163,6 +161,7 @@ export default {
   components: {
     TableCell,
     DateTableCell,
+    Avatar
   },
 };
 </script>
