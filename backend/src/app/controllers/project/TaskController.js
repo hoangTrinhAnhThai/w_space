@@ -1,4 +1,5 @@
 const Task = require('../../models/Task');
+const File = require('../../models/File');
 const Checklist = require('../../models/Checklist');
 const Project = require('../../models/Project');
 const Status = require('../../models/Status');
@@ -27,7 +28,31 @@ class TaskController {
     }
     return apiResponse.successResponseWithData(res, 'show task success', task);
   };
-
+  attachImg = async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return apiResponse.validationErrorWithData(
+          res,
+          'Validation Error',
+          errors.array(),
+        );
+      } else {
+        const taskUpdate = await Task.findById(req.params.id)
+        const newFile = await File.create({ name: req.body.fileName, isFile: false, task: taskUpdate, url: req.body.url, contentType: req.body.contentType })
+        const task = await Task.findByIdAndUpdate(req.params.id, {
+          $push: { files: newFile }
+        })
+        return apiResponse.successResponseWithData(
+          res,
+          'Edit task successfully',
+          task,
+        );
+      }
+    } catch (error) {
+      return apiResponse.ErrorResponse(res, error);
+    }
+  };
   createTask = async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -51,7 +76,7 @@ class TaskController {
         taskParams.checklist = [];
         const docTask = await Task.create(taskParams);
         const arrayTask = await Task.find({ project: req.params.id })
-        await Project.findByIdAndUpdate(req.params.id, {$push: {tasks: docTask}})
+        await Project.findByIdAndUpdate(req.params.id, { $push: { tasks: docTask } })
         if (arrayTask.length > 0) {
           for (let task of arrayTask) {
             if (
@@ -163,7 +188,7 @@ class TaskController {
   deleteTask = async (req, res) => {
     const idProject = req.params.idProject;
     const idTask = req.params.idTask;
-    const tasks = await Task.find({project: idProject})
+    const tasks = await Task.find({ project: idProject })
     dropANode(tasks, idTask);
     const logtimes = await Logtime.find({ task: idTask });
     if (logtimes.length > 0) {

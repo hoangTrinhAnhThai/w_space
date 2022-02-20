@@ -1,18 +1,25 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const File = new mongoose.Schema({
-  doc_id: {
-    type: String,
+const File = new mongoose.Schema(
+  {
+    task: {
+      type: Schema.Types.ObjectId,
+      ref: 'Task',
+    },
+    name: {
+      type: String,
+    },
+    isFile: {
+      type: Boolean,
+    },
+    url: {
+      type: String
+    },
+    contentType: { type: String }
   },
-  length: {
-    type: Number,
-  },
-  name: {
-    type: String,
-  },
-  type: {
-    type: String,
-  },
-});
+  {
+    timestamps: true,
+  });
 
-module.exports = mongoose.model('File', File);
+module.exports = mongoose.model('File', File, 'File');

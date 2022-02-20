@@ -11,6 +11,8 @@ const crypto = require('crypto');
 const router = express.Router();
 const chatController = require('../../app/controllers/chatroom/ChatController');
 const Chat = require('../../app/models/Chat');
+const File = require('../../app/models/File');
+const Task = require('../../app/models/Task');
 const Notification = require('../../app/models/Notification');
 const User = require('../../app/models/User');
 const apiResponse = require('../../utils/apiResponse');
@@ -55,6 +57,20 @@ const io = require('socket.io')(server, {
   allowEIO3: true,
 });
 
+router.post('/attach/upload/:id', upload.single('file'), async (req, res) => {
+  const file = await gfs.files.findOne({ filename: name });
+  console.log(file);
+  const taskUpdate = await Task.findById(req.params.id)
+  const newFile = await File.create({ name: file.filename, isFile: true, task: taskUpdate, contentType: file.contentType })
+  const task = await Task.findByIdAndUpdate(req.params.id, {
+    $push: { files: newFile }
+  })
+  return apiResponse.successResponseWithData(
+    res,
+    'Add file successfully',
+    task,
+  );
+})
 router.post('/upload/:id', upload.single('file'), async (req, res) => {
   const file = await gfs.files.findOne({ filename: name });
   const user = await User.findById(host(req, res));

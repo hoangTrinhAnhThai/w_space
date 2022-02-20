@@ -41,6 +41,12 @@ const Task = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    files: [
+      {
+        fileName: {type: String},
+        isImg: {type: Boolean}
+      }
+    ]
   },
   {
     timestamps: true,
