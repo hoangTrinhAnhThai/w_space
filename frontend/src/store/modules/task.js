@@ -15,6 +15,7 @@ const state = {
   comments: [],
   checklist: [],
   allChecklist: [],
+  files: []
 };
 
 const getters = {
@@ -38,6 +39,9 @@ const getters = {
   },
   allChecklist(state) {
     return state.allChecklist
+  },
+  files(state) {
+    return state.files
   }
 };
 
@@ -92,6 +96,9 @@ const mutations = {
       }
     }
     state.checklist = list
+  },
+  setFiles(state, data) {
+    state.files = data
   }
 };
 const actions = {
@@ -116,6 +123,13 @@ const actions = {
     http.get(`/task/tasksOfProject/${idProject}`).then((result) => {
       commit('setTasksArray', result.data.data);
       commit('setTasks', result.data.data);
+      commit('ERROR/setIsLoading', false, { root: true });
+    });
+  },
+  getTask({commit}, params) {
+    commit('ERROR/setIsLoading', true, { root: true });
+    http.get(`/task/${params}`).then((result) => {
+      commit('addCurrentTask', result.data.data);
       commit('ERROR/setIsLoading', false, { root: true });
     });
   },
@@ -246,6 +260,45 @@ const actions = {
           root: true,
         });
       });
+  },
+  getFiles({commit}, params) {
+    commit('ERROR/setIsLoading', true, { root: true });
+    http.get(`/task/files/${params}`).then((response) => {
+      console.log(response.data.data);
+      commit('setFiles', response.data.data)
+    commit('ERROR/setIsLoading', false, { root: true });
+
+    })
+  },
+  deleteFile({commit, dispatch}, params) {
+    console.log(params);
+    commit('ERROR/setIsLoading', true, { root: true });
+    http.delete(`/task/files/${params.idFile}`).then((response) => {
+      console.log(response.data.data);
+      dispatch('getFiles', params.idTask);
+    commit('ERROR/setIsLoading', false, { root: true });
+    })
+
+  },
+  attachFile({ commit, dispatch }, params) {
+    commit('ERROR/setIsLoading', true, { root: true });
+    http.post(`/chat/attach/upload/${params.idTask}`, params.file).then((response) => {
+      // commit('setCurrentTask', response.data.data)
+      console.log(response.data.data);
+      dispatch('getFiles', params.idTask);
+    commit('ERROR/setIsLoading', false, { root: true });
+
+    });
+  },
+  attachImg({ commit, dispatch }, params) {
+    commit('ERROR/setIsLoading', true, { root: true });
+    http.put(`/task/attach/upload/${params.idTask}`, params.file).then((response) => {
+      // commit('setCurrentTask', response.data.data)
+      console.log(response.data.data);
+      dispatch('getFiles', params.idTask);
+    commit('ERROR/setIsLoading', false, { root: true });
+
+    });
   }
 };
 

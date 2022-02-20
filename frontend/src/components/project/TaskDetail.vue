@@ -18,7 +18,14 @@
             ></v-text-field>
           </div>
           <div class="function-task-detail">
-            <v-btn text> <v-icon small>mdi-paperclip</v-icon> Attach </v-btn>
+            <v-btn @click="handleClickInputFile" text>
+              <v-icon small>mdi-paperclip</v-icon> Attach
+              <input
+                type="file"
+                @change="onFileChange"
+                ref="fileInputAvt"
+                style="display: none"
+            /></v-btn>
             <v-btn text @click="isShowChecklist = true">
               <v-icon small>mdi-checkbox-multiple-marked-outline</v-icon> List
               to do
@@ -35,6 +42,9 @@
               rows="1"
             ></v-textarea>
           </v-row>
+          <div class="attach-file">
+            <AttachFile :idTask="task._id"/>
+          </div>
           <div
             v-if="checklists.length > 0 || isShowChecklist"
             class="checklist"
@@ -255,20 +265,17 @@
           </v-row>
           <v-row>
             <v-col cols="24" v-if="logtimes.length > 0">
-              <label for=""
-                ><v-icon> mdi-update</v-icon> Logtimes
-                </label
-              >
+              <label for=""><v-icon> mdi-update</v-icon> Logtimes </label>
 
               <ReportLogtimeTable />
               <span class="export" @click="fetchData">
-                  <export-excel
-                    :data="logtimes"
-                    :name="`Logtime ${task.name}.xls`"
-                  >
-                    <v-btn text>Download Data</v-btn>
-                  </export-excel>
-                </span>
+                <export-excel
+                  :data="logtimes"
+                  :name="`Logtime ${task.name}.xls`"
+                >
+                  <v-btn text>Export Logtime</v-btn>
+                </export-excel>
+              </span>
             </v-col>
           </v-row>
         </v-col>
@@ -306,6 +313,9 @@ import ReportLogtimeTable from "../table/ReportLogtimeTable.vue";
 import Avatar from "../Avatar.vue";
 import DatePicker from "vue2-datepicker";
 import { mapActions, mapGetters } from "vuex";
+import axios from 'axios';
+import AttachFile from '../project/AttachFile.vue'
+
 export default {
   name: "task-detail",
   props: {
@@ -364,6 +374,9 @@ export default {
       deleteChecklistAction: "TASK/deleteChecklist",
       editChecklistItemAction: "TASK/editChecklistItem",
       getLogtimes: "LOGTIME/getAllLogtimeByTask",
+      attachFile: "TASK/attachFile",
+      attachImg: "TASK/attachImg",
+      addIsLoading: 'ERROR/addIsLoading',
     }),
     show() {
       this.$refs.taskDetailModal.show();
@@ -493,6 +506,37 @@ export default {
     async fetchData() {
       this.getLogtimes(this.task._id);
     },
+    handleClickInputFile() {
+      this.$refs.fileInputAvt.click();
+    },
+    onFileChange(e) {
+      this.isDisableButton = true;
+      const formData = new FormData();
+      formData.append("file", e.target.files[0]);
+      this.addIsLoading(true);
+      console.log(e.target.files[0]);
+      if (e.target.files[0].type.includes("image")) {
+      formData.append("upload_preset", "wfcqkljk");
+
+        axios
+          .post(
+            "https://api.cloudinary.com/v1_1/dj5xafymg/image/upload",
+            formData
+          )
+          .then((response) => {
+            console.log(response.data);
+            this.attachImg({ idTask: this.task._id, file: {fileName: e.target.files[0].name, url: response.data.url, contentType: e.target.files[0].type} })
+            // this.avatar = response.data.url;
+            // this.isDisableButton = false;
+            // this.addIsLoading(false);
+          })
+          .catch(() => {
+            this.addIsLoading(false);
+          });
+      } else {
+        this.attachFile({ file: formData, idTask:this.task._id })
+      }
+    },
   },
   watch: {
     isShowChecklistItem() {
@@ -503,6 +547,7 @@ export default {
     DatePicker,
     ReportLogtimeTable,
     Avatar,
+    AttachFile
   },
 };
 </script>
@@ -641,9 +686,9 @@ export default {
       }
     }
     .export {
-        display: flex;
-        flex-direction: row-reverse;
-      }
+      display: flex;
+      flex-direction: row-reverse;
+    }
     margin-top: 55px;
     .row {
       margin-bottom: 5px;

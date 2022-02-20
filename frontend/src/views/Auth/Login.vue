@@ -217,6 +217,6 @@ input {
 .errors {
   text-align: start;
   margin-left: 5px;
-  font-size: 85%;
+  font-size: 100%;
 }
 </style>

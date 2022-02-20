@@ -18,14 +18,11 @@ function pdfBlobConversion(b64Data, contentType) {
     offset = offset + sliceSize
   ) {
     var slice = byteCharacters.slice(offset, offset + sliceSize);
-
     var byteNumbers = new Array(slice.length);
     for (var i = 0; i < slice.length; i++) {
       byteNumbers[i] = slice.charCodeAt(i);
     }
-
     var byteArray = new Uint8Array(byteNumbers);
-
     byteArrays.push(byteArray);
   }
 
@@ -121,10 +118,18 @@ const actions = {
       link.href = window.URL.createObjectURL(
         pdfBlobConversion(response.data.data, response.data.type),
       );
+      
       let arr = params.split('-');
       arr.pop();
       link.download = arr.join('-');
       link.click();
+
+     
+        // let  url = window.URL.createObjectURL(
+        //     pdfBlobConversion(response.data.data, response.data.type))
+
+        // window.open(url)
+    
     });
   },
 };

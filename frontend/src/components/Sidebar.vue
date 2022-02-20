@@ -116,10 +116,19 @@
           <template v-slot:activator>
             <v-list-item-content @click="handleClickChatRoom">
               <v-list-item-title>
-                <i
-                  style="font-size: 20px"
-                  class="bx bx-message-rounded-dots"
-                ></i>
+                <v-badge
+                  :content="totalNotification"
+                  :value="totalNotification"
+                  dot
+                  overlap
+                  color="red lighten-1"
+                  style="font-weight: lighter; height: 10px; top: -10px; left: 0px"
+                >
+                  <i
+                    style="font-size: 20px"
+                    class="bx bx-message-rounded-dots"
+                  ></i
+                ></v-badge>
                 Chatroom</v-list-item-title
               >
             </v-list-item-content>
@@ -139,7 +148,12 @@
                     color="red lighten-1"
                     :content="notification.listContent[0].unreadCount"
                     :value="notification.listContent[0].unreadCount"
-                    style="font-weight: lighter; margin-left: 10px; top: 20px; height: 20px"
+                    style="
+                      font-weight: lighter;
+                      margin-left: 10px;
+                      top: 20px;
+                      height: 20px;
+                    "
                   ></v-badge>
                   <v-badge
                     v-else-if="
@@ -148,7 +162,12 @@
                     "
                     :content="'5+'"
                     color="red lighten-1"
-                    style="font-weight: lighter; margin-left: 10px;  top: 20px; height: 20px"
+                    style="
+                      font-weight: lighter;
+                      margin-left: 10px;
+                      top: 20px;
+                      height: 20px;
+                    "
                   >
                   </v-badge>
                 </span>
@@ -164,12 +183,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import AddNewProjectModal from '../components/modal/AddNewProject.vue';
-import AddMemberModal from '../components/modal/AddMember.vue';
+import { mapActions, mapGetters } from "vuex";
+import AddNewProjectModal from "../components/modal/AddNewProject.vue";
+import AddMemberModal from "../components/modal/AddMember.vue";
 
 export default {
-  name: 'Sidebar',
+  name: "Sidebar",
   data: () => ({
     drawer: true,
     mini: true,
@@ -180,13 +199,35 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projectsOfLeader: 'PROJECT/projectsOfLeader',
-      projectsOfMember: 'PROJECT/projectsOfMember',
-      rooms: 'CHAT/rooms',
-      notifications: 'NOTIFICATION/notifications',
-      userInfo: 'AUTH/userInfo',
-      userRole: 'AUTH/userRole',
+      projectsOfLeader: "PROJECT/projectsOfLeader",
+      projectsOfMember: "PROJECT/projectsOfMember",
+      rooms: "CHAT/rooms",
+      notifications: "NOTIFICATION/notifications",
+      userInfo: "AUTH/userInfo",
+      userRole: "AUTH/userRole",
     }),
+    totalNotification() {
+      let total = 0;
+      for (let pr of this.projectsOfLeader) {
+        for (let n of this.notifications) {
+          if (n.project == pr._id) {
+            for (let c of n.listContent) {
+              if (c.member == this.userInfo._id) total += c.unreadCount;
+            }
+          }
+        }
+      }
+      for (let pr of this.projectsOfMember) {
+        for (let n of this.notifications) {
+          if (n.project == pr._id) {
+            for (let c of n.listContent) {
+              if (c.member == this.userInfo._id) total += c.unreadCount;
+            }
+          }
+        }
+      }
+      return total;
+    },
   },
   methods: {
     showAddProjectModal(project, typeOfModal) {
@@ -198,12 +239,12 @@ export default {
       this.$refs.addMemberModal.show(project);
     },
     ...mapActions({
-      deleteProjectAction: 'PROJECT/deleteProject',
+      deleteProjectAction: "PROJECT/deleteProject",
       // getProject: 'PROJECT/getProject',
-      addProjectEditAction: 'PROJECT/addProjectEdit',
-      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
-      addCurrentRoom: 'CHAT/addCurrentRoom',
-      removeUnreadNotification: 'NOTIFICATION/removeUnreadNotification',
+      addProjectEditAction: "PROJECT/addProjectEdit",
+      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
+      addCurrentRoom: "CHAT/addCurrentRoom",
+      removeUnreadNotification: "NOTIFICATION/removeUnreadNotification",
     }),
     deleteProject(idProject) {
       this.deleteProjectAction(idProject);
@@ -239,7 +280,6 @@ export default {
       this.mini = true;
     },
   },
-  
 };
 </script>
 <style>
@@ -249,7 +289,7 @@ export default {
 
 .sidebar {
   height: calc(100vh - 50px) !important;
-  font-family: 'Poppins', sans-serif !important;
+  font-family: "Poppins", sans-serif !important;
   font-weight: 500;
   letter-spacing: 2px !important;
   margin: 0 5px;

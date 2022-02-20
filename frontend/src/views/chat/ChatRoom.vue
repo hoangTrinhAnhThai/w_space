@@ -259,6 +259,7 @@ export default {
         return;
       } else {
         if (this.files.name) {
+          console.log(this.files);
           const formData = new FormData();
           formData.append('file', this.files);
           this.uploadFile({

@@ -171,6 +171,7 @@ export default {
       addCurrentTask: "TASK/addCurrentTask",
       getCommentByIdTask: "TASK/getCommentByIdTask",
       getChecklistByIdTask: "TASK/getChecklistByIdTask",
+      getFiles: 'TASK/getFiles'
     }),
     deleteTask() {
       this.deleteTaskAction({
@@ -183,6 +184,7 @@ export default {
       this.addCurrentTask(this.card);
       this.getLogtimes(this.card._id);
       this.getChecklistByIdTask(this.card._id);
+      this.getFiles(this.card._id)
       this.$refs.taskDetailModal.show();
     },
   },
