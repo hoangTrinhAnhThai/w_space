@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import TaskDetail from "../project/TaskDetail.vue";
+import { mapActions } from 'vuex';
+import TaskDetail from '../project/TaskDetail.vue';
 
 export default {
   props: {
@@ -25,11 +25,11 @@ export default {
   },
   methods: {
     ...mapActions({
-      deleteTaskAction: "TASK/deleteTask",
-      getLogtimes: "PROJECT/getLogtimes",
-      addCurrentTask: "TASK/addCurrentTask",
-      getCommentByIdTask: "TASK/getCommentByIdTask",
-      getChecklistByIdTask: "TASK/getChecklistByIdTask",
+      deleteTaskAction: 'TASK/deleteTask',
+      getLogtimes: 'PROJECT/getLogtimes',
+      addCurrentTask: 'TASK/addCurrentTask',
+      getCommentByIdTask: 'TASK/getCommentByIdTask',
+      getChecklistByIdTask: 'TASK/getChecklistByIdTask',
     }),
     openTask() {
       this.getCommentByIdTask(this.item._id);
@@ -50,7 +50,7 @@ export default {
 }
 
 .open-button {
-  position: absolute;  
+  position: absolute;
   right: 0;
   bottom: 0;
 }

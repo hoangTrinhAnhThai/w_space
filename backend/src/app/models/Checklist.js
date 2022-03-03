@@ -11,8 +11,8 @@ const Checklist = new Schema(
     items: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'ChecklistItem'
-      }
+        ref: 'ChecklistItem',
+      },
     ],
   },
   {

@@ -15,7 +15,7 @@ const state = {
   logtimes: '',
   projectEdit: '',
   currentTask: {},
-  backgrounds: []
+  backgrounds: [],
 };
 
 const getters = {
@@ -47,8 +47,8 @@ const getters = {
     return state.currentTask;
   },
   backgrounds(state) {
-    return state.backgrounds
-  }
+    return state.backgrounds;
+  },
 };
 
 const formatDataProject = function (data) {
@@ -130,8 +130,8 @@ const mutations = {
     state.logtimes = data;
   },
   setBackgroundList(state, data) {
-    state.backgrounds = data
-  }
+    state.backgrounds = data;
+  },
 };
 const actions = {
   addCurrentProject({ commit }, project) {
@@ -183,7 +183,7 @@ const actions = {
   addProject({ commit, dispatch }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
     http
-      .post('/project', params)
+      .post('/project', params, 'Add project successfully')
       .then((result) => {
         dispatch('addProjectEdit', result.data.data);
         dispatch('getProject');
@@ -200,16 +200,22 @@ const actions = {
 
   deleteProject({ commit, dispatch }, idProject) {
     commit('ERROR/setIsLoading', true, { root: true });
-    http.delete(`/project/${idProject}`).then(() => {
-      dispatch('getProject');
-      dispatch('CHAT/getAllRooms', null, { root: true });
-      commit('ERROR/setIsLoading', false, { root: true });
-    });
+    http
+      .delete(`/project/${idProject}`, 'Delete project successfully')
+      .then(() => {
+        dispatch('getProject');
+        dispatch('CHAT/getAllRooms', null, { root: true });
+        commit('ERROR/setIsLoading', false, { root: true });
+      });
   },
   editProject({ commit, dispatch }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
     http
-      .put(`/project/${params.idProject}`, params.project)
+      .put(
+        `/project/${params.idProject}`,
+        params.project,
+        'Edit project successfully',
+      )
       .then((result) => {
         commit('setProjectEdit', result.data.data);
         dispatch('getProject');
@@ -226,7 +232,11 @@ const actions = {
 
   removeMember({ commit, dispatch }, params) {
     http
-      .put(`/project/${params.idProject}/member/remove`, params.project)
+      .put(
+        `/project/${params.idProject}/member/remove`,
+        params.project,
+        'Remove member successfully',
+      )
       .then((result) => {
         commit('setProjectEdit', result.data.data);
         dispatch('getProject');
@@ -239,7 +249,11 @@ const actions = {
   },
   addMember({ commit, dispatch }, params) {
     http
-      .put(`/project/${params.idProject}/member/add`, params.project)
+      .put(
+        `/project/${params.idProject}/member/add`,
+        params.project,
+        'Add member successfully',
+      )
       .then((result) => {
         commit('setProjectEdit', result.data.data);
         dispatch('getProject');
@@ -251,22 +265,25 @@ const actions = {
       });
   },
   getBackground({ commit }) {
-    http.get(`/bg/`)
-      .then((result) => {
-        commit('setBackgroundList', result.data.data)
-      })
+    http.get(`/bg/`).then((result) => {
+      commit('setBackgroundList', result.data.data);
+    });
   },
   setBackground({ commit, dispatch }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
-    http.put(`/bg/${params.idProject}/${params.idBg}`)
+    http
+      .put(
+        `/bg/${params.idProject}/${params.idBg}`,
+        null,
+        'Set background successfully',
+      )
       .then((result) => {
-        commit('setBackgroundList', result.data.data)
-        dispatch('getBackground')
-        dispatch('addCurrentProject', params.idProject)
+        commit('setBackgroundList', result.data.data);
+        dispatch('getBackground');
+        dispatch('addCurrentProject', params.idProject);
         commit('ERROR/setIsLoading', false, { root: true });
-
-      })
-  }
+      });
+  },
 };
 
 export default {

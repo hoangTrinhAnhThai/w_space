@@ -43,7 +43,7 @@
             ></v-textarea>
           </v-row>
           <div class="attach-file">
-            <AttachFile :idTask="task._id"/>
+            <AttachFile :idTask="task._id" />
           </div>
           <div
             v-if="checklists.length > 0 || isShowChecklist"
@@ -309,15 +309,15 @@
 </template>
 
 <script>
-import ReportLogtimeTable from "../table/ReportLogtimeTable.vue";
-import Avatar from "../Avatar.vue";
-import DatePicker from "vue2-datepicker";
-import { mapActions, mapGetters } from "vuex";
+import ReportLogtimeTable from '../table/ReportLogtimeTable.vue';
+import Avatar from '../Avatar.vue';
+import DatePicker from 'vue2-datepicker';
+import { mapActions, mapGetters } from 'vuex';
 import axios from 'axios';
-import AttachFile from '../project/AttachFile.vue'
+import AttachFile from '../project/AttachFile.vue';
 
 export default {
-  name: "task-detail",
+  name: 'task-detail',
   props: {
     task: {
       type: Object,
@@ -326,23 +326,23 @@ export default {
   data() {
     return {
       date: this.task.dueDate ? new Date(this.task.dueDate) : new Date(),
-      priorities: ["high", "normal", "low"],
-      comment: "",
+      priorities: ['high', 'normal', 'low'],
+      comment: '',
       isShowChecklist: false,
       isShowChecklistItem: null,
-      itemName: "",
-      checklistName: "",
+      itemName: '',
+      checklistName: '',
     };
   },
   computed: {
     ...mapGetters({
-      currentProject: "PROJECT/currentProject",
-      currentTask: "PROJECT/currentTask",
-      validateText: "VALIDATION/validateText",
-      comments: "TASK/comments",
-      checklists: "TASK/checklist",
-      userInfo: "AUTH/userInfo",
-      logtimes: "LOGTIME/logtimeArrayByTask",
+      currentProject: 'PROJECT/currentProject',
+      currentTask: 'PROJECT/currentTask',
+      validateText: 'VALIDATION/validateText',
+      comments: 'TASK/comments',
+      checklists: 'TASK/checklist',
+      userInfo: 'AUTH/userInfo',
+      logtimes: 'LOGTIME/logtimeArrayByTask',
     }),
     listMember() {
       let list = [];
@@ -367,15 +367,15 @@ export default {
   },
   methods: {
     ...mapActions({
-      editTaskAction: "TASK/editTask",
-      addCommentAction: "TASK/addComment",
-      addChecklistAction: "TASK/addChecklist",
-      addChecklistItemAction: "TASK/addChecklistItem",
-      deleteChecklistAction: "TASK/deleteChecklist",
-      editChecklistItemAction: "TASK/editChecklistItem",
-      getLogtimes: "LOGTIME/getAllLogtimeByTask",
-      attachFile: "TASK/attachFile",
-      attachImg: "TASK/attachImg",
+      editTaskAction: 'TASK/editTask',
+      addCommentAction: 'TASK/addComment',
+      addChecklistAction: 'TASK/addChecklist',
+      addChecklistItemAction: 'TASK/addChecklistItem',
+      deleteChecklistAction: 'TASK/deleteChecklist',
+      editChecklistItemAction: 'TASK/editChecklistItem',
+      getLogtimes: 'LOGTIME/getAllLogtimeByTask',
+      attachFile: 'TASK/attachFile',
+      attachImg: 'TASK/attachImg',
       addIsLoading: 'ERROR/addIsLoading',
     }),
     show() {
@@ -399,7 +399,7 @@ export default {
     sendCommentByKey(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit(this.comment)) {
-          document.getElementById("content").focus();
+          document.getElementById('content').focus();
           return;
         } else {
           this.addCommentAction({
@@ -407,13 +407,13 @@ export default {
             idProject: this.currentProject._id,
             comment: { content: this.comment },
           });
-          this.comment = "";
+          this.comment = '';
         }
       }
     },
     sendComment() {
       if (!this.validateBeforeSubmit(this.comment)) {
-        document.getElementById("content").focus();
+        document.getElementById('content').focus();
         return;
       } else {
         this.addCommentAction({
@@ -421,7 +421,7 @@ export default {
           idProject: this.currentProject._id,
           comment: { content: this.comment },
         });
-        this.comment = "";
+        this.comment = '';
       }
     },
     validateBeforeSubmit(text) {
@@ -433,7 +433,7 @@ export default {
       return passedValidate;
     },
     closeChecklist() {
-      this.checklistName = "";
+      this.checklistName = '';
       this.isShowChecklist = false;
     },
     showChecklistItem(index) {
@@ -441,7 +441,7 @@ export default {
     },
     addChecklist() {
       if (!this.validateBeforeSubmit(this.checklistName)) {
-        document.getElementById("content-checklist").focus();
+        document.getElementById('content-checklist').focus();
         return;
       } else {
         this.addChecklistAction({
@@ -449,15 +449,15 @@ export default {
           idTask: this.task._id,
           idProject: this.currentProject._id,
         });
-        this.$emit("closeAddtaskForm");
-        this.checklistName = "";
+        this.$emit('closeAddtaskForm');
+        this.checklistName = '';
         this.isShowChecklist = false;
       }
     },
     addChecklistByKey(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit(this.checklistName)) {
-          document.getElementById("content-checklist").focus();
+          document.getElementById('content-checklist').focus();
           return;
         } else {
           this.addChecklistAction({
@@ -465,15 +465,15 @@ export default {
             idTask: this.task._id,
             idProject: this.currentProject._id,
           });
-          this.$emit("closeAddtaskForm");
-          this.checklistName = "";
+          this.$emit('closeAddtaskForm');
+          this.checklistName = '';
           this.isShowChecklist = false;
         }
       }
     },
     addChecklistItem(id) {
       if (!this.validateBeforeSubmit(this.itemName)) {
-        document.getElementById("content-checklist-item").focus();
+        document.getElementById('content-checklist-item').focus();
         return;
       } else {
         this.addChecklistItemAction({
@@ -481,7 +481,7 @@ export default {
           idTask: this.task._id,
           name: { name: this.itemName },
         });
-        this.itemName = "";
+        this.itemName = '';
       }
     },
     deleteChecklist(idChecklist) {
@@ -512,20 +512,27 @@ export default {
     onFileChange(e) {
       this.isDisableButton = true;
       const formData = new FormData();
-      formData.append("file", e.target.files[0]);
+      formData.append('file', e.target.files[0]);
       this.addIsLoading(true);
       console.log(e.target.files[0]);
-      if (e.target.files[0].type.includes("image")) {
-      formData.append("upload_preset", "wfcqkljk");
+      if (e.target.files[0].type.includes('image')) {
+        formData.append('upload_preset', 'wfcqkljk');
 
         axios
           .post(
-            "https://api.cloudinary.com/v1_1/dj5xafymg/image/upload",
-            formData
+            'https://api.cloudinary.com/v1_1/dj5xafymg/image/upload',
+            formData,
           )
           .then((response) => {
             console.log(response.data);
-            this.attachImg({ idTask: this.task._id, file: {fileName: e.target.files[0].name, url: response.data.url, contentType: e.target.files[0].type} })
+            this.attachImg({
+              idTask: this.task._id,
+              file: {
+                fileName: e.target.files[0].name,
+                url: response.data.url,
+                contentType: e.target.files[0].type,
+              },
+            });
             // this.avatar = response.data.url;
             // this.isDisableButton = false;
             // this.addIsLoading(false);
@@ -534,20 +541,20 @@ export default {
             this.addIsLoading(false);
           });
       } else {
-        this.attachFile({ file: formData, idTask:this.task._id })
+        this.attachFile({ file: formData, idTask: this.task._id });
       }
     },
   },
   watch: {
     isShowChecklistItem() {
-      this.itemName = "";
+      this.itemName = '';
     },
   },
   components: {
     DatePicker,
     ReportLogtimeTable,
     Avatar,
-    AttachFile
+    AttachFile,
   },
 };
 </script>

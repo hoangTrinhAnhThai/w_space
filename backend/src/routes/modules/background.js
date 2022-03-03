@@ -6,6 +6,4 @@ router.post('/', backgroundController.createBackground);
 router.get('/', backgroundController.showBackground);
 router.put('/:idProject/:idBg', backgroundController.setBackground);
 
-
-
 module.exports = router;

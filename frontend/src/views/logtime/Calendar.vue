@@ -45,7 +45,9 @@
         ></v-btn>
       </v-col> -->
       <div class="function-btn">
-        <v-btn class="save-btn" @click="createLogtime">Add new time entry</v-btn>
+        <v-btn class="save-btn" @click="createLogtime"
+          >Add new time entry</v-btn
+        >
         <div @click="fetchData">
           <export-excel :data="logtimeArray" :name="`Logtime ${dateName}.xls`">
             <v-btn>Download Data</v-btn>
@@ -71,26 +73,26 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import LogtimeCard from "../../components/logtime/LogtimeCard.vue";
-import data from "../../utils/data";
-import DatePicker from "vue2-datepicker";
+import { mapActions, mapGetters } from 'vuex';
+import LogtimeCard from '../../components/logtime/LogtimeCard.vue';
+import data from '../../utils/data';
+import DatePicker from 'vue2-datepicker';
 export default {
-  name: "Logtime",
+  name: 'Logtime',
   data() {
     return {
       logtime: {},
-      date: sessionStorage.getItem("date")
-        ? sessionStorage.getItem("date")
+      date: sessionStorage.getItem('date')
+        ? sessionStorage.getItem('date')
         : `${new Date().getFullYear()}-${
             new Date().getMonth() + 1
           }-${new Date().getDate()}`,
-      logtimeList: JSON.parse(localStorage.getItem("logtimeList")),
+      logtimeList: JSON.parse(localStorage.getItem('logtimeList')),
     };
   },
   computed: {
     ...mapGetters({
-      logtimeArray: "LOGTIME/logtimeArray",
+      logtimeArray: 'LOGTIME/logtimeArray',
     }),
     dateWeek() {
       return data.weekday[new Date(this.date).getDay()];
@@ -102,8 +104,8 @@ export default {
       return data.month[new Date(this.date).getMonth()];
     },
     dateName() {
-      if (sessionStorage.getItem("date")) {
-        let date = new Date(sessionStorage.getItem("date"));
+      if (sessionStorage.getItem('date')) {
+        let date = new Date(sessionStorage.getItem('date'));
         return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
       } else {
         return `${new Date().getFullYear()}-${
@@ -114,18 +116,18 @@ export default {
   },
   methods: {
     ...mapActions({
-      getAllLogtimeAction: "LOGTIME/getAllLogtime",
-      createLogtimeAction: "LOGTIME/createLogtime",
-      getAllLogtimeByDate: "LOGTIME/getAllLogtimeByDate",
+      getAllLogtimeAction: 'LOGTIME/getAllLogtime',
+      createLogtimeAction: 'LOGTIME/createLogtime',
+      getAllLogtimeByDate: 'LOGTIME/getAllLogtimeByDate',
     }),
     createLogtime() {
       this.createLogtimeAction();
     },
     startDownload() {
-      alert("show loading");
+      alert('show loading');
     },
     finishDownload() {
-      alert("hide loading");
+      alert('hide loading');
     },
     async fetchData() {
       this.getAllLogtimeByDate(this.date);
@@ -140,7 +142,7 @@ export default {
   },
   watch: {
     date() {
-      sessionStorage.setItem("date", this.date);
+      sessionStorage.setItem('date', this.date);
       this.getAllLogtimeByDate(this.date);
     },
   },

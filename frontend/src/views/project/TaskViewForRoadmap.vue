@@ -1,5 +1,12 @@
 <template>
-  <v-main class="task-page"  v-bind:style="{ backgroundImage: currentProject.background ?  `url('${currentProject.background.url}')` : ''}">
+  <v-main
+    class="task-page"
+    v-bind:style="{
+      backgroundImage: currentProject.background
+        ? `url('${currentProject.background.url}')`
+        : '',
+    }"
+  >
     <v-row class="table-task">
       <v-card-title>
         <v-text-field
@@ -56,7 +63,7 @@
               </div>
             </td>
             <td class="text" style="text-align: left">
-              <Avatar v-if="item.assigned" :user="item.assigned"/>
+              <Avatar v-if="item.assigned" :user="item.assigned" />
             </td>
             <td class="text">
               <div style="font-weight: 500">
@@ -95,73 +102,73 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import TableCell from "../../components/tableCell/NameTableCell.vue";
-import DateTableCell from "../../components/tableCell/DateTableCell.vue";
-import Avatar from '../../components/Avatar.vue'
+import { mapGetters } from 'vuex';
+import TableCell from '../../components/tableCell/NameTableCell.vue';
+import DateTableCell from '../../components/tableCell/DateTableCell.vue';
+import Avatar from '../../components/Avatar.vue';
 
 export default {
-  name: "Roadmap",
+  name: 'Roadmap',
   data() {
     return {
       dialog: false,
       dialogDelete: false,
-      search: "",
+      search: '',
       headers: [
         {
-          text: "Task",
-          value: "name",
-          width: "250px",
+          text: 'Task',
+          value: 'name',
+          width: '250px',
         },
         {
-          text: "Description",
-          value: "description",
-          width: "250px",
+          text: 'Description',
+          value: 'description',
+          width: '250px',
         },
         {
-          text: "Status",
-          value: "status.name",
-          align: "center",
+          text: 'Status',
+          value: 'status.name',
+          align: 'center',
         },
         {
-          text: "Assigned",
-          value: "assigned.firstName",
-          align: "center",
+          text: 'Assigned',
+          value: 'assigned.firstName',
+          align: 'center',
         },
         {
-          text: "Priority",
-          value: "priority",
-          align: "center",
+          text: 'Priority',
+          value: 'priority',
+          align: 'center',
         },
         {
-          text: "Due date",
-          value: "dueDate",
-          align: "center",
+          text: 'Due date',
+          value: 'dueDate',
+          align: 'center',
         },
         {
-          text: "CreatedAt",
-          value: "createdAt",
-          align: "center",
+          text: 'CreatedAt',
+          value: 'createdAt',
+          align: 'center',
         },
       ],
     };
   },
   computed: {
     ...mapGetters({
-      dataTask: "TASK/taskList",
-      currentProject: "PROJECT/currentProject",
+      dataTask: 'TASK/taskList',
+      currentProject: 'PROJECT/currentProject',
     }),
     getColor(dueDate) {
       let today = new Date();
       let date = new Date(dueDate);
-      if (today.getTime() > date.getTime()) return "red";
-      else return "green";
+      if (today.getTime() > date.getTime()) return 'red';
+      else return 'green';
     },
   },
   components: {
     TableCell,
     DateTableCell,
-    Avatar
+    Avatar,
   },
 };
 </script>
@@ -190,17 +197,17 @@ export default {
   margin: 0 auto;
 }
 .open {
-  background-color: rgba(0, 54, 56, .9);
+  background-color: rgba(0, 54, 56, 0.9);
 }
 
 .inProgress {
   background-color: rgba(186, 58, 236, 0.9);
 }
 .resolved {
-  background-color: rgba(120, 29, 66, .9);
+  background-color: rgba(120, 29, 66, 0.9);
 }
 .closed {
-  background-color: rgba(243, 139, 160, .9);
+  background-color: rgba(243, 139, 160, 0.9);
 }
 
 .low {

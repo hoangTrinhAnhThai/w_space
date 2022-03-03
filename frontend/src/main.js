@@ -12,6 +12,7 @@ import vuetify from './plugins/vuetify';
 import VueJWT from 'vuejs-jwt';
 import '@mdi/font/css/materialdesignicons.css';
 import excel from 'vue-excel-export';
+import Toasted from 'vue-toasted';
 
 Vue.use(excel);
 Vue.use(BootstrapVue);
@@ -19,6 +20,12 @@ Vue.use(IconsPlugin);
 Vue.use(BootstrapVueIcons);
 Vue.use(VueChatScroll);
 Vue.use(VueJWT);
+Vue.use(Toasted, {
+  type: 'center',
+  duration: 3000,
+  wordWrap: true,
+  width: '150px',
+});
 Vue.config.productionTip = false;
 
 new Vue({

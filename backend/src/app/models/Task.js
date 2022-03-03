@@ -43,10 +43,10 @@ const Task = new Schema(
     },
     files: [
       {
-        fileName: {type: String},
-        isImg: {type: Boolean}
-      }
-    ]
+        fileName: { type: String },
+        isImg: { type: Boolean },
+      },
+    ],
   },
   {
     timestamps: true,

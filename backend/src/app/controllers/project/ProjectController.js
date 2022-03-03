@@ -178,7 +178,8 @@ class ProjectController {
       .sort({ createdAt: -1 })
       .populate('tasks')
       .populate('members')
-      .populate('createdBy').populate('background');
+      .populate('createdBy')
+      .populate('background');
     if (!project) {
       return apiResponse.ErrorResponse(res, 'Not found project');
     }
@@ -189,7 +190,8 @@ class ProjectController {
       .populate('tasks')
       .populate('members')
       .populate('createdBy')
-      .populate('status').populate('background');
+      .populate('status')
+      .populate('background');
     if (!project) {
       return apiResponse.ErrorResponse(res, error);
     }

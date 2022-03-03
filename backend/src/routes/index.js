@@ -8,8 +8,7 @@ const notification = require('./modules/notification');
 const status = require('./modules/status');
 const admin = require('./modules/admin');
 const task = require('./modules/task');
-const bg = require('./modules/background')
-
+const bg = require('./modules/background');
 
 const auth = require('../middleware/jwt');
 
@@ -24,6 +23,6 @@ function route(app) {
   app.use('/task', task);
   app.use('/admin', admin);
   app.use('/notification', auth, notification);
-  app.use('/bg', bg)
+  app.use('/bg', bg);
 }
 module.exports = route;

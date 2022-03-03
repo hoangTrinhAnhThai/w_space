@@ -118,18 +118,16 @@ const actions = {
       link.href = window.URL.createObjectURL(
         pdfBlobConversion(response.data.data, response.data.type),
       );
-      
+
       let arr = params.split('-');
       arr.pop();
       link.download = arr.join('-');
       link.click();
 
-     
-        // let  url = window.URL.createObjectURL(
-        //     pdfBlobConversion(response.data.data, response.data.type))
+      // let  url = window.URL.createObjectURL(
+      //     pdfBlobConversion(response.data.data, response.data.type))
 
-        // window.open(url)
-    
+      // window.open(url)
     });
   },
 };

@@ -60,17 +60,22 @@ const io = require('socket.io')(server, {
 router.post('/attach/upload/:id', upload.single('file'), async (req, res) => {
   const file = await gfs.files.findOne({ filename: name });
   console.log(file);
-  const taskUpdate = await Task.findById(req.params.id)
-  const newFile = await File.create({ name: file.filename, isFile: true, task: taskUpdate, contentType: file.contentType })
+  const taskUpdate = await Task.findById(req.params.id);
+  const newFile = await File.create({
+    name: file.filename,
+    isFile: true,
+    task: taskUpdate,
+    contentType: file.contentType,
+  });
   const task = await Task.findByIdAndUpdate(req.params.id, {
-    $push: { files: newFile }
-  })
+    $push: { files: newFile },
+  });
   return apiResponse.successResponseWithData(
     res,
     'Add file successfully',
     task,
   );
-})
+});
 router.post('/upload/:id', upload.single('file'), async (req, res) => {
   const file = await gfs.files.findOne({ filename: name });
   const user = await User.findById(host(req, res));

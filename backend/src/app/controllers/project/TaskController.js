@@ -12,7 +12,12 @@ const { addANode, dropANode } = require('../../../utils/movedCard');
 
 class TaskController {
   showAllTask = async (req, res) => {
-    const tasks = await Task.find({ project: req.params.id }).populate('comments').populate('assigned').populate('checklist').populate('status').sort({ status: -1 });
+    const tasks = await Task.find({ project: req.params.id })
+      .populate('comments')
+      .populate('assigned')
+      .populate('checklist')
+      .populate('status')
+      .sort({ status: -1 });
     if (!tasks) {
       return apiResponse.ErrorResponse(res, error);
     }
@@ -38,11 +43,17 @@ class TaskController {
           errors.array(),
         );
       } else {
-        const taskUpdate = await Task.findById(req.params.id)
-        const newFile = await File.create({ name: req.body.fileName, isFile: false, task: taskUpdate, url: req.body.url, contentType: req.body.contentType })
+        const taskUpdate = await Task.findById(req.params.id);
+        const newFile = await File.create({
+          name: req.body.fileName,
+          isFile: false,
+          task: taskUpdate,
+          url: req.body.url,
+          contentType: req.body.contentType,
+        });
         const task = await Task.findByIdAndUpdate(req.params.id, {
-          $push: { files: newFile }
-        })
+          $push: { files: newFile },
+        });
         return apiResponse.successResponseWithData(
           res,
           'Edit task successfully',
@@ -64,9 +75,9 @@ class TaskController {
         );
       } else {
         const status = await Status.findOne({ name: 'Open' });
-        const projectFound = await Project.findById(req.params.id)
+        const projectFound = await Project.findById(req.params.id);
         let taskParams = new Task();
-        taskParams.project = projectFound
+        taskParams.project = projectFound;
         taskParams.name = req.body.name;
         taskParams.description = req.body.description;
         taskParams.status = status;
@@ -75,13 +86,16 @@ class TaskController {
         taskParams.moved.before = null;
         taskParams.checklist = [];
         const docTask = await Task.create(taskParams);
-        const arrayTask = await Task.find({ project: req.params.id })
-        await Project.findByIdAndUpdate(req.params.id, { $push: { tasks: docTask } })
+        const arrayTask = await Task.find({ project: req.params.id });
+        await Project.findByIdAndUpdate(req.params.id, {
+          $push: { tasks: docTask },
+        });
         if (arrayTask.length > 0) {
           for (let task of arrayTask) {
             if (
               JSON.stringify(task.status) == JSON.stringify(status._id) &&
-              task.moved.before == null && JSON.stringify(docTask._id) != JSON.stringify(task._id)
+              task.moved.before == null &&
+              JSON.stringify(docTask._id) != JSON.stringify(task._id)
             ) {
               await Task.findByIdAndUpdate(task._id, {
                 'moved.before': docTask._id,
@@ -188,7 +202,7 @@ class TaskController {
   deleteTask = async (req, res) => {
     const idProject = req.params.idProject;
     const idTask = req.params.idTask;
-    const tasks = await Task.find({ project: idProject })
+    const tasks = await Task.find({ project: idProject });
     dropANode(tasks, idTask);
     const logtimes = await Logtime.find({ task: idTask });
     if (logtimes.length > 0) {

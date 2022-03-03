@@ -5,7 +5,7 @@ const state = {
   timeStop: '',
   logtimeArray: [],
   logtimeIsPlaying: {},
-  logtimeArrayByTask: []
+  logtimeArrayByTask: [],
 };
 
 const getters = {
@@ -25,8 +25,8 @@ const getters = {
     return state.logtimeIsPlaying;
   },
   logtimeArrayByTask(state) {
-    return state.logtimeArrayByTask
-  }
+    return state.logtimeArrayByTask;
+  },
 };
 const mutations = {
   logMess() {
@@ -45,8 +45,8 @@ const mutations = {
     state.logtimeArray = data;
   },
   setLogtimeArrayByTask(state, data) {
-    state.logtimeArrayByTask = data
-  }, 
+    state.logtimeArrayByTask = data;
+  },
   setLogtimeIsPlaying(state, data) {
     state.logtimeIsPlaying = data;
   },

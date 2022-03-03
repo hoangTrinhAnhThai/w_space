@@ -45,24 +45,24 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import Date from '../../components/tableCell/DateTableCell.vue'
+import { mapActions } from 'vuex';
+import Date from '../../components/tableCell/DateTableCell.vue';
 export default {
-  name: "ChatCard",
+  name: 'ChatCard',
   props: {
     file: {
       type: Object,
     },
     idTask: {
-        type: String
-    }
+      type: String,
+    },
   },
   computed: {
     fileName() {
       if (this.file.isFile) {
-        let arr = this.file.name.split("-");
+        let arr = this.file.name.split('-');
         arr.pop();
-        return arr.join("-");
+        return arr.join('-');
       } else {
         return this.file.name;
       }
@@ -70,29 +70,29 @@ export default {
   },
   methods: {
     ...mapActions({
-      downloadFileAction: "CHAT/downloadFile",
-      deleteFileAction: "TASK/deleteFile"
+      downloadFileAction: 'CHAT/downloadFile',
+      deleteFileAction: 'TASK/deleteFile',
     }),
     downloadFile() {
-        this.downloadFileAction(this.file.name);
+      this.downloadFileAction(this.file.name);
     },
     deleteFile() {
-        console.log(this.file._id);
-        this.deleteFileAction({idFile: this.file._id, idTask: this.idTask})
-    }
+      console.log(this.file._id);
+      this.deleteFileAction({ idFile: this.file._id, idTask: this.idTask });
+    },
   },
   components: {
-      Date
-  }
+    Date,
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .file {
   position: relative;
-      border-radius: 5px;
-  
-box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  border-radius: 5px;
+
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   .img {
     img {
       width: 180px;
@@ -139,7 +139,7 @@ box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     opacity: 0;
     .v-btn {
       padding: 0 !important;
-      background-color: rgba(255, 255, 255, .5);
+      background-color: rgba(255, 255, 255, 0.5);
       min-width: 20px !important;
       width: 30px !important;
       height: 30px;
@@ -148,10 +148,10 @@ box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   }
 }
 .file:hover {
-    .function {
-        opacity: 1;
-        content: "";
-        transition: .3s cubic-bezier(.25,.8,.5,1);
-    }
+  .function {
+    opacity: 1;
+    content: '';
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  }
 }
 </style>

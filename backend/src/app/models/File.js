@@ -14,12 +14,13 @@ const File = new mongoose.Schema(
       type: Boolean,
     },
     url: {
-      type: String
+      type: String,
     },
-    contentType: { type: String }
+    contentType: { type: String },
   },
   {
     timestamps: true,
-  });
+  },
+);
 
 module.exports = mongoose.model('File', File, 'File');

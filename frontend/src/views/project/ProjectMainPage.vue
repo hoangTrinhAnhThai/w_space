@@ -54,15 +54,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import ByStatus from "./Roadmap.vue";
-import ByTasks from "./TaskViewForRoadmap.vue";
+import { mapActions, mapGetters } from 'vuex';
+import ByStatus from './Roadmap.vue';
+import ByTasks from './TaskViewForRoadmap.vue';
 export default {
-  name: "ProjectMainPage",
+  name: 'ProjectMainPage',
   data() {
     return {
-      showGroup: false
-    }
+      showGroup: false,
+    };
   },
   components: {
     ByStatus,
@@ -70,31 +70,34 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentProject: "PROJECT/currentProject",
-      dataTask: "TASK/tasksArray",
-      userInfo: "AUTH/userInfo",
-      backgrounds: "PROJECT/backgrounds",
-      allChecklist: 'TASK/allChecklist'
+      currentProject: 'PROJECT/currentProject',
+      dataTask: 'TASK/tasksArray',
+      userInfo: 'AUTH/userInfo',
+      backgrounds: 'PROJECT/backgrounds',
+      allChecklist: 'TASK/allChecklist',
     }),
   },
   methods: {
     ...mapActions({
-      getTaskOfProjectAction: "TASK/getTasks",
-      addCurrentProjectAction: "PROJECT/addCurrentProject",
-      getStatus: "TASK/getStatus",
-      setBackgroundAction: "PROJECT/setBackground",
-      getAllChecklist: "TASK/getAllChecklist"
+      getTaskOfProjectAction: 'TASK/getTasks',
+      addCurrentProjectAction: 'PROJECT/addCurrentProject',
+      getStatus: 'TASK/getStatus',
+      setBackgroundAction: 'PROJECT/setBackground',
+      getAllChecklist: 'TASK/getAllChecklist',
     }),
     setBackground(bg) {
-      this.setBackgroundAction({idProject: this.currentProject._id,idBg: bg })
-      this.showGroup = false
-    }
+      this.setBackgroundAction({
+        idProject: this.currentProject._id,
+        idBg: bg,
+      });
+      this.showGroup = false;
+    },
   },
   created() {
     this.getStatus();
     this.addCurrentProjectAction(this.$route.params.id);
     this.getTaskOfProjectAction(this.$route.params.id);
-    this.getAllChecklist()
+    this.getAllChecklist();
     console.log(this.allChecklist);
   },
   watch: {
@@ -122,7 +125,6 @@ export default {
   font-weight: 900;
 }
 
-
 .content {
   display: flex;
   flex-wrap: wrap;
@@ -135,28 +137,27 @@ export default {
     margin: 5px;
   }
   .content-sub {
-  position: relative;
+    position: relative;
+  }
+  .bg-title {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    color: white;
+    font-weight: bolder;
+    width: 94%;
+    background-color: rgba(102, 95, 95, 0.7);
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding-left: 5px;
+    opacity: 0;
+    padding-top: 5px;
+  }
+  .content-sub:hover .bg-title {
+    opacity: 1;
+  }
+  .content-sub:hover img {
+    // opacity: 0.8;
+  }
 }
-.bg-title {
-  position: absolute;
-  bottom: 5px;
-  left: 5px;
-  color: white;
-  font-weight: bolder;
-  width: 94%;
-  background-color: rgba(102, 95, 95, 0.7);
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  padding-left: 5px;
-  opacity: 0;
-  padding-top: 5px;
-}
-.content-sub:hover .bg-title {
-  opacity: 1;
-}
-.content-sub:hover img {
-  // opacity: 0.8;
-}
-}
-
 </style>

@@ -1,14 +1,12 @@
 <template>
   <div v-if="timeInMiliseconds">
-    {{timeReport }}
+    {{ timeReport }}
   </div>
 </template>
 
 <script>
 export default {
-  props: [
-    'timeInMiliseconds'
-  ],
+  props: ['timeInMiliseconds'],
   computed: {
     timeReport() {
       let totalSecond = 0;
@@ -36,5 +34,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

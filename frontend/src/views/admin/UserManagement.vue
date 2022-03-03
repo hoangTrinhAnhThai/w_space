@@ -1,5 +1,10 @@
 <template>
-  <v-data-table :headers="headers" :items="userList" :items-per-page="10" class="elevation-1">
+  <v-data-table
+    :headers="headers"
+    :items="userList"
+    :items-per-page="10"
+    class="elevation-1"
+  >
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title style="font-weight: 900"
@@ -99,48 +104,47 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: "Email",
-        align: "start",
-        value: "email",
+        text: 'Email',
+        align: 'start',
+        value: 'email',
       },
-      { text: "First name", value: "firstName" },
-      { text: "Last Name", value: "lastName" },
-      { text: "Role", value: "role.name" },
-      { text: "Status", value: "isBlock" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: 'First name', value: 'firstName' },
+      { text: 'Last Name', value: 'lastName' },
+      { text: 'Role', value: 'role.name' },
+      { text: 'Status', value: 'isBlock' },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
     editedId: 0,
     editedItem: {
-      lastName: "",
-      firstName: "",
+      lastName: '',
+      firstName: '',
     },
   }),
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
     },
     ...mapGetters({
-      userList: "ADMIN/userList",
-      userInfo: "USER/userInfo",
+      userList: 'ADMIN/userList',
+      userInfo: 'USER/userInfo',
     }),
   },
 
-  watch: {
-  },
+  watch: {},
   created() {
     this.getAllUsers();
   },
   methods: {
     ...mapActions({
-      getAllUsers: "ADMIN/getAllUsers",
-      editUser: "ADMIN/editUser",
+      getAllUsers: 'ADMIN/getAllUsers',
+      editUser: 'ADMIN/editUser',
     }),
     editItem(item) {
       this.editedId = item._id;
@@ -165,12 +169,8 @@ export default {
       }
       this.close();
     },
-    closeDelete() {
-
-    },
-    deleteItemConfirm() {
-
-    }
+    closeDelete() {},
+    deleteItemConfirm() {},
   },
 };
 </script>

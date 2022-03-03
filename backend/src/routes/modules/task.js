@@ -18,9 +18,7 @@ const io = require('socket.io')(server, {
   },
   allowEIO3: true,
 });
-const {
-  taskValidation,
-} = require('../../middleware/validation');
+const { taskValidation } = require('../../middleware/validation');
 
 // router.get('/:idProject', taskController.showAllTask);
 router.get('/tasksOfProject/:id/', taskController.showAllTask);
@@ -35,7 +33,6 @@ router.post('/comment/:id', commentController.createComment);
 router.post('/checklistItem/:id/', checklistController.createChecklistItem);
 router.post('/:id/', taskValidation(), taskController.createTask);
 
-
 router.put('/checklistItem/:idItem/', checklistController.editChecklistItem);
 router.put('/attach/upload/:id', taskController.attachImg);
 router.put('/:id', taskValidation(), taskController.editTask);
@@ -43,7 +40,10 @@ router.put('/', taskController.moveCard);
 
 router.delete('/files/:idFile', fileController.deleteFile);
 router.delete('/checklist/:idChecklist', checklistController.deleteChecklist);
-router.delete('/checklistItem/:idChecklistItem', checklistController.deleteChecklist);
+router.delete(
+  '/checklistItem/:idChecklistItem',
+  checklistController.deleteChecklist,
+);
 router.delete('/:idProject/:idTask', taskController.deleteTask);
 
 server.listen(server_port);

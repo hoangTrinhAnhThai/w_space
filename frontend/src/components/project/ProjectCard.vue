@@ -17,22 +17,30 @@
       </span>
       <div class="right-option">
         <span class="priority" v-if="card.priority">
-          <v-tooltip bottom >
+          <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-icon
-              v-bind="attrs"
+                v-bind="attrs"
                 v-on="on"
                 v-if="card.priority == 'high'"
                 style="color: rgb(233, 92, 92)"
               >
                 mdi-alert-outline</v-icon
               >
-              <v-icon v-bind="attrs"
-                v-on="on" v-if="card.priority == 'normal'" style="color: orange">
+              <v-icon
+                v-bind="attrs"
+                v-on="on"
+                v-if="card.priority == 'normal'"
+                style="color: orange"
+              >
                 mdi-alert-outline</v-icon
               >
-              <v-icon v-bind="attrs"
-                v-on="on" v-if="card.priority == 'low'" style="color: green">
+              <v-icon
+                v-bind="attrs"
+                v-on="on"
+                v-if="card.priority == 'low'"
+                style="color: green"
+              >
                 mdi-alert-outline</v-icon
               >
             </template>
@@ -68,7 +76,9 @@
                 </span>
               </v-avatar>
             </template>
-            <span>{{ card.assigned.firstName }} {{card.assigned.lastName}}</span>
+            <span
+              >{{ card.assigned.firstName }} {{ card.assigned.lastName }}</span
+            >
           </v-tooltip>
         </span>
       </div>
@@ -97,11 +107,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import TaskDetail from "./TaskDetail.vue";
-import helper from "../../utils/data";
+import { mapActions, mapGetters } from 'vuex';
+import TaskDetail from './TaskDetail.vue';
+import helper from '../../utils/data';
 export default {
-  name: "Cards",
+  name: 'Cards',
   props: {
     card: {
       type: Object,
@@ -117,17 +127,17 @@ export default {
     deadline() {
       if (
         new Date(this.card.dueDate) >= new Date() &&
-        this.card.status.name !== "Closed"
+        this.card.status.name !== 'Closed'
       ) {
-        return "green";
+        return 'green';
       }
       if (
         new Date(this.card.dueDate) < new Date() &&
-        this.card.status.name !== "Closed"
+        this.card.status.name !== 'Closed'
       ) {
-        return "red";
+        return 'red';
       }
-      return "grey";
+      return 'grey';
     },
     date() {
       return new Date(this.card.dueDate).getDate();
@@ -139,9 +149,9 @@ export default {
       return helper.month[new Date(this.card.dueDate).getMonth()];
     },
     ...mapGetters({
-      currentProject: "PROJECT/currentProject",
-      currentTask: "TASK/currentTask",
-      checklists: "TASK/allChecklist",
+      currentProject: 'PROJECT/currentProject',
+      currentTask: 'TASK/currentTask',
+      checklists: 'TASK/allChecklist',
     }),
     checklistTotal() {
       let initialValue = 0;
@@ -166,12 +176,12 @@ export default {
 
   methods: {
     ...mapActions({
-      deleteTaskAction: "TASK/deleteTask",
-      getLogtimes: "LOGTIME/getAllLogtimeByTask",
-      addCurrentTask: "TASK/addCurrentTask",
-      getCommentByIdTask: "TASK/getCommentByIdTask",
-      getChecklistByIdTask: "TASK/getChecklistByIdTask",
-      getFiles: 'TASK/getFiles'
+      deleteTaskAction: 'TASK/deleteTask',
+      getLogtimes: 'LOGTIME/getAllLogtimeByTask',
+      addCurrentTask: 'TASK/addCurrentTask',
+      getCommentByIdTask: 'TASK/getCommentByIdTask',
+      getChecklistByIdTask: 'TASK/getChecklistByIdTask',
+      getFiles: 'TASK/getFiles',
     }),
     deleteTask() {
       this.deleteTaskAction({
@@ -184,7 +194,7 @@ export default {
       this.addCurrentTask(this.card);
       this.getLogtimes(this.card._id);
       this.getChecklistByIdTask(this.card._id);
-      this.getFiles(this.card._id)
+      this.getFiles(this.card._id);
       this.$refs.taskDetailModal.show();
     },
   },
@@ -212,7 +222,7 @@ export default {
     color: rgb(58, 57, 61);
     font-size: 16px !important;
     font-weight: 600;
-    font-family: "Poppins", sans-serif !important;
+    font-family: 'Poppins', sans-serif !important;
   }
   .description {
     display: flex;

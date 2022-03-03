@@ -1,25 +1,23 @@
 <template>
-<div class="attach-file">
-  <ul>
-    <li v-for="(file, index) in files" :key="index">
-      <File :file="file" :idTask="idTask"/>
-    </li>
-  </ul>
-</div>
+  <div class="attach-file">
+    <ul>
+      <li v-for="(file, index) in files" :key="index">
+        <File :file="file" :idTask="idTask" />
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import File from './File.vue'
+import File from './File.vue';
 export default {
   name: 'ChatCard',
-  props: [
-    'idTask'
-  ],
+  props: ['idTask'],
   computed: {
     ...mapGetters({
-      files: 'TASK/files'
-    })
+      files: 'TASK/files',
+    }),
   },
   methods: {
     ...mapActions({
@@ -32,8 +30,8 @@ export default {
     },
   },
   components: {
-    File
-  }
+    File,
+  },
 };
 </script>
 

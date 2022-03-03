@@ -1,11 +1,11 @@
 <template>
   <div v-if="date">
-    {{getTime }}
+    {{ getTime }}
   </div>
 </template>
 
 <script>
-import helper from "../../utils/data";
+import helper from '../../utils/data';
 export default {
   props: {
     date: {
@@ -23,5 +23,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

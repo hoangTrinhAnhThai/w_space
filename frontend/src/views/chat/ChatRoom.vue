@@ -36,9 +36,7 @@
               </div>
               <img
                 class="image img"
-                v-if="
-                  chat.createdBy.avatar
-                "
+                v-if="chat.createdBy.avatar"
                 :src="chat.createdBy.avatar"
                 alt=""
               />
@@ -316,8 +314,8 @@ export default {
       console.log(this.files);
     },
     $route(to) {
-        this.addCurrentRoom(to.params.id);
-        this.getAllChatByIdRoom(to.params.id);
+      this.addCurrentRoom(to.params.id);
+      this.getAllChatByIdRoom(to.params.id);
     },
   },
 };

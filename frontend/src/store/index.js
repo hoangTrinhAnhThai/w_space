@@ -26,6 +26,5 @@ export default new Vuex.Store({
     CHAT: Chat,
     ADMIN: Admin,
     NOTIFICATION: Notification,
-
   },
 });

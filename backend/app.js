@@ -1,6 +1,5 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const path = require('path')
 const cors = require('cors')
 const route = require('./src/routes/index.js')
 const db = require('./src/config/database')

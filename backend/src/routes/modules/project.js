@@ -2,10 +2,7 @@ const express = require('express');
 const router = express.Router();
 const projectController = require('../../app/controllers/project/ProjectController');
 
-const {
-  projectValidation,
-} = require('../../middleware/validation');
-
+const { projectValidation } = require('../../middleware/validation');
 
 // project
 router.get('/:id', projectController.showProject);

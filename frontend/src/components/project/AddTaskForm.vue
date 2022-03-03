@@ -19,15 +19,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "AddTaskForm",
+  name: 'AddTaskForm',
   data() {
     return {
       newTask: {
-        name: "",
-        priority: "",
-        dueDate: "",
+        name: '',
+        priority: '',
+        dueDate: '',
         member: [],
       },
       loading: false,
@@ -35,19 +35,19 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentProject: "PROJECT/currentProject",
-      validateText: "VALIDATION/validateText",
-      errorMessage: "ERROR/errorMessage",
+      currentProject: 'PROJECT/currentProject',
+      validateText: 'VALIDATION/validateText',
+      errorMessage: 'ERROR/errorMessage',
     }),
   },
   methods: {
     ...mapActions({
-      addNewTaskAction: "TASK/addNewTask",
+      addNewTaskAction: 'TASK/addNewTask',
     }),
     addtaskForm() {
       this.loading = true;
       if (!this.validateBeforeSubmit()) {
-        document.getElementById("content").focus();
+        document.getElementById('content').focus();
         return;
       } else {
         // setTimeout(() => (this.loading = false), 2000);
@@ -55,14 +55,14 @@ export default {
           task: this.newTask,
           idProject: this.currentProject._id,
         });
-        this.$emit("closeAddtaskForm");
-        this.newTask.name = "";
+        this.$emit('closeAddtaskForm');
+        this.newTask.name = '';
       }
     },
     addtaskFormByKey(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
-          document.getElementById("content").focus();
+          document.getElementById('content').focus();
           return;
         } else {
           setTimeout(() => (this.loading = false), 2000);
@@ -70,13 +70,13 @@ export default {
             task: this.newTask,
             idProject: this.currentProject._id,
           });
-          this.$emit("closeAddtaskForm");
-          this.newTask.name = "";
+          this.$emit('closeAddtaskForm');
+          this.newTask.name = '';
         }
       }
     },
     closeAddtaskForm() {
-      this.$emit("closeAddtaskForm");
+      this.$emit('closeAddtaskForm');
     },
     validateBeforeSubmit() {
       let passedValidate = true;
@@ -88,7 +88,7 @@ export default {
     },
   },
   watch: {
-    "newTask.name"() {
+    'newTask.name'() {
       this.loading = false;
     },
   },

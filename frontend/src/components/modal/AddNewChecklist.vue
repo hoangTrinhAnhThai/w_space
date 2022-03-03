@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       loading: false,
-      checklistName: ''
+      checklistName: '',
     };
   },
   computed: {
@@ -47,17 +47,17 @@ export default {
         document.getElementById('content').focus();
         return;
       } else {
-          this.addChecklistAction({
-            name: { name: this.checklistName },
-            idTask: this.idTask,
-            idProject: this.currentProject._id,
-          });
+        this.addChecklistAction({
+          name: { name: this.checklistName },
+          idTask: this.idTask,
+          idProject: this.currentProject._id,
+        });
         this.$emit('closeAddtaskForm');
         this.checklistName = '';
       }
     },
     addtaskFormByKey(e) {
-        console.log(e);
+      console.log(e);
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
           document.getElementById('content').focus();
@@ -86,7 +86,7 @@ export default {
     },
   },
   watch: {
-    'checklistName'() {
+    checklistName() {
       this.loading = false;
     },
   },
