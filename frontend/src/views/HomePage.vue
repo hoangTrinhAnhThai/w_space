@@ -36,14 +36,108 @@
           </div>
         </div>
       </div>
+      <div class="container4">
+        <div class="cont4-child1">
+          <h2>WHY W-SPACE?</h2>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nostrum
+          exercitationem ullam corrupti assumenda, quas delectus sit fugit,
+          aperiam eius odit aliquam velit, facilis corporis adipisci dolorum
+          blanditiis. Inventore, suscipit!
+        </div>
+        <div class="cont4-child2">
+          <div class="cont4-sub sub1">
+            <v-icon>mdi-file-table-box-multiple-outline</v-icon>
+            <h4>workflow management</h4>
+            Lorem ipsum dolor sit ame ab numquam obcaecati assumenda iure
+            laudantium enim distinctio illum velit unde quisquam atque cumque
+            corporis possimus voluptatibus quos! illum velit unde quisquam atque
+            cumque corporis possimus voluptatibus quos!
+          </div>
+          <div class="cont4-sub sub2">
+            <v-icon>mdi-clipboard-text-clock-outline</v-icon>
+            <h4>Time tracking</h4>
+            Lorem ipsum dolor sit amet distinctio illum velit consectetur
+            adipisicing elit. Quo eligendi dolorum, voluptas ab numquam
+            laudantium enim distinctio illum velit unde quisquam atque cumque
+            corporis possimus voluptatibus quos!
+          </div>
+          <div class="cont4-sub sub3">
+            <v-icon>mdi-wechat</v-icon>
+            <h4>Chat</h4>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
+            eligendi dolorum, voluptas ab distinctio illum velit numquam
+            obcaecati assumenda iure laudantium enim distinctio illum
+          </div>
+          <div class="cont4-sub sub4">
+            <v-icon>mdi-view-dashboard-variant</v-icon>
+            <h4>Better view</h4>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
+            eligendi dolorum, voluptas ab numquam m enim distinctio illum veli
+            obcaecati assumenda iure laudantium enim distinctio illum velit unde
+            quisquam atque cumque corporis possimus voluptatibus quos!
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <footer class="text-center text-white">
+        <div  style="margin: 0 auto !important">
+          <section class="mb-4">
+            <a
+              class="btn btn-link btn-floating btn-lg text-dark m-1"
+              href="#!"
+              role="button"
+              data-mdb-ripple-color="dark"
+              ><i class='bx bxl-facebook'></i></a>
+            <a
+              class="btn btn-link btn-floating btn-lg text-dark m-1"
+              href="#!"
+              role="button"
+              data-mdb-ripple-color="dark"
+              ><i class='bx bxl-twitter' ></i></a>
+            <a
+              class="btn btn-link btn-floating btn-lg text-dark m-1"
+              href="#!"
+              role="button"
+              data-mdb-ripple-color="dark"
+              ><i class='bx bxl-google' ></i></a>
+            <a
+              class="btn btn-link btn-floating btn-lg text-dark m-1"
+              href="#!"
+              role="button"
+              data-mdb-ripple-color="dark"
+              ><i class='bx bxl-instagram' ></i></a>
+            <a
+              class="btn btn-link btn-floating btn-lg text-dark m-1"
+              href="#!"
+              role="button"
+              data-mdb-ripple-color="dark"
+              ><i class='bx bxl-linkedin-square'></i></a>
+            <a
+              class="btn btn-link btn-floating btn-lg text-dark m-1"
+              href="#!"
+              role="button"
+              data-mdb-ripple-color="dark"
+              ><i class='bx bxl-github' ></i></a>
+          </section>
+        </div>
+        <div
+          class="text-center text-dark"
+        >
+          © 2020 Copyright:
+          <a class="text-dark" href="https://mdbootstrap.com/"
+            >W-space</a
+          >
+        </div>
+      </footer>
     </div>
   </div>
 </template>
 
 <script>
-import Navigation from '../components/Navigation.vue';
+import Navigation from "../components/Navigation.vue";
 export default {
-  name: 'HomePage',
+  name: "HomePage",
   components: {
     Navigation,
   },
@@ -81,7 +175,7 @@ img {
         rgba(29, 28, 28, 0.6),
         rgba(36, 35, 35, 0.6)
       ),
-      url('https://shrm.pace.edu.vn/CMSFileManager/files/10/10f300de-0edc-449d-9959-0b4535664720.png');
+      url("https://shrm.pace.edu.vn/CMSFileManager/files/10/10f300de-0edc-449d-9959-0b4535664720.png");
     background-color: #232323;
     background-position: bottom center;
     background-size: cover;
@@ -91,6 +185,7 @@ img {
       color: rgba(255, 255, 255, 0.4);
       text-align: center;
       margin-top: 30vh;
+      font-weight: bold;
     }
   }
   .container2 {
@@ -132,5 +227,64 @@ img {
       }
     }
   }
+  .container4 {
+    background-image: linear-gradient(
+        rgba(29, 28, 28, 0.6),
+        rgba(36, 35, 35, 0.6)
+      ),
+      url("../assets/Office.png");
+    height: 80vh;
+    background-size: cover;
+    background-position: center;
+    .cont4-child1 {
+      color: #fff;
+      text-align: center;
+      width: 50%;
+      margin: 40px auto;
+      font-size: 18px;
+    }
+    .cont4-child2 {
+      display: flex;
+      justify-content: center;
+      height: 60%;
+      .cont4-sub {
+        width: 15%;
+        background-color: #fff;
+        border-radius: 10px;
+        margin: 2% 20px;
+        padding: 30px;
+        .v-icon {
+          font-size: 30px;
+        }
+        h4 {
+          margin-bottom: 20px;
+        }
+      }
+      .sub1 {
+        .v-icon {
+          color: red;
+        }
+      }
+      .sub2 {
+        .v-icon {
+          color: green;
+        }
+      }
+      .sub3 {
+        .v-icon {
+          color: orange;
+        }
+      }
+      .sub4 {
+        .v-icon {
+          color: blue;
+        }
+      }
+    }
+  }
 }
+.footer {
+    // background-color: rgb(226, 221, 221);
+    padding: 20px 0
+  }
 </style>
