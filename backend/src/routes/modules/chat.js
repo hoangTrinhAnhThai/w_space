@@ -50,7 +50,7 @@ const upload = multer({ storage });
 const io = require('socket.io')(server, {
   cors: {
     origin: `${process.env.URL}`,
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
     allowedHeaders: ['my-custom-header'],
     credentials: true,
   },

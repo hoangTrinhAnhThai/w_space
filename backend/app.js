@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 const corsOptions = {
   origin: process.env.URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
   credentials: true,            //access-control-allow-credentials:true
   optionSuccessStatus: 200
 }
