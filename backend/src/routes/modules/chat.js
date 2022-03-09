@@ -84,6 +84,7 @@ router.post('/upload/:id', upload.single('file'), async (req, res) => {
   chatParams.isFile = true;
   chatParams.message = file.filename;
   chatParams.room = req.params.id;
+  console.log(chatParams);
   const chat = await Chat.create(chatParams);
   const notification = await Notification.findOne({ room: req.params.id });
   let listContent = notification.listContent;

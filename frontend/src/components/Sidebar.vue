@@ -112,10 +112,10 @@
           </template>
           <v-list-item-group class="pl-10"> </v-list-item-group>
         </v-list-group>
-        <v-list-group no-action>
+        <v-list-group no-action class="class-chatroom">
           <template v-slot:activator>
             <v-list-item-content @click="handleClickChatRoom">
-              <v-list-item-title>
+              <v-list-item-title class="header">
                 <v-badge
                   :content="totalNotification"
                   :value="totalNotification"
@@ -413,5 +413,11 @@ i {
 
 .mini i {
   color: rgb(21, 17, 30) !important;
+}
+
+.class-chatroom .header .v-badge {
+  margin-top: 0 !important;
+  top: 2px !important;
+  left: -1px !important;
 }
 </style>
