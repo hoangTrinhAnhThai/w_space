@@ -179,6 +179,7 @@ class ProjectController {
       .populate('tasks')
       .populate('members')
       .populate('createdBy')
+      .populate('status')
       .populate('background');
     if (!project) {
       return apiResponse.ErrorResponse(res, 'Not found project');
@@ -190,7 +191,6 @@ class ProjectController {
       .populate('tasks')
       .populate('members')
       .populate('createdBy')
-      .populate('status')
       .populate('background');
     if (!project) {
       return apiResponse.ErrorResponse(res, error);
@@ -200,6 +200,20 @@ class ProjectController {
       'Get tasks success',
       project,
     );
+  };
+  getAllProjects = async (req, res) => {
+    const project = await Project.find({
+       isDelete: false,
+    })
+      .sort({ createdAt: -1 })
+      .populate('tasks')
+      .populate('members')
+      .populate('createdBy')
+      .populate('background');
+    if (!project) {
+      return apiResponse.ErrorResponse(res, 'Not found project');
+    }
+    return apiResponse.successResponseWithData(res, 'data', project);
   };
 }
 

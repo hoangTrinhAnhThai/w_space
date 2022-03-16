@@ -53,7 +53,7 @@ class TaskController {
         });
         const task = await Task.findByIdAndUpdate(req.params.id, {
           $push: { files: newFile },
-        });
+        }).populate('assigned');
         return apiResponse.successResponseWithData(
           res,
           'Edit task successfully',
@@ -133,7 +133,7 @@ class TaskController {
           req.params.id,
           req.body,
           { new: true },
-        );
+        ).populate('assigned');
         return apiResponse.successResponseWithData(
           res,
           'Edit task successfully',
@@ -163,7 +163,7 @@ class TaskController {
           req.params.id,
           { $push: { checklist: checklist } },
           { new: true },
-        );
+        ).populate('assigned');
         return apiResponse.successResponseWithData(
           res,
           'Edit task successfully',
@@ -188,7 +188,7 @@ class TaskController {
           req.params.id,
           { $push: { checklist: { name: req.body.name, items: [] } } },
           { new: true },
-        );
+        ).populate('assigned');
         return apiResponse.successResponseWithData(
           res,
           'Edit task successfully',
