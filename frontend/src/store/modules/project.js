@@ -55,6 +55,7 @@ const formatDataProject = function (data) {
   const dataFormat = data.map((dataItem) => ({
     _id: dataItem._id,
     createdAt: dataItem.createdAt,
+    background: dataItem.background,
     createdBy: {
       _id: dataItem.createdBy._id,
       avatar: dataItem.createdBy.avatar,
@@ -169,6 +170,7 @@ const actions = {
     http
       .get('/project')
       .then((result) => {
+        console.log(result.data.data);
         commit('setProjectsOfLeader', result.data.data);
         commit('setProjectOfMember', result.data.data);
         commit('ERROR/setIsLoading', false, { root: true });

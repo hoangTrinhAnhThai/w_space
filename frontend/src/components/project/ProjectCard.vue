@@ -89,12 +89,18 @@
           <i v-bind="attrs" v-on="on" class="bx bx-dots-vertical-rounded"></i>
         </template>
         <v-list>
-          <v-list-item @click="showTaskDetailModal">
+          <v-list-item @click="showTaskDetailModal" v-if="isEdit">
+            <v-list-item-title>
+              <v-icon>mdi-eye-outline</v-icon>
+              View
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="showTaskDetailModal" v-if="!isEdit">
             <v-list-item-title>
               <i class="bx bx-edit-alt"></i> Edit</v-list-item-title
             >
           </v-list-item>
-          <v-list-item @click="deleteTask">
+          <v-list-item @click="deleteTask" v-if="!isEdit">
             <v-list-item-title>
               <i class="bx bx-trash"></i> Delete</v-list-item-title
             >
@@ -124,6 +130,17 @@ export default {
     return {};
   },
   computed: {
+    ...mapGetters({
+      userInfo: 'AUTH/userInfo',
+      currentProject: 'PROJECT/currentProject',
+    }),
+    isEdit() {
+      let isEdit = true;
+      if (this.userInfo._id == this.currentProject.createdBy._id) {
+        isEdit = false;
+      }
+      return isEdit;
+    },
     deadline() {
       if (
         new Date(this.card.dueDate) >= new Date() &&
@@ -237,7 +254,7 @@ export default {
       margin-top: 0px;
       .v-icon {
         font-size: 15px;
-        margin-bottom: 3px;
+        margin-bottom: 2px;
         margin-right: 4px;
       }
     }
@@ -247,6 +264,7 @@ export default {
         height: 24px;
         border-radius: 50%;
       }
+      
     }
     .due-date {
       .due {
@@ -260,6 +278,13 @@ export default {
     .right-option {
       position: relative;
       top: -5px;
+      .priority {
+        .v-icon {
+          top: 2px;
+          font-size: 20px !important;
+          margin-right: 5px;
+        }
+      }
     }
   }
 }
@@ -270,5 +295,11 @@ export default {
 .theme--light.v-card > .v-card__subtitle,
 .theme--light.v-card > .v-card__text {
   word-break: break-all;
+}
+
+</style>
+<style scoped>
+.v-icon {
+  font-size: 15px !important;
 }
 </style>

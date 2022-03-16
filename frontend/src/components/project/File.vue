@@ -4,7 +4,7 @@
       <img :src="file.url" alt="" />
     </div>
     <div class="img-file" v-else>
-      <img
+        <img
         v-if="file.contentType.includes('pdf')"
         src="../../assets/pdf.png"
         alt=""
@@ -19,6 +19,7 @@
         src="../../assets/excel.png"
         alt=""
       />
+      
       <img
         v-else-if="file.contentType.includes('text')"
         src="../../assets/notepad.png"

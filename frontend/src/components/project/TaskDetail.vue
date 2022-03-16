@@ -216,7 +216,6 @@
                   <v-chip label text-color="indigo darken-4" class="ma-2"
                     ><img v-if="item.avatar" :src="item.avatar" alt="" />
                     <v-avatar
-                      v-bind="attrs"
                       v-on="on"
                       v-else
                       color="light-blue lighten-3"

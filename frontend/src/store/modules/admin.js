@@ -15,6 +15,7 @@ const formatDataListByMonth = function (data) {
 const state = {
   userList: [],
   userListMonth: [],
+  allProjects: [],
   projectList: [],
   numberOfRegisteredUsersToday: 0,
   numberOfRegisteredUsersYesterday: 0,
@@ -78,8 +79,14 @@ const mutations = {
     );
     state.numberOfRegisteredProjectsYesterday = list2.length;
   },
+  setAllProjects(state, data) {
+    state.allProjects = data
+  }
 };
 const getters = {
+  allProjects(state) {
+    return state.allProjects
+  },
   userList(state) {
     return state.userList;
   },
@@ -138,6 +145,8 @@ const actions = {
     http
       .post('/admin/projects', params)
       .then((response) => {
+        console.log(response.data.data);
+        commit('setAllProjects', response.data.data);
         commit('setProjectList', response.data.data);
         commit('setRegisteredProjectMonth');
         commit('setRegisteredProjectDate', response.data.data);

@@ -17,16 +17,40 @@
             v-for="(project, index) in projectsOfLeader"
             :key="index"
             cols="3"
-            md="4"
+            md="3"
           >
             <v-item>
               <v-card
                 class="d-flex align-center"
                 height="100"
-                width="400px"
+                width="300"
                 @click="handleClickProject(project._id)"
               >
-                <v-card-title>{{ project.name }}</v-card-title>
+                <v-img
+                  v-if="project.background"
+                  height="120"
+                  class="light-blue lighten-5 align-end"
+                  :src="project.background.url"
+                >
+                  <v-card-title>
+                    <span
+                      style="
+                        background-color: rgba(255, 255, 255, 0.4);
+                        border-radius: 5px;
+                        padding: 0 5px;
+                      "
+                      >{{ project.name }}</span
+                    ></v-card-title
+                  >
+                </v-img>
+                <v-img
+                  v-else
+                  height="120"
+                  class="teal darken-4 align-end"
+                  src="https://i.pinimg.com/736x/2f/60/6a/2f606ad14bf9171e5f41b42a01b4441f.jpg"
+                >
+                  <v-card-title>{{ project.name }}</v-card-title>
+                </v-img>
               </v-card>
             </v-item>
           </v-col>
@@ -37,16 +61,40 @@
             v-for="(project, index) in projectsOfMember"
             :key="index"
             cols="3"
-            md="4"
+            md="3"
           >
             <v-item>
               <v-card
                 class="d-flex align-center"
                 height="100"
-                width="400px"
+                width="300"
                 @click="handleClickProject(project._id)"
               >
-                <v-card-title>{{ project.name }}</v-card-title>
+                <v-img
+                  v-if="project.background"
+                  height="120"
+                  class="light-blue lighten-5 align-end"
+                  :src="project.background.url"
+                >
+                  <v-card-title>
+                    <span
+                      style="
+                        background-color: rgba(255, 255, 255, 0.4);
+                        border-radius: 5px;
+                        padding: 0 5px;
+                      "
+                      >{{ project.name }}</span
+                    ></v-card-title
+                  >
+                </v-img>
+                <v-img
+                  v-else
+                  height="120"
+                  class="teal darken-4 align-end"
+                  src="https://i.pinimg.com/736x/2f/60/6a/2f606ad14bf9171e5f41b42a01b4441f.jpg"
+                >
+                  <v-card-title>{{ project.name }}</v-card-title>
+                </v-img>
               </v-card>
             </v-item>
           </v-col>
@@ -58,15 +106,15 @@
 </template>
 
 <script>
-import AddNewProjectModal from '../../components/modal/AddNewProject.vue';
+import AddNewProjectModal from "../../components/modal/AddNewProject.vue";
 
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 export default {
-  name: 'ProjectPage',
+  name: "ProjectPage",
   computed: {
     ...mapGetters({
-      projectsOfLeader: 'PROJECT/projectsOfLeader',
-      projectsOfMember: 'PROJECT/projectsOfMember',
+      projectsOfLeader: "PROJECT/projectsOfLeader",
+      projectsOfMember: "PROJECT/projectsOfMember",
     }),
   },
   methods: {
@@ -91,11 +139,12 @@ h5 {
   cursor: pointer;
 }
 .theme--light.v-label {
-  height: 150px;
+  height: 100px;
 }
 .v-main {
   text-align: center;
-  height: 100vh;
+  height: calc(100vh -75);
+  margin-bottom: 50px;
 }
 .container {
   text-align: start;
@@ -103,11 +152,14 @@ h5 {
   width: 80%;
 }
 img {
-  width: 200px;
+  width: 150px;
   margin-bottom: 50px;
 }
 
 .label {
   margin-bottom: 50px;
+}
+.v-card:hover {
+  opacity: 0.8;
 }
 </style>

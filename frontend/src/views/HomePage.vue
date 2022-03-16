@@ -50,31 +50,27 @@
             <h4>workflow management</h4>
             Lorem ipsum dolor sit ame ab numquam obcaecati assumenda iure
             laudantium enim distinctio illum velit unde quisquam atque cumque
-            corporis possimus voluptatibus quos! illum velit unde quisquam atque
-            cumque corporis possimus voluptatibus quos!
+            co
           </div>
           <div class="cont4-sub sub2">
             <v-icon>mdi-clipboard-text-clock-outline</v-icon>
             <h4>Time tracking</h4>
             Lorem ipsum dolor sit amet distinctio illum velit consectetur
             adipisicing elit. Quo eligendi dolorum, voluptas ab numquam
-            laudantium enim distinctio illum velit unde quisquam atque cumque
-            corporis possimus voluptatibus quos!
+            laudantium enim distin
           </div>
           <div class="cont4-sub sub3">
             <v-icon>mdi-wechat</v-icon>
             <h4>Chat</h4>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
-            eligendi dolorum, voluptas ab distinctio illum velit numquam
-            obcaecati assumenda iure laudantium enim distinctio illum
+            eligendi dolorum, voluptas ab distinctio illum ve
           </div>
           <div class="cont4-sub sub4">
             <v-icon>mdi-view-dashboard-variant</v-icon>
             <h4>Better view</h4>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
             eligendi dolorum, voluptas ab numquam m enim distinctio illum veli
-            obcaecati assumenda iure laudantium enim distinctio illum velit unde
-            quisquam atque cumque corporis possimus voluptatibus quos!
+            obcaecati assumenda iure laudantium enim dist
           </div>
         </div>
       </div>
@@ -233,20 +229,20 @@ img {
         rgba(36, 35, 35, 0.6)
       ),
       url("../assets/Office.png");
-    height: 80vh;
+    height: 90vh;
     background-size: cover;
     background-position: center;
     .cont4-child1 {
       color: #fff;
       text-align: center;
       width: 50%;
-      margin: 40px auto;
-      font-size: 18px;
+      margin: 20px auto;
+      font-size: 15px;
     }
     .cont4-child2 {
       display: flex;
       justify-content: center;
-      height: 60%;
+      height: 70%;
       .cont4-sub {
         width: 15%;
         background-color: #fff;

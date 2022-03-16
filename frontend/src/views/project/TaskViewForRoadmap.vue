@@ -177,7 +177,7 @@ export default {
 .task-page {
   width: 100%;
   min-width: 1000px;
-  height: calc(100vh - 181px);
+  height: calc(100vh - 113px);
   overflow-y: scroll !important;
   background-size: cover;
   background-position: center;

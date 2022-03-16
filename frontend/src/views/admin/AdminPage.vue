@@ -1,14 +1,14 @@
 <template>
   <div class="dashboard">
     <box-chart />
-    <bar-chart />
+    <bar-chart class="bar-chart"/>
     <p>Statistical graph of the number of registered user accounts</p>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import BarChart from '../../components/admin/BarChart.vue';
+import BarChart from '../../components/admin/Chart.vue';
 import BoxChart from '../../components/admin/ChartBox.vue';
 export default {
   components: {
@@ -44,6 +44,7 @@ p {
 }
 .dashboard {
   height: calc(100vh - 65px);
-  padding: 50px 50px 0;
+  padding: 10px 50px 0;
 }
+
 </style>

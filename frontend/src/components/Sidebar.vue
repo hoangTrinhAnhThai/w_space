@@ -30,10 +30,19 @@
         <v-list-group @click="handleClickDashboard">
           <template v-slot:activator>
             <v-list-item-content>
-              <v-list-item-title
-                ><i class="bx bxs-dashboard" style="font-size: 20px"></i
-                >Dashboard</v-list-item-title
-              >
+              <v-list-item-title>
+                <i class="bx bxs-dashboard" style="font-size: 20px"></i>Dashboard
+              </v-list-item-title>
+            </v-list-item-content>
+          </template>
+        </v-list-group>
+        <v-list-group @click="handleClickProjectManagement">
+          <template v-slot:activator>
+            <v-list-item-content>
+              <v-list-item-title>
+                <i class="bx bxs-folder-open" style="font-size: 20px"></i>
+                Project management
+              </v-list-item-title>
             </v-list-item-content>
           </template>
         </v-list-group>
@@ -188,12 +197,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import AddNewProjectModal from '../components/modal/AddNewProject.vue';
-import AddMemberModal from '../components/modal/AddMember.vue';
+import { mapActions, mapGetters } from "vuex";
+import AddNewProjectModal from "../components/modal/AddNewProject.vue";
+import AddMemberModal from "../components/modal/AddMember.vue";
 
 export default {
-  name: 'Sidebar',
+  name: "Sidebar",
   data: () => ({
     drawer: true,
     mini: true,
@@ -204,12 +213,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projectsOfLeader: 'PROJECT/projectsOfLeader',
-      projectsOfMember: 'PROJECT/projectsOfMember',
-      rooms: 'CHAT/rooms',
-      notifications: 'NOTIFICATION/notifications',
-      userInfo: 'AUTH/userInfo',
-      userRole: 'AUTH/userRole',
+      projectsOfLeader: "PROJECT/projectsOfLeader",
+      projectsOfMember: "PROJECT/projectsOfMember",
+      rooms: "CHAT/rooms",
+      notifications: "NOTIFICATION/notifications",
+      userInfo: "AUTH/userInfo",
+      userRole: "AUTH/userRole",
     }),
     totalNotification() {
       let total = 0;
@@ -244,12 +253,12 @@ export default {
       this.$refs.addMemberModal.show(project);
     },
     ...mapActions({
-      deleteProjectAction: 'PROJECT/deleteProject',
+      deleteProjectAction: "PROJECT/deleteProject",
       // getProject: 'PROJECT/getProject',
-      addProjectEditAction: 'PROJECT/addProjectEdit',
-      getAllChatByIdRoom: 'CHAT/getAllChatByIdRoom',
-      addCurrentRoom: 'CHAT/addCurrentRoom',
-      removeUnreadNotification: 'NOTIFICATION/removeUnreadNotification',
+      addProjectEditAction: "PROJECT/addProjectEdit",
+      getAllChatByIdRoom: "CHAT/getAllChatByIdRoom",
+      addCurrentRoom: "CHAT/addCurrentRoom",
+      removeUnreadNotification: "NOTIFICATION/removeUnreadNotification",
     }),
     deleteProject(idProject) {
       this.deleteProjectAction(idProject);
@@ -280,6 +289,10 @@ export default {
       this.$router.push(`/admin/`);
       this.mini = true;
     },
+    handleClickProjectManagement() {
+      this.$router.push(`/projectmanagement/`);
+      this.mini = true;
+    },
     handleClickUser() {
       this.$router.push(`/usermanagement/`);
       this.mini = true;
@@ -294,7 +307,7 @@ export default {
 
 .sidebar {
   height: calc(100vh - 50px) !important;
-  font-family: 'Poppins', sans-serif !important;
+  font-family: "Poppins", sans-serif !important;
   font-weight: 500;
   letter-spacing: 2px !important;
   margin: 0 5px;

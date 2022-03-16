@@ -121,11 +121,12 @@ p {
 <style lang="scss" scoped>
 .container {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 25px;
+  justify-content: space-around;
+  margin-bottom: 15px;
+  max-width: 90vw !important;
   .content {
-    flex-basis: 20%;
-    padding: 10px 15px 0px;
+    flex-basis: 24%;
+    padding: 10px 10px 0px;
     border: 1px solid rgb(209, 206, 206);
     border-radius: 5px;
     color: white;
@@ -145,16 +146,16 @@ p {
     }
   }
   .content1 {
-    background-color: rgb(99, 194, 223);
+    background-color: rgb(76,60,224);
   }
   .content2 {
-    background-color: rgb(231, 201, 108);
+    background-color: rgb(250,112,35);
   }
   .content3 {
-    background-color: rgb(249, 108, 108);
+    background-color: rgb(49,184,124);
   }
   .content4 {
-    background-color: rgb(119, 190, 119);
+    background-color: rgb(246,53,65);
   }
 }
 </style>

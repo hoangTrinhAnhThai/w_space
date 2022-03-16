@@ -178,7 +178,8 @@ export default {
 .roadmap-container {
   width: 100%;
   min-width: 1000px;
-  height: calc(100vh - 177px);
+  height: calc(100vh - 113px);
+  // margin-top: 15px;
   white-space: nowrap;
   overflow-y: scroll !important;
   background-size: cover;

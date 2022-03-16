@@ -17,6 +17,7 @@ import ChatPage from '../views/chat/ChatPage.vue';
 import ChatRoom from '../views/chat/ChatRoom.vue';
 // import AdminMainPage from '../views/admin/MainPage.vue';
 import Admin from '../views/admin/AdminPage.vue';
+import ProjectManagement from '../views/admin/ProjectManagement.vue';
 import UserManagement from '../views/admin/UserManagement.vue';
 
 import { decodeToken } from '../utils/helper';
@@ -64,6 +65,14 @@ const routes = [
         path: '/admin',
         name: Admin,
         component: Admin,
+        meta: {
+          admin_system: true,
+        },
+      },
+      {
+        path: '/projectmanagement',
+        name: ProjectManagement,
+        component: ProjectManagement,
         meta: {
           admin_system: true,
         },

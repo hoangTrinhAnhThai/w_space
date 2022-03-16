@@ -1,22 +1,23 @@
 <template>
   <div class="project-main-page">
-    <v-app-bar class="bar1">
-      <v-toolbar-title
-        ><i class="bx bxl-trello"></i>
-        {{ currentProject.name }}</v-toolbar-title
-      >
-      <v-spacer></v-spacer>
-      <v-btn
-        color="blue-grey darken-4"
-        icon
-        @click.stop="showGroup = !showGroup"
-      >
-        <v-icon> mdi-home-floor-g</v-icon>
-      </v-btn>
-    </v-app-bar>
     <v-tabs right>
-      <v-tab>By Status</v-tab>
-      <v-tab>By tasks</v-tab>
+      <v-app-bar class="bar1">
+        <v-toolbar-title
+          ><i class="bx bxl-trello"></i>
+          {{ currentProject.name }}</v-toolbar-title
+        >
+        <v-spacer></v-spacer>
+        <v-tab>By Status</v-tab>
+        <v-tab>By tasks</v-tab>
+
+        <v-btn
+          color="blue-grey darken-4"
+          icon
+          @click.stop="showGroup = !showGroup"
+        >
+          <v-icon> mdi-home-floor-g</v-icon>
+        </v-btn>
+      </v-app-bar>
       <v-tab-item>
         <ByStatus />
       </v-tab-item>
@@ -54,11 +55,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import ByStatus from './Roadmap.vue';
-import ByTasks from './TaskViewForRoadmap.vue';
+import { mapActions, mapGetters } from "vuex";
+import ByStatus from "./Roadmap.vue";
+import ByTasks from "./TaskViewForRoadmap.vue";
 export default {
-  name: 'ProjectMainPage',
+  name: "ProjectMainPage",
   data() {
     return {
       showGroup: false,
@@ -70,20 +71,20 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentProject: 'PROJECT/currentProject',
-      dataTask: 'TASK/tasksArray',
-      userInfo: 'AUTH/userInfo',
-      backgrounds: 'PROJECT/backgrounds',
-      allChecklist: 'TASK/allChecklist',
+      currentProject: "PROJECT/currentProject",
+      dataTask: "TASK/tasksArray",
+      userInfo: "AUTH/userInfo",
+      backgrounds: "PROJECT/backgrounds",
+      allChecklist: "TASK/allChecklist",
     }),
   },
   methods: {
     ...mapActions({
-      getTaskOfProjectAction: 'TASK/getTasks',
-      addCurrentProjectAction: 'PROJECT/addCurrentProject',
-      getStatus: 'TASK/getStatus',
-      setBackgroundAction: 'PROJECT/setBackground',
-      getAllChecklist: 'TASK/getAllChecklist',
+      getTaskOfProjectAction: "TASK/getTasks",
+      addCurrentProjectAction: "PROJECT/addCurrentProject",
+      getStatus: "TASK/getStatus",
+      setBackgroundAction: "PROJECT/setBackground",
+      getAllChecklist: "TASK/getAllChecklist",
     }),
     setBackground(bg) {
       this.setBackgroundAction({
@@ -124,7 +125,6 @@ export default {
   padding: 0px 20px;
   font-weight: 900;
 }
-
 .content {
   display: flex;
   flex-wrap: wrap;
@@ -155,9 +155,6 @@ export default {
   }
   .content-sub:hover .bg-title {
     opacity: 1;
-  }
-  .content-sub:hover img {
-    // opacity: 0.8;
   }
 }
 </style>
