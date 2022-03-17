@@ -21,7 +21,7 @@ class LogtimeController {
   };
   showAllLogtime = async (req, res) => {
     const user = await User.findById(host(req, res));
-    const logtimes = await LogTime.find({ createdBy: user }).sort({
+    const logtimes = await LogTime.find({ createdBy: user }).populate('task').sort({
       createdAt: -1,
     });
     return apiResponse.successResponseWithData(
@@ -33,17 +33,23 @@ class LogtimeController {
 
   showAllLogtimeByDate = async (req, res) => {
     const user = await User.findById(host(req, res));
-    const logtimes = await LogTime.find({
-      $and: [
-        { createdBy: user },
-        {
-          createdAt: {
-            $gte: startOfDay(new Date(req.params.date)),
-            $lte: endOfDay(new Date(req.params.date)),
+    let logtimes =[] 
+    const params = req.params.date
+    if (params != 'undefined') {
+       logtimes = await LogTime.find({
+        $and: [
+          { createdBy: user },
+          {
+            createdAt: {
+              $gte: startOfDay(new Date(req.params.date)),
+              $lte: endOfDay(new Date(req.params.date)),
+            },
           },
-        },
-      ],
-    }).sort({ createdAt: -1 });
+        ],
+      }).populate('createdBy').populate('task').sort({ createdAt: -1 });
+    } else {
+      logtimes = await LogTime.find().populate('createdBy').populate('task').sort({ createdAt: -1 });
+    }
     return apiResponse.successResponseWithData(
       res,
       'Show logtimes success',

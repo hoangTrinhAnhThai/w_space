@@ -1,61 +1,43 @@
 <template>
   <v-main>
     <v-row class="row1">
-      <v-col cols="8">
+      <v-col cols="1">
         <v-btn-toggle class="calendar">
-          <v-btn>
-            <i style="font-size: 20px" class="bx bxs-chevron-left"></i>
+          <v-btn style="width: 70px !important" @click="getAllLogtime">
+            All
           </v-btn>
+        </v-btn-toggle>
+      </v-col>
+      <v-col cols="1">
+        <v-btn-toggle class="calendar">
           <v-btn>
             <i class="bx bxs-calendar"></i>
             <DatePicker v-model="date" :clearable="false" class="datepicker" />
           </v-btn>
-          <v-btn>
-            <i class="bx bxs-chevron-right"></i>
-          </v-btn>
         </v-btn-toggle>
       </v-col>
-      <!-- <v-col cols="1">
-        <v-btn-toggle class="date-week1">
-          <v-btn> Day </v-btn>
-          <v-btn> Week </v-btn>
-        </v-btn-toggle>
-      </v-col>
-      <v-col cols="2">
-        <div class="date-week2">
-          <v-btn text>
-            <i class="bx bx-sync"></i>
-          </v-btn>
-          <v-btn text>
-            <i class="bx bx-user"></i>
-          </v-btn>
-          <v-btn text>
-            <i class="bx bx-edit"></i>
-          </v-btn>
-        </div>
-      </v-col> -->
     </v-row>
     <v-row>
-      <!-- <v-col cols="3">
-        <v-text-field label="Search"></v-text-field>
-      </v-col>
-      <v-col cols="1">
-        <v-btn style="height: 80%; width: 100%"
-          ><i class="bx bx-filter-alt"></i
-        ></v-btn>
-      </v-col> -->
       <div class="function-btn">
         <v-btn class="save-btn" @click="createLogtime"
           >Add new time entry</v-btn
         >
         <div @click="fetchData">
-          <export-excel :data="logtimeArray" :name="`Logtime ${dateName}.xls`">
+          <export-excel
+            v-if="date"
+            :data="list"
+            :name="`Logtime ${dateName}.xls`"
+          >
+            <v-btn>Download Data</v-btn>
+          </export-excel>
+          <export-excel v-else :data="list" :name="`All logtimes.xls`">
             <v-btn>Download Data</v-btn>
           </export-excel>
         </div>
       </div>
     </v-row>
     <v-row>
+      <DateTableCell :date="date" />
       <v-card>
         <v-list shaped>
           <v-list-item-group>
@@ -73,26 +55,25 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import LogtimeCard from '../../components/logtime/LogtimeCard.vue';
-import data from '../../utils/data';
-import DatePicker from 'vue2-datepicker';
+import { mapActions, mapGetters } from "vuex";
+import LogtimeCard from "../../components/logtime/LogtimeCard.vue";
+import data from "../../utils/data";
+import DatePicker from "vue2-datepicker";
+import DateTableCell from "../../components/tableCell/DateTableCell.vue";
+
 export default {
-  name: 'Logtime',
+  name: "Logtime",
   data() {
     return {
       logtime: {},
-      date: sessionStorage.getItem('date')
-        ? sessionStorage.getItem('date')
-        : `${new Date().getFullYear()}-${
-            new Date().getMonth() + 1
-          }-${new Date().getDate()}`,
-      logtimeList: JSON.parse(localStorage.getItem('logtimeList')),
+      date: "",
+      logtimeList: JSON.parse(localStorage.getItem("logtimeList")),
+      list: [],
     };
   },
   computed: {
     ...mapGetters({
-      logtimeArray: 'LOGTIME/logtimeArray',
+      logtimeArray: "LOGTIME/logtimeArray",
     }),
     dateWeek() {
       return data.weekday[new Date(this.date).getDay()];
@@ -104,8 +85,8 @@ export default {
       return data.month[new Date(this.date).getMonth()];
     },
     dateName() {
-      if (sessionStorage.getItem('date')) {
-        let date = new Date(sessionStorage.getItem('date'));
+      if (sessionStorage.getItem("date")) {
+        let date = new Date(sessionStorage.getItem("date"));
         return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
       } else {
         return `${new Date().getFullYear()}-${
@@ -113,36 +94,75 @@ export default {
         }-${new Date().getDate()}`;
       }
     },
+    // dataFormat() {
+
+    // }
   },
   methods: {
     ...mapActions({
-      getAllLogtimeAction: 'LOGTIME/getAllLogtime',
-      createLogtimeAction: 'LOGTIME/createLogtime',
-      getAllLogtimeByDate: 'LOGTIME/getAllLogtimeByDate',
+      getAllLogtimeAction: "LOGTIME/getAllLogtime",
+      createLogtimeAction: "LOGTIME/createLogtime",
+      getAllLogtimeByDate: "LOGTIME/getAllLogtimeByDate",
     }),
     createLogtime() {
       this.createLogtimeAction();
     },
     startDownload() {
-      alert('show loading');
+      alert("show loading");
     },
     finishDownload() {
-      alert('hide loading');
+      alert("hide loading");
     },
     async fetchData() {
-      this.getAllLogtimeByDate(this.date);
+      // if (this.date) {
+      //   this.getAllLogtimeByDate(this.date);
+      // } else {
+      //   this.getAllLogtimeByDate();
+      // }
+      this.list = this.logtimeArray.map((logtime) => ({
+        Id: logtime._id,
+        Task_id: logtime.task ? logtime.task._id : "",
+        Task_name: logtime.task ? logtime.task.name : "",
+        CreatedBy_Email: logtime.createdBy.email,
+        CreatedBy_Full_Name: `${logtime.createdBy.firstName} ${logtime.createdBy.lastName}`,
+        CreatedAt: `${new Date(logtime.createdAt).getDate()} ${
+          data.month[new Date(logtime.createdAt).getMonth()]
+        },  ${new Date(logtime.createdAt).getFullYear()}`,
+        StartTime: logtime.startTime
+          ? `${new Date(logtime.startTime).getHours()}h${new Date(
+              logtime.startTime
+            ).getMinutes()} ${new Date(logtime.startTime).getDate()} ${
+              data.month[new Date(logtime.startTime).getMonth()]
+            },  ${new Date(logtime.startTime).getFullYear()}`
+          : "",
+        StopTime: logtime.stopTime
+          ? `${new Date(logtime.stopTime).getHours()}h${new Date(
+              logtime.stopTime
+            ).getMinutes()} ${new Date(logtime.stopTime).getDate()} ${
+              data.month[new Date(logtime.stopTime).getMonth()]
+            },  ${new Date(logtime.stopTime).getFullYear()}`
+          : "",
+        TimeInMiliseconds: logtime.timeInMiliseconds
+          ? logtime.timeInMiliseconds
+          : "",
+      }));
+    },
+    getAllLogtime() {
+      this.date = null;
+      this.getAllLogtimeByDate();
     },
   },
   components: {
     LogtimeCard,
     DatePicker,
+    DateTableCell,
   },
   created() {
-    this.getAllLogtimeByDate(this.date);
+    this.getAllLogtimeByDate();
   },
   watch: {
     date() {
-      sessionStorage.setItem('date', this.date);
+      sessionStorage.setItem("date", this.date);
       this.getAllLogtimeByDate(this.date);
     },
   },
@@ -166,7 +186,7 @@ export default {
       font-size: 16px;
     }
     .v-btn {
-      width: 50px !important;
+      width: 70px !important;
       height: 40px !important;
     }
     .datepicker {
