@@ -16,7 +16,6 @@ export default {
     };
   },
   mounted() {
-    setTimeout(() => {
       this.renderChart(
         {
           labels: this.shortMonth,
@@ -50,7 +49,6 @@ export default {
           },
         },
       );
-    }, 500);
   },
 };
 </script>

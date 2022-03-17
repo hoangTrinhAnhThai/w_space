@@ -25,7 +25,7 @@
         </v-btn>
       </template>
       <v-list>
-        <v-list-item>
+        <v-list-item v-if="userRole !== 'Admin'">
           <router-link tag="li" to="/profile"
             ><i class="bx bx-user-circle"></i>Profile</router-link
           >
@@ -55,6 +55,7 @@ export default {
     ...mapGetters({
       userInfo: 'USER/userInfo',
       userInfoAuth: 'AUTH/userInfo',
+      userRole: "AUTH/userRole",
     }),
   },
   methods: {

@@ -3,18 +3,17 @@ const Project = require('../../models/Project');
 const apiResponse = require('../../../utils/apiResponse');
 const endOfDay = require('date-fns/endOfDay');
 const startOfDay = require('date-fns/startOfDay');
+const endOfYear = require('date-fns/endOfYear');
+const startOfYear = require('date-fns/startOfYear');
 require('dotenv').config();
 
 class AdminController {
   getAllUsers = async (req, res) => {
+    const year = new Date(String(req.body.year));
     const users = await User.find({
       createdAt: {
-        $gte: startOfDay(
-          new Date(`${new Date().getFullYear()}-01-01T00:00:00.000Z`),
-        ),
-        $lte: endOfDay(
-          new Date(`${new Date().getFullYear() + 1}-01-01T00:00:00.000Z`),
-        ),
+        $gte: startOfYear(year),
+        $lte: endOfYear(year),
       },
     })
       .sort({ createdAt: 1 })
@@ -26,15 +25,12 @@ class AdminController {
     );
   };
   getAllProjects = async (req, res) => {
+    const year = new Date(String(req.body.year));
     const projects = await Project.find({
-      // createdAt: {
-      //   $gte: startOfDay(
-      //     new Date(`${new Date().getFullYear()}-01-01T00:00:00.000Z`),
-      //   ),
-      //   $lte: endOfDay(
-      //     new Date(`${new Date().getFullYear() + 1}-01-01T00:00:00.000Z`),
-      //   ),
-      // },
+      createdAt: {
+        $gte: startOfYear(year),
+        $lte: endOfYear(year),
+      },
       isDelete: false
     }).populate('tasks')
     .populate('members')
