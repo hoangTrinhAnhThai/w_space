@@ -59,7 +59,7 @@ class LogtimeController {
   showAllLogtimeByTask = async (req, res) => {
     const logtimes = await LogTime.find({
       task: req.params.task,
-    }).populate('createdBy');
+    }).populate('createdBy').populate('task');
     return apiResponse.successResponseWithData(
       res,
       'Show logtime successfully',
