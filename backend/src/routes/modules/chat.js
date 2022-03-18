@@ -59,7 +59,6 @@ const io = require('socket.io')(server, {
 
 router.post('/attach/upload/:id', upload.single('file'), async (req, res) => {
   const file = await gfs.files.findOne({ filename: name });
-  console.log(file);
   const taskUpdate = await Task.findById(req.params.id);
   const newFile = await File.create({
     name: file.filename,
@@ -84,7 +83,6 @@ router.post('/upload/:id', upload.single('file'), async (req, res) => {
   chatParams.isFile = true;
   chatParams.message = file.filename;
   chatParams.room = req.params.id;
-  console.log(chatParams);
   const chat = await Chat.create(chatParams);
   const notification = await Notification.findOne({ room: req.params.id });
   let listContent = notification.listContent;

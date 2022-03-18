@@ -3,7 +3,7 @@
     ref="newProjectModal"
     hide-header-close
     hide-footer
-    title="Add a new project"
+    title="Project"
   >
     <v-row>
       <v-col>

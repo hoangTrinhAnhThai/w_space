@@ -6,10 +6,16 @@
           v-if="logtime && logtime.task && logtime.task._id"
           v-model="logtime.task._id"
           :items="tasks"
-          item-text="taskName"
           item-value="taskId"
           label="Your task"
         >
+          <template v-slot:selection="data">
+            {{ data.item.taskName }}
+          </template>
+          <template v-slot:item="data">
+            {{ data.item.taskName }}
+            <span v-if="data.item.taskAssigned == logtime.createdBy._id"><v-icon small>mdi-clipboard-account-outline</v-icon></span>
+          </template>
         </v-select>
         <v-select
           v-else
@@ -19,6 +25,9 @@
           item-value="taskId"
           label="Your task"
         >
+        <template v-slot:selection="data">
+            {{ data.item.taskName }}
+          </template>
         </v-select>
       </v-col>
       <v-col cols="1" class="functions">
@@ -112,13 +121,13 @@ export default {
       for (let project of this.projectsOfLeader) {
         list.push({ header: `${project.name}` });
         for (let task of project.tasks) {
-          list.push({ taskName: task.name, taskId: task._id });
+          list.push({ taskName: task.name, taskId: task._id, taskAssigned: task.assigned });
         }
       }
       for (let project of this.projectsOfMember) {
         list.push({ header: `${project.name}` });
         for (let task of project.tasks) {
-          list.push({ taskName: task.name, taskId: task._id });
+          list.push({ taskName: task.name, taskId: task._id, taskAssigned: task.assigned });
         }
       }
       return list;
@@ -250,7 +259,7 @@ export default {
     },
   },
   watch: {
-    "logtime.task"() {
+    "logtime.task._id"() {
       this.updateLogtimeAction({
         logtime: this.logtime,
         _id: this.logtime._id,
@@ -268,6 +277,10 @@ export default {
   margin: 0 auto;
   padding: 20px;
 }
+.logtime-card .theme--light.v-subheader {
+  font-weight: 800;
+}
+
 #play {
   font-size: 20px;
   border: none;
@@ -347,3 +360,4 @@ ul i {
   background-color: rgba(39, 102, 120, 0.4);
 }
 </style>
+

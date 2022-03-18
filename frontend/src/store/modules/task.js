@@ -253,7 +253,6 @@ const actions = {
     http
       .get(`/task/checklists/`)
       .then((result) => {
-        console.log(result.data.data);
         commit('setAllChecklist', result.data.data);
         commit('ERROR/setIsLoading', false, { root: true });
       })
@@ -282,8 +281,7 @@ const actions = {
   addChecklist({ commit, dispatch }, params) {
     http
       .post(`/task/checklist/${params.idTask}`, params.name)
-      .then((result) => {
-        console.log(result.data.data);
+      .then(() => {
         dispatch('getChecklistByIdTask', params.idTask);
         dispatch('getAllChecklist');
       })
@@ -353,7 +351,6 @@ const actions = {
     http
       .get(`/task/files/${params}`)
       .then((response) => {
-        console.log(response.data.data);
         commit('setFiles', response.data.data);
         commit('ERROR/setIsLoading', false, { root: true });
       })
@@ -365,12 +362,10 @@ const actions = {
       });
   },
   deleteFile({ commit, dispatch }, params) {
-    console.log(params);
     commit('ERROR/setIsLoading', true, { root: true });
     http
       .delete(`/task/files/${params.idFile}`)
-      .then((response) => {
-        console.log(response.data.data);
+      .then(() => {
         dispatch('getFiles', params.idTask);
         commit('ERROR/setIsLoading', false, { root: true });
       })
@@ -385,8 +380,7 @@ const actions = {
     commit('ERROR/setIsLoading', true, { root: true });
     http
       .post(`/chat/attach/upload/${params.idTask}`, params.file)
-      .then((response) => {
-        console.log(response.data.data);
+      .then(() => {
         dispatch('getFiles', params.idTask);
         commit('ERROR/setIsLoading', false, { root: true });
       })
@@ -401,8 +395,7 @@ const actions = {
     commit('ERROR/setIsLoading', true, { root: true });
     http
       .put(`/task/attach/upload/${params.idTask}`, params.file)
-      .then((response) => {
-        console.log(response.data.data);
+      .then(() => {
         dispatch('getFiles', params.idTask);
         commit('ERROR/setIsLoading', false, { root: true });
       })

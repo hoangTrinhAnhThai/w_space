@@ -177,7 +177,6 @@ const actions = {
     http
       .post('/admin/projects', params)
       .then((response) => {
-        console.log(response.data.data);
         commit('setAllProjects', response.data.data);
         commit('setProjectList', response.data.data);
         commit('setRegisteredProjectMonth');

@@ -99,7 +99,6 @@ export default {
     this.addCurrentProjectAction(this.$route.params.id);
     this.getTaskOfProjectAction(this.$route.params.id);
     this.getAllChecklist();
-    console.log(this.allChecklist);
   },
   watch: {
     $route(to) {

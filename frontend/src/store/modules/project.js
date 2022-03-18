@@ -79,6 +79,7 @@ const formatDataProject = function (data) {
       name: task.name,
       priority: task.priority,
       status: task.status,
+      assigned: task.assigned,
       _id: task._id,
     })),
   }));
@@ -170,7 +171,6 @@ const actions = {
     http
       .get('/project')
       .then((result) => {
-        console.log(result.data.data);
         commit('setProjectsOfLeader', result.data.data);
         commit('setProjectOfMember', result.data.data);
         commit('ERROR/setIsLoading', false, { root: true });

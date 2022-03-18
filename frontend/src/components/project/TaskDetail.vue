@@ -208,7 +208,7 @@
                 item-value="_id"
                 clearable
                 small-chips
-                label="assigned"
+                label="Assigned"
                 ><template v-slot:item="{ item }">
                   <Avatar :user="item" />
                 </template>
@@ -541,17 +541,14 @@ export default {
       const formData = new FormData();
       formData.append("file", e.target.files[0]);
       this.addIsLoading(true);
-      console.log(e.target.files[0]);
       if (e.target.files[0].type.includes("image")) {
         formData.append("upload_preset", "wfcqkljk");
-
         axios
           .post(
             "https://api.cloudinary.com/v1_1/dj5xafymg/image/upload",
             formData
           )
           .then((response) => {
-            console.log(response.data);
             this.attachImg({
               idTask: this.task._id,
               file: {
@@ -562,7 +559,7 @@ export default {
             });
             // this.avatar = response.data.url;
             // this.isDisableButton = false;
-            // this.addIsLoading(false);
+            this.addIsLoading(false);
           })
           .catch(() => {
             this.addIsLoading(false);

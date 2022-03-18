@@ -51,7 +51,6 @@ const mutations = {
     state.logtimeIsPlaying = data;
   },
   addLogtime(state, data) {
-    console.log(data);
     state.logtimeArray.unshift(data);
     for (let logtime of state.logtimeArray) {
       if (logtime.isPlaying == true) {
@@ -111,7 +110,6 @@ const actions = {
           commit('setLogtimeIsPlaying', logtime);
         }
       }
-      console.log(result.data.data);
       commit('ERROR/setIsLoading', false, { root: true });
     });
   },

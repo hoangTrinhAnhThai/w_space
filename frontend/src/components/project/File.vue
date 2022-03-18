@@ -78,7 +78,6 @@ export default {
       this.downloadFileAction(this.file.name);
     },
     deleteFile() {
-      console.log(this.file._id);
       this.deleteFileAction({ idFile: this.file._id, idTask: this.idTask });
     },
   },

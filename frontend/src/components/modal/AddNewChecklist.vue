@@ -57,7 +57,6 @@ export default {
       }
     },
     addtaskFormByKey(e) {
-      console.log(e);
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit()) {
           document.getElementById('content').focus();

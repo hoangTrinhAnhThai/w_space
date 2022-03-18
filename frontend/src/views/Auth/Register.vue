@@ -3,7 +3,7 @@
     <navigation />
     <div class="register">
       <div class="container">
-        <h4>Create an Account</h4>
+        <h5>Create an Account</h5>
         <form @submit.prevent="register">
           <div class="form-group email">
             <input
@@ -267,8 +267,9 @@ export default {
     padding: 30px;
     background-color: #fff;
     border: 1px solid rgb(224, 210, 210);
-    h4 {
+    h5 {
       text-transform: uppercase;
+      text-align: center;
     }
     form {
       width: 100%;

@@ -21,7 +21,7 @@ class LogtimeController {
   };
   showAllLogtime = async (req, res) => {
     const user = await User.findById(host(req, res));
-    const logtimes = await LogTime.find({ createdBy: user }).populate('task').sort({
+    const logtimes = await LogTime.find({ createdBy: user }).populate('createdBy').populate('task').sort({
       createdAt: -1,
     });
     return apiResponse.successResponseWithData(

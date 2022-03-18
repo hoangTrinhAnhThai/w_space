@@ -28,10 +28,10 @@
             :data="list"
             :name="`Logtime ${dateName}.xls`"
           >
-            <v-btn>Download Data</v-btn>
+            <v-btn>Export logtime</v-btn>
           </export-excel>
           <export-excel v-else :data="list" :name="`All logtimes.xls`">
-            <v-btn>Download Data</v-btn>
+            <v-btn>Export logtime</v-btn>
           </export-excel>
         </div>
       </div>
