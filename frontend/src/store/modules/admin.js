@@ -16,7 +16,9 @@ const state = {
   userList: [],
   userListMonth: [],
   allProjects: [],
+  allProjectsList: [],
   projectList: [],
+  allUserList: [],
   numberOfRegisteredUsersToday: 0,
   numberOfRegisteredUsersYesterday: 0,
   numberOfRegisteredProjectsToday: 0,
@@ -30,6 +32,9 @@ const state = {
 const mutations = {
   setUserList(state, data) {
     state.userList = data;
+  },
+  setAllUserList(state, data) {
+    state.allUserList = data;
   },
   setUserListMonth(state, userListMonth) {
     state.userListMonth = formatDataListByMonth(userListMonth);
@@ -81,14 +86,24 @@ const mutations = {
   },
   setAllProjects(state, data) {
     state.allProjects = data
+  },
+  setAllProjectsList(state, data) {
+    state.allProjectsList = data
   }
+
 };
 const getters = {
   allProjects(state) {
     return state.allProjects
   },
+  allProjectsList(state) {
+    return state.allProjectsList
+  },
   userList(state) {
     return state.userList;
+  },
+  allUserList(state) {
+    return state.allUserList
   },
   userListMonth(state) {
     return state.userListMonth;
@@ -122,6 +137,14 @@ const getters = {
   },
 };
 const actions = {
+  getAllUsersList({commit}) {
+    commit('ERROR/setIsLoading', true, { root: true });
+    http.get('/admin/users')
+    .then((response) => {
+      commit('setAllUserList', response.data.data);
+      commit('ERROR/setIsLoading', false, { root: true });
+    })
+  },
   getAllUsers({ commit }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
     http
@@ -139,6 +162,15 @@ const actions = {
           root: true,
         });
       });
+  },
+  getAllProjectsList({commit}) {
+    commit('ERROR/setIsLoading', true, { root: true });
+    http.get('/admin/projects')
+    .then((response) => {
+      commit('setAllProjectsList', response.data.data);
+      commit('ERROR/setIsLoading', false, { root: true });
+
+    })
   },
   getAllProjects({ commit }, params) {
     commit('ERROR/setIsLoading', true, { root: true });
@@ -159,9 +191,11 @@ const actions = {
         });
       });
   },
-  editUser({ dispatch }, params) {
+  editUser({ commit, dispatch }, params) {
     http.put(`/user/${params.id}`, params.user).then(() => {
-      dispatch('getAllUsers');
+      dispatch('getAllUsersList');
+      commit('ERROR/setIsLoading', false, { root: true });
+
     });
   },
 };

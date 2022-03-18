@@ -37,7 +37,7 @@
       </div>
     </v-row>
     <v-row>
-      <DateTableCell :date="date" />
+      <DateTableCell :date="String(date)" />
       <v-card>
         <v-list shaped>
           <v-list-item-group>
@@ -66,6 +66,7 @@ export default {
   data() {
     return {
       logtime: {},
+      isDate: false,
       date: "",
       logtimeList: JSON.parse(localStorage.getItem("logtimeList")),
       list: [],
@@ -94,9 +95,6 @@ export default {
         }-${new Date().getDate()}`;
       }
     },
-    // dataFormat() {
-
-    // }
   },
   methods: {
     ...mapActions({
@@ -107,18 +105,7 @@ export default {
     createLogtime() {
       this.createLogtimeAction();
     },
-    startDownload() {
-      alert("show loading");
-    },
-    finishDownload() {
-      alert("hide loading");
-    },
     async fetchData() {
-      // if (this.date) {
-      //   this.getAllLogtimeByDate(this.date);
-      // } else {
-      //   this.getAllLogtimeByDate();
-      // }
       this.list = this.logtimeArray.map((logtime) => ({
         Id: logtime._id,
         Task_id: logtime.task ? logtime.task._id : "",
@@ -148,8 +135,8 @@ export default {
       }));
     },
     getAllLogtime() {
-      this.date = null;
-      this.getAllLogtimeByDate();
+      this.date = ""
+      this.getAllLogtimeAction();
     },
   },
   components: {
@@ -158,12 +145,14 @@ export default {
     DateTableCell,
   },
   created() {
-    this.getAllLogtimeByDate();
+    this.getAllLogtimeAction();
   },
   watch: {
     date() {
-      sessionStorage.setItem("date", this.date);
+      if (this.date) {
       this.getAllLogtimeByDate(this.date);
+
+      }
     },
   },
 };

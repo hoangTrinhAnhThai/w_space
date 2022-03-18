@@ -51,6 +51,7 @@ const mutations = {
     state.logtimeIsPlaying = data;
   },
   addLogtime(state, data) {
+    console.log(data);
     state.logtimeArray.unshift(data);
     for (let logtime of state.logtimeArray) {
       if (logtime.isPlaying == true) {

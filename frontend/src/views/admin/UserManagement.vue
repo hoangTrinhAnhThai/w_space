@@ -132,18 +132,16 @@ export default {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
     },
     ...mapGetters({
-      userList: 'ADMIN/userList',
+      userList: 'ADMIN/allUserList',
       userInfo: 'USER/userInfo',
     }),
   },
-
-  watch: {},
   created() {
     this.getAllUsers();
   },
   methods: {
     ...mapActions({
-      getAllUsers: 'ADMIN/getAllUsers',
+      getAllUsers: 'ADMIN/getAllUsersList',
       editUser: 'ADMIN/editUser',
     }),
     editItem(item) {

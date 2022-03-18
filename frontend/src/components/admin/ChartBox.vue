@@ -122,7 +122,7 @@ p {
 .container {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 15px;
+  margin-bottom: 0px;
   max-width: 90vw !important;
   .content {
     flex-basis: 24%;

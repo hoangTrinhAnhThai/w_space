@@ -269,8 +269,8 @@
               <ReportLogtimeTable />
               <span class="export" @click="fetchData">
                 <export-excel
-                  :data="logtimes"
-                  :name="`Logtime ${task.name}.xls`"
+                  :data="list"
+                  :name="`Logtime for task '${task.name}'.xls`"
                 >
                   <v-btn text>Export Logtime</v-btn>
                 </export-excel>
@@ -308,15 +308,16 @@
 </template>
 
 <script>
-import ReportLogtimeTable from '../table/ReportLogtimeTable.vue';
-import Avatar from '../Avatar.vue';
-import DatePicker from 'vue2-datepicker';
-import { mapActions, mapGetters } from 'vuex';
-import axios from 'axios';
-import AttachFile from '../project/AttachFile.vue';
+import ReportLogtimeTable from "../table/ReportLogtimeTable.vue";
+import Avatar from "../Avatar.vue";
+import DatePicker from "vue2-datepicker";
+import { mapActions, mapGetters } from "vuex";
+import axios from "axios";
+import AttachFile from "../project/AttachFile.vue";
+import data from "../../utils/data";
 
 export default {
-  name: 'task-detail',
+  name: "task-detail",
   props: {
     task: {
       type: Object,
@@ -325,23 +326,24 @@ export default {
   data() {
     return {
       date: this.task.dueDate ? new Date(this.task.dueDate) : new Date(),
-      priorities: ['high', 'normal', 'low'],
-      comment: '',
+      priorities: ["high", "normal", "low"],
+      comment: "",
       isShowChecklist: false,
       isShowChecklistItem: null,
-      itemName: '',
-      checklistName: '',
+      itemName: "",
+      checklistName: "",
+      list: []
     };
   },
   computed: {
     ...mapGetters({
-      currentProject: 'PROJECT/currentProject',
-      currentTask: 'PROJECT/currentTask',
-      validateText: 'VALIDATION/validateText',
-      comments: 'TASK/comments',
-      checklists: 'TASK/checklist',
-      userInfo: 'AUTH/userInfo',
-      logtimes: 'LOGTIME/logtimeArrayByTask',
+      currentProject: "PROJECT/currentProject",
+      currentTask: "PROJECT/currentTask",
+      validateText: "VALIDATION/validateText",
+      comments: "TASK/comments",
+      checklists: "TASK/checklist",
+      userInfo: "AUTH/userInfo",
+      logtimes: "LOGTIME/logtimeArrayByTask",
     }),
     listMember() {
       let list = [];
@@ -366,16 +368,16 @@ export default {
   },
   methods: {
     ...mapActions({
-      editTaskAction: 'TASK/editTask',
-      addCommentAction: 'TASK/addComment',
-      addChecklistAction: 'TASK/addChecklist',
-      addChecklistItemAction: 'TASK/addChecklistItem',
-      deleteChecklistAction: 'TASK/deleteChecklist',
-      editChecklistItemAction: 'TASK/editChecklistItem',
-      getLogtimes: 'LOGTIME/getAllLogtimeByTask',
-      attachFile: 'TASK/attachFile',
-      attachImg: 'TASK/attachImg',
-      addIsLoading: 'ERROR/addIsLoading',
+      editTaskAction: "TASK/editTask",
+      addCommentAction: "TASK/addComment",
+      addChecklistAction: "TASK/addChecklist",
+      addChecklistItemAction: "TASK/addChecklistItem",
+      deleteChecklistAction: "TASK/deleteChecklist",
+      editChecklistItemAction: "TASK/editChecklistItem",
+      getLogtimes: "LOGTIME/getAllLogtimeByTask",
+      attachFile: "TASK/attachFile",
+      attachImg: "TASK/attachImg",
+      addIsLoading: "ERROR/addIsLoading",
     }),
     show() {
       this.$refs.taskDetailModal.show();
@@ -398,7 +400,7 @@ export default {
     sendCommentByKey(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit(this.comment)) {
-          document.getElementById('content').focus();
+          document.getElementById("content").focus();
           return;
         } else {
           this.addCommentAction({
@@ -406,13 +408,13 @@ export default {
             idProject: this.currentProject._id,
             comment: { content: this.comment },
           });
-          this.comment = '';
+          this.comment = "";
         }
       }
     },
     sendComment() {
       if (!this.validateBeforeSubmit(this.comment)) {
-        document.getElementById('content').focus();
+        document.getElementById("content").focus();
         return;
       } else {
         this.addCommentAction({
@@ -420,7 +422,7 @@ export default {
           idProject: this.currentProject._id,
           comment: { content: this.comment },
         });
-        this.comment = '';
+        this.comment = "";
       }
     },
     validateBeforeSubmit(text) {
@@ -432,7 +434,7 @@ export default {
       return passedValidate;
     },
     closeChecklist() {
-      this.checklistName = '';
+      this.checklistName = "";
       this.isShowChecklist = false;
     },
     showChecklistItem(index) {
@@ -440,7 +442,7 @@ export default {
     },
     addChecklist() {
       if (!this.validateBeforeSubmit(this.checklistName)) {
-        document.getElementById('content-checklist').focus();
+        document.getElementById("content-checklist").focus();
         return;
       } else {
         this.addChecklistAction({
@@ -448,15 +450,15 @@ export default {
           idTask: this.task._id,
           idProject: this.currentProject._id,
         });
-        this.$emit('closeAddtaskForm');
-        this.checklistName = '';
+        this.$emit("closeAddtaskForm");
+        this.checklistName = "";
         this.isShowChecklist = false;
       }
     },
     addChecklistByKey(e) {
       if (e.keyCode === 13) {
         if (!this.validateBeforeSubmit(this.checklistName)) {
-          document.getElementById('content-checklist').focus();
+          document.getElementById("content-checklist").focus();
           return;
         } else {
           this.addChecklistAction({
@@ -464,15 +466,15 @@ export default {
             idTask: this.task._id,
             idProject: this.currentProject._id,
           });
-          this.$emit('closeAddtaskForm');
-          this.checklistName = '';
+          this.$emit("closeAddtaskForm");
+          this.checklistName = "";
           this.isShowChecklist = false;
         }
       }
     },
     addChecklistItem(id) {
       if (!this.validateBeforeSubmit(this.itemName)) {
-        document.getElementById('content-checklist-item').focus();
+        document.getElementById("content-checklist-item").focus();
         return;
       } else {
         this.addChecklistItemAction({
@@ -480,7 +482,7 @@ export default {
           idTask: this.task._id,
           name: { name: this.itemName },
         });
-        this.itemName = '';
+        this.itemName = "";
       }
     },
     deleteChecklist(idChecklist) {
@@ -503,7 +505,33 @@ export default {
       });
     },
     async fetchData() {
-      this.getLogtimes(this.task._id);
+      this.list = this.logtimes.map((logtime) => ({
+        Id: logtime._id,
+        Task_id: logtime.task ? logtime.task._id : "",
+        Task_name: logtime.task ? logtime.task.name : "",
+        CreatedBy_Email: logtime.createdBy.email,
+        CreatedBy_Full_Name: `${logtime.createdBy.firstName} ${logtime.createdBy.lastName}`,
+        CreatedAt: `${new Date(logtime.createdAt).getDate()} ${
+          data.month[new Date(logtime.createdAt).getMonth()]
+        },  ${new Date(logtime.createdAt).getFullYear()}`,
+        StartTime: logtime.startTime
+          ? `${new Date(logtime.startTime).getHours()}h${new Date(
+              logtime.startTime
+            ).getMinutes()} ${new Date(logtime.startTime).getDate()} ${
+              data.month[new Date(logtime.startTime).getMonth()]
+            },  ${new Date(logtime.startTime).getFullYear()}`
+          : "",
+        StopTime: logtime.stopTime
+          ? `${new Date(logtime.stopTime).getHours()}h${new Date(
+              logtime.stopTime
+            ).getMinutes()} ${new Date(logtime.stopTime).getDate()} ${
+              data.month[new Date(logtime.stopTime).getMonth()]
+            },  ${new Date(logtime.stopTime).getFullYear()}`
+          : "",
+        TimeInMiliseconds: logtime.timeInMiliseconds
+          ? logtime.timeInMiliseconds
+          : "",
+      }));
     },
     handleClickInputFile() {
       this.$refs.fileInputAvt.click();
@@ -511,16 +539,16 @@ export default {
     onFileChange(e) {
       this.isDisableButton = true;
       const formData = new FormData();
-      formData.append('file', e.target.files[0]);
+      formData.append("file", e.target.files[0]);
       this.addIsLoading(true);
       console.log(e.target.files[0]);
-      if (e.target.files[0].type.includes('image')) {
-        formData.append('upload_preset', 'wfcqkljk');
+      if (e.target.files[0].type.includes("image")) {
+        formData.append("upload_preset", "wfcqkljk");
 
         axios
           .post(
-            'https://api.cloudinary.com/v1_1/dj5xafymg/image/upload',
-            formData,
+            "https://api.cloudinary.com/v1_1/dj5xafymg/image/upload",
+            formData
           )
           .then((response) => {
             console.log(response.data);
@@ -546,7 +574,7 @@ export default {
   },
   watch: {
     isShowChecklistItem() {
-      this.itemName = '';
+      this.itemName = "";
     },
   },
   components: {

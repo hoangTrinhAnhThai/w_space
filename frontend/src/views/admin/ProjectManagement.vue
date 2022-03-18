@@ -143,7 +143,7 @@ export default {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
     ...mapGetters({
-      allProjects: "ADMIN/allProjects",
+      allProjects: "ADMIN/allProjectsList",
     }),
   },
 
@@ -156,7 +156,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getAllProjects: "ADMIN/getAllProjects",
+      getAllProjects: "ADMIN/getAllProjectsList",
     }),
     close() {
       this.dialog = false;

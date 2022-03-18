@@ -3,6 +3,16 @@
     <v-row>
       <v-col cols="3" style="position: relative; top: -10px">
         <v-select
+          v-if="logtime && logtime.task && logtime.task._id"
+          v-model="logtime.task._id"
+          :items="tasks"
+          item-text="taskName"
+          item-value="taskId"
+          label="Your task"
+        >
+        </v-select>
+        <v-select
+          v-else
           v-model="logtime.task"
           :items="tasks"
           item-text="taskName"
@@ -74,9 +84,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
-  name: 'LogtimeCard',
+  name: "LogtimeCard",
   props: {
     logtime: {
       type: Object,
@@ -92,10 +102,10 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      projectsOfLeader: 'PROJECT/projectsOfLeader',
-      projectsOfMember: 'PROJECT/projectsOfMember',
-      logtimeArray: 'LOGTIME/logtimeArray',
-      logtimeIsPlaying: 'LOGTIME/logtimeIsPlaying',
+      projectsOfLeader: "PROJECT/projectsOfLeader",
+      projectsOfMember: "PROJECT/projectsOfMember",
+      logtimeArray: "LOGTIME/logtimeArray",
+      logtimeIsPlaying: "LOGTIME/logtimeIsPlaying",
     }),
     tasks() {
       let list = [];
@@ -171,9 +181,9 @@ export default {
   components: {},
   methods: {
     ...mapActions({
-      deteleLogtimeAction: 'LOGTIME/deteleLogtime',
-      createLogtimeAction: 'LOGTIME/createLogtime',
-      updateLogtimeAction: 'LOGTIME/updateLogtime',
+      deteleLogtimeAction: "LOGTIME/deteleLogtime",
+      createLogtimeAction: "LOGTIME/createLogtime",
+      updateLogtimeAction: "LOGTIME/updateLogtime",
     }),
     startTime() {
       this.hours = 0;
@@ -221,12 +231,12 @@ export default {
       var timeInMiliseconds = new Date() - start;
       this.hours = Math.floor(timeInMiliseconds / 1000 / 60 / 60);
       this.minutes = Math.floor(
-        (timeInMiliseconds / 1000 / 60 / 60 - this.hours) * 60,
+        (timeInMiliseconds / 1000 / 60 / 60 - this.hours) * 60
       );
       this.seconds = Math.floor(
         ((timeInMiliseconds / 1000 / 60 / 60 - this.hours) * 60 -
           this.minutes) *
-          60,
+          60
       );
     },
     deteleLogtime() {
@@ -240,7 +250,7 @@ export default {
     },
   },
   watch: {
-    'logtime.task'() {
+    "logtime.task"() {
       this.updateLogtimeAction({
         logtime: this.logtime,
         _id: this.logtime._id,

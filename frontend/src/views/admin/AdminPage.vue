@@ -46,7 +46,7 @@ export default {
   watch: {
     year() {
       this.getAllUsers({year: this.year});
-    this.getAllProjects({year: this.year});
+      this.getAllProjects({year: this.year});
     }
   }
 };
@@ -62,9 +62,10 @@ p {
 }
 .dashboard {
   height: calc(100vh - 65px);
-  padding: 10px 50px 0;
+  padding: 10px 10px 0;
 }
 .v-select {
   width: 70px;
+  margin-left: 50px !important;
 }
 </style>
