@@ -143,7 +143,7 @@ h5 {
 }
 .v-main {
   text-align: center;
-  height: calc(100vh -75);
+  height: calc(100vh -75px) !important;
   margin-bottom: 50px;
 }
 .container {

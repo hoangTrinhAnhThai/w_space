@@ -110,6 +110,7 @@ const actions = {
           commit('setLogtimeIsPlaying', logtime);
         }
       }
+      console.log(result.data.data);
       commit('ERROR/setIsLoading', false, { root: true });
     });
   },
