@@ -1,0 +1,23 @@
+$color: rgb(21, 17, 30);
+$font-color: gray;
+$login_width: 22em;
+$inputHeight: 40px;
+$border-color: rgb(211, 224, 234);
+$color2: rgb(211, 224, 234);
+.container {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.error {
+  margin-top: 0.3125em;
+  margin-left: 29.5%;
+  font-size: 0.75em;
+  color: rgb(209, 80, 80);
+  font-style: italic;
+}
+
+.errors {
+  width: 100%;
+}
